@@ -1,0 +1,5 @@
+{
+  "type": "panel",
+  "name": "D3 Gauge",
+  "id": "grafana-gauge-panel"
+}

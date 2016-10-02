@@ -1,0 +1,45 @@
+<div class="editor-row">
+
+	<div class="section gf-form-group">
+		<h5 class="section-heading">Thresholding</h5>
+	  <div class="gf-form-inline">
+	      <gf-form-switch class="gf-form" label-class="width-18" label="Show Threshold Color on Background" checked="ctrl.panel.gauge.showThresholdColorOnBackground" on-change="ctrl.render()"></gf-form-switch>
+	      <gf-form-switch class="gf-form" label-class="width-18" label="Show Threshold Color on Value" checked="ctrl.panel.gauge.showThresholdColorOnValue" on-change="ctrl.render()"></gf-form-switch>
+	  </div>
+		<div class="gf-form-inline">
+			<gf-form-switch class="gf-form" label-class="width-9" label="Show on Gauge" checked="ctrl.panel.gauge.showThresholdOnGauge" on-change="ctrl.render()"></gf-form-switch>
+			<div ng-if="ctrl.panel.gauge.showThresholdOnGauge">
+				<div class="gf-form-inline">
+	      	<gf-form-switch class="gf-form" label-class="width-12" label="Show Lower Range" checked="ctrl.panel.gauge.showLowerThresholdRange" on-change="ctrl.render()"></gf-form-switch>
+	      	<gf-form-switch class="gf-form" label-class="width-12" label="Show Middle Range" checked="ctrl.panel.gauge.showMiddleThresholdRange" on-change="ctrl.render()"></gf-form-switch>
+					<gf-form-switch class="gf-form" label-class="width-12" label="Show Upper Range" checked="ctrl.panel.gauge.showUpperThresholdRange" on-change="ctrl.render()"></gf-form-switch>
+	  	  </div>
+			</div>
+		</div>
+	  <div class="gf-form-inline">
+		  <div class="gf-form max-width-21">
+		    <label class="gf-form-label width-9">Thresholds
+		      <tip>Define two threshold values&lt;br /&gt; 50,80 will produce: &lt;50 = Green, 50:80 = Yellow, &gt;80 = Red</tip>
+		    </label>
+		    <input type="text" class="gf-form-input" ng-model="ctrl.panel.thresholds" ng-blur="ctrl.render()" placeholder="50,80"></input>
+		  </div>
+		  <div class="gf-form">
+		    <label class="gf-form-label width-12">Threshold Colors
+					<tip>Colors to use when thresholds are exceeded</tip>
+				</label>
+		    <span class="gf-form-label">
+		    	<spectrum-picker ng-model="ctrl.panel.colors[0]" ng-change="ctrl.render()" ></spectrum-picker>
+		    </span>
+		    <span class="gf-form-label">
+		    	<spectrum-picker ng-model="ctrl.panel.colors[1]" ng-change="ctrl.render()" ></spectrum-picker>
+		    </span>
+		    <span class="gf-form-label">
+		    	<spectrum-picker ng-model="ctrl.panel.colors[2]" ng-change="ctrl.render()" ></spectrum-picker>
+		    </span>
+		    <span class="gf-form-label">
+		    	<a ng-click="ctrl.invertColorOrder()">Invert</a>
+		    </span>
+		  </div>
+	  </div>
+	</div>
+</div>

@@ -1,0 +1,85 @@
+<div class="editor-row">
+
+	<div class="section gf-form-group">
+		<h5 class="section-heading">Radial Customization</h5>
+		<div class="gf-form-inline">
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Radius
+          	<tip>The radius of the gauge in pixels (0 for autoscaling)</tip>
+        	</label>
+				  <input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.gaugeRadius" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Pivot Radius
+          	<tip>Size of the central 'pivot' circle, on which the needle sits, as a % of the gauge radius</tip>
+        	</label>
+				  <input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.pivotRadius" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Padding
+          	<tip>Padding between gauge radius and the outer circle of the gauge, as a % of the gauge radius</tip>
+        	</label>
+				  <input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.padding" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Edge Width
+          	<tip>The thickness of the circle around the edge of the gauge, as a % of the gauge radius</tip>
+        	</label>
+				  <input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.edgeWidth" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+			</div>
+		<div class="gf-form-inline">
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Tick Edge Gap
+          	<tip>Spacing between ticks and the outer circle, as a % of the gauge radius</tip>
+        	</label>
+				  <input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.tickEdgeGap" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Tick Length Major
+          	<tip>Length of the major ticks, as a % of the gauge radius</tip>
+        	</label>
+				  <input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.tickLengthMaj" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Tick Length Minor
+          	<tip>Length of the minor ticks, as a % of the gauge radius</tip>
+        	</label>
+				  <input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.tickLengthMin" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+			</div>
+		<div class="gf-form-inline">
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Needle Tick Gap
+						<tip>Spacing between ticks and the outer circle, as a % of the gauge radius</tip>
+					</label>
+					<input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.needleTickGap" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Needle Length Stem
+						<tip>Length of the needle section extending beyond the centre of the gauge, as a % of the gauge radius</tip>
+					</label>
+					<input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.needleLengthNeg" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+			</div>
+	</div>
+
+	<div class="section gf-form-group">
+		<h5 class="section-heading">Gauge Readings</h5>
+		<div class="gf-form-inline">
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Tick Spacing Minor
+          <tip>The numeric spacing of the minor increment ticks</tip>
+        </label>
+				  <input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.tickSpaceMinVal" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Tick Spacing Major
+          <tip>The numeric spacing of the major increment ticks</tip>
+        </label>
+				  <input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.tickSpaceMajVal" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+			</div>
+	</div>
+
+</div>
