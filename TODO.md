@@ -3,7 +3,7 @@
 TODO:
 
 * Animation options
- * Split need animation and value transition settings
+ * Split needle animation and value transition settings
  * Add selector for animation types (currently elastic and quadin)
  * Add speed option (currently 500ms)
 * Add trending indicator (arrow up/down based on last value and current value)
