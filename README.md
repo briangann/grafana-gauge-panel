@@ -6,29 +6,29 @@ This panel plugin provides a [D3-based](http://www.d3js.org) gauge panel for [Gr
 
 ##### Example gauges
 
-![Default Gauge](screenshots/default-gauge.png)
-![Default Gauge With Threshold](screenshots/default-gauge-w-threshold.png)
+![Default Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/screenshots/default-gauge.png)
+![Default Gauge With Threshold](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/screenshots/default-gauge-w-threshold.png)
 
-![Custom Gauge](screenshots/alt-gauge.png)
-![Custom Gauge With Limits](screenshots/alt-gauge-limits.png)
+![Custom Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/screenshots/alt-gauge.png)
+![Custom Gauge With Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/screenshots/alt-gauge-limits.png)
 
 ##### Options
 
-![Options](screenshots/options.png)
+![Options](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/screenshots/options.png)
 
 With Limits
 
-![Options with Limits](screenshots/options-limits.png)
+![Options with Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/screenshots/options-limits.png)
 
 ##### Limits Shown
 
-![Options With Limits](screenshots/options-limits.png)
+![Options With Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/screenshots/options-limits.png)
 
 ##### Radial Metrics
-![Radial Metrics](screenshots/radialmetrics.png)
+![Radial Metrics](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/screenshots/radialmetrics.png)
 
 ##### Thresholding
-![Thresholding](screenshots/thresholding.png)
+![Thresholding](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/screenshots/thresholding.png)
 
 -------
 
