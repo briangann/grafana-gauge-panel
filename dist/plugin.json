@@ -1,5 +1,44 @@
 {
-  "type": "panel",
-  "name": "D3 Gauge",
-  "id": "grafana-gauge-panel"
+    "type": "panel",
+    "name": "D3 Gauge",
+    "id": "briangann-gauge-panel",
+    "info": {
+        "description": "D3-based Gauge panel for Grafana",
+        "author": {
+            "name": "Brian Gann (bkgann@gmail.com)",
+            "url": "https://github.com/briangann"
+        },
+        "keywords": ["gauge", "panel"],
+        "logos": {
+            "small": "src/img/Logo_D3.svg",
+            "large": "src/img/Logo_D3.svg"
+        },
+        "links": [{
+            "name": "Project site",
+            "url": "https://github.com/briangann/grafana-gauge-panel"
+        }, {
+            "name": "MIT License",
+            "url": "https://github.com/briangann/grafana-gauge-panel/blob/master/LICENSE"
+        }],
+        "screenshots": [{
+            "name": "Showcase",
+            "path": "screenshots/default-gauge-w-threshold.png"
+        }, {
+            "name": "Options",
+            "path": "screenshots/options.png"
+        }, {
+            "name": "Radial Metrics",
+            "path": "screenshots/radialmetrics.png"
+        }, {
+            "name": "Thresholding",
+            "path": "screenshots/thresholding.png"
+        }],
+        "version": "0.0.1",
+        "updated": "2016-10-05"
+    },
+
+    "dependencies": {
+        "grafanaVersion": "3.x.x",
+        "plugins": []
+    }
 }
