@@ -10,8 +10,8 @@
         },
         "keywords": ["gauge", "panel"],
         "logos": {
-            "small": "src/img/Logo_D3.svg",
-            "large": "src/img/Logo_D3.svg"
+            "small": "img/Logo_D3.svg",
+            "large": "img/Logo_D3.svg"
         },
         "links": [{
             "name": "Project site",
