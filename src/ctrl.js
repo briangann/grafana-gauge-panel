@@ -100,13 +100,13 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
       valueRounded: 0
     };
     this.series = [];
-    console.log("D3GaugePanelCtrl constructor!");
+    //console.log("D3GaugePanelCtrl constructor!");
     this.events.on('init-edit-mode', this.onInitEditMode.bind(this));
     this.events.on('render', this.onRender.bind(this));
     this.events.on('data-received', this.onDataReceived.bind(this));
     this.events.on('data-error', this.onDataError.bind(this));
     this.events.on('data-snapshot-load', this.onDataReceived.bind(this));
-    console.log("D3GaugePanelCtrl constructor done!");
+    //console.log("D3GaugePanelCtrl constructor done!");
   }
 
   onInitEditMode() {
@@ -135,11 +135,19 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
 
   getPanelWidth() {
     // with a full sized panel, this comes back as zero, so calculate from the div panel instead
+    //debugger;
     var tmpPanelWidth = this.panelContainer[0].clientWidth;
     if (tmpPanelWidth === 0) {
-      var tmpPanelWidthCSS = $("div.panel").css("width");
-      var tmpPanelWidthPx = tmpPanelWidthCSS.replace("px","");
-      tmpPanelWidth = parseInt(tmpPanelWidthPx);
+      // just use the height...
+      tmpPanelWidth = this.getPanelHeight();
+      tmpPanelWidth -= 24;
+      if (tmpPanelWidth < 250) {
+        tmpPanelWidth = 250;
+      }
+      return tmpPanelWidth;
+      //var tmpPanelWidthCSS = $("div.panel").css("width");
+      //var tmpPanelWidthPx = tmpPanelWidthCSS.replace("px","");
+      //tmpPanelWidth = parseInt(tmpPanelWidthPx);
     }
     var actualWidth = tmpPanelWidth;
     return actualWidth;
@@ -154,11 +162,13 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
       tmpPanelHeight = this.row.height;
       // default to 250px if that was undefined also
       if (typeof tmpPanelHeight === 'undefined') {
-        tmpPanelHeight = "250px";
+        tmpPanelHeight = 250;
       }
     }
-    // convert to numeric value
-    tmpPanelHeight = tmpPanelHeight.replace("px","");
+    else {
+      // convert to numeric value
+      tmpPanelHeight = tmpPanelHeight.replace("px","");
+    }
     var actualHeight = parseInt(tmpPanelHeight);
     // grafana minimum height for a panel is 250px
     if (actualHeight < 250) {
@@ -174,6 +184,8 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
     }
   }
   onRender() {
+    // update the values to be sent to the gauge constructor
+    this.setValues(this.data);
     //console.log("Render D3");
     this.clearSVG();
     // use jQuery to get the height on our container
@@ -183,7 +195,7 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
     var margin = {top: 10, right: 0, bottom: 30, left: 0};
     var width = this.panelWidth;
     var height = this.panelHeight;
-
+    //console.log("width: " + width + " height: " + height);
     var svg = d3.select(this.panelContainer[0])
       .append("svg")
       .attr("width", width + "px")
@@ -208,7 +220,7 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
       maxVal : this.panel.gauge.maxValue,
       tickSpaceMinVal: this.panel.gauge.tickSpaceMinVal,
       tickSpaceMajVal: this.panel.gauge.tickSpaceMajVal,
-      gaugeUnits: this.panel.gauge.gaugeUnits,
+      gaugeUnits: this.panel.format,
       gaugeRadius: tmpGaugeRadius,
       pivotRadius: this.panel.gauge.pivotRadius,
       padding: this.panel.gauge.padding,
@@ -243,7 +255,8 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
       showMiddleThresholdRange: this.panel.gauge.showMiddleThresholdRange,
       showUpperThresholdRange: this.panel.gauge.showUpperThresholdRange,
       thresholdColors: this.panel.colors,
-      needleVal : this.getValueText(),
+      needleValText : this.getValueText(),
+      needleVal : this.getValueRounded(),
       tickFont: this.panel.gauge.tickFont,
       unitsFont: this.panel.gauge.unitsFont,
       animateNeedleValueTransition: this.panel.gauge.animateNeedleValueTransition
@@ -274,7 +287,7 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
 
 
   link(scope, elem, attrs, ctrl) {
-    console.log("d3gauge inside link");
+    //console.log("d3gauge inside link");
     ctrl.setContainer(elem.find('.grafana-d3-gauge'));
     // Check if there is a gauge rendered
     var renderedSVG = $('#'+this.panel.gaugeDivId);
@@ -349,7 +362,6 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
       } else {
         data.value = this.series[0].stats[this.panel.operatorName];
         data.flotpairs = this.series[0].flotpairs;
-
         var decimalInfo = this.getDecimalsForValue(data.value);
         var formatFunc = kbn.valueFormats[this.panel.format];
         data.valueFormatted = formatFunc(data.value, decimalInfo.decimals, decimalInfo.scaledDecimals);
@@ -415,6 +427,10 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
     return this.data.valueFormatted;
   }
 
+  getValueRounded() {
+    return this.data.valueRounded;
+  }
+
   setUnitFormat(subItem) {
     this.panel.format = subItem.value;
     this.render();
@@ -429,7 +445,7 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
     var data = {};
     this.setValues(data);
     this.data = data;
-    console.log("Data value: " + data.value + " formatted: " + data.valueFormatted + " rounded: " + data.valueRounded );
+    //console.log("Data value: " + data.value + " formatted: " + data.valueFormatted + " rounded: " + data.valueRounded );
     //var fmtTxt = kbn.valueFormats[this.panel.format];
     //console.log("Format: " + fmtTxt);
     this.gaugeObject.updateGauge(data.value, data.valueFormatted, data.valueRounded);

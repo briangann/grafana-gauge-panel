@@ -161,13 +161,13 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
             valueRounded: 0
           };
           _this.series = [];
-          console.log("D3GaugePanelCtrl constructor!");
+          //console.log("D3GaugePanelCtrl constructor!");
           _this.events.on('init-edit-mode', _this.onInitEditMode.bind(_this));
           _this.events.on('render', _this.onRender.bind(_this));
           _this.events.on('data-received', _this.onDataReceived.bind(_this));
           _this.events.on('data-error', _this.onDataError.bind(_this));
           _this.events.on('data-snapshot-load', _this.onDataReceived.bind(_this));
-          console.log("D3GaugePanelCtrl constructor done!");
+          //console.log("D3GaugePanelCtrl constructor done!");
           return _this;
         }
 
@@ -197,11 +197,19 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           key: 'getPanelWidth',
           value: function getPanelWidth() {
             // with a full sized panel, this comes back as zero, so calculate from the div panel instead
+            //debugger;
             var tmpPanelWidth = this.panelContainer[0].clientWidth;
             if (tmpPanelWidth === 0) {
-              var tmpPanelWidthCSS = $("div.panel").css("width");
-              var tmpPanelWidthPx = tmpPanelWidthCSS.replace("px", "");
-              tmpPanelWidth = parseInt(tmpPanelWidthPx);
+              // just use the height...
+              tmpPanelWidth = this.getPanelHeight();
+              tmpPanelWidth -= 24;
+              if (tmpPanelWidth < 250) {
+                tmpPanelWidth = 250;
+              }
+              return tmpPanelWidth;
+              //var tmpPanelWidthCSS = $("div.panel").css("width");
+              //var tmpPanelWidthPx = tmpPanelWidthCSS.replace("px","");
+              //tmpPanelWidth = parseInt(tmpPanelWidthPx);
             }
             var actualWidth = tmpPanelWidth;
             return actualWidth;
@@ -217,11 +225,12 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
               tmpPanelHeight = this.row.height;
               // default to 250px if that was undefined also
               if (typeof tmpPanelHeight === 'undefined') {
-                tmpPanelHeight = "250px";
+                tmpPanelHeight = 250;
               }
+            } else {
+              // convert to numeric value
+              tmpPanelHeight = tmpPanelHeight.replace("px", "");
             }
-            // convert to numeric value
-            tmpPanelHeight = tmpPanelHeight.replace("px", "");
             var actualHeight = parseInt(tmpPanelHeight);
             // grafana minimum height for a panel is 250px
             if (actualHeight < 250) {
@@ -240,6 +249,8 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
         }, {
           key: 'onRender',
           value: function onRender() {
+            // update the values to be sent to the gauge constructor
+            this.setValues(this.data);
             //console.log("Render D3");
             this.clearSVG();
             // use jQuery to get the height on our container
@@ -249,7 +260,7 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
             var margin = { top: 10, right: 0, bottom: 30, left: 0 };
             var width = this.panelWidth;
             var height = this.panelHeight;
-
+            //console.log("width: " + width + " height: " + height);
             var svg = d3.select(this.panelContainer[0]).append("svg").attr("width", width + "px").attr("height", height + 24 + "px").attr("id", this.panel.gaugeDivId).classed("svg-content-responsive", true).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             // check which is smaller, the height or the width and set the radius to be half of the lesser
@@ -267,7 +278,7 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
               maxVal: this.panel.gauge.maxValue,
               tickSpaceMinVal: this.panel.gauge.tickSpaceMinVal,
               tickSpaceMajVal: this.panel.gauge.tickSpaceMajVal,
-              gaugeUnits: this.panel.gauge.gaugeUnits,
+              gaugeUnits: this.panel.format,
               gaugeRadius: tmpGaugeRadius,
               pivotRadius: this.panel.gauge.pivotRadius,
               padding: this.panel.gauge.padding,
@@ -302,7 +313,8 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
               showMiddleThresholdRange: this.panel.gauge.showMiddleThresholdRange,
               showUpperThresholdRange: this.panel.gauge.showUpperThresholdRange,
               thresholdColors: this.panel.colors,
-              needleVal: this.getValueText(),
+              needleValText: this.getValueText(),
+              needleVal: this.getValueRounded(),
               tickFont: this.panel.gauge.tickFont,
               unitsFont: this.panel.gauge.unitsFont,
               animateNeedleValueTransition: this.panel.gauge.animateNeedleValueTransition
@@ -337,7 +349,7 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
         }, {
           key: 'link',
           value: function link(scope, elem, attrs, ctrl) {
-            console.log("d3gauge inside link");
+            //console.log("d3gauge inside link");
             ctrl.setContainer(elem.find('.grafana-d3-gauge'));
             // Check if there is a gauge rendered
             var renderedSVG = $('#' + this.panel.gaugeDivId);
@@ -415,7 +427,6 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
               } else {
                 data.value = this.series[0].stats[this.panel.operatorName];
                 data.flotpairs = this.series[0].flotpairs;
-
                 var decimalInfo = this.getDecimalsForValue(data.value);
                 var formatFunc = kbn.valueFormats[this.panel.format];
                 data.valueFormatted = formatFunc(data.value, decimalInfo.decimals, decimalInfo.scaledDecimals);
@@ -482,6 +493,11 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
             return this.data.valueFormatted;
           }
         }, {
+          key: 'getValueRounded',
+          value: function getValueRounded() {
+            return this.data.valueRounded;
+          }
+        }, {
           key: 'setUnitFormat',
           value: function setUnitFormat(subItem) {
             this.panel.format = subItem.value;
@@ -499,7 +515,7 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
             var data = {};
             this.setValues(data);
             this.data = data;
-            console.log("Data value: " + data.value + " formatted: " + data.valueFormatted + " rounded: " + data.valueRounded);
+            //console.log("Data value: " + data.value + " formatted: " + data.valueFormatted + " rounded: " + data.valueRounded );
             //var fmtTxt = kbn.valueFormats[this.panel.format];
             //console.log("Format: " + fmtTxt);
             this.gaugeObject.updateGauge(data.value, data.valueFormatted, data.valueRounded);

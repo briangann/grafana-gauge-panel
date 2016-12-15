@@ -8,6 +8,7 @@ function drawGauge(svg,opt) {
     if(typeof opt.tickSpaceMajVal === 'undefined')  {opt.tickSpaceMajVal=10;}
     if(typeof opt.divID === 'undefined')            {opt.divID="vizBox";}
     if(typeof opt.needleVal === 'undefined')        {opt.needleVal=60;}
+    if(typeof opt.needleValText === 'undefined')    {opt.needleValText='60';}
     if(typeof opt.gaugeUnits === 'undefined')       {opt.gaugeUnits="%";}
 
     if(typeof opt.padding === 'undefined')          {opt.padding=0.05;}
@@ -169,12 +170,12 @@ function drawGauge(svg,opt) {
       var degreeRange = opt.maxTickAngle - opt.zeroTickAngle;
       var range = opt.maxVal - opt.minVal;
       var min = opt.minVal;
-  		return value / range * degreeRange - (min / range * degreeRange + opt.zeroTickAngle);
+      return value / range * degreeRange - (min / range * degreeRange + opt.zeroTickAngle);
       //return value / this.config.range * 270 - (this.config.min / this.config.range * 270 + 45);
-  	};
+    };
 
     valueToRadians = function(value) {
-    	return this.valueToDegrees(value) * Math.PI / 180;
+      return this.valueToDegrees(value) * Math.PI / 180;
     };
 
     drawBand = function(start, end, color){
@@ -193,7 +194,6 @@ function drawGauge(svg,opt) {
     //for (var index in this.config.redZones)	{
     if (opt.showThresholdOnGauge && opt.thresholds.length > 0) {
       // split the threshold values
-      //debugger;
       var boundaries = opt.thresholds.split(',');
       if (opt.showLowerThresholdRange) {
         drawBand(opt.minVal, parseFloat(boundaries[0]), opt.thresholdColors[0]);
@@ -403,7 +403,8 @@ function drawGauge(svg,opt) {
         var i = d3.interpolateString(opt.minVal, opt.needleVal);
 
         return function(t) {
-            this.textContent = Math.round(i(t)) + " " + opt.gaugeUnits;
+          //this.textContent = Math.round(i(t)) + " " + opt.gaugeUnits;
+          this.textContent = opt.needleValText;
         };
     });
 
