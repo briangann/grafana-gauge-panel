@@ -1,7 +1,7 @@
 {
   "name": "briangann-gauge-panel",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Grafana D3 Gauge Panel",
   "main": "module.js",
   "scripts": {
