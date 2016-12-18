@@ -82,12 +82,13 @@ const panelDefaults = {
 
 class D3GaugePanelCtrl extends MetricsPanelCtrl {
 
-  constructor($scope, $injector) {
+  constructor($scope, $injector, alertSrv) {
     super($scope, $injector);
     // merge existing settings with our defaults
     _.defaults(this.panel, panelDefaults);
     this.panel.gaugeDivId = 'd3gauge_svg_' + this.panel.id;
     this.scoperef = $scope;
+    this.alertSrvRef = alertSrv;
     this.initialized = false;
     this.panelContainer = null;
     this.svg = null;
@@ -285,6 +286,35 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
     this.panel.rangeMaps.push({from: '', to: '', text: ''});
   }
 
+  validateRadialMetricValues() {
+    // make sure the spacing values are valid
+    if ((this.panel.gauge.tickSpaceMinVal === null) ||
+        (this.panel.gauge.tickSpaceMinVal === "") ||
+        (isNaN(this.panel.gauge.tickSpaceMinVal))
+      ){
+      // alert about the error, and set it to 1
+      this.panel.gauge.tickSpaceMinVal = 1;
+      this.alertSrvRef.set("Problem!", "Invalid Value for Tick Spacing Minor, auto-setting back to default of 1", 'error', 10000);
+    }
+    if ((this.panel.gauge.tickSpaceMajVal === null) ||
+        (this.panel.gauge.tickSpaceMajVal === "") ||
+        (isNaN(this.panel.gauge.tickSpaceMajVal))
+      ){
+      // alert about the error, and set it to 10
+      this.panel.gauge.tickSpaceMajVal = 10;
+      this.alertSrvRef.set("Problem!", "Invalid Value for Tick Spacing Major, auto-setting back to default of 10", 'error', 10000);
+    }
+    if ((this.panel.gauge.gaugeRadius === null) ||
+        (this.panel.gauge.gaugeRadius === "") ||
+        (isNaN(this.panel.gauge.gaugeRadius) ||
+        (this.panel.gauge.gaugeRadius < 0))
+      ){
+      // alert about the error, and set it to 0
+      this.panel.gauge.gaugeRadius = 0;
+      this.alertSrvRef.set("Problem!", "Invalid Value for Gauge Radius, auto-setting back to default of 0", 'error', 10000);
+    }
+    this.render();
+  }
 
   link(scope, elem, attrs, ctrl) {
     //console.log("d3gauge inside link");

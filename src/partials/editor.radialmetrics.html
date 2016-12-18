@@ -7,7 +7,7 @@
 					<label class="gf-form-label width-12">Radius
           	<tip>The radius of the gauge in pixels (0 for autoscaling)</tip>
         	</label>
-				  <input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.gaugeRadius" ng-blur="ctrl.render()" placeholder="0"></input>
+				  <input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.gaugeRadius" ng-blur="ctrl.validateRadialMetricValues()" placeholder="0"></input>
 				</div>
 				<div class="gf-form">
 					<label class="gf-form-label width-12">Pivot Radius
@@ -71,13 +71,13 @@
 					<label class="gf-form-label width-12">Tick Spacing Minor
           <tip>The numeric spacing of the minor increment ticks</tip>
         </label>
-				  <input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.tickSpaceMinVal" ng-blur="ctrl.render()" placeholder="0"></input>
+				  <input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.tickSpaceMinVal" ng-blur="ctrl.validateRadialMetricValues()" placeholder="1"></input>
 				</div>
 				<div class="gf-form">
 					<label class="gf-form-label width-12">Tick Spacing Major
-          <tip>The numeric spacing of the major increment ticks</tip>
+          <tip>The numeric spacing of the major increment ticks. Uses precision as specified.</tip>
         </label>
-				  <input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.tickSpaceMajVal" ng-blur="ctrl.render()" placeholder="0"></input>
+				  <input type="text" class="gf-form-input" ng-model="ctrl.panel.gauge.tickSpaceMajVal" ng-blur="ctrl.validateRadialMetricValues()" placeholder="10"></input>
 				</div>
 			</div>
 	</div>

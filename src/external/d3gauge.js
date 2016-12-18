@@ -125,7 +125,14 @@ function drawGauge(svg,opt) {
 
     for (var k = opt.zeroTickAngle; k <= opt.maxTickAngle; k = k + tickSpacingMajDeg)
         {
-            tickLabelText.push(opt.minVal + (opt.tickSpaceMajVal * counter));
+            let tickValue = opt.minVal + (opt.tickSpaceMajVal * counter);
+            var parts = opt.tickSpaceMajVal.toString().split('.');
+            if (parts.length > 1) {
+              tickText = Number(tickValue).toFixed(parts[1].length);
+            } else {
+              tickText = tickValue;
+            }
+            tickLabelText.push(tickText);
             counter++;
         }
 

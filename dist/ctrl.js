@@ -140,7 +140,7 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
       _export('MetricsPanelCtrl', _export('D3GaugePanelCtrl', D3GaugePanelCtrl = function (_MetricsPanelCtrl) {
         _inherits(D3GaugePanelCtrl, _MetricsPanelCtrl);
 
-        function D3GaugePanelCtrl($scope, $injector) {
+        function D3GaugePanelCtrl($scope, $injector, alertSrv) {
           _classCallCheck(this, D3GaugePanelCtrl);
 
           var _this = _possibleConstructorReturn(this, (D3GaugePanelCtrl.__proto__ || Object.getPrototypeOf(D3GaugePanelCtrl)).call(this, $scope, $injector));
@@ -149,6 +149,7 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           _.defaults(_this.panel, panelDefaults);
           _this.panel.gaugeDivId = 'd3gauge_svg_' + _this.panel.id;
           _this.scoperef = $scope;
+          _this.alertSrvRef = alertSrv;
           _this.initialized = false;
           _this.panelContainer = null;
           _this.svg = null;
@@ -345,6 +346,27 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           key: 'addRangeMap',
           value: function addRangeMap() {
             this.panel.rangeMaps.push({ from: '', to: '', text: '' });
+          }
+        }, {
+          key: 'validateRadialMetricValues',
+          value: function validateRadialMetricValues() {
+            // make sure the spacing values are valid
+            if (this.panel.gauge.tickSpaceMinVal === null || this.panel.gauge.tickSpaceMinVal === "" || isNaN(this.panel.gauge.tickSpaceMinVal)) {
+              // alert about the error, and set it to 1
+              this.panel.gauge.tickSpaceMinVal = 1;
+              this.alertSrvRef.set("Problem!", "Invalid Value for Tick Spacing Minor, auto-setting back to default of 1", 'error', 10000);
+            }
+            if (this.panel.gauge.tickSpaceMajVal === null || this.panel.gauge.tickSpaceMajVal === "" || isNaN(this.panel.gauge.tickSpaceMajVal)) {
+              // alert about the error, and set it to 10
+              this.panel.gauge.tickSpaceMajVal = 10;
+              this.alertSrvRef.set("Problem!", "Invalid Value for Tick Spacing Major, auto-setting back to default of 10", 'error', 10000);
+            }
+            if (this.panel.gauge.gaugeRadius === null || this.panel.gauge.gaugeRadius === "" || isNaN(this.panel.gauge.gaugeRadius) || this.panel.gauge.gaugeRadius < 0) {
+              // alert about the error, and set it to 0
+              this.panel.gauge.gaugeRadius = 0;
+              this.alertSrvRef.set("Problem!", "Invalid Value for Gauge Radius, auto-setting back to default of 0", 'error', 10000);
+            }
+            this.render();
           }
         }, {
           key: 'link',
