@@ -87,10 +87,12 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
     // merge existing settings with our defaults
     _.defaults(this.panel, panelDefaults);
     this.panel.gaugeDivId = 'd3gauge_svg_' + this.panel.id;
+    this.containerDivId = 'container_'+this.panel.gaugeDivId;
     this.scoperef = $scope;
     this.alertSrvRef = alertSrv;
     this.initialized = false;
     this.panelContainer = null;
+    this.panel.ughContainer = null;
     this.svg = null;
     this.panelWidth = null;
     this.panelHeight = null;
@@ -103,7 +105,7 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
     this.series = [];
     //console.log("D3GaugePanelCtrl constructor!");
     this.events.on('init-edit-mode', this.onInitEditMode.bind(this));
-    this.events.on('render', this.onRender.bind(this));
+    //this.events.on('render', this.onRender.bind(this));
     this.events.on('data-received', this.onDataReceived.bind(this));
     this.events.on('data-error', this.onDataError.bind(this));
     this.events.on('data-snapshot-load', this.onDataReceived.bind(this));
@@ -132,12 +134,12 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
    */
   setContainer(container) {
     this.panelContainer = container;
+    this.panel.ughContainer = container;
   }
 
   getPanelWidth() {
     // with a full sized panel, this comes back as zero, so calculate from the div panel instead
-    //debugger;
-    var tmpPanelWidth = this.panelContainer[0].clientWidth;
+    var tmpPanelWidth = this.panel.ughContainer.clientWidth;
     if (tmpPanelWidth === 0) {
       // just use the height...
       tmpPanelWidth = this.getPanelHeight();
@@ -180,24 +182,35 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
 
   clearSVG() {
     if ($('#'+this.panel.gaugeDivId).length) {
-      //console.log("Clearing SVG");
+      console.log("Clearing SVG id: " + this.panel.gaugeDivId);
       $('#'+this.panel.gaugeDivId).remove();
     }
   }
-  onRender() {
+  //onRender() {
+
+  doit() {
     // update the values to be sent to the gauge constructor
     this.setValues(this.data);
     //console.log("Render D3");
-    this.clearSVG();
+    //this.clearSVG();
+    console.log("Looking for: #"+this.panel.gaugeDivId);
+    if ($('#'+this.panel.gaugeDivId).length) {
+      console.log("Clearing SVG id: " + this.panel.gaugeDivId);
+      $('#'+this.panel.gaugeDivId).remove();
+    } else {
+      console.log("not found...");
+    }
     // use jQuery to get the height on our container
     this.panelWidth = this.getPanelWidth();
     this.panelHeight = this.getPanelHeight();
-
     var margin = {top: 10, right: 0, bottom: 30, left: 0};
     var width = this.panelWidth;
     var height = this.panelHeight;
+
+    console.log("Creating SVG id: " + this.panel.gaugeDivId);
+
     //console.log("width: " + width + " height: " + height);
-    var svg = d3.select(this.panelContainer[0])
+    var svg = d3.select(this.panel.ughContainer)
       .append("svg")
       .attr("width", width + "px")
       .attr("height", (height + 24) + "px")
@@ -318,14 +331,27 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
 
   link(scope, elem, attrs, ctrl) {
     //console.log("d3gauge inside link");
-    ctrl.setContainer(elem.find('.grafana-d3-gauge'));
-    // Check if there is a gauge rendered
-    var renderedSVG = $('#'+this.panel.gaugeDivId);
-    // console.log("link: found svg length " + renderedSVG.length);
-    if (renderedSVG.length === 0) {
-      // no gauge found, force a render
-      this.render();
+    var gaugeByClass = elem.find('.grafana-d3-gauge');
+    gaugeByClass.append('<div id="'+ctrl.containerDivId+'"></div>');
+    var container = gaugeByClass[0].childNodes[0];
+    ctrl.setContainer(container);
+
+    function render(){
+    		ctrl.doit();
     }
+    this.events.on('render', function() {
+			render();
+			ctrl.renderingCompleted();
+	  });
+    //elem.css('height', ctrl.height + 'px');
+    //ctrl.setContainer(elem.find('.grafana-d3-gauge'));
+    // Check if there is a gauge rendered
+    //var renderedSVG = $('#'+this.panel.gaugeDivId);
+    // console.log("link: found svg length " + renderedSVG.length);
+    //if (renderedSVG.length === 0) {
+      // no gauge found, force a render
+    //  this.doit();
+    //}
   }
 
 
@@ -475,10 +501,12 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
     var data = {};
     this.setValues(data);
     this.data = data;
-    //console.log("Data value: " + data.value + " formatted: " + data.valueFormatted + " rounded: " + data.valueRounded );
-    //var fmtTxt = kbn.valueFormats[this.panel.format];
-    //console.log("Format: " + fmtTxt);
-    this.gaugeObject.updateGauge(data.value, data.valueFormatted, data.valueRounded);
+    if(this.gaugeObject !== null){
+      this.gaugeObject.updateGauge(data.value, data.valueFormatted, data.valueRounded);
+    } else {
+      // render gauge
+      this.render();
+    }
   }
 
   seriesHandler(seriesData) {

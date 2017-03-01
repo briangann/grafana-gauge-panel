@@ -148,10 +148,12 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           // merge existing settings with our defaults
           _.defaults(_this.panel, panelDefaults);
           _this.panel.gaugeDivId = 'd3gauge_svg_' + _this.panel.id;
+          _this.containerDivId = 'container_' + _this.panel.gaugeDivId;
           _this.scoperef = $scope;
           _this.alertSrvRef = alertSrv;
           _this.initialized = false;
           _this.panelContainer = null;
+          _this.panel.ughContainer = null;
           _this.svg = null;
           _this.panelWidth = null;
           _this.panelHeight = null;
@@ -164,7 +166,7 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           _this.series = [];
           //console.log("D3GaugePanelCtrl constructor!");
           _this.events.on('init-edit-mode', _this.onInitEditMode.bind(_this));
-          _this.events.on('render', _this.onRender.bind(_this));
+          //this.events.on('render', this.onRender.bind(this));
           _this.events.on('data-received', _this.onDataReceived.bind(_this));
           _this.events.on('data-error', _this.onDataError.bind(_this));
           _this.events.on('data-snapshot-load', _this.onDataReceived.bind(_this));
@@ -193,13 +195,13 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           key: 'setContainer',
           value: function setContainer(container) {
             this.panelContainer = container;
+            this.panel.ughContainer = container;
           }
         }, {
           key: 'getPanelWidth',
           value: function getPanelWidth() {
             // with a full sized panel, this comes back as zero, so calculate from the div panel instead
-            //debugger;
-            var tmpPanelWidth = this.panelContainer[0].clientWidth;
+            var tmpPanelWidth = this.panel.ughContainer.clientWidth;
             if (tmpPanelWidth === 0) {
               // just use the height...
               tmpPanelWidth = this.getPanelHeight();
@@ -243,26 +245,35 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           key: 'clearSVG',
           value: function clearSVG() {
             if ($('#' + this.panel.gaugeDivId).length) {
-              //console.log("Clearing SVG");
+              console.log("Clearing SVG id: " + this.panel.gaugeDivId);
               $('#' + this.panel.gaugeDivId).remove();
             }
           }
         }, {
-          key: 'onRender',
-          value: function onRender() {
+          key: 'doit',
+          value: function doit() {
             // update the values to be sent to the gauge constructor
             this.setValues(this.data);
             //console.log("Render D3");
-            this.clearSVG();
+            //this.clearSVG();
+            console.log("Looking for: #" + this.panel.gaugeDivId);
+            if ($('#' + this.panel.gaugeDivId).length) {
+              console.log("Clearing SVG id: " + this.panel.gaugeDivId);
+              $('#' + this.panel.gaugeDivId).remove();
+            } else {
+              console.log("not found...");
+            }
             // use jQuery to get the height on our container
             this.panelWidth = this.getPanelWidth();
             this.panelHeight = this.getPanelHeight();
-
             var margin = { top: 10, right: 0, bottom: 30, left: 0 };
             var width = this.panelWidth;
             var height = this.panelHeight;
+
+            console.log("Creating SVG id: " + this.panel.gaugeDivId);
+
             //console.log("width: " + width + " height: " + height);
-            var svg = d3.select(this.panelContainer[0]).append("svg").attr("width", width + "px").attr("height", height + 24 + "px").attr("id", this.panel.gaugeDivId).classed("svg-content-responsive", true).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            var svg = d3.select(this.panel.ughContainer).append("svg").attr("width", width + "px").attr("height", height + 24 + "px").attr("id", this.panel.gaugeDivId).classed("svg-content-responsive", true).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             // check which is smaller, the height or the width and set the radius to be half of the lesser
             var tmpGaugeRadius = parseFloat(this.panel.gauge.gaugeRadius);
@@ -372,14 +383,27 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           key: 'link',
           value: function link(scope, elem, attrs, ctrl) {
             //console.log("d3gauge inside link");
-            ctrl.setContainer(elem.find('.grafana-d3-gauge'));
-            // Check if there is a gauge rendered
-            var renderedSVG = $('#' + this.panel.gaugeDivId);
-            // console.log("link: found svg length " + renderedSVG.length);
-            if (renderedSVG.length === 0) {
-              // no gauge found, force a render
-              this.render();
+            var gaugeByClass = elem.find('.grafana-d3-gauge');
+            gaugeByClass.append('<div id="' + ctrl.containerDivId + '"></div>');
+            var container = gaugeByClass[0].childNodes[0];
+            ctrl.setContainer(container);
+
+            function render() {
+              ctrl.doit();
             }
+            this.events.on('render', function () {
+              render();
+              ctrl.renderingCompleted();
+            });
+            //elem.css('height', ctrl.height + 'px');
+            //ctrl.setContainer(elem.find('.grafana-d3-gauge'));
+            // Check if there is a gauge rendered
+            //var renderedSVG = $('#'+this.panel.gaugeDivId);
+            // console.log("link: found svg length " + renderedSVG.length);
+            //if (renderedSVG.length === 0) {
+            // no gauge found, force a render
+            //  this.doit();
+            //}
           }
         }, {
           key: 'getDecimalsForValue',
@@ -537,10 +561,12 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
             var data = {};
             this.setValues(data);
             this.data = data;
-            //console.log("Data value: " + data.value + " formatted: " + data.valueFormatted + " rounded: " + data.valueRounded );
-            //var fmtTxt = kbn.valueFormats[this.panel.format];
-            //console.log("Format: " + fmtTxt);
-            this.gaugeObject.updateGauge(data.value, data.valueFormatted, data.valueRounded);
+            if (this.gaugeObject !== null) {
+              this.gaugeObject.updateGauge(data.value, data.valueFormatted, data.valueRounded);
+            } else {
+              // render gauge
+              this.render();
+            }
           }
         }, {
           key: 'seriesHandler',
