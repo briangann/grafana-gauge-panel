@@ -133,7 +133,8 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           showLowerThresholdRange: false,
           showMiddleThresholdRange: true,
           showUpperThresholdRange: true,
-          animateNeedleValueTransition: true
+          animateNeedleValueTransition: true,
+          animateNeedleValueTransitionSpeed: 100
         }
       };
 
@@ -210,9 +211,6 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
                 tmpPanelWidth = 250;
               }
               return tmpPanelWidth;
-              //var tmpPanelWidthCSS = $("div.panel").css("width");
-              //var tmpPanelWidthPx = tmpPanelWidthCSS.replace("px","");
-              //tmpPanelWidth = parseInt(tmpPanelWidthPx);
             }
             var actualWidth = tmpPanelWidth;
             return actualWidth;
@@ -250,11 +248,10 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
             }
           }
         }, {
-          key: 'doit',
-          value: function doit() {
+          key: 'renderGauge',
+          value: function renderGauge() {
             // update the values to be sent to the gauge constructor
             this.setValues(this.data);
-            //console.log("Render D3");
             //this.clearSVG();
             console.log("Looking for: #" + this.panel.gaugeDivId);
             if ($('#' + this.panel.gaugeDivId).length) {
@@ -270,9 +267,8 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
             var width = this.panelWidth;
             var height = this.panelHeight;
 
-            console.log("Creating SVG id: " + this.panel.gaugeDivId);
+            //console.log("Creating SVG id: " + this.panel.gaugeDivId);
 
-            //console.log("width: " + width + " height: " + height);
             var svg = d3.select(this.panel.ughContainer).append("svg").attr("width", width + "px").attr("height", height + 24 + "px").attr("id", this.panel.gaugeDivId).classed("svg-content-responsive", true).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             // check which is smaller, the height or the width and set the radius to be half of the lesser
@@ -329,7 +325,8 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
               needleVal: this.getValueRounded(),
               tickFont: this.panel.gauge.tickFont,
               unitsFont: this.panel.gauge.unitsFont,
-              animateNeedleValueTransition: this.panel.gauge.animateNeedleValueTransition
+              animateNeedleValueTransition: this.panel.gauge.animateNeedleValueTransition,
+              animateNeedleValueTransitionSpeed: this.panel.gauge.animateNeedleValueTransitionSpeed
             };
             this.gaugeObject = new drawGauge(svg, opt);
             this.svg = svg;
@@ -357,6 +354,20 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           key: 'addRangeMap',
           value: function addRangeMap() {
             this.panel.rangeMaps.push({ from: '', to: '', text: '' });
+          }
+        }, {
+          key: 'validateTransitionValue',
+          value: function validateTransitionValue() {
+            if (this.panel.gauge.animateNeedleValueTransitionSpeed === null) {
+              this.panel.gauge.animateNeedleValueTransitionSpeed = 100;
+            }
+            if (this.panel.gauge.animateNeedleValueTransitionSpeed < 0) {
+              this.panel.gauge.animateNeedleValueTransitionSpeed = 0;
+            }
+            if (this.panel.gauge.animateNeedleValueTransitionSpeed > 60000) {
+              this.panel.gauge.animateNeedleValueTransitionSpeed = 60000;
+            }
+            this.render();
           }
         }, {
           key: 'validateRadialMetricValues',
@@ -389,21 +400,12 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
             ctrl.setContainer(container);
 
             function render() {
-              ctrl.doit();
+              ctrl.renderGauge();
             }
             this.events.on('render', function () {
               render();
               ctrl.renderingCompleted();
             });
-            //elem.css('height', ctrl.height + 'px');
-            //ctrl.setContainer(elem.find('.grafana-d3-gauge'));
-            // Check if there is a gauge rendered
-            //var renderedSVG = $('#'+this.panel.gaugeDivId);
-            // console.log("link: found svg length " + renderedSVG.length);
-            //if (renderedSVG.length === 0) {
-            // no gauge found, force a render
-            //  this.doit();
-            //}
           }
         }, {
           key: 'getDecimalsForValue',

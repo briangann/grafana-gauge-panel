@@ -53,6 +53,8 @@ function drawGauge(svg,opt) {
       opt.thresholdColors = ["rgba(245, 54, 54, 0.9)", "rgba(237, 129, 40, 0.89)", "rgba(50, 172, 45, 0.97)"];
     }
     if(typeof opt.animateNeedleValueTransition === 'undefined') {opt.animateNeedleValueTransition = true;}
+    // default transition speed 500ms
+    if(typeof opt.animateNeedleValueTransitionSpeed === 'undefined') {opt.animateNeedleValueTransitionSpeed = 100;}
 
     // Calculate absolute values
     opt.padding = opt.padding * opt.gaugeRadius;
@@ -381,14 +383,14 @@ function drawGauge(svg,opt) {
 
     //Animate the transistion of the needle to its starting value
     var easeType = "quadin";
+    var transitionSpeed = 0;
     if (opt.animateNeedleValueTransition) {
-      easeType = "elastic";
+      //easeType = "quadin";
+      transitionSpeed = opt.animateNeedleValueTransitionSpeed
     }
     needlePath.transition()
-        .duration(500)
-        //.delay(0)
+        .duration(transitionSpeed)
         .ease(easeType,1,0.9)
-        //.attr("transform", function(d)
         .attrTween("transform", function(d,i,a)
         {
             needleAngle=valueScale(opt.needleVal);
@@ -404,7 +406,7 @@ function drawGauge(svg,opt) {
 
 
     unitsLabel.transition()
-    .duration(500)
+    .duration(transitionSpeed)
     .ease(easeType,1,0.9)
     .tween("text", function(d) {
         var i = d3.interpolateString(opt.minVal, opt.needleVal);
@@ -426,11 +428,14 @@ function drawGauge(svg,opt) {
         var needlePath = needleGroup.selectAll("path");
         var oldVal = opt.needleVal;
         var easeType = "quadin";
+        // snap to new location by default
+        var transitionSpeed = 0;
         if (opt.animateNeedleValueTransition) {
-          easeType = "elastic";
+          //easeType = "quadin";
+          transitionSpeed = opt.animateNeedleValueTransitionSpeed
         }
         needlePath.transition()
-            .duration(500)
+            .duration(transitionSpeed)
             .ease(easeType,1,0.9)
             .attrTween("transform", function(d,i,a)
             {
@@ -463,7 +468,7 @@ function drawGauge(svg,opt) {
         unitsLabel.style("fill", valueThresholdColor);
 
         unitsLabel.transition()
-            .duration(500)
+            .duration(transitionSpeed)
             .ease(easeType,1,0.9)
             .tween("text", function(d) {
                 var i = d3.interpolateString(oldVal, newVal);

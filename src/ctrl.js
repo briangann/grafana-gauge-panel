@@ -77,6 +77,7 @@ const panelDefaults = {
     showMiddleThresholdRange: true,
     showUpperThresholdRange: true,
     animateNeedleValueTransition: true,
+    animateNeedleValueTransitionSpeed: 100
   },
 };
 
@@ -148,9 +149,6 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
         tmpPanelWidth = 250;
       }
       return tmpPanelWidth;
-      //var tmpPanelWidthCSS = $("div.panel").css("width");
-      //var tmpPanelWidthPx = tmpPanelWidthCSS.replace("px","");
-      //tmpPanelWidth = parseInt(tmpPanelWidthPx);
     }
     var actualWidth = tmpPanelWidth;
     return actualWidth;
@@ -186,12 +184,10 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
       $('#'+this.panel.gaugeDivId).remove();
     }
   }
-  //onRender() {
 
-  doit() {
+  renderGauge() {
     // update the values to be sent to the gauge constructor
     this.setValues(this.data);
-    //console.log("Render D3");
     //this.clearSVG();
     console.log("Looking for: #"+this.panel.gaugeDivId);
     if ($('#'+this.panel.gaugeDivId).length) {
@@ -207,9 +203,8 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
     var width = this.panelWidth;
     var height = this.panelHeight;
 
-    console.log("Creating SVG id: " + this.panel.gaugeDivId);
+    //console.log("Creating SVG id: " + this.panel.gaugeDivId);
 
-    //console.log("width: " + width + " height: " + height);
     var svg = d3.select(this.panel.ughContainer)
       .append("svg")
       .attr("width", width + "px")
@@ -273,7 +268,8 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
       needleVal : this.getValueRounded(),
       tickFont: this.panel.gauge.tickFont,
       unitsFont: this.panel.gauge.unitsFont,
-      animateNeedleValueTransition: this.panel.gauge.animateNeedleValueTransition
+      animateNeedleValueTransition: this.panel.gauge.animateNeedleValueTransition,
+      animateNeedleValueTransitionSpeed: this.panel.gauge.animateNeedleValueTransitionSpeed
     };
     this.gaugeObject = new drawGauge(svg,opt);
     this.svg = svg;
@@ -297,6 +293,19 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
 
   addRangeMap() {
     this.panel.rangeMaps.push({from: '', to: '', text: ''});
+  }
+
+  validateTransitionValue() {
+    if (this.panel.gauge.animateNeedleValueTransitionSpeed === null) {
+      this.panel.gauge.animateNeedleValueTransitionSpeed = 100;
+    }
+    if (this.panel.gauge.animateNeedleValueTransitionSpeed < 0) {
+      this.panel.gauge.animateNeedleValueTransitionSpeed = 0;
+    }
+    if (this.panel.gauge.animateNeedleValueTransitionSpeed > 60000) {
+      this.panel.gauge.animateNeedleValueTransitionSpeed = 60000;
+    }
+    this.render();
   }
 
   validateRadialMetricValues() {
@@ -337,21 +346,12 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
     ctrl.setContainer(container);
 
     function render(){
-    		ctrl.doit();
+    		ctrl.renderGauge();
     }
     this.events.on('render', function() {
 			render();
 			ctrl.renderingCompleted();
 	  });
-    //elem.css('height', ctrl.height + 'px');
-    //ctrl.setContainer(elem.find('.grafana-d3-gauge'));
-    // Check if there is a gauge rendered
-    //var renderedSVG = $('#'+this.panel.gaugeDivId);
-    // console.log("link: found svg length " + renderedSVG.length);
-    //if (renderedSVG.length === 0) {
-      // no gauge found, force a render
-    //  this.doit();
-    //}
   }
 
 
