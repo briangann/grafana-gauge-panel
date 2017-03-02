@@ -128,6 +128,7 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           tickColMin: '#000',
           tickFont: 'Open Sans',
           unitsFont: 'Open Sans',
+          valueYOffset: 0,
           showThresholdOnGauge: false,
           showThresholdColorOnValue: false,
           showLowerThresholdRange: false,
@@ -261,15 +262,20 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
               console.log("not found...");
             }
             // use jQuery to get the height on our container
-            this.panelWidth = this.getPanelWidth();
-            this.panelHeight = this.getPanelHeight();
-            var margin = { top: 10, right: 0, bottom: 30, left: 0 };
+            // TODO: Check if there is a "title" and offset size of gauge accordingly
+            var panelTitleOffset = 0;
+            if (this.panel.title !== "") {
+              panelTitleOffset = 25;
+            }
+            this.panelWidth = this.getPanelWidth() - panelTitleOffset;
+            this.panelHeight = this.getPanelHeight() - panelTitleOffset;
+            var margin = { top: 0, right: 0, bottom: 0, left: 10 };
             var width = this.panelWidth;
             var height = this.panelHeight;
 
             //console.log("Creating SVG id: " + this.panel.gaugeDivId);
 
-            var svg = d3.select(this.panel.ughContainer).append("svg").attr("width", width + "px").attr("height", height + 24 + "px").attr("id", this.panel.gaugeDivId).classed("svg-content-responsive", true).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            var svg = d3.select(this.panel.ughContainer).append("svg").attr("width", width + "px").attr("height", height + "px").attr("id", this.panel.gaugeDivId).classed("svg-content-responsive", true).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             // check which is smaller, the height or the width and set the radius to be half of the lesser
             var tmpGaugeRadius = parseFloat(this.panel.gauge.gaugeRadius);
@@ -325,6 +331,7 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
               needleVal: this.getValueRounded(),
               tickFont: this.panel.gauge.tickFont,
               unitsFont: this.panel.gauge.unitsFont,
+              valueYOffset: this.panel.gauge.valueYOffset,
               animateNeedleValueTransition: this.panel.gauge.animateNeedleValueTransition,
               animateNeedleValueTransitionSpeed: this.panel.gauge.animateNeedleValueTransitionSpeed
             };
@@ -395,7 +402,7 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           value: function link(scope, elem, attrs, ctrl) {
             //console.log("d3gauge inside link");
             var gaugeByClass = elem.find('.grafana-d3-gauge');
-            gaugeByClass.append('<div id="' + ctrl.containerDivId + '"></div>');
+            gaugeByClass.append('<center><div id="' + ctrl.containerDivId + '"></div></center>');
             var container = gaugeByClass[0].childNodes[0];
             ctrl.setContainer(container);
 

@@ -32,6 +32,14 @@
 					ng-model-onblur>
 			</div>
 		</div>
+		<div class="gf-form-inline">
+      <div class="gf-form">
+        <label class="gf-form-label width-10">Value Y Offset
+					<tip>Adjust the displayed value up or down the Y-Axis, use negative value to move up, positive for down</tip>
+				</label>
+				<input type="number" class="gf-form-input width-4" ng-model="ctrl.panel.gauge.valueYOffset" ng-blur="ctrl.render()" placeholder="0"></input>
+			</div>
+		</div>
 	</div>
 
 	<div class="section gf-form-group">

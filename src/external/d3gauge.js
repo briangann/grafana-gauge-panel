@@ -6,7 +6,6 @@ function drawGauge(svg,opt) {
     if(typeof opt.maxVal === 'undefined')           {opt.maxVal=100;}
     if(typeof opt.tickSpaceMinVal === 'undefined')  {opt.tickSpaceMinVal=1;}
     if(typeof opt.tickSpaceMajVal === 'undefined')  {opt.tickSpaceMajVal=10;}
-    if(typeof opt.divID === 'undefined')            {opt.divID="vizBox";}
     if(typeof opt.needleVal === 'undefined')        {opt.needleVal=60;}
     if(typeof opt.needleValText === 'undefined')    {opt.needleValText='60';}
     if(typeof opt.gaugeUnits === 'undefined')       {opt.gaugeUnits="%";}
@@ -43,6 +42,7 @@ function drawGauge(svg,opt) {
     defaultFonts = '"Helvetica Neue", Helvetica, Arial, sans-serif';
     if(typeof opt.tickFont === 'undefined')        {opt.tickFont = defaultFonts;}
     if(typeof opt.unitsFont === 'undefined')        {opt.unitsFont = defaultFonts;}
+    if(typeof opt.valueYOffset === 'undefined')        {opt.valueYOffset = 0;}
 
     if(typeof opt.showThresholdOnGauge === 'undefined') {opt.showThresholdOnGauge = false;}
     if(typeof opt.showThresholdColorOnValue === 'undefined') {opt.showThresholdColorOnValue = false;}
@@ -124,30 +124,23 @@ function drawGauge(svg,opt) {
     //Calculate major tick mark label text
     counter=0;
     var tickLabelText=[];
-
+    //debugger;
     for (var k = opt.zeroTickAngle; k <= opt.maxTickAngle; k = k + tickSpacingMajDeg)
-        {
-            let tickValue = opt.minVal + (opt.tickSpaceMajVal * counter);
-            var parts = opt.tickSpaceMajVal.toString().split('.');
-            if (parts.length > 1) {
-              tickText = Number(tickValue).toFixed(parts[1].length);
-            } else {
-              tickText = tickValue;
-            }
-            tickLabelText.push(tickText);
-            counter++;
-        }
-
+    {
+      let tickValue = opt.minVal + (opt.tickSpaceMajVal * counter);
+      var parts = opt.tickSpaceMajVal.toString().split('.');
+      if (parts.length > 1) {
+        tickText = Number(tickValue).toFixed(parts[1].length);
+      } else {
+        tickText = tickValue;
+      }
+      tickLabelText.push(tickText);
+      counter++;
+    }
+    //debugger;
     //Add the svg content holder to the visualisation box element in the document (vizbox)
     var svgWidth=opt.gaugeRadius * 2,
         svgHeight=opt.gaugeRadius * 2;
-
-    //var svg = d3.select("#" + opt.divID)
-    //    .append("svg")
-    //    .attr("id", "SVGbox-" + opt.divID)
-    //    .attr("width", svgWidth)
-    //    .attr("height", svgHeight)
-    //    .attr({'xmlns': 'http://www.w3.org/2000/svg','xmlns:xlink': 'http://www.w3.org/1999/xlink'});
 
     //Draw the circles that make up the edge of the gauge
     var circleGroup = svg.append("svg:g")
@@ -333,7 +326,12 @@ function drawGauge(svg,opt) {
                 .data([0])
                 .enter().append("text")
                 .attr("x",function(d,i){return labelXcalc(d,i);})
-                .attr("y",function(d,i){return labelYcalc(d,i);})
+                .attr("y",function(d,i){
+                  var y = labelYcalc(d,i);
+                  y = y + opt.valueYOffset;
+                  return y;
+                  //return labelYcalc(d,i);
+                })
                 .attr("font-size", opt.unitsLabelFontSize)
                 .attr("text-anchor", "middle")
                 .style("fill", opt.unitsLabelCol)
