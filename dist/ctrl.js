@@ -233,7 +233,7 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           key: 'clearSVG',
           value: function clearSVG() {
             if ($('#' + this.panel.gaugeDivId).length) {
-              console.log("Clearing SVG id: " + this.panel.gaugeDivId);
+              //console.log("Clearing SVG id: " + this.panel.gaugeDivId);
               $('#' + this.panel.gaugeDivId).remove();
             }
           }
@@ -261,9 +261,6 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
             var margin = { top: 0, right: 0, bottom: 0, left: 10 };
             var width = this.panelWidth;
             var height = this.panelHeight;
-
-            console.log("panel width is " + width);
-            console.log("panel height is " + height);
 
             //console.log("Creating SVG id: " + this.panel.gaugeDivId);
 
