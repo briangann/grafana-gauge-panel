@@ -6,7 +6,6 @@ function drawGauge(svg,opt) {
     if(typeof opt.maxVal === 'undefined')           {opt.maxVal=100;}
     if(typeof opt.tickSpaceMinVal === 'undefined')  {opt.tickSpaceMinVal=1;}
     if(typeof opt.tickSpaceMajVal === 'undefined')  {opt.tickSpaceMajVal=10;}
-    if(typeof opt.divID === 'undefined')            {opt.divID="vizBox";}
     if(typeof opt.needleVal === 'undefined')        {opt.needleVal=60;}
     if(typeof opt.needleValText === 'undefined')    {opt.needleValText='60';}
     if(typeof opt.gaugeUnits === 'undefined')       {opt.gaugeUnits="%";}
@@ -43,6 +42,7 @@ function drawGauge(svg,opt) {
     defaultFonts = '"Helvetica Neue", Helvetica, Arial, sans-serif';
     if(typeof opt.tickFont === 'undefined')        {opt.tickFont = defaultFonts;}
     if(typeof opt.unitsFont === 'undefined')        {opt.unitsFont = defaultFonts;}
+    if(typeof opt.valueYOffset === 'undefined')        {opt.valueYOffset = 0;}
 
     if(typeof opt.showThresholdOnGauge === 'undefined') {opt.showThresholdOnGauge = false;}
     if(typeof opt.showThresholdColorOnValue === 'undefined') {opt.showThresholdColorOnValue = false;}
@@ -53,6 +53,8 @@ function drawGauge(svg,opt) {
       opt.thresholdColors = ["rgba(245, 54, 54, 0.9)", "rgba(237, 129, 40, 0.89)", "rgba(50, 172, 45, 0.97)"];
     }
     if(typeof opt.animateNeedleValueTransition === 'undefined') {opt.animateNeedleValueTransition = true;}
+    // default transition speed 500ms
+    if(typeof opt.animateNeedleValueTransitionSpeed === 'undefined') {opt.animateNeedleValueTransitionSpeed = 100;}
 
     // Calculate absolute values
     opt.padding = opt.padding * opt.gaugeRadius;
@@ -99,8 +101,13 @@ function drawGauge(svg,opt) {
 
     for (var i = opt.zeroTickAngle; i <= opt.maxTickAngle; i = i + tickSpacingMajDeg)
         {
+          var tickAngle = (opt.zeroTickAngle + (tickSpacingMajDeg * counter))
+          // check if this is the "end" of a full circle, and skip the last tick marker
+          if ((tickAngle - opt.zeroTickAngle) < 360) {
+            //console.log("adding tick at angle " + tickAngle)
             tickAnglesMaj.push(opt.zeroTickAngle + (tickSpacingMajDeg * counter));
-            counter++;
+          }
+          counter++;
         }
 
     counter = 0;
@@ -122,30 +129,23 @@ function drawGauge(svg,opt) {
     //Calculate major tick mark label text
     counter=0;
     var tickLabelText=[];
-
+    //debugger;
     for (var k = opt.zeroTickAngle; k <= opt.maxTickAngle; k = k + tickSpacingMajDeg)
-        {
-            let tickValue = opt.minVal + (opt.tickSpaceMajVal * counter);
-            var parts = opt.tickSpaceMajVal.toString().split('.');
-            if (parts.length > 1) {
-              tickText = Number(tickValue).toFixed(parts[1].length);
-            } else {
-              tickText = tickValue;
-            }
-            tickLabelText.push(tickText);
-            counter++;
-        }
-
+    {
+      let tickValue = opt.minVal + (opt.tickSpaceMajVal * counter);
+      var parts = opt.tickSpaceMajVal.toString().split('.');
+      if (parts.length > 1) {
+        tickText = Number(tickValue).toFixed(parts[1].length);
+      } else {
+        tickText = tickValue;
+      }
+      tickLabelText.push(tickText);
+      counter++;
+    }
+    //debugger;
     //Add the svg content holder to the visualisation box element in the document (vizbox)
     var svgWidth=opt.gaugeRadius * 2,
         svgHeight=opt.gaugeRadius * 2;
-
-    //var svg = d3.select("#" + opt.divID)
-    //    .append("svg")
-    //    .attr("id", "SVGbox-" + opt.divID)
-    //    .attr("width", svgWidth)
-    //    .attr("height", svgHeight)
-    //    .attr({'xmlns': 'http://www.w3.org/2000/svg','xmlns:xlink': 'http://www.w3.org/1999/xlink'});
 
     //Draw the circles that make up the edge of the gauge
     var circleGroup = svg.append("svg:g")
@@ -331,7 +331,12 @@ function drawGauge(svg,opt) {
                 .data([0])
                 .enter().append("text")
                 .attr("x",function(d,i){return labelXcalc(d,i);})
-                .attr("y",function(d,i){return labelYcalc(d,i);})
+                .attr("y",function(d,i){
+                  var y = labelYcalc(d,i);
+                  y = y + opt.valueYOffset;
+                  return y;
+                  //return labelYcalc(d,i);
+                })
                 .attr("font-size", opt.unitsLabelFontSize)
                 .attr("text-anchor", "middle")
                 .style("fill", opt.unitsLabelCol)
@@ -381,14 +386,14 @@ function drawGauge(svg,opt) {
 
     //Animate the transistion of the needle to its starting value
     var easeType = "quadin";
+    var transitionSpeed = 0;
     if (opt.animateNeedleValueTransition) {
-      easeType = "elastic";
+      //easeType = "quadin";
+      transitionSpeed = opt.animateNeedleValueTransitionSpeed
     }
     needlePath.transition()
-        .duration(500)
-        //.delay(0)
+        .duration(transitionSpeed)
         .ease(easeType,1,0.9)
-        //.attr("transform", function(d)
         .attrTween("transform", function(d,i,a)
         {
             needleAngle=valueScale(opt.needleVal);
@@ -404,7 +409,7 @@ function drawGauge(svg,opt) {
 
 
     unitsLabel.transition()
-    .duration(500)
+    .duration(transitionSpeed)
     .ease(easeType,1,0.9)
     .tween("text", function(d) {
         var i = d3.interpolateString(opt.minVal, opt.needleVal);
@@ -426,11 +431,14 @@ function drawGauge(svg,opt) {
         var needlePath = needleGroup.selectAll("path");
         var oldVal = opt.needleVal;
         var easeType = "quadin";
+        // snap to new location by default
+        var transitionSpeed = 0;
         if (opt.animateNeedleValueTransition) {
-          easeType = "elastic";
+          //easeType = "quadin";
+          transitionSpeed = opt.animateNeedleValueTransitionSpeed
         }
         needlePath.transition()
-            .duration(500)
+            .duration(transitionSpeed)
             .ease(easeType,1,0.9)
             .attrTween("transform", function(d,i,a)
             {
@@ -463,7 +471,7 @@ function drawGauge(svg,opt) {
         unitsLabel.style("fill", valueThresholdColor);
 
         unitsLabel.transition()
-            .duration(500)
+            .duration(transitionSpeed)
             .ease(easeType,1,0.9)
             .tween("text", function(d) {
                 var i = d3.interpolateString(oldVal, newVal);

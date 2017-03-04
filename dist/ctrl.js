@@ -128,12 +128,14 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           tickColMin: '#000',
           tickFont: 'Open Sans',
           unitsFont: 'Open Sans',
+          valueYOffset: 0,
           showThresholdOnGauge: false,
           showThresholdColorOnValue: false,
           showLowerThresholdRange: false,
           showMiddleThresholdRange: true,
           showUpperThresholdRange: true,
-          animateNeedleValueTransition: true
+          animateNeedleValueTransition: true,
+          animateNeedleValueTransitionSpeed: 100
         }
       };
 
@@ -148,10 +150,12 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           // merge existing settings with our defaults
           _.defaults(_this.panel, panelDefaults);
           _this.panel.gaugeDivId = 'd3gauge_svg_' + _this.panel.id;
+          _this.containerDivId = 'container_' + _this.panel.gaugeDivId;
           _this.scoperef = $scope;
           _this.alertSrvRef = alertSrv;
           _this.initialized = false;
           _this.panelContainer = null;
+          _this.panel.svgContainer = null;
           _this.svg = null;
           _this.panelWidth = null;
           _this.panelHeight = null;
@@ -164,7 +168,7 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           _this.series = [];
           //console.log("D3GaugePanelCtrl constructor!");
           _this.events.on('init-edit-mode', _this.onInitEditMode.bind(_this));
-          _this.events.on('render', _this.onRender.bind(_this));
+          //this.events.on('render', this.onRender.bind(this));
           _this.events.on('data-received', _this.onDataReceived.bind(_this));
           _this.events.on('data-error', _this.onDataError.bind(_this));
           _this.events.on('data-snapshot-load', _this.onDataReceived.bind(_this));
@@ -193,33 +197,23 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           key: 'setContainer',
           value: function setContainer(container) {
             this.panelContainer = container;
+            this.panel.svgContainer = container;
           }
         }, {
-          key: 'getPanelWidth',
-          value: function getPanelWidth() {
-            // with a full sized panel, this comes back as zero, so calculate from the div panel instead
-            //debugger;
-            var tmpPanelWidth = this.panelContainer[0].clientWidth;
-            if (tmpPanelWidth === 0) {
-              // just use the height...
-              tmpPanelWidth = this.getPanelHeight();
-              tmpPanelWidth -= 24;
-              if (tmpPanelWidth < 250) {
-                tmpPanelWidth = 250;
-              }
-              return tmpPanelWidth;
-              //var tmpPanelWidthCSS = $("div.panel").css("width");
-              //var tmpPanelWidthPx = tmpPanelWidthCSS.replace("px","");
-              //tmpPanelWidth = parseInt(tmpPanelWidthPx);
-            }
-            var actualWidth = tmpPanelWidth;
-            return actualWidth;
+          key: 'getPanelWidthBySpan',
+          value: function getPanelWidthBySpan() {
+            var viewPortWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            // get the pixels of a span
+            var pixelsPerSpan = viewPortWidth / 12;
+            // multiply num spans by pixelsPerSpan
+            var trueWidth = Math.round(this.panel.span * pixelsPerSpan);
+            return trueWidth;
           }
         }, {
           key: 'getPanelHeight',
           value: function getPanelHeight() {
             // panel can have a fixed height via options
-            var tmpPanelHeight = this.$scope.ctrl.panel.height;
+            var tmpPanelHeight = this.panel.height;
             // if that is blank, try to get it from our row
             if (typeof tmpPanelHeight === 'undefined') {
               // get from the row instead
@@ -233,36 +227,42 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
               tmpPanelHeight = tmpPanelHeight.replace("px", "");
             }
             var actualHeight = parseInt(tmpPanelHeight);
-            // grafana minimum height for a panel is 250px
-            if (actualHeight < 250) {
-              actualHeight = 250;
-            }
             return actualHeight;
           }
         }, {
           key: 'clearSVG',
           value: function clearSVG() {
             if ($('#' + this.panel.gaugeDivId).length) {
-              //console.log("Clearing SVG");
+              //console.log("Clearing SVG id: " + this.panel.gaugeDivId);
               $('#' + this.panel.gaugeDivId).remove();
             }
           }
         }, {
-          key: 'onRender',
-          value: function onRender() {
+          key: 'renderGauge',
+          value: function renderGauge() {
             // update the values to be sent to the gauge constructor
             this.setValues(this.data);
-            //console.log("Render D3");
-            this.clearSVG();
-            // use jQuery to get the height on our container
-            this.panelWidth = this.getPanelWidth();
-            this.panelHeight = this.getPanelHeight();
+            //this.clearSVG();
+            //console.log("Looking for: #"+this.panel.gaugeDivId);
+            if ($('#' + this.panel.gaugeDivId).length) {
+              //console.log("Clearing SVG id: " + this.panel.gaugeDivId);
+              $('#' + this.panel.gaugeDivId).remove();
+            } else {}
+            //console.log("not found...");
 
-            var margin = { top: 10, right: 0, bottom: 30, left: 0 };
+            // use jQuery to get the height on our container
+            // TODO: Check if there is a "title" and offset size of gauge accordingly
+            var panelTitleOffset = 0;
+            if (this.panel.title !== "") {
+              panelTitleOffset = 25;
+            }
+            this.panelWidth = this.getPanelWidthBySpan();
+            this.panelHeight = this.getPanelHeight() - panelTitleOffset;
+            var margin = { top: 0, right: 0, bottom: 0, left: 10 };
             var width = this.panelWidth;
             var height = this.panelHeight;
-            //console.log("width: " + width + " height: " + height);
-            var svg = d3.select(this.panelContainer[0]).append("svg").attr("width", width + "px").attr("height", height + 24 + "px").attr("id", this.panel.gaugeDivId).classed("svg-content-responsive", true).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            //console.log("Creating SVG id: " + this.panel.gaugeDivId);
 
             // check which is smaller, the height or the width and set the radius to be half of the lesser
             var tmpGaugeRadius = parseFloat(this.panel.gauge.gaugeRadius);
@@ -274,6 +274,10 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
               }
               tmpGaugeRadius -= 10;
             }
+
+            // set the width and height to be double the radius
+            var svg = d3.select(this.panel.svgContainer).append("svg").attr("width", Math.round(tmpGaugeRadius * 2) + "px").attr("height", Math.round(tmpGaugeRadius * 2) + "px").attr("id", this.panel.gaugeDivId).classed("svg-content-responsive", true).append("g");
+
             var opt = {
               minVal: this.panel.gauge.minValue,
               maxVal: this.panel.gauge.maxValue,
@@ -318,7 +322,9 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
               needleVal: this.getValueRounded(),
               tickFont: this.panel.gauge.tickFont,
               unitsFont: this.panel.gauge.unitsFont,
-              animateNeedleValueTransition: this.panel.gauge.animateNeedleValueTransition
+              valueYOffset: this.panel.gauge.valueYOffset,
+              animateNeedleValueTransition: this.panel.gauge.animateNeedleValueTransition,
+              animateNeedleValueTransitionSpeed: this.panel.gauge.animateNeedleValueTransitionSpeed
             };
             this.gaugeObject = new drawGauge(svg, opt);
             this.svg = svg;
@@ -348,6 +354,88 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
             this.panel.rangeMaps.push({ from: '', to: '', text: '' });
           }
         }, {
+          key: 'validateTransitionValue',
+          value: function validateTransitionValue() {
+            if (this.panel.gauge.animateNeedleValueTransitionSpeed === null) {
+              this.panel.gauge.animateNeedleValueTransitionSpeed = 100;
+            }
+            if (this.panel.gauge.animateNeedleValueTransitionSpeed < 0) {
+              this.panel.gauge.animateNeedleValueTransitionSpeed = 0;
+            }
+            if (this.panel.gauge.animateNeedleValueTransitionSpeed > 60000) {
+              this.panel.gauge.animateNeedleValueTransitionSpeed = 60000;
+            }
+            this.render();
+          }
+        }, {
+          key: 'validateGaugeTickDegreeValues',
+          value: function validateGaugeTickDegreeValues() {
+            if (this.panel.gauge.zeroTickAngle === null || this.panel.gauge.zeroTickAngle === "" || this.panel.gauge.zeroTickAngle < 0 || isNaN(this.panel.gauge.zeroTickAngle)) {
+              // alert about the error, and set it to 60
+              this.panel.gauge.zeroTickAngle = 60;
+              this.alertSrvRef.set("Problem!", "Invalid Value for Zero Tick Angle, auto-setting to default of 60", 'error', 10000);
+            }
+
+            if (this.panel.gauge.maxTickAngle === null || this.panel.gauge.maxTickAngle === "" || this.panel.gauge.maxTickAngle < 0 || isNaN(this.panel.gauge.maxTickAngle)) {
+              // alert about the error, and set it to 320
+              this.panel.gauge.maxTickAngle = 320;
+              this.alertSrvRef.set("Problem!", "Invalid Value for Max Tick Angle, auto-setting to default of 320", 'error', 10000);
+            }
+
+            var gaugeTickDegrees = this.panel.gauge.maxTickAngle - this.panel.gauge.zeroTickAngle;
+            // make sure the total degrees does not exceed 360
+            if (gaugeTickDegrees > 360) {
+              // set to default values and alert
+              this.panel.gauge.zeroTickAngle = 60;
+              this.panel.gauge.maxTickAngle = 320;
+              this.alertSrvRef.set("Problem!", "Gauge tick angle difference is larger than 360 degrees, auto-setting to default values", 'error', 10000);
+            }
+            // make sure it is "positive"
+            if (gaugeTickDegrees < 0) {
+              // set to default values and alert
+              this.panel.gauge.zeroTickAngle = 60;
+              this.panel.gauge.maxTickAngle = 320;
+              this.alertSrvRef.set("Problem!", "Gauge tick angle difference is less than 0 degrees, auto-setting to default values", 'error', 10000);
+            }
+
+            // render
+            this.render();
+          }
+        }, {
+          key: 'validateGaugeNeedleDegreeValues',
+          value: function validateGaugeNeedleDegreeValues() {
+            if (this.panel.gauge.zeroNeedleAngle === null || this.panel.gauge.zeroNeedleAngle === "" || this.panel.gauge.zeroNeedleAngle < 0 || isNaN(this.panel.gauge.zeroNeedleAngle)) {
+              // alert about the error, and set it to 60
+              this.panel.gauge.zeroNeedleAngle = 60;
+              this.alertSrvRef.set("Problem!", "Invalid Value for Zero Needle Angle, auto-setting to default of 60", 'error', 10000);
+            }
+
+            if (this.panel.gauge.maxNeedleAngle === null || this.panel.gauge.maxNeedleAngle === "" || this.panel.gauge.maxNeedleAngle < 0 || isNaN(this.panel.gauge.maxNeedleAngle)) {
+              // alert about the error, and set it to 320
+              this.panel.gauge.maxNeedleAngle = 320;
+              this.alertSrvRef.set("Problem!", "Invalid Value for Max Needle Angle, auto-setting to default of 320", 'error', 10000);
+            }
+
+            var gaugeNeedleDegrees = this.panel.gauge.maxNeedleAngle - this.panel.gauge.zeroNeedleAngle;
+            // make sure the total degrees does not exceed 360
+            if (gaugeNeedleDegrees > 360) {
+              // set to default values and alert
+              this.panel.gauge.zeroNeedleAngle = 60;
+              this.panel.gauge.maxNeedleAngle = 320;
+              this.alertSrvRef.set("Problem!", "Gauge needle angle difference is larger than 360 degrees, auto-setting to default values", 'error', 10000);
+            }
+            // make sure it is "positive"
+            if (gaugeNeedleDegrees < 0) {
+              // set to default values and alert
+              this.panel.gauge.zeroNeedleAngle = 60;
+              this.panel.gauge.maxNeedleAngle = 320;
+              this.alertSrvRef.set("Problem!", "Gauge needle angle difference is less than 0 degrees, auto-setting to default values", 'error', 10000);
+            }
+
+            // render
+            this.render();
+          }
+        }, {
           key: 'validateRadialMetricValues',
           value: function validateRadialMetricValues() {
             // make sure the spacing values are valid
@@ -372,14 +460,18 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           key: 'link',
           value: function link(scope, elem, attrs, ctrl) {
             //console.log("d3gauge inside link");
-            ctrl.setContainer(elem.find('.grafana-d3-gauge'));
-            // Check if there is a gauge rendered
-            var renderedSVG = $('#' + this.panel.gaugeDivId);
-            // console.log("link: found svg length " + renderedSVG.length);
-            if (renderedSVG.length === 0) {
-              // no gauge found, force a render
-              this.render();
+            var gaugeByClass = elem.find('.grafana-d3-gauge');
+            //gaugeByClass.append('<center><div id="'+ctrl.containerDivId+'"></div></center>');
+            gaugeByClass.append('<div id="' + ctrl.containerDivId + '"></div>');
+            var container = gaugeByClass[0].childNodes[0];
+            ctrl.setContainer(container);
+            function render() {
+              ctrl.renderGauge();
             }
+            this.events.on('render', function () {
+              render();
+              ctrl.renderingCompleted();
+            });
           }
         }, {
           key: 'getDecimalsForValue',
@@ -537,10 +629,12 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
             var data = {};
             this.setValues(data);
             this.data = data;
-            //console.log("Data value: " + data.value + " formatted: " + data.valueFormatted + " rounded: " + data.valueRounded );
-            //var fmtTxt = kbn.valueFormats[this.panel.format];
-            //console.log("Format: " + fmtTxt);
-            this.gaugeObject.updateGauge(data.value, data.valueFormatted, data.valueRounded);
+            if (this.gaugeObject !== null) {
+              this.gaugeObject.updateGauge(data.value, data.valueFormatted, data.valueRounded);
+            } else {
+              // render gauge
+              this.render();
+            }
           }
         }, {
           key: 'seriesHandler',
