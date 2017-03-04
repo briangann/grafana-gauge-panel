@@ -47,6 +47,10 @@ With Limits
 * Thresholding colors displayed on gauge
 * Threshold can modify displayed value and background
 
+* Needle animation speed is now configurable
+* Arbitrary degree gauges now supported (default is from 60 to 320)
+* Value text on gauge can now be moved up/down as needed
+
 ## Building
 
 This plugin relies on Grunt/NPM/Bower, typical build sequence:

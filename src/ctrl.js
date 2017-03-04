@@ -94,7 +94,7 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
     this.alertSrvRef = alertSrv;
     this.initialized = false;
     this.panelContainer = null;
-    this.panel.ughContainer = null;
+    this.panel.svgContainer = null;
     this.svg = null;
     this.panelWidth = null;
     this.panelHeight = null;
@@ -136,28 +136,22 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
    */
   setContainer(container) {
     this.panelContainer = container;
-    this.panel.ughContainer = container;
+    this.panel.svgContainer = container;
   }
 
-  getPanelWidth() {
-    // with a full sized panel, this comes back as zero, so calculate from the div panel instead
-    var tmpPanelWidth = this.panel.ughContainer.clientWidth;
-    if (tmpPanelWidth === 0) {
-      // just use the height...
-      tmpPanelWidth = this.getPanelHeight();
-      tmpPanelWidth -= 24;
-      if (tmpPanelWidth < 250) {
-        tmpPanelWidth = 250;
-      }
-      return tmpPanelWidth;
-    }
-    var actualWidth = tmpPanelWidth;
-    return actualWidth;
+  // determine the width of a panel by the span and viewport
+  getPanelWidthBySpan() {
+    var viewPortWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    // get the pixels of a span
+    var pixelsPerSpan = viewPortWidth / 12;
+    // multiply num spans by pixelsPerSpan
+    var trueWidth = Math.round(this.panel.span * pixelsPerSpan);
+    return trueWidth;
   }
 
   getPanelHeight() {
     // panel can have a fixed height via options
-    var tmpPanelHeight = this.$scope.ctrl.panel.height;
+    var tmpPanelHeight = this.panel.height;
     // if that is blank, try to get it from our row
     if (typeof tmpPanelHeight === 'undefined') {
       // get from the row instead
@@ -172,10 +166,6 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
       tmpPanelHeight = tmpPanelHeight.replace("px","");
     }
     var actualHeight = parseInt(tmpPanelHeight);
-    // grafana minimum height for a panel is 250px
-    if (actualHeight < 250) {
-      actualHeight = 250;
-    }
     return actualHeight;
   }
 
@@ -190,12 +180,12 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
     // update the values to be sent to the gauge constructor
     this.setValues(this.data);
     //this.clearSVG();
-    console.log("Looking for: #"+this.panel.gaugeDivId);
+    //console.log("Looking for: #"+this.panel.gaugeDivId);
     if ($('#'+this.panel.gaugeDivId).length) {
-      console.log("Clearing SVG id: " + this.panel.gaugeDivId);
+      //console.log("Clearing SVG id: " + this.panel.gaugeDivId);
       $('#'+this.panel.gaugeDivId).remove();
     } else {
-      console.log("not found...");
+      //console.log("not found...");
     }
     // use jQuery to get the height on our container
     // TODO: Check if there is a "title" and offset size of gauge accordingly
@@ -203,22 +193,16 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
     if (this.panel.title !== "") {
       panelTitleOffset = 25;
     }
-    this.panelWidth = this.getPanelWidth() - panelTitleOffset;
+    this.panelWidth = this.getPanelWidthBySpan();
     this.panelHeight = this.getPanelHeight() - panelTitleOffset;
     var margin = {top: 0, right: 0, bottom: 0, left: 10};
     var width = this.panelWidth;
     var height = this.panelHeight;
 
-    //console.log("Creating SVG id: " + this.panel.gaugeDivId);
+    console.log("panel width is " + width);
+    console.log("panel height is " + height);
 
-    var svg = d3.select(this.panel.ughContainer)
-      .append("svg")
-      .attr("width", width + "px")
-      .attr("height", height + "px")
-      .attr("id", this.panel.gaugeDivId)
-      .classed("svg-content-responsive", true)
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    //console.log("Creating SVG id: " + this.panel.gaugeDivId);
 
     // check which is smaller, the height or the width and set the radius to be half of the lesser
     var tmpGaugeRadius = parseFloat(this.panel.gauge.gaugeRadius);
@@ -230,6 +214,16 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
       }
       tmpGaugeRadius -= 10;
     }
+
+    // set the width and height to be double the radius
+    var svg = d3.select(this.panel.svgContainer)
+      .append("svg")
+      .attr("width", Math.round(tmpGaugeRadius*2) + "px")
+      .attr("height", Math.round(tmpGaugeRadius*2) + "px")
+      .attr("id", this.panel.gaugeDivId)
+      .classed("svg-content-responsive", true)
+      .append("g");
+
     var opt = {
       minVal : this.panel.gauge.minValue,
       maxVal : this.panel.gauge.maxValue,
@@ -315,6 +309,90 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
     this.render();
   }
 
+  // sanity check for tick degree settings
+  validateGaugeTickDegreeValues() {
+    if ((this.panel.gauge.zeroTickAngle === null) ||
+        (this.panel.gauge.zeroTickAngle === "") ||
+        (this.panel.gauge.zeroTickAngle < 0) ||
+        (isNaN(this.panel.gauge.zeroTickAngle))
+      ){
+      // alert about the error, and set it to 60
+      this.panel.gauge.zeroTickAngle = 60;
+      this.alertSrvRef.set("Problem!", "Invalid Value for Zero Tick Angle, auto-setting to default of 60", 'error', 10000);
+    }
+
+    if ((this.panel.gauge.maxTickAngle === null) ||
+        (this.panel.gauge.maxTickAngle === "") ||
+        (this.panel.gauge.maxTickAngle < 0) ||
+        (isNaN(this.panel.gauge.maxTickAngle))
+      ){
+      // alert about the error, and set it to 320
+      this.panel.gauge.maxTickAngle = 320;
+      this.alertSrvRef.set("Problem!", "Invalid Value for Max Tick Angle, auto-setting to default of 320", 'error', 10000);
+    }
+
+    var gaugeTickDegrees = this.panel.gauge.maxTickAngle - this.panel.gauge.zeroTickAngle;
+    // make sure the total degrees does not exceed 360
+    if (gaugeTickDegrees > 360) {
+      // set to default values and alert
+      this.panel.gauge.zeroTickAngle = 60;
+      this.panel.gauge.maxTickAngle = 320;
+      this.alertSrvRef.set("Problem!", "Gauge tick angle difference is larger than 360 degrees, auto-setting to default values", 'error', 10000);
+    }
+    // make sure it is "positive"
+    if (gaugeTickDegrees < 0) {
+      // set to default values and alert
+      this.panel.gauge.zeroTickAngle = 60;
+      this.panel.gauge.maxTickAngle = 320;
+      this.alertSrvRef.set("Problem!", "Gauge tick angle difference is less than 0 degrees, auto-setting to default values", 'error', 10000);
+    }
+
+    // render
+    this.render();
+  }
+
+  // sanity check for Needle degree settings
+  validateGaugeNeedleDegreeValues() {
+    if ((this.panel.gauge.zeroNeedleAngle === null) ||
+        (this.panel.gauge.zeroNeedleAngle === "") ||
+        (this.panel.gauge.zeroNeedleAngle < 0) ||
+        (isNaN(this.panel.gauge.zeroNeedleAngle))
+      ){
+      // alert about the error, and set it to 60
+      this.panel.gauge.zeroNeedleAngle = 60;
+      this.alertSrvRef.set("Problem!", "Invalid Value for Zero Needle Angle, auto-setting to default of 60", 'error', 10000);
+    }
+
+    if ((this.panel.gauge.maxNeedleAngle === null) ||
+        (this.panel.gauge.maxNeedleAngle === "") ||
+        (this.panel.gauge.maxNeedleAngle < 0) ||
+        (isNaN(this.panel.gauge.maxNeedleAngle))
+      ){
+      // alert about the error, and set it to 320
+      this.panel.gauge.maxNeedleAngle = 320;
+      this.alertSrvRef.set("Problem!", "Invalid Value for Max Needle Angle, auto-setting to default of 320", 'error', 10000);
+    }
+
+    var gaugeNeedleDegrees = this.panel.gauge.maxNeedleAngle - this.panel.gauge.zeroNeedleAngle;
+    // make sure the total degrees does not exceed 360
+    if (gaugeNeedleDegrees > 360) {
+      // set to default values and alert
+      this.panel.gauge.zeroNeedleAngle = 60;
+      this.panel.gauge.maxNeedleAngle = 320;
+      this.alertSrvRef.set("Problem!", "Gauge needle angle difference is larger than 360 degrees, auto-setting to default values", 'error', 10000);
+    }
+    // make sure it is "positive"
+    if (gaugeNeedleDegrees < 0) {
+      // set to default values and alert
+      this.panel.gauge.zeroNeedleAngle = 60;
+      this.panel.gauge.maxNeedleAngle = 320;
+      this.alertSrvRef.set("Problem!", "Gauge needle angle difference is less than 0 degrees, auto-setting to default values", 'error', 10000);
+    }
+
+    // render
+    this.render();
+  }
+
   validateRadialMetricValues() {
     // make sure the spacing values are valid
     if ((this.panel.gauge.tickSpaceMinVal === null) ||
@@ -348,10 +426,10 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
   link(scope, elem, attrs, ctrl) {
     //console.log("d3gauge inside link");
     var gaugeByClass = elem.find('.grafana-d3-gauge');
-    gaugeByClass.append('<center><div id="'+ctrl.containerDivId+'"></div></center>');
+    //gaugeByClass.append('<center><div id="'+ctrl.containerDivId+'"></div></center>');
+    gaugeByClass.append('<div id="'+ctrl.containerDivId+'"></div>');
     var container = gaugeByClass[0].childNodes[0];
     ctrl.setContainer(container);
-
     function render(){
     		ctrl.renderGauge();
     }

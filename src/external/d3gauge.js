@@ -101,8 +101,13 @@ function drawGauge(svg,opt) {
 
     for (var i = opt.zeroTickAngle; i <= opt.maxTickAngle; i = i + tickSpacingMajDeg)
         {
+          var tickAngle = (opt.zeroTickAngle + (tickSpacingMajDeg * counter))
+          // check if this is the "end" of a full circle, and skip the last tick marker
+          if ((tickAngle - opt.zeroTickAngle) < 360) {
+            //console.log("adding tick at angle " + tickAngle)
             tickAnglesMaj.push(opt.zeroTickAngle + (tickSpacingMajDeg * counter));
-            counter++;
+          }
+          counter++;
         }
 
     counter = 0;

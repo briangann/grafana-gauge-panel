@@ -69,29 +69,29 @@
 		<div class="gf-form-inline">
 				<div class="gf-form">
 					<label class="gf-form-label width-12">Zero Tick Angle
-					<tip>Angle where min tick value (0) starts (default 60)/tip>
+					<tip>Angle where the tick value (0) starts (default 60)/tip>
 				</label>
-					<input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.zeroTickAngle" ng-blur="ctrl.validateRadialMetricValues()" placeholder="60"></input>
+					<input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.zeroTickAngle" ng-blur="ctrl.validateGaugeTickDegreeValues()" placeholder="60"></input>
 				</div>
 				<div class="gf-form">
 					<label class="gf-form-label width-12">Max Tick Angle
-					<tip>Angle where the max tick value (default 320)</tip>
+					<tip>Angle where the tick value ends (default 320)</tip>
 				</label>
-					<input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.maxTickAngle" ng-blur="ctrl.validateRadialMetricValues()" placeholder="320"></input>
+					<input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.maxTickAngle" ng-blur="ctrl.validateGaugeTickDegreeValues()" placeholder="320"></input>
 				</div>
 			</div>
 			<div class="gf-form-inline">
 					<div class="gf-form">
 						<label class="gf-form-label width-12">Zero Needle Angle
-						<tip>Angle where needle is at minimum value starts (default 40)</tip>
+						<tip>Angle where needle is at minimum value (default 60)</tip>
 					</label>
-						<input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.zeroNeedleAngle" ng-blur="ctrl.validateRadialMetricValues()" placeholder="40"></input>
+						<input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.zeroNeedleAngle" ng-blur="ctrl.validateGaugeNeedleDegreeValues()" placeholder="60"></input>
 					</div>
 					<div class="gf-form">
 						<label class="gf-form-label width-12">Max Needle Angle
-						<tip>Angle where needle is at max value (default 320)</tip>
+						<tip>Angle where needle is at maximum value (default 320)</tip>
 					</label>
-						<input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.maxNeedleAngle" ng-blur="ctrl.validateRadialMetricValues()" placeholder="320"></input>
+						<input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.maxNeedleAngle" ng-blur="ctrl.validateGaugeNeedleDegreeValues()" placeholder="320"></input>
 					</div>
 				</div>
 	</div>
