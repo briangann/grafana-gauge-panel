@@ -87,6 +87,7 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
         valueMaps: [{ value: 'null', op: '=', text: 'N/A' }],
         mappingTypes: [{ name: 'value to text', value: 1 }, { name: 'range to text', value: 2 }],
         rangeMaps: [{ from: 'null', to: 'null', text: 'N/A' }],
+        tickMaps: [],
         mappingType: 1,
         thresholds: '',
         colors: ["rgba(245, 54, 54, 0.9)", "rgba(237, 129, 40, 0.89)", "rgba(50, 172, 45, 0.97)"],
@@ -324,7 +325,8 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
               unitsFont: this.panel.gauge.unitsFont,
               valueYOffset: this.panel.gauge.valueYOffset,
               animateNeedleValueTransition: this.panel.gauge.animateNeedleValueTransition,
-              animateNeedleValueTransitionSpeed: this.panel.gauge.animateNeedleValueTransitionSpeed
+              animateNeedleValueTransitionSpeed: this.panel.gauge.animateNeedleValueTransitionSpeed,
+              tickMaps: this.panel.tickMaps
             };
             this.gaugeObject = new drawGauge(svg, opt);
             this.svg = svg;
@@ -352,6 +354,18 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
           key: 'addRangeMap',
           value: function addRangeMap() {
             this.panel.rangeMaps.push({ from: '', to: '', text: '' });
+          }
+        }, {
+          key: 'addTickMap',
+          value: function addTickMap() {
+            this.panel.tickMaps.push({ value: 0, text: '' });
+          }
+        }, {
+          key: 'removeTickMap',
+          value: function removeTickMap(tickMap) {
+            var index = _.indexOf(this.panel.tickMaps, tickMap);
+            this.panel.tickMaps.splice(index, 1);
+            this.render();
           }
         }, {
           key: 'validateTransitionValue',

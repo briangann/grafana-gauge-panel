@@ -30,6 +30,7 @@ const panelDefaults = {
   rangeMaps: [
     { from: 'null', to: 'null', text: 'N/A' }
   ],
+  tickMaps: [],
   mappingType: 1,
   thresholds: '',
   colors: ["rgba(245, 54, 54, 0.9)", "rgba(237, 129, 40, 0.89)", "rgba(50, 172, 45, 0.97)"],
@@ -267,7 +268,8 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
       unitsFont: this.panel.gauge.unitsFont,
       valueYOffset: this.panel.gauge.valueYOffset,
       animateNeedleValueTransition: this.panel.gauge.animateNeedleValueTransition,
-      animateNeedleValueTransitionSpeed: this.panel.gauge.animateNeedleValueTransitionSpeed
+      animateNeedleValueTransitionSpeed: this.panel.gauge.animateNeedleValueTransitionSpeed,
+      tickMaps: this.panel.tickMaps
     };
     this.gaugeObject = new drawGauge(svg,opt);
     this.svg = svg;
@@ -291,6 +293,15 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
 
   addRangeMap() {
     this.panel.rangeMaps.push({from: '', to: '', text: ''});
+  }
+
+  addTickMap() {
+    this.panel.tickMaps.push({value: 0, text: ''});
+  }
+  removeTickMap(tickMap) {
+    var index = _.indexOf(this.panel.tickMaps, tickMap);
+    this.panel.tickMaps.splice(index, 1);
+    this.render();
   }
 
   validateTransitionValue() {

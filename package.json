@@ -1,7 +1,7 @@
 {
   "name": "briangann-gauge-panel",
   "private": true,
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Grafana D3 Gauge Panel",
   "main": "module.js",
   "scripts": {
@@ -41,7 +41,6 @@
     "load-grunt-tasks": "~3.2.0",
     "lodash": "^4.0.1"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "homepage": "https://github.com/briangann/grafana-gauge-panel"
 }
