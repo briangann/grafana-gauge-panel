@@ -368,6 +368,26 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
             this.render();
           }
         }, {
+          key: 'validateLimitsMinValue',
+          value: function validateLimitsMinValue() {
+            if (this.panel.gauge.minValue >= this.panel.gauge.maxValue) {
+              // set the maxValue to be the same as the minValue+1
+              this.panel.gauge.maxValue = this.panel.gauge.minValue + 1;
+              this.alertSrvRef.set("Problem!", "Minimum Value cannot be equal to or greater than Max Value, auto-adjusting Max Value to Minimum+1 (" + this.panel.gauge.maxValue + ")", 'warning', 10000);
+            }
+            this.render();
+          }
+        }, {
+          key: 'validateLimitsMaxValue',
+          value: function validateLimitsMaxValue() {
+            if (this.panel.gauge.maxValue <= this.panel.gauge.minValue) {
+              // set the minValue to be the same as the maxValue-1
+              this.panel.gauge.minValue = this.panel.gauge.maxValue - 1;
+              this.alertSrvRef.set("Problem!", "Maximum Value cannot be equal to or less than Min Value, auto-adjusting Min Value to Maximum-1 (" + this.panel.gauge.minValue + ")", 'warning', 10000);
+            }
+            this.render();
+          }
+        }, {
           key: 'validateTransitionValue',
           value: function validateTransitionValue() {
             if (this.panel.gauge.animateNeedleValueTransitionSpeed === null) {
