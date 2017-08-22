@@ -98,7 +98,7 @@
 		      <label class="gf-form-label width-9">Minimum
 						<tip>Minimum Value</tip>
 					</label>
-		      <input type="number" class="gf-form-input width-6" placeholder="0" data-placement="right" ng-model="ctrl.panel.gauge.minValue" ng-change="ctrl.render()" ng-model-onblur>
+		      <input type="number" class="gf-form-input width-6" placeholder="0" data-placement="right" ng-model="ctrl.panel.gauge.minValue" ng-change="ctrl.validateLimitsMinValue()" ng-model-onblur>
 		      <label class="gf-form-label alert-state-critical" ng-show="ctrl.invalidGaugeRange">
 		          &nbsp; <i class="fa fa-warning"></i>
 		          Min value is bigger than max.
@@ -108,7 +108,7 @@
 		      <label class="gf-form-label width-9">Maximum
 						<tip>Maximum Value</tip>
 					</label>
-		      <input type="number" class="gf-form-input width-6" placeholder="0" data-placement="right" ng-model="ctrl.panel.gauge.maxValue" ng-change="ctrl.render()" ng-model-onblur>
+		      <input type="number" class="gf-form-input width-6" placeholder="0" data-placement="right" ng-model="ctrl.panel.gauge.maxValue" ng-change="ctrl.validateLimitsMaxValue()" ng-model-onblur>
 		    </div>
 				<!-- TODO -->
 				<!--

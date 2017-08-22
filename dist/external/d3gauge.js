@@ -55,6 +55,8 @@ function drawGauge(svg,opt) {
     if(typeof opt.animateNeedleValueTransition === 'undefined') {opt.animateNeedleValueTransition = true;}
     // default transition speed 500ms
     if(typeof opt.animateNeedleValueTransitionSpeed === 'undefined') {opt.animateNeedleValueTransitionSpeed = 100;}
+    //
+    if(typeof opt.tickMaps === 'undefined') {opt.tickMaps = [];}
 
     // Calculate absolute values
     opt.padding = opt.padding * opt.gaugeRadius;
@@ -138,6 +140,18 @@ function drawGauge(svg,opt) {
         tickText = Number(tickValue).toFixed(parts[1].length);
       } else {
         tickText = tickValue;
+      }
+      //console.log("TickText = " + tickText);
+      // check if there are tickMaps that apply
+      let tickTextFloat = parseFloat(tickText);
+      for (let i = 0; i < opt.tickMaps.length; i++) {
+        let aTickMap = opt.tickMaps[i];
+        //console.log("Checking tickMap " + i);
+        if (parseFloat(aTickMap.value) === tickTextFloat) {
+            //console.log("found tickmap, value is mapped to " + aTickMap.text);
+            tickText = aTickMap.text;
+            break;
+        }
       }
       tickLabelText.push(tickText);
       counter++;

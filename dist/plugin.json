@@ -33,8 +33,8 @@
             "name": "Thresholding",
             "path": "screenshots/thresholding.png"
         }],
-        "version": "0.0.3",
-        "updated": "2017-03-04"
+        "version": "0.0.4",
+        "updated": "2017-08-21"
     },
 
     "dependencies": {

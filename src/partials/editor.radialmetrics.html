@@ -69,7 +69,7 @@
 		<div class="gf-form-inline">
 				<div class="gf-form">
 					<label class="gf-form-label width-12">Zero Tick Angle
-					<tip>Angle where the tick value (0) starts (default 60)/tip>
+					<tip>Angle where the tick value (0) starts (default 60)</tip>
 				</label>
 					<input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.zeroTickAngle" ng-blur="ctrl.validateGaugeTickDegreeValues()" placeholder="60"></input>
 				</div>
@@ -112,6 +112,31 @@
 				  <input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.tickSpaceMajVal" ng-blur="ctrl.validateRadialMetricValues()" placeholder="10"></input>
 				</div>
 			</div>
+	</div>
+
+</div>
+
+<div class="editor-row">
+	<div class="section gf-form-group">
+		<h5 class="section-heading">Gauge Tick Mapping</h5>
+		<div class="gf-form-group">
+	    <div class="gf-form" ng-repeat="tickMap in ctrl.panel.tickMaps">
+	        <span class="gf-form-label">Value</span>
+	        <input type="text" ng-model="tickMap.value" class="gf-form-input max-width-6" ng-blur="ctrl.render()">
+	        <span class="gf-form-label">Text</span>
+	        <input type="text" ng-model="tickMap.text" class="gf-form-input max-width-8" ng-blur="ctrl.render()">
+					<span class="gf-form-label">
+	          <i class="fa fa-trash pointer" ng-click="ctrl.removeTickMap(tickMap)"></i>
+	        </span>
+	    </div>
+
+	    <div class="gf-form-button-row">
+	      <button class="btn btn-inverse" ng-click="ctrl.addTickMap()">
+	        <i class="fa fa-plus"></i>
+	        Add tick mapping
+	      </button>
+	    </div>
+	  </div>
 	</div>
 
 </div>
