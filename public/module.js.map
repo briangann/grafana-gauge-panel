@@ -1,0 +1,11 @@
+{
+ "version": 3,
+ "sources": [
+  "../src/module.js"
+ ],
+ "file": "../src/module.js",
+ "names": [
+  "PanelCtrl"
+ ],
+ "mappings": ";;;;;;;AAAA;;QAGsBA,S"
+}

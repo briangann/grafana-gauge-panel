@@ -152,7 +152,7 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
 
   getPanelHeight() {
     // panel can have a fixed height via options
-    var tmpPanelHeight = this.panel.height;
+    var tmpPanelHeight = this.panel.height || String(this.height);
     // if that is blank, try to get it from our row
     if (typeof tmpPanelHeight === 'undefined') {
       // get from the row instead
