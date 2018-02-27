@@ -213,22 +213,10 @@ System.register(['app/plugins/sdk', 'lodash', 'jquery', 'app/core/utils/kbn', 'a
         }, {
           key: 'getPanelHeight',
           value: function getPanelHeight() {
-            // panel can have a fixed height via options
-            var tmpPanelHeight = this.panel.height;
-            // if that is blank, try to get it from our row
-            if (typeof tmpPanelHeight === 'undefined') {
-              // get from the row instead
-              tmpPanelHeight = this.row.height;
-              // default to 250px if that was undefined also
-              if (typeof tmpPanelHeight === 'undefined') {
-                tmpPanelHeight = 250;
-              }
-            } else {
-              // convert to numeric value
-              tmpPanelHeight = tmpPanelHeight.replace("px", "");
-            }
-            var actualHeight = parseInt(tmpPanelHeight);
-            return actualHeight;
+            // use fixed height via options, else use the actual height
+            var tmpPanelHeight = this.panel.height || String(this.height);
+            tmpPanelHeight = tmpPanelHeight.replace("px", "");
+            return parseInt(tmpPanelHeight);
           }
         }, {
           key: 'clearSVG',
