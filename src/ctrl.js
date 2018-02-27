@@ -151,10 +151,25 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
   }
 
   getPanelHeight() {
-    // use fixed height via options, else use the actual height
-    let tmpPanelHeight = this.panel.height || String(this.height);
+    // panel can have a fixed height set via "General" tab in panel editor
+    var tmpPanelHeight = this.panel.height;
+    if ((typeof tmpPanelHeight === 'undefined') || (tmpPanelHeight === "")) {
+      // grafana also supplies the height, try to use that if the panel does not have a height
+      tmpPanelHeight = String(this.height);
+      if (typeof tmpPanelHeight === 'undefined') {
+        // height still cannot be determined, get it from the row instead
+        tmpPanelHeight = this.row.height;
+        if (typeof tmpPanelHeight === 'undefined') {
+          // last resort - default to 250px (this should never happen)
+          tmpPanelHeight = "250";
+        }
+      }
+    }
+    // replace px
     tmpPanelHeight = tmpPanelHeight.replace("px","");
-    return parseInt(tmpPanelHeight);
+    // convert to numeric value
+    var actualHeight = parseInt(tmpPanelHeight);
+    return actualHeight;
   }
 
   clearSVG() {
