@@ -142,11 +142,18 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
 
   // determine the width of a panel by the span and viewport
   getPanelWidthBySpan() {
-    var viewPortWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-    // get the pixels of a span
-    var pixelsPerSpan = viewPortWidth / 12;
-    // multiply num spans by pixelsPerSpan
-    var trueWidth = Math.round(this.panel.span * pixelsPerSpan);
+    var trueWidth = 0;
+    if (typeof this.panel.span === 'undefined') {
+      // get the width based on the scaled container (v5 needs this)
+      trueWidth = this.panelContainer.offsetParent.clientWidth;
+    } else {
+      // v4 and previous used fixed spans
+      var viewPortWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+      // get the pixels of a span
+      var pixelsPerSpan = viewPortWidth / 12;
+      // multiply num spans by pixelsPerSpan
+      trueWidth = Math.round(this.panel.span * pixelsPerSpan);
+    }
     return trueWidth;
   }
 
@@ -156,6 +163,15 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
     if ((typeof tmpPanelHeight === 'undefined') || (tmpPanelHeight === "")) {
       // grafana also supplies the height, try to use that if the panel does not have a height
       tmpPanelHeight = String(this.height);
+      // v4 and earlier define this height, detect span for pre-v5
+      if (typeof this.panel.span != 'undefined') {
+        // if there is no header, adjust height to use all space available
+        var panelTitleOffset = 20;
+        if (this.panel.title !== "") {
+          panelTitleOffset = 42;
+        }
+        tmpPanelHeight = String(this.containerHeight - panelTitleOffset); // offset for header
+      }
       if (typeof tmpPanelHeight === 'undefined') {
         // height still cannot be determined, get it from the row instead
         tmpPanelHeight = this.row.height;
@@ -182,27 +198,14 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
   renderGauge() {
     // update the values to be sent to the gauge constructor
     this.setValues(this.data);
-    //this.clearSVG();
-    //console.log("Looking for: #"+this.panel.gaugeDivId);
     if ($('#'+this.panel.gaugeDivId).length) {
-      //console.log("Clearing SVG id: " + this.panel.gaugeDivId);
       $('#'+this.panel.gaugeDivId).remove();
-    } else {
-      //console.log("not found...");
-    }
-    // use jQuery to get the height on our container
-    // TODO: Check if there is a "title" and offset size of gauge accordingly
-    var panelTitleOffset = 0;
-    if (this.panel.title !== "") {
-      panelTitleOffset = 25;
     }
     this.panelWidth = this.getPanelWidthBySpan();
-    this.panelHeight = this.getPanelHeight() - panelTitleOffset;
-    var margin = {top: 0, right: 0, bottom: 0, left: 10};
+    this.panelHeight = this.getPanelHeight();
+    var margin = {top: 0, right: 0, bottom: 0, left: 0};
     var width = this.panelWidth;
     var height = this.panelHeight;
-
-    //console.log("Creating SVG id: " + this.panel.gaugeDivId);
 
     // check which is smaller, the height or the width and set the radius to be half of the lesser
     var tmpGaugeRadius = parseFloat(this.panel.gauge.gaugeRadius);
@@ -211,13 +214,30 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
       tmpGaugeRadius = this.panelHeight / 2;
       if (this.panelWidth < this.panelHeight) {
         tmpGaugeRadius = this.panelWidth / 2;
+        if ((typeof this.panel.span !== 'undefined') && (this.panel.title !== "")) {
+          // using the width requires more margin in pre-v5
+          tmpGaugeRadius -= 5;
+        }
       }
-      tmpGaugeRadius -= 10;
     }
+    // calculate top margin
+    var verticalOffset = Math.round(this.panelHeight - (tmpGaugeRadius * 2))/2;
+    margin.top = verticalOffset;
+    // pre-v5, with title, set top margin to at least 7px
+    if ((typeof this.panel.span !== 'undefined') && (this.panel.title !== "")) {
+      if (verticalOffset < 7) {
+        margin.top = 7;
+      }
+    }
+    margin.bottom = verticalOffset;
 
     // set the width and height to be double the radius
     var svg = d3.select(this.panel.svgContainer)
       .append("svg")
+      .style("margin-top", margin.top + "px")
+      .style("margin-bottom", margin.bottom + "px")
+      .style("margin-left", margin.left + "px")
+      .style("margin-right", margin.right + "px")
       .attr("width", Math.round(tmpGaugeRadius*2) + "px")
       .attr("height", Math.round(tmpGaugeRadius*2) + "px")
       .attr("id", this.panel.gaugeDivId)
