@@ -486,15 +486,14 @@ class D3GaugePanelCtrl extends MetricsPanelCtrl {
     gaugeByClass.append('<div id="'+ctrl.containerDivId+'"></div>');
     var container = gaugeByClass[0].childNodes[0];
     ctrl.setContainer(container);
-    function render(){
-    		ctrl.renderGauge();
+    function render() {
+      ctrl.renderGauge();
     }
     this.events.on('render', function() {
-			render();
-			ctrl.renderingCompleted();
-	  });
+      render();
+      ctrl.renderingCompleted();
+    });
   }
-
 
   getDecimalsForValue(value) {
     if (_.isNumber(this.panel.decimals)) {
@@ -678,6 +677,6 @@ function getColorForValue(data, value) {
 
 D3GaugePanelCtrl.templateUrl = 'partials/template.html';
 export {
-	D3GaugePanelCtrl,
-	D3GaugePanelCtrl as MetricsPanelCtrl
+  D3GaugePanelCtrl,
+  D3GaugePanelCtrl as MetricsPanelCtrl
 };
