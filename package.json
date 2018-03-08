@@ -1,7 +1,7 @@
 {
   "name": "briangann-gauge-panel",
   "private": true,
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Grafana D3 Gauge Panel",
   "main": "module.js",
   "scripts": {
@@ -17,13 +17,10 @@
     "url": "https://github.com/briangann/grafana-gauge-panel/issues"
   },
   "devDependencies": {
-    "babel": "~6.5.1",
-    "babel-cli": "^6.14.0",
-    "babel-plugin-module-resolver": "^2.2.0",
-    "babel-plugin-transform-es2015-for-of": "^6.8.0",
-    "babel-plugin-transform-es2015-modules-systemjs": "^6.5.0",
-    "babel-preset-es2015": "^6.14.0",
-    "browser-sync": "^2.15.0",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-module-resolver": "^2.7.1",
+    "babel-preset-env": "^1.6.1",
+    "browser-sync": "^2.23.6",
     "del": "^2.2.2",
     "grunt": "~0.4.5",
     "grunt-babel": "~6.0.0",
@@ -39,7 +36,7 @@
     "grunt-package-modules": "^0.1.3",
     "grunt-systemjs-builder": "^0.2.5",
     "load-grunt-tasks": "~3.2.0",
-    "lodash": "^4.0.1"
+    "lodash": "^4.17.5"
   },
   "dependencies": {},
   "homepage": "https://github.com/briangann/grafana-gauge-panel"

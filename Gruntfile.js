@@ -87,8 +87,7 @@ module.exports = function(grunt) {
       options: {
         ignore: ['**/bower_components/*','**/external/*'],
         sourceMap: true,
-        presets:  ["es2015"],
-        plugins: ['transform-es2015-modules-systemjs', "transform-es2015-for-of"],
+        presets:  ["env"],
       },
       dist: {
         files: [{
