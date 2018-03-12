@@ -24,6 +24,14 @@ module.exports = function(grunt) {
       },
       src: ['Gruntfile.js', 'src/**/*.js'],
     },
+
+    jscs: {
+      src: ['src/**/*.js', '!src/external/d3.v3.min.js'],
+      options: {
+        config: ".jscs.json",
+      },
+    },
+
     copy: {
       main: {
         cwd: 'src',
@@ -87,8 +95,7 @@ module.exports = function(grunt) {
       options: {
         ignore: ['**/bower_components/*','**/external/*'],
         sourceMap: true,
-        presets:  ["es2015"],
-        plugins: ['transform-es2015-modules-systemjs', "transform-es2015-for-of"],
+        presets:  ["env"],
       },
       dist: {
         files: [{
@@ -106,6 +113,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', [
           'jshint',
+          'jscs',
           'multidest',
           'copy:bower_libs',
           'babel']);

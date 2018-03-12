@@ -19,8 +19,8 @@
     "tests"
   ],
   "dependencies": {
-    "d3": "^4.2.2",
-    "lodash": "^4.15.0",
-    "font-awesome": "^4.6.3"
+    "d3": "^4.7.1",
+    "lodash": "^4.17.5",
+    "font-awesome": "^4.7.0"
   }
 }
