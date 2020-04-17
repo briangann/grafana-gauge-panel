@@ -6,9 +6,10 @@
   "main": "module.js",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
-    "test": "grafana-toolkit plugin:test --coverage",
+    "test": "grafana-toolkit plugin:test",
     "dev": "grafana-toolkit plugin:dev",
-    "watch": "grafana-toolkit plugin:dev --watch"
+    "watch": "grafana-toolkit plugin:dev --watch",
+    "postinstall": "grafana-toolkit plugin:update-circleci"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,7 @@
     "url": "https://github.com/briangann/grafana-gauge-panel/issues"
   },
   "devDependencies": {
-    "@grafana/toolkit": "next",
+    "@grafana/toolkit": "canary",
     "@types/d3": "^5.7.2",
     "@types/grafana": "github:CorpGlory/types-grafana.git",
     "@types/jquery": "^3.3.34",
