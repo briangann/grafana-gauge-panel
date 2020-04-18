@@ -3,7 +3,7 @@ version: 2.1
 parameters:
   ssh-fingerprint:
     type: string
-    default:  ${GITHUB_PUBLISH_KEY}
+    default:  ${GITHUB_ACCESS_TOKEN}
 
 aliases:
   # Workflow filters
@@ -343,8 +343,6 @@ jobs:
             PLUGIN_NAME=`cat dist/plugin.json|jq '.id'| sed s/\"//g`
             RELEASE_NOTES=`awk 'BEGIN {FS="##"; RS=""} FNR==4 {print; exit}' CHANGELOG.md`
             VERSION=`cat dist/plugin.json|jq '.info.version'| sed s/\"//g`
-            #ls -al
-            #ls -al ./artifacts
             git config user.email "bkgann@gmail.com"
             git config user.name "CircleCI Automation"
             git checkout -b release-${VERSION}
