@@ -132,7 +132,7 @@ jobs:
         command: yarn global add jest jest-junit
     - run:
         name: Run tests with JUnit as reporter
-        command: jest --ci --runInBand --reporters=default --reporters=jest-junit
+        command: jest --ci --runInBand --reporters=default --testResultsProcessor=jest-junit
         environment:
           JEST_JUNIT_OUTPUT_DIR: "test-results/jest/results.xml"
     - persist_to_workspace:
