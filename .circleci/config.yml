@@ -30,7 +30,7 @@ workflows:
       - code_coverage_setup
       - code_coverage_frontend:
           requires:
-          - build_plugin
+          - build_frontend
           - code_coverage_setup
       - upload_coverage:
           requires:
