@@ -174,15 +174,15 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
 
   onInitEditMode() {
     // determine the path to this plugin
-    var thisPanelPath = 'public/plugins/' + this.panel.type + '/';
+    let thisPanelPath = 'public/plugins/' + this.panel.type + '/';
     // add the relative path to the partial
-    var optionsPath = thisPanelPath + 'partials/editor.options.html';
+    let optionsPath = thisPanelPath + 'partials/editor.options.html';
     this.addEditorTab('Options', optionsPath, 2);
-    var radialMetricsPath = thisPanelPath + 'partials/editor.radialmetrics.html';
+    let radialMetricsPath = thisPanelPath + 'partials/editor.radialmetrics.html';
     this.addEditorTab('Radial Metrics', radialMetricsPath, 3);
-    var thresholdingPath = thisPanelPath + 'partials/editor.thresholding.html';
+    let thresholdingPath = thisPanelPath + 'partials/editor.thresholding.html';
     this.addEditorTab('Thresholding', thresholdingPath, 4);
-    var mappingsPath = thisPanelPath + 'partials/editor.mappings.html';
+    let mappingsPath = thisPanelPath + 'partials/editor.mappings.html';
     this.addEditorTab('Value Mappings', mappingsPath, 5);
   }
 
@@ -197,15 +197,15 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
 
   // determine the width of a panel by the span and viewport
   getPanelWidthBySpan() {
-    var trueWidth = 0;
+    let trueWidth = 0;
     if (typeof this.panel.span === 'undefined') {
       // get the width based on the scaled container (v5 needs this)
       trueWidth = this.panelContainer.offsetParent.clientWidth;
     } else {
       // v4 and previous used fixed spans
-      var viewPortWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+      let viewPortWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
       // get the pixels of a span
-      var pixelsPerSpan = viewPortWidth / 12;
+      let pixelsPerSpan = viewPortWidth / 12;
       // multiply num spans by pixelsPerSpan
       trueWidth = Math.round(this.panel.span * pixelsPerSpan);
     }
@@ -214,14 +214,14 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
 
   getPanelHeight() {
     // panel can have a fixed height set via "General" tab in panel editor
-    var tmpPanelHeight = this.panel.height;
+    let tmpPanelHeight = this.panel.height;
     if (typeof tmpPanelHeight === 'undefined' || tmpPanelHeight === '') {
       // grafana also supplies the height, try to use that if the panel does not have a height
       tmpPanelHeight = String(this.height);
       // v4 and earlier define this height, detect span for pre-v5
       if (typeof this.panel.span !== 'undefined') {
         // if there is no header, adjust height to use all space available
-        var panelTitleOffset = 20;
+        let panelTitleOffset = 20;
         if (this.panel.title !== '') {
           panelTitleOffset = 42;
         }
@@ -239,7 +239,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
     // replace px
     tmpPanelHeight = tmpPanelHeight.replace('px', '');
     // convert to numeric value
-    var actualHeight = parseInt(tmpPanelHeight, 10);
+    let actualHeight = parseInt(tmpPanelHeight, 10);
     return actualHeight;
   }
 
@@ -258,10 +258,10 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
     }
     this.panelWidth = this.getPanelWidthBySpan();
     this.panelHeight = this.getPanelHeight();
-    var margin = { top: 0, right: 0, bottom: 0, left: 0 };
+    let margin = { top: 0, right: 0, bottom: 0, left: 0 };
 
     // check which is smaller, the height or the width and set the radius to be half of the lesser
-    var tmpGaugeRadius = parseFloat(this.panel.gauge.gaugeRadius);
+    let tmpGaugeRadius = parseFloat(this.panel.gauge.gaugeRadius);
     // autosize if radius is set to zero
     if (this.panel.gauge.gaugeRadius === 0) {
       tmpGaugeRadius = this.panelHeight / 2;
@@ -274,7 +274,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       }
     }
     // calculate top margin
-    var verticalOffset = Math.round(this.panelHeight - tmpGaugeRadius * 2) / 2;
+    let verticalOffset = Math.round(this.panelHeight - tmpGaugeRadius * 2) / 2;
     margin.top = verticalOffset;
     // pre-v5, with title, set top margin to at least 7px
     if (typeof this.panel.span !== 'undefined' && this.panel.title !== '') {
@@ -285,7 +285,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
     margin.bottom = verticalOffset;
 
     // set the width and height to be double the radius
-    var svg = d3
+    let svg = d3
       .select(this.panel.svgContainer)
       .append('svg')
       .style('margin-top', margin.top + 'px')
@@ -298,7 +298,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       .classed('svg-content-responsive', true)
       .append('g');
 
-    var opt = {
+    let opt = {
       minVal: this.panel.gauge.minValue,
       maxVal: this.panel.gauge.maxValue,
       tickSpaceMinVal: this.panel.gauge.tickSpaceMinVal,
@@ -352,7 +352,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
   }
 
   removeValueMap(map: any) {
-    var index = _.indexOf(this.panel.valueMaps, map);
+    let index = _.indexOf(this.panel.valueMaps, map);
     this.panel.valueMaps.splice(index, 1);
     this.render();
   }
@@ -362,7 +362,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
   }
 
   removeRangeMap(rangeMap: any) {
-    var index = _.indexOf(this.panel.rangeMaps, rangeMap);
+    let index = _.indexOf(this.panel.rangeMaps, rangeMap);
     this.panel.rangeMaps.splice(index, 1);
     this.render();
   }
@@ -375,7 +375,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
     this.panel.tickMaps.push({ value: 0, text: '' });
   }
   removeTickMap(tickMap: any) {
-    var index = _.indexOf(this.panel.tickMaps, tickMap);
+    let index = _.indexOf(this.panel.tickMaps, tickMap);
     this.panel.tickMaps.splice(index, 1);
     this.render();
   }
@@ -453,7 +453,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       this.alertSrvRef.set('Problem!', 'Invalid Value for Max Tick Angle, auto-setting to default of 320', 'error', 10000);
     }
 
-    var gaugeTickDegrees = this.panel.gauge.maxTickAngle - this.panel.gauge.zeroTickAngle;
+    let gaugeTickDegrees = this.panel.gauge.maxTickAngle - this.panel.gauge.zeroTickAngle;
     // make sure the total degrees does not exceed 360
     if (gaugeTickDegrees > 360) {
       // set to default values and alert
@@ -497,7 +497,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       this.alertSrvRef.set('Problem!', 'Invalid Value for Max Needle Angle, auto-setting to default of 320', 'error', 10000);
     }
 
-    var gaugeNeedleDegrees = this.panel.gauge.maxNeedleAngle - this.panel.gauge.zeroNeedleAngle;
+    let gaugeNeedleDegrees = this.panel.gauge.maxNeedleAngle - this.panel.gauge.zeroNeedleAngle;
     // make sure the total degrees does not exceed 360
     if (gaugeNeedleDegrees > 360) {
       // set to default values and alert
@@ -543,11 +543,9 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
   }
 
   link(scope: any, elem: any, attrs: any, ctrl: any) {
-    //console.log("d3gauge inside link");
-    var gaugeByClass = elem.find('.grafana-d3-gauge');
-    //gaugeByClass.append('<center><div id="'+ctrl.containerDivId+'"></div></center>');
+    let gaugeByClass = elem.find('.grafana-d3-gauge');
     gaugeByClass.append('<div id="' + ctrl.containerDivId + '"></div>');
-    var container = gaugeByClass[0].childNodes[0];
+    let container = gaugeByClass[0].childNodes[0];
     ctrl.setContainer(container);
     function render() {
       ctrl.renderGauge();
@@ -563,10 +561,10 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       return { decimals: this.panel.decimals, scaledDecimals: null };
     }
 
-    var delta = value / 2;
-    var dec = -Math.floor(Math.log(delta) / Math.LN10);
+    let delta = value / 2;
+    let dec = -Math.floor(Math.log(delta) / Math.LN10);
 
-    var magn = Math.pow(10, -dec),
+    let magn = Math.pow(10, -dec),
       norm = delta / magn, // norm is between 1.0 and 10.0
       size;
 
@@ -592,7 +590,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       dec = 0;
     }
 
-    var result = {
+    let result = {
       decimals: 0,
       scaledDecimals: 0,
     };
@@ -604,7 +602,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
   setValues(data: any) {
     data.flotpairs = [];
     if (this.series.length > 1) {
-      var error = new Error();
+      let error = new Error();
       error.message = 'Multiple Series Error';
       error.stack =
         'Metric query returns ' +
@@ -615,8 +613,8 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
     }
 
     if (this.series && this.series.length > 0) {
-      var lastPoint = _.last(this.series[0].datapoints);
-      var lastValue = _.isArray(lastPoint) ? lastPoint[0] : null;
+      let lastPoint = _.last(this.series[0].datapoints);
+      let lastValue = _.isArray(lastPoint) ? lastPoint[0] : null;
 
       if (this.panel.operatorName === 'name') {
         data.value = 0;
@@ -629,8 +627,8 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       } else {
         data.value = this.series[0].stats[this.panel.operatorName];
         data.flotpairs = this.series[0].flotpairs;
-        var decimalInfo = this.getDecimalsForValue(data.value);
-        var formatFunc = kbn.valueFormats[this.panel.format];
+        let decimalInfo = this.getDecimalsForValue(data.value);
+        let formatFunc = kbn.valueFormats[this.panel.format];
         data.valueFormatted = formatFunc(data.value, decimalInfo.decimals, decimalInfo.scaledDecimals);
         data.valueRounded = kbn.roundValue(data.value, decimalInfo.decimals);
       }
@@ -645,8 +643,8 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
 
     // check value to text mappings if its enabled
     if (this.panel.mappingType === 1) {
-      for (var i = 0; i < this.panel.valueMaps.length; i++) {
-        var map = this.panel.valueMaps[i];
+      for (let i = 0; i < this.panel.valueMaps.length; i++) {
+        let map = this.panel.valueMaps[i];
         // special null case
         if (map.value === 'null') {
           if (data.value === null || data.value === void 0) {
@@ -657,15 +655,15 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
         }
 
         // value/number to text mapping
-        var value = parseFloat(map.value);
+        let value = parseFloat(map.value);
         if (value === data.valueRounded) {
           data.valueFormatted = map.text;
           return;
         }
       }
     } else if (this.panel.mappingType === 2) {
-      for (var j = 0; j < this.panel.rangeMaps.length; j++) {
-        var rangeMap = this.panel.rangeMaps[j];
+      for (let j = 0; j < this.panel.rangeMaps.length; j++) {
+        let rangeMap = this.panel.rangeMaps[j];
         // special null case
         if (rangeMap.from === 'null' && rangeMap.to === 'null') {
           if (data.value === null || data.value === void 0) {
@@ -676,8 +674,8 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
         }
 
         // value/number to range mapping
-        var from = parseFloat(rangeMap.from);
-        var to = parseFloat(rangeMap.to);
+        let from = parseFloat(rangeMap.from);
+        let to = parseFloat(rangeMap.to);
         if (to >= data.valueRounded && from <= data.valueRounded) {
           data.valueFormatted = rangeMap.text;
           return;
@@ -709,7 +707,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
 
   onDataReceived(dataList: any) {
     this.series = dataList.map(this.seriesHandler.bind(this));
-    var data = {
+    let data = {
       value: 0,
       valueFormatted: 0,
       valueRounded: 0,
@@ -725,7 +723,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
   }
 
   seriesHandler(seriesData: any) {
-    var series = new TimeSeries({
+    let series = new TimeSeries({
       datapoints: seriesData.datapoints,
       alias: seriesData.target,
     });
@@ -734,7 +732,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
   }
 
   invertColorOrder() {
-    var tmp = this.panel.colors[0];
+    let tmp = this.panel.colors[0];
     this.panel.colors[0] = this.panel.colors[2];
     this.panel.colors[2] = tmp;
     this.render();
