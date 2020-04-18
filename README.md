@@ -100,13 +100,3 @@ This panel is based on the "SingleStat" panel by Grafana, along with large porti
 * <https://oliverbinns.com/articles/D3js-gauge/>
 * <http://bl.ocks.org/tomerd/1499279>
 
-## Changelog
-
-### v0.0.7
-
-* Update to typescript and using standardized build process.
-* Simplified value display
-
-### v0.0.1
-
-* Initial commit
