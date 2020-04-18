@@ -343,12 +343,12 @@ jobs:
             PLUGIN_NAME=`cat dist/plugin.json|jq '.id'| sed s/\"//g`
             RELEASE_NOTES=`awk 'BEGIN {FS="##"; RS=""} FNR==4 {print; exit}' CHANGELOG.md`
             VERSION=`cat dist/plugin.json|jq '.info.version'| sed s/\"//g`
-            ls -al
-            ls -al ./artifacts
+            #ls -al
+            #ls -al ./artifacts
             git config user.email "bkgann@gmail.com"
             git config user.name "CircleCI Automation"
             git checkout -b release-${VERSION}
-            git add artifacts/
+            #git add artifacts/
             git add --force dist/
             git commit -m "automated release $VERSION [skip ci]"
             git push -f origin release-${VERSION}
@@ -362,5 +362,6 @@ jobs:
               -n "${PLUGIN_NAME} v${VERSION}" \
               -b "${RELEASE_NOTES}" \
               -delete \
+              -replace \
               v${VERSION} \
               ./artifacts/
