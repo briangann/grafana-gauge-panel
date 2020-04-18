@@ -192,6 +192,8 @@ jobs:
           root: .
           paths:
             - dist
+            - ci/jobs/build_frontend
+
 
   build_backend:
     executor: default_exec
