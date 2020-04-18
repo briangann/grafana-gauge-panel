@@ -1,0 +1,142 @@
+<div class="editor-row">
+
+	<div class="section gf-form-group">
+		<h5 class="section-heading">Radial Customization</h5>
+		<div class="gf-form-inline">
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Radius
+          	<tip>The radius of the gauge in pixels (0 for autoscaling)</tip>
+        	</label>
+				  <input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.gaugeRadius" ng-blur="ctrl.validateRadialMetricValues()" placeholder="0"></input>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Pivot Radius
+          	<tip>Size of the central 'pivot' circle, on which the needle sits, as a % of the gauge radius</tip>
+        	</label>
+				  <input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.pivotRadius" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Padding
+          	<tip>Padding between gauge radius and the outer circle of the gauge, as a % of the gauge radius</tip>
+        	</label>
+				  <input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.padding" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Edge Width
+          	<tip>The thickness of the circle around the edge of the gauge, as a % of the gauge radius</tip>
+        	</label>
+				  <input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.edgeWidth" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+			</div>
+		<div class="gf-form-inline">
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Tick Edge Gap
+          	<tip>Spacing between ticks and the outer circle, as a % of the gauge radius</tip>
+        	</label>
+				  <input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.tickEdgeGap" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Tick Length Major
+          	<tip>Length of the major ticks, as a % of the gauge radius</tip>
+        	</label>
+				  <input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.tickLengthMaj" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Tick Length Minor
+          	<tip>Length of the minor ticks, as a % of the gauge radius</tip>
+        	</label>
+				  <input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.tickLengthMin" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+			</div>
+		<div class="gf-form-inline">
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Needle Tick Gap
+						<tip>Spacing between ticks and the outer circle, as a % of the gauge radius</tip>
+					</label>
+					<input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.needleTickGap" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Needle Length Stem
+						<tip>Length of the needle section extending beyond the centre of the gauge, as a % of the gauge radius</tip>
+					</label>
+					<input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.needleLengthNeg" ng-blur="ctrl.render()" placeholder="0"></input>
+				</div>
+			</div>
+	</div>
+
+	<div class="section gf-form-group">
+		<h5 class="section-heading">Gauge Degrees</h5>
+		<div class="gf-form-inline">
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Zero Tick Angle
+					<tip>Angle where the tick value (0) starts (default 60)</tip>
+				</label>
+					<input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.zeroTickAngle" ng-blur="ctrl.validateGaugeTickDegreeValues()" placeholder="60"></input>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Max Tick Angle
+					<tip>Angle where the tick value ends (default 320)</tip>
+				</label>
+					<input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.maxTickAngle" ng-blur="ctrl.validateGaugeTickDegreeValues()" placeholder="320"></input>
+				</div>
+			</div>
+			<div class="gf-form-inline">
+					<div class="gf-form">
+						<label class="gf-form-label width-12">Zero Needle Angle
+						<tip>Angle where needle is at minimum value (default 60)</tip>
+					</label>
+						<input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.zeroNeedleAngle" ng-blur="ctrl.validateGaugeNeedleDegreeValues()" placeholder="60"></input>
+					</div>
+					<div class="gf-form">
+						<label class="gf-form-label width-12">Max Needle Angle
+						<tip>Angle where needle is at maximum value (default 320)</tip>
+					</label>
+						<input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.maxNeedleAngle" ng-blur="ctrl.validateGaugeNeedleDegreeValues()" placeholder="320"></input>
+					</div>
+				</div>
+	</div>
+
+	<div class="section gf-form-group">
+		<h5 class="section-heading">Gauge Readings</h5>
+		<div class="gf-form-inline">
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Tick Spacing Minor
+          <tip>The numeric spacing of the minor increment ticks</tip>
+        </label>
+				  <input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.tickSpaceMinVal" ng-blur="ctrl.validateRadialMetricValues()" placeholder="1"></input>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-12">Tick Spacing Major
+          <tip>The numeric spacing of the major increment ticks. Uses precision as specified.</tip>
+        </label>
+				  <input type="number" class="gf-form-input" ng-model="ctrl.panel.gauge.tickSpaceMajVal" ng-blur="ctrl.validateRadialMetricValues()" placeholder="10"></input>
+				</div>
+			</div>
+	</div>
+
+</div>
+
+<div class="editor-row">
+	<div class="section gf-form-group">
+		<h5 class="section-heading">Gauge Tick Mapping</h5>
+		<div class="gf-form-group">
+	    <div class="gf-form" ng-repeat="tickMap in ctrl.panel.tickMaps">
+	        <span class="gf-form-label">Value</span>
+	        <input type="text" ng-model="tickMap.value" class="gf-form-input max-width-6" ng-blur="ctrl.render()">
+	        <span class="gf-form-label">Text</span>
+	        <input type="text" ng-model="tickMap.text" class="gf-form-input max-width-8" ng-blur="ctrl.render()">
+					<span class="gf-form-label">
+	          <i class="fa fa-trash pointer" ng-click="ctrl.removeTickMap(tickMap)"></i>
+	        </span>
+	    </div>
+
+	    <div class="gf-form-button-row">
+	      <button class="btn btn-inverse" ng-click="ctrl.addTickMap()">
+	        <i class="fa fa-plus"></i>
+	        Add tick mapping
+	      </button>
+	    </div>
+	  </div>
+	</div>
+
+</div>

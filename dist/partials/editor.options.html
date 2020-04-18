@@ -1,0 +1,196 @@
+<div class="editor-row">
+	<div class="section gf-form-group">
+		<h5 class="section-heading">D3 Gauge Options</h5>
+		<div class="gf-form-inline">
+      <div class="gf-form">
+        <label class="gf-form-label width-10">Data Operator
+					<tip></tip>
+				</label>
+        <div class="gf-form-select-wrapper width-10">
+          <select class="gf-form-input" ng-model="ctrl.panel.operatorName" ng-options="f for f in ctrl.panel.operatorNameOptions" ng-change="ctrl.render()"></select>
+        </div>
+      </div>
+    </div>
+		<div class="gf-form-inline">
+			<div class="gf-form">
+				<label class="gf-form-label width-10"><strong>Unit</strong></label>
+			</div>
+			<div class="gf-form max-width-15">
+				<div class="gf-form-dropdown-typeahead max-width-19"
+					ng-model="ctrl.panel.format"
+					dropdown-typeahead2="ctrl.panel.unitFormats"
+					dropdown-typeahead-on-select="ctrl.setUnitFormat($subItem)">
+				</div>
+			</div>
+			<div class="gf-form max-width-11">
+				<label class="gf-form-label width-6">Decimals</label>
+				<input type="number" class="gf-form-input width-5"
+					placeholder="auto" data-placement="right"
+					bs-tooltip="'Override automatic decimal precision for legend and tooltips'"
+					ng-model="ctrl.panel.decimals"
+					ng-change="ctrl.render()"
+					ng-model-onblur>
+			</div>
+		</div>
+		<div class="gf-form-inline">
+      <div class="gf-form">
+        <label class="gf-form-label width-10">Value Y Offset
+					<tip>Adjust the displayed value up or down the Y-Axis, use negative value to move up, positive for down</tip>
+				</label>
+				<input type="number" class="gf-form-input width-4" ng-model="ctrl.panel.gauge.valueYOffset" ng-blur="ctrl.render()" placeholder="0"></input>
+			</div>
+		</div>
+	</div>
+
+	<div class="section gf-form-group">
+		<h5 class="section-heading">Font Settings</h5>
+		<div class="gf-form-inline">
+			<label class="gf-form-label width-12">Value Font Size
+				<tip>Font Size of Value Displayed</tip>
+			</label>
+			<div class="gf-form-select-wrapper">
+				<select class="gf-form-input" ng-model="ctrl.panel.gauge.unitsLabelFontSize" ng-options="f for f in ctrl.panel.fontSizes" ng-change="ctrl.render()"></select>
+			</div>
+
+			<label class="gf-form-label width-12">Value Font
+				<tip>The font of the value text, at the bottom of the gauge</tip>
+			</label>
+			<div class="gf-form-select-wrapper">
+				<select class="gf-form-input" ng-model="ctrl.panel.gauge.unitsFont" ng-options="f for f in ctrl.panel.fontTypes" ng-change="ctrl.render()"></select>
+			</div>
+		</div>
+		<div class="gf-form-inline">
+			<label class="gf-form-label width-12">Tick Label Font Size
+				<tip>Font Size of Value Displayed</tip>
+			</label>
+			<div class="gf-form-select-wrapper">
+				<select class="gf-form-input" ng-model="ctrl.panel.gauge.labelFontSize" ng-options="f for f in ctrl.panel.fontSizes" ng-change="ctrl.render()"></select>
+			</div>
+
+			<label class="gf-form-label width-12">Tick Label Font
+				<tip>The font of the tick labels</tip>
+			</label>
+			<div class="gf-form-select-wrapper">
+				<select class="gf-form-input" ng-model="ctrl.panel.gauge.tickFont" ng-options="f for f in ctrl.panel.fontTypes" ng-change="ctrl.render()"></select>
+			</div>
+		</div>
+	</div>
+
+	<div class="section gf-form-group">
+		<h5 class="section-heading">Needle Options</h5>
+		<gf-form-switch class="gf-form" label-class="width-13" label="Animate transition" checked="ctrl.panel.gauge.animateNeedleValueTransition" on-change="ctrl.render()"></gf-form-switch>
+		<div class="gf-form">
+		<label class="gf-form-label width-13">Transition Speed (MS)
+			<tip>How fast to move the needle when value changes in milliseconds, default is 500</tip>
+		</label>
+		<input type="number" class="gf-form-input width-6" data-placement="right" ng-model="ctrl.panel.gauge.animateNeedleValueTransitionSpeed" ng-change="ctrl.validateTransitionValue()" ng-model-onblur>
+	</div>
+	</div>
+
+
+
+	<div class="section gf-form-group">
+		<h5 class="section-heading">Limits</h5>
+		<gf-form-switch class="gf-form" label-class="width-9" label="Show" checked="ctrl.panel.gauge.show" on-change="ctrl.render()"></gf-form-switch>
+		<div ng-if="ctrl.panel.gauge.show">
+			<div class="gf-form-inline">
+		    <div class="gf-form">
+		      <label class="gf-form-label width-9">Minimum
+						<tip>Minimum Value</tip>
+					</label>
+		      <input type="number" class="gf-form-input width-6" placeholder="0" data-placement="right" ng-model="ctrl.panel.gauge.minValue" ng-change="ctrl.validateLimitsMinValue()" ng-model-onblur>
+		      <label class="gf-form-label alert-state-critical" ng-show="ctrl.invalidGaugeRange">
+		          &nbsp; <i class="fa fa-warning"></i>
+		          Min value is bigger than max.
+		      </label>
+		    </div>
+		    <div class="gf-form">
+		      <label class="gf-form-label width-9">Maximum
+						<tip>Maximum Value</tip>
+					</label>
+		      <input type="number" class="gf-form-input width-6" placeholder="0" data-placement="right" ng-model="ctrl.panel.gauge.maxValue" ng-change="ctrl.validateLimitsMaxValue()" ng-model-onblur>
+		    </div>
+				<!-- TODO -->
+				<!--
+		    <gf-form-switch class="gf-form" label-class="width-9" label="Threshold labels" checked="ctrl.panel.gauge.thresholdLabels" on-change="ctrl.render()"></gf-form-switch>
+		    <gf-form-switch class="gf-form" label-class="width-12" label="Threshold markers" checked="ctrl.panel.gauge.thresholdMarkers" on-change="ctrl.render()"></gf-form-switch>
+				-->
+			</div>
+		</div>
+	</div>
+
+	<div class="section gf-form-group">
+	  <h5 class="section-heading">Coloring</h5>
+		<div class="gf-form-inline">
+      	<div class="gf-form">
+        	<label class="gf-form-label width-9">Outer Edge
+						<tip>Color of the outer circle</tip>
+					</label>
+        	<span class="gf-form-label">
+          	<spectrum-picker ng-model="ctrl.panel.gauge.outerEdgeCol" ng-change="ctrl.render()" ></spectrum-picker>
+        	</span>
+      	</div>
+
+				<div class="gf-form">
+					<label class="gf-form-label width-9">Inner (Face)
+						<tip>Color of the gauge face</tip>
+					</label>
+					<span class="gf-form-label">
+						<spectrum-picker ng-model="ctrl.panel.gauge.innerCol" ng-change="ctrl.render()" ></spectrum-picker>
+					</span>
+				</div>
+
+				<div class="gf-form">
+					<label class="gf-form-label width-9">Pivot
+						<tip>Color of the central pivot circle</tip>
+					</label>
+					<span class="gf-form-label">
+						<spectrum-picker ng-model="ctrl.panel.gauge.pivotCol" ng-change="ctrl.render()" ></spectrum-picker>
+					</span>
+				</div>
+
+			  <div class="gf-form">
+					<label class="gf-form-label width-9">Needle
+						<tip>Color of the needle</tip>
+					</label>
+					<span class="gf-form-label">
+						<spectrum-picker ng-model="ctrl.panel.gauge.needleCol" ng-change="ctrl.render()" ></spectrum-picker>
+					</span>
+				</div>
+			</div>
+		<div class="gf-form-inline">
+				<div class="gf-form">
+					<label class="gf-form-label width-9">Units Label
+						<tip>The color of the units text, at the bottom of the gauge</tip>
+					</label>
+					<span class="gf-form-label">
+						<spectrum-picker ng-model="ctrl.panel.gauge.unitsLabelCol" ng-change="ctrl.render()" ></spectrum-picker>
+					</span>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-9">Tick Label
+						<tip>The color of the tick labels</tip>
+					</label>
+					<span class="gf-form-label">
+						<spectrum-picker ng-model="ctrl.panel.gauge.tickLabelCol" ng-change="ctrl.render()" ></spectrum-picker>
+					</span>
+				</div>
+				<div class="gf-form">
+					<label class="gf-form-label width-9">Tick Major
+						<tip>Color of the major ticks</tip>
+					</label>
+					<span class="gf-form-label">
+						<spectrum-picker ng-model="ctrl.panel.gauge.tickColMaj" ng-change="ctrl.render()" ></spectrum-picker>
+					</span>
+				</div>
+  			<div class="gf-form">
+				  <label class="gf-form-label width-9">Tick Minor
+					  <tip>Color of the minor ticks</tip>
+				  </label>
+				  <span class="gf-form-label">
+					  <spectrum-picker ng-model="ctrl.panel.gauge.tickColMin" ng-change="ctrl.render()" ></spectrum-picker>
+				  </span>
+			  </div>
+		  </div>
+  </div>
+</div>
