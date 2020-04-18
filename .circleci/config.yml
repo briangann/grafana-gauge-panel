@@ -353,7 +353,7 @@ jobs:
           name: "Publish Release on GitHub"
           command: |
             # copy ci dist
-            cp -r ci/jobs/build_plugin/dist .
+            # cp -r ci/jobs/build_plugin/dist .
             # copy ci artifacts
             mkdir -p artifacts
             cp -r ci/packages/* artifacts
