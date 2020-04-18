@@ -100,7 +100,8 @@ This panel is based on the "SingleStat" panel by Grafana, along with large porti
 
 ### v0.0.7
 
-Update to typescript and using standardized build process.
+* Update to typescript and using standardized build process.
+* Simplified value display
 
 ### v0.0.1
 
