@@ -125,6 +125,7 @@ jobs:
     - run:
         name: Run coverage report
         command: |
+          ls -l ci/jobs
           ls -l ci/jobs/build_frontend
           ls -l ci/jobs/build_frontend/coverage
           ./ccbin/cc-test-reporter format-coverage -t lcov -o out/codeclimate.frontend.json ci/jobs/build_frontend/coverage/lcov.info
