@@ -89,7 +89,7 @@ export class DrawGauge {
       // check if there are tickMaps that apply
       let tickTextFloat = parseFloat(tickText);
       for (let i = 0; i < this.opt.tickMaps.length; i++) {
-        let aTickMap = this.opt.tickMaps[i];
+        const aTickMap = this.opt.tickMaps[i];
         if (parseFloat(aTickMap.value) === tickTextFloat) {
           tickText = aTickMap.text;
           break;
@@ -462,7 +462,7 @@ export class DrawGauge {
   }
 
   createCircleGroup() {
-    let circleGroup = this.svg.append('svg:g').attr('id', 'circles');
+    const circleGroup = this.svg.append('svg:g').attr('id', 'circles');
     circleGroup
       .append('svg:circle')
       .attr('cx', this.originX)
@@ -489,9 +489,9 @@ export class DrawGauge {
   }
   valueToDegrees(value: any) {
     // degree range is from 60 to 300 (240)  maxTickAngle - zeroTickAngle
-    let degreeRange = this.opt.maxTickAngle - this.opt.zeroTickAngle;
-    let range = this.opt.maxVal - this.opt.minVal;
-    let min = this.opt.minVal;
+    const degreeRange = this.opt.maxTickAngle - this.opt.zeroTickAngle;
+    const range = this.opt.maxVal - this.opt.minVal;
+    const min = this.opt.minVal;
     return (value / range) * degreeRange - ((min / range) * degreeRange + this.opt.zeroTickAngle);
   }
 
@@ -503,14 +503,14 @@ export class DrawGauge {
   tickCalcMaj() {
     return (d: any, i: any) => {
       // Offset the tick mark angle so zero is vertically down, then convert to radians
-      let tickAngle = d + 90;
+      const tickAngle = d + 90;
       const tickAngleRad = dToR(tickAngle);
-      let y1 = this.originY + this.tickStartMaj * Math.sin(tickAngleRad);
-      let y2 = this.originY + (this.tickStartMaj + this.opt.tickLengthMaj) * Math.sin(tickAngleRad);
-      let x1 = this.originX + this.tickStartMaj * Math.cos(tickAngleRad);
-      let x2 = this.originX + (this.tickStartMaj + this.opt.tickLengthMaj) * Math.cos(tickAngleRad);
+      const y1 = this.originY + this.tickStartMaj * Math.sin(tickAngleRad);
+      const y2 = this.originY + (this.tickStartMaj + this.opt.tickLengthMaj) * Math.sin(tickAngleRad);
+      const x1 = this.originX + this.tickStartMaj * Math.cos(tickAngleRad);
+      const x2 = this.originX + (this.tickStartMaj + this.opt.tickLengthMaj) * Math.cos(tickAngleRad);
       // Use a D3.JS path generator
-      let lineSVG = d3.line()([
+      const lineSVG = d3.line()([
         [x1, y1],
         [x2, y2],
       ]);
@@ -521,13 +521,13 @@ export class DrawGauge {
   tickCalcMin() {
     return (d: any, i: any) => {
       // Offset the tick mark angle so zero is vertically down, then convert to radians
-      let tickAngle = d + 90;
-      let tickAngleRad = dToR(tickAngle);
-      let y1 = this.originY + this.tickStartMin * Math.sin(tickAngleRad);
+      const tickAngle = d + 90;
+      const tickAngleRad = dToR(tickAngle);
+      const y1 = this.originY + this.tickStartMin * Math.sin(tickAngleRad);
       const y2 = this.originY + (this.tickStartMin + this.opt.tickLengthMin) * Math.sin(tickAngleRad);
-      let x1 = this.originX + this.tickStartMin * Math.cos(tickAngleRad);
-      let x2 = this.originX + (this.tickStartMin + this.opt.tickLengthMin) * Math.cos(tickAngleRad);
-      let lineSVG = d3.line()([
+      const x1 = this.originX + this.tickStartMin * Math.cos(tickAngleRad);
+      const x2 = this.originX + (this.tickStartMin + this.opt.tickLengthMin) * Math.cos(tickAngleRad);
+      const lineSVG = d3.line()([
         [x1, y1],
         [x2, y2],
       ]);
@@ -537,12 +537,12 @@ export class DrawGauge {
 
   needleCalc() {
     return (d: any, i: any) => {
-      let nAngleRad = dToR(d + 90);
-      let y1 = this.originY + this.needlePathStart * Math.sin(nAngleRad);
-      let y2 = this.originY + (this.needlePathStart + this.needlePathLength) * Math.sin(nAngleRad);
-      let x1 = this.originX + this.needlePathStart * Math.cos(nAngleRad);
-      let x2 = this.originX + (this.needlePathStart + this.needlePathLength) * Math.cos(nAngleRad);
-      let lineSVG = d3.line()([
+      const nAngleRad = dToR(d + 90);
+      const y1 = this.originY + this.needlePathStart * Math.sin(nAngleRad);
+      const y2 = this.originY + (this.needlePathStart + this.needlePathLength) * Math.sin(nAngleRad);
+      const x1 = this.originX + this.needlePathStart * Math.cos(nAngleRad);
+      const x2 = this.originX + (this.needlePathStart + this.needlePathLength) * Math.cos(nAngleRad);
+      const lineSVG = d3.line()([
         [x1, y1],
         [x2, y2],
       ]);
@@ -552,23 +552,23 @@ export class DrawGauge {
 
   // Define functions to calcuate the positions of the labels for the tick marks
   labelXcalc(d: any, i: any) {
-    let tickAngle = d + 90;
-    let tickAngleRad = dToR(tickAngle);
-    let labelW = this.opt.labelFontSize / (this.tickLabelText[i].toString().length / 2);
-    let x1 = this.originX + (this.labelStart - labelW) * Math.cos(tickAngleRad);
+    const tickAngle = d + 90;
+    const tickAngleRad = dToR(tickAngle);
+    const labelW = this.opt.labelFontSize / (this.tickLabelText[i].toString().length / 2);
+    const x1 = this.originX + (this.labelStart - labelW) * Math.cos(tickAngleRad);
     return x1;
   }
 
   labelYcalc(d: any, i: any) {
-    let tickAngle = d + 90;
-    let tickAngleRad = dToR(tickAngle);
-    let y1 = this.originY + this.labelStart * Math.sin(tickAngleRad) + this.opt.labelFontSize / 2;
+    const tickAngle = d + 90;
+    const tickAngleRad = dToR(tickAngle);
+    const y1 = this.originY + this.labelStart * Math.sin(tickAngleRad) + this.opt.labelFontSize / 2;
     return y1;
   }
 }
 
 function dToR(angleDeg: any) {
   // Turns an angle in degrees to radians
-  let angleRad = angleDeg * (Math.PI / 180);
+  const angleRad = angleDeg * (Math.PI / 180);
   return angleRad;
 }
