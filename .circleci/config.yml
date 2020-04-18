@@ -339,19 +339,46 @@ jobs:
         path: ci
 
   publish_github_release:
-    executor: default_exec
+    working_directory: ~/briangann-gauge-panel
+    docker:
+    - image: cibuilds/github:0.13
     steps:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - << pipeline.parameters.ssh-fingerprint >>
+            - "b7:b5:14:2e:43:05:2b:bb:7e:72:35:00:bc:cc:3c:1e"
       - attach_workspace:
           at: .
-      - restore_cache:
-          name: restore node_modules
-          keys:
-          - build-cache-{{ .Environment.CACHE_VERSION }}-{{ checksum "yarn.lock" }}
       - run:
           name: "Publish Release on GitHub"
           command: |
-            ./node_modules/.bin/grafana-toolkit plugin:github-publish
+            # copy ci dist
+            cp -r ci/jobs/build_plugin/dist .
+            # copy ci artifacts
+            mkdir -p artifacts
+            cp -r ci/packages/* artifacts
+            #
+            apk add --update --no-cache jq
+            PLUGIN_NAME=`cat dist/plugin.json|jq '.id'| sed s/\"//g`
+            RELEASE_NOTES=`awk 'BEGIN {FS="##"; RS=""} FNR==4 {print; exit}' CHANGELOG.md`
+            VERSION=`cat dist/plugin.json|jq '.info.version'| sed s/\"//g`
+            ls -al
+            ls -al ./artifacts
+            git config user.email "bkgann@gmail.com"
+            git config user.name "CircleCI Automation"
+            git checkout -b release-${VERSION}
+            git add --force dist/
+            git commit -m "automated release $VERSION [skip ci]"
+            git push -f origin release-${VERSION}
+            git tag -f v${VERSION}
+            git push -f origin v${VERSION}
+            ghr \
+              -t ${GITHUB_TOKEN} \
+              -u ${CIRCLE_PROJECT_USERNAME} \
+              -r ${CIRCLE_PROJECT_REPONAME} \
+              -c ${CIRCLE_SHA1} \
+              -n "${PLUGIN_NAME} v${VERSION}" \
+              -b "${RELEASE_NOTES}" \
+              -delete \
+              v${VERSION} \
+              ./artifacts/
