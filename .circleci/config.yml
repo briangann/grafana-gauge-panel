@@ -32,14 +32,9 @@ workflows:
           requires:
           - build_plugin
           - code_coverage_setup
-      - code_coverage_backend:
-          requires:
-          - lint_backend
-          - code_coverage_setup
       - upload_coverage:
           requires:
           - code_coverage_frontend
-          - code_coverage_backend
       - package:
           requires:
             - build_frontend
