@@ -349,6 +349,13 @@ jobs:
             git checkout -b release-${VERSION}
             #git add artifacts/
             git add --force dist/
+            # don't include src and other files in the release
+            git rm -rf src
+            git rm -rf .circleci
+            git rm .gitignore
+            git rm .prettierrc.js
+            git rm tsconfig.json
+            git rm yarn.lock
             git commit -m "automated release $VERSION [skip ci]"
             git push -f origin release-${VERSION}
             git tag -f v${VERSION}
