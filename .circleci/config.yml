@@ -129,7 +129,7 @@ jobs:
           ./ccbin/cc-test-reporter format-coverage -t lcov -o out/codeclimate.frontend.json coverage/lcov.info
     - run:
         name: Install jest and jest-junit
-        command: sudo yarn global add jest jest-junit
+        command: yarn global add jest jest-junit
     - run:
         name: Run tests with JUnit as reporter
         command: jest --ci --runInBand --reporters=default --reporters=jest-junit
