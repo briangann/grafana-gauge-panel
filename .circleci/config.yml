@@ -125,9 +125,9 @@ jobs:
     - run:
         name: Run coverage report
         command: |
-          ls -l ci/jobs/build_plugin
-          ls -l ci/jobs/build_plugin/coverage
-          ./ccbin/cc-test-reporter format-coverage -t lcov -o out/codeclimate.frontend.json ci/jobs/build_plugin/coverage/lcov.info
+          ls -l ci/jobs/build_frontend
+          ls -l ci/jobs/build_frontend/coverage
+          ./ccbin/cc-test-reporter format-coverage -t lcov -o out/codeclimate.frontend.json ci/jobs/build_frontend/coverage/lcov.info
     - run:
         name: Install jest and jest-junit
         command: sudo yarn global add jest jest-junit
