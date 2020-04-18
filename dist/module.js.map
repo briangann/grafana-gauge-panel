@@ -1,1 +1,0 @@
-{"version":3,"sources":["../src/module.js"],"names":["PanelCtrl"],"mappings":";;;;;;;AAAA;;QAGsBA,S","file":"module.js","sourcesContent":["import {D3GaugePanelCtrl} from  './ctrl';\n\nexport {\n  D3GaugePanelCtrl as PanelCtrl\n};\n"]}
