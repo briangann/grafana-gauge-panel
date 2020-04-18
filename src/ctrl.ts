@@ -243,12 +243,6 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
     return actualHeight;
   }
 
-  clearSVG() {
-    if ($('#' + this.panel.gaugeDivId).length) {
-      $('#' + this.panel.gaugeDivId).remove();
-    }
-  }
-
   renderGauge() {
     // update the values to be sent to the gauge constructor
     this.setValues(this.data);
