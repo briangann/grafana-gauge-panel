@@ -57,11 +57,11 @@ workflows:
           type: approval
           requires:
             - report
-          filters: *filter-only-release
+          filters: *filter-only-master
       - publish_github_release:
           requires:
             - approve_release
-          filters: *filter-only-release
+          filters: *filter-only-master
 
 executors:
   default_exec: # declares a reusable executor
@@ -154,7 +154,7 @@ jobs:
       - run:
           name: Upload coverage results to Code Climate
           command: |
-            ./ccbin/cc-test-reporter sum-coverage out/codeclimate.*.json -d -p 2 -o out/codeclimate.total.json
+            ./ccbin/cc-test-reporter sum-coverage out/codeclimate.*.json -d -p 1 -o out/codeclimate.total.json
             ./ccbin/cc-test-reporter upload-coverage -i out/codeclimate.total.json
 
   build_docs:
