@@ -203,7 +203,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       trueWidth = this.panelContainer.offsetParent.clientWidth;
     } else {
       // v4 and previous used fixed spans
-      let viewPortWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+      const viewPortWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
       // get the pixels of a span
       let pixelsPerSpan = viewPortWidth / 12;
       // multiply num spans by pixelsPerSpan
@@ -258,7 +258,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
     }
     this.panelWidth = this.getPanelWidthBySpan();
     this.panelHeight = this.getPanelHeight();
-    let margin = { top: 0, right: 0, bottom: 0, left: 0 };
+    const margin = { top: 0, right: 0, bottom: 0, left: 0 };
 
     // check which is smaller, the height or the width and set the radius to be half of the lesser
     let tmpGaugeRadius = parseFloat(this.panel.gauge.gaugeRadius);
@@ -352,7 +352,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
   }
 
   removeValueMap(map: any) {
-    let index = _.indexOf(this.panel.valueMaps, map);
+    const index = _.indexOf(this.panel.valueMaps, map);
     this.panel.valueMaps.splice(index, 1);
     this.render();
   }
@@ -362,7 +362,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
   }
 
   removeRangeMap(rangeMap: any) {
-    let index = _.indexOf(this.panel.rangeMaps, rangeMap);
+    const index = _.indexOf(this.panel.rangeMaps, rangeMap);
     this.panel.rangeMaps.splice(index, 1);
     this.render();
   }
@@ -375,7 +375,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
     this.panel.tickMaps.push({ value: 0, text: '' });
   }
   removeTickMap(tickMap: any) {
-    let index = _.indexOf(this.panel.tickMaps, tickMap);
+    const index = _.indexOf(this.panel.tickMaps, tickMap);
     this.panel.tickMaps.splice(index, 1);
     this.render();
   }
@@ -564,9 +564,9 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
     const delta = value / 2;
     let dec = -Math.floor(Math.log(delta) / Math.LN10);
 
-    let magn = Math.pow(10, -dec),
-      norm = delta / magn, // norm is between 1.0 and 10.0
-      size;
+    let magn = Math.pow(10, -dec);
+    let norm = delta / magn; // norm is between 1.0 and 10.0
+    let size = 1;
 
     if (norm < 1.5) {
       size = 1;
@@ -613,8 +613,8 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
     }
 
     if (this.series && this.series.length > 0) {
-      let lastPoint = _.last(this.series[0].datapoints);
-      let lastValue = _.isArray(lastPoint) ? lastPoint[0] : null;
+      const lastPoint = _.last(this.series[0].datapoints);
+      const lastValue = _.isArray(lastPoint) ? lastPoint[0] : null;
 
       if (this.panel.operatorName === 'name') {
         data.value = 0;
@@ -655,7 +655,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
         }
 
         // value/number to text mapping
-        let value = parseFloat(map.value);
+        const value = parseFloat(map.value);
         if (value === data.valueRounded) {
           data.valueFormatted = map.text;
           return;
@@ -663,7 +663,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       }
     } else if (this.panel.mappingType === 2) {
       for (let j = 0; j < this.panel.rangeMaps.length; j++) {
-        let rangeMap = this.panel.rangeMaps[j];
+        const rangeMap = this.panel.rangeMaps[j];
         // special null case
         if (rangeMap.from === 'null' && rangeMap.to === 'null') {
           if (data.value === null || data.value === void 0) {

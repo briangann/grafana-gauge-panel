@@ -121,7 +121,7 @@ export class DrawGauge {
     let ticks = this.svg.append('svg:g').attr('id', 'tickMarks');
     // Add a groups for major and minor ticks (minor first, so majors overlay)
     let ticksMin = ticks.append('svg:g').attr('id', 'minorTickMarks');
-    let ticksMaj = ticks.append('svg:g').attr('id', 'majorTickMarks');
+    const ticksMaj = ticks.append('svg:g').attr('id', 'majorTickMarks');
     // Draw the tick marks
     ticksMin
       .selectAll('path')
@@ -504,7 +504,7 @@ export class DrawGauge {
     return (d: any, i: any) => {
       // Offset the tick mark angle so zero is vertically down, then convert to radians
       let tickAngle = d + 90;
-      let tickAngleRad = dToR(tickAngle);
+      const tickAngleRad = dToR(tickAngle);
       let y1 = this.originY + this.tickStartMaj * Math.sin(tickAngleRad);
       let y2 = this.originY + (this.tickStartMaj + this.opt.tickLengthMaj) * Math.sin(tickAngleRad);
       let x1 = this.originX + this.tickStartMaj * Math.cos(tickAngleRad);
@@ -524,7 +524,7 @@ export class DrawGauge {
       let tickAngle = d + 90;
       let tickAngleRad = dToR(tickAngle);
       let y1 = this.originY + this.tickStartMin * Math.sin(tickAngleRad);
-      let y2 = this.originY + (this.tickStartMin + this.opt.tickLengthMin) * Math.sin(tickAngleRad);
+      const y2 = this.originY + (this.tickStartMin + this.opt.tickLengthMin) * Math.sin(tickAngleRad);
       let x1 = this.originX + this.tickStartMin * Math.cos(tickAngleRad);
       let x2 = this.originX + (this.tickStartMin + this.opt.tickLengthMin) * Math.cos(tickAngleRad);
       let lineSVG = d3.line()([
