@@ -42,19 +42,19 @@ export class DrawGauge {
     this.originX = opt.gaugeRadius;
     this.originY = opt.gaugeRadius;
 
-    //Define a linear scale to convert values to needle displacement angle (degrees)
+    // Define a linear scale to convert values to needle displacement angle (degrees)
     this.valueScale = d3
       .scaleLinear()
       .domain([this.opt.minVal, this.opt.maxVal])
       .range([this.opt.zeroTickAngle, this.opt.maxTickAngle]);
-    //Calculate tick mark angles (degrees)
-    var counter = 0;
+    // Calculate tick mark angles (degrees)
+    let counter = 0;
     this.tickAnglesMaj = [];
     this.tickAnglesMin = [];
     this.tickSpacingMajDeg = this.valueScale(this.opt.tickSpaceMajVal) - this.valueScale(0);
     this.tickSpacingMinDeg = this.valueScale(this.opt.tickSpaceMinVal) - this.valueScale(0);
-    for (var i = this.opt.zeroTickAngle; i <= this.opt.maxTickAngle; i = i + this.tickSpacingMajDeg) {
-      var tickAngle = this.opt.zeroTickAngle + this.tickSpacingMajDeg * counter;
+    for (let i = this.opt.zeroTickAngle; i <= this.opt.maxTickAngle; i = i + this.tickSpacingMajDeg) {
+      let tickAngle = this.opt.zeroTickAngle + this.tickSpacingMajDeg * counter;
       // check if this is the "end" of a full circle, and skip the last tick marker
       if (tickAngle - this.opt.zeroTickAngle < 360) {
         //console.log("adding tick at angle " + tickAngle)
@@ -63,9 +63,9 @@ export class DrawGauge {
       counter++;
     }
     counter = 0;
-    for (var j = opt.zeroTickAngle; j <= opt.maxTickAngle; j = j + this.tickSpacingMinDeg) {
+    for (let j = opt.zeroTickAngle; j <= opt.maxTickAngle; j = j + this.tickSpacingMinDeg) {
       //Check for an existing major tick angle
-      var exists = 0;
+      let exists = 0;
       this.tickAnglesMaj.forEach((d: any) => {
         if (opt.zeroTickAngle + this.tickSpacingMinDeg * counter === d) {
           exists = 1;
@@ -79,21 +79,18 @@ export class DrawGauge {
     //Calculate major tick mark label text
     counter = 0;
     this.tickLabelText = [] as any;
-    for (var k = this.opt.zeroTickAngle; k <= this.opt.maxTickAngle; k = k + this.tickSpacingMajDeg) {
+    for (let k = this.opt.zeroTickAngle; k <= this.opt.maxTickAngle; k = k + this.tickSpacingMajDeg) {
       let tickValue = this.opt.minVal + this.opt.tickSpaceMajVal * counter;
-      var parts = this.opt.tickSpaceMajVal.toString().split('.');
+      let parts = this.opt.tickSpaceMajVal.toString().split('.');
       let tickText = tickValue;
       if (parts.length > 1) {
         tickText = Number(tickValue).toFixed(parts[1].length);
       }
-      //console.log("TickText = " + tickText);
       // check if there are tickMaps that apply
       let tickTextFloat = parseFloat(tickText);
       for (let i = 0; i < this.opt.tickMaps.length; i++) {
         let aTickMap = this.opt.tickMaps[i];
-        //console.log("Checking tickMap " + i);
         if (parseFloat(aTickMap.value) === tickTextFloat) {
-          //console.log("found tickmap, value is mapped to " + aTickMap.text);
           tickText = aTickMap.text;
           break;
         }
@@ -101,13 +98,13 @@ export class DrawGauge {
       this.tickLabelText.push(tickText);
       counter++;
     }
-    //Add the svg content holder to the visualisation box element in the document (vizbox)
-    //var svgWidth = opt.gaugeRadius * 2, svgHeight = opt.gaugeRadius * 2;
-    //Draw the circles that make up the edge of the gauge
+    // Add the svg content holder to the visualisation box element in the document (vizbox)
+    // let svgWidth = opt.gaugeRadius * 2, svgHeight = opt.gaugeRadius * 2;
+    // Draw the circles that make up the edge of the gauge
     this.circleGroup = this.createCircleGroup();
     if (this.opt.showThresholdOnGauge && this.opt.thresholds.length > 0) {
       // split the threshold values
-      var boundaries = this.opt.thresholds.split(',');
+      let boundaries = this.opt.thresholds.split(',');
       if (this.opt.showLowerThresholdRange) {
         this.drawBand(this.opt.minVal, parseFloat(boundaries[0]), this.opt.thresholdColors[0]);
       }
@@ -118,14 +115,14 @@ export class DrawGauge {
         this.drawBand(parseFloat(boundaries[1]), this.opt.maxVal, this.opt.thresholdColors[2]);
       }
     }
-    var pathTickMaj = this.tickCalcMaj();
-    var pathTickMin = this.tickCalcMin();
-    //Add a group to hold the ticks
-    var ticks = this.svg.append('svg:g').attr('id', 'tickMarks');
-    //Add a groups for major and minor ticks (minor first, so majors overlay)
-    var ticksMin = ticks.append('svg:g').attr('id', 'minorTickMarks');
-    var ticksMaj = ticks.append('svg:g').attr('id', 'majorTickMarks');
-    //Draw the tick marks
+    let pathTickMaj = this.tickCalcMaj();
+    let pathTickMin = this.tickCalcMin();
+    // Add a group to hold the ticks
+    let ticks = this.svg.append('svg:g').attr('id', 'tickMarks');
+    // Add a groups for major and minor ticks (minor first, so majors overlay)
+    let ticksMin = ticks.append('svg:g').attr('id', 'minorTickMarks');
+    const ticksMaj = ticks.append('svg:g').attr('id', 'majorTickMarks');
+    // Draw the tick marks
     ticksMin
       .selectAll('path')
       .data(this.tickAnglesMin)
@@ -142,8 +139,8 @@ export class DrawGauge {
       .attr('d', pathTickMaj)
       .style('stroke', this.opt.tickColMaj)
       .style('stroke-width', this.opt.tickWidthMaj + 'px');
-    //Add labels for major tick marks
-    var tickLabels = this.svg.append('svg:g').attr('id', 'tickLabels');
+    // Add labels for major tick marks
+    let tickLabels = this.svg.append('svg:g').attr('id', 'tickLabels');
     tickLabels
       .selectAll('text')
       .data(this.tickAnglesMaj)
@@ -163,7 +160,7 @@ export class DrawGauge {
       .text((d: any, i: any) => {
         return this.tickLabelText[i];
       });
-    //Add label for units
+    // Add label for units
     this.valueLabelParent = svg.append('svg:g').attr('id', 'valueLabels');
     this.valueLabel = this.valueLabelParent
       .selectAll('text')
@@ -174,7 +171,7 @@ export class DrawGauge {
         return this.labelXcalc(d, i);
       })
       .attr('y', (d: any, i: any) => {
-        var y = this.labelYcalc(d, i);
+        let y = this.labelYcalc(d, i);
         y = y + this.opt.valueYOffset;
         return y;
       })
@@ -184,14 +181,14 @@ export class DrawGauge {
       .style('font-weight', 'bold')
       .attr('font-family', this.opt.unitsFont)
       .text(this.opt.needleValText); // was just the units, nothing formatted
-    //Draw needle
-    var needleAngle = [this.opt.zeroNeedleAngle];
-    //Define a function for calculating the coordinates of the needle paths (see tick mark equivalent)
-    var pathNeedle = this.needleCalc();
-    //Add a group to hold the needle path
+    // Draw needle
+    let needleAngle = [this.opt.zeroNeedleAngle];
+    // Define a function for calculating the coordinates of the needle paths (see tick mark equivalent)
+    let pathNeedle = this.needleCalc();
+    // Add a group to hold the needle path
     this.needleGroup = this.svg.append('svg:g').attr('id', 'needle');
-    //Draw the needle path
-    var needlePath = this.needleGroup
+    // Draw the needle path
+    let needlePath = this.needleGroup
       .selectAll('path')
       .data(needleAngle)
       .enter()
@@ -199,8 +196,8 @@ export class DrawGauge {
       .attr('d', pathNeedle)
       .style('stroke', this.opt.needleCol)
       .style('stroke-width', this.opt.needleWidth + 'px');
-    //Animate the transistion of the needle to its starting value
-    var transitionSpeed = 0;
+    // Animate the transistion of the needle to its starting value
+    let transitionSpeed = 0;
     if (this.opt.animateNeedleValueTransition) {
       transitionSpeed = this.opt.animateNeedleValueTransitionSpeed;
     }
@@ -210,15 +207,15 @@ export class DrawGauge {
       .ease(d3.easeQuadIn)
       .attrTween('transform', (d: any, i: any, a: any) => {
         let needleAngle = this.valueScale(this.opt.needleVal);
-        //Check for min/max ends of the needle
+        // Check for min/max ends of the needle
         if (needleAngle > this.opt.maxTickAngle) {
           needleAngle = this.opt.maxNeedleAngle;
         }
         if (needleAngle < this.opt.zeroTickAngle) {
           needleAngle = this.opt.zeroNeedleAngle;
         }
-        var needleCentre = this.originX + ',' + this.originY;
-        var needleRot = needleAngle - this.opt.zeroNeedleAngle;
+        let needleCentre = this.originX + ',' + this.originY;
+        let needleRot = needleAngle - this.opt.zeroNeedleAngle;
         return d3.interpolateString('rotate(0,' + needleCentre + ')', 'rotate(' + needleRot + ',' + needleCentre + ')');
       });
     this.valueLabelParent.selectAll('text').text(this.opt.needleValText);
@@ -226,15 +223,15 @@ export class DrawGauge {
 
   // Function to update the gauge value
   updateGauge(newVal: any, newValFormatted: any, newValRounded: any) {
-    //Set default values if necessary
+    // Set default values if necessary
     if (newVal === undefined) {
       newVal = this.opt.minVal;
     }
-    //Animate the transistion of the needle to its new value
-    var needlePath = this.needleGroup.selectAll('path');
-    var oldVal = this.opt.needleVal;
+    // Animate the transistion of the needle to its new value
+    let needlePath = this.needleGroup.selectAll('path');
+    let oldVal = this.opt.needleVal;
     // snap to new location by default
-    var transitionSpeed = 0;
+    let transitionSpeed = 0;
     if (this.opt.animateNeedleValueTransition) {
       transitionSpeed = this.opt.animateNeedleValueTransitionSpeed;
     }
@@ -245,7 +242,7 @@ export class DrawGauge {
       .attrTween('transform', (d: any, i: any, a: any) => {
         let needleAngleOld = this.valueScale(oldVal) - this.opt.zeroNeedleAngle;
         let needleAngleNew = this.valueScale(newVal) - this.opt.zeroNeedleAngle;
-        //Check for min/max ends of the needle
+        // Check for min/max ends of the needle
         if (needleAngleOld + this.opt.zeroNeedleAngle > this.opt.maxTickAngle) {
           needleAngleOld = this.opt.maxNeedleAngle - this.opt.zeroNeedleAngle;
         }
@@ -258,12 +255,12 @@ export class DrawGauge {
         if (needleAngleNew + this.opt.zeroNeedleAngle < this.opt.zeroTickAngle) {
           needleAngleNew = 0;
         }
-        var needleCentre = this.originX + ',' + this.originY;
+        let needleCentre = this.originX + ',' + this.originY;
         return d3.interpolateString('rotate(' + needleAngleOld + ',' + needleCentre + ')', 'rotate(' + needleAngleNew + ',' + needleCentre + ')');
       });
-    var valueThresholdColor = this.opt.unitsLabelCol;
+    let valueThresholdColor = this.opt.unitsLabelCol;
     if (this.opt.showThresholdColorOnValue) {
-      var boundaries = this.opt.thresholds.split(',');
+      let boundaries = this.opt.thresholds.split(',');
       if (newVal < parseFloat(boundaries[0])) {
         valueThresholdColor = this.opt.thresholdColors[0];
       }
@@ -277,7 +274,7 @@ export class DrawGauge {
     // fill color
     this.valueLabel.style('fill', valueThresholdColor);
     this.valueLabelParent.selectAll('text').text(newValFormatted);
-    //Update the current value
+    // Update the current value
     this.opt.needleVal = newVal;
   }
 
@@ -492,9 +489,9 @@ export class DrawGauge {
   }
   valueToDegrees(value: any) {
     // degree range is from 60 to 300 (240)  maxTickAngle - zeroTickAngle
-    var degreeRange = this.opt.maxTickAngle - this.opt.zeroTickAngle;
-    var range = this.opt.maxVal - this.opt.minVal;
-    var min = this.opt.minVal;
+    let degreeRange = this.opt.maxTickAngle - this.opt.zeroTickAngle;
+    let range = this.opt.maxVal - this.opt.minVal;
+    let min = this.opt.minVal;
     return (value / range) * degreeRange - ((min / range) * degreeRange + this.opt.zeroTickAngle);
   }
 
@@ -502,18 +499,18 @@ export class DrawGauge {
     return (this.valueToDegrees(value) * Math.PI) / 180;
   }
 
-  //Define two functions for calculating the coordinates of the major & minor tick mark paths
+  // Define two functions for calculating the coordinates of the major & minor tick mark paths
   tickCalcMaj() {
     return (d: any, i: any) => {
-      //Offset the tick mark angle so zero is vertically down, then convert to radians
-      var tickAngle = d + 90,
-        tickAngleRad = dToR(tickAngle);
-      var y1 = this.originY + this.tickStartMaj * Math.sin(tickAngleRad);
-      var y2 = this.originY + (this.tickStartMaj + this.opt.tickLengthMaj) * Math.sin(tickAngleRad);
-      var x1 = this.originX + this.tickStartMaj * Math.cos(tickAngleRad);
-      var x2 = this.originX + (this.tickStartMaj + this.opt.tickLengthMaj) * Math.cos(tickAngleRad);
-      //Use a D3.JS path generator
-      var lineSVG = d3.line()([
+      // Offset the tick mark angle so zero is vertically down, then convert to radians
+      let tickAngle = d + 90;
+      const tickAngleRad = dToR(tickAngle);
+      let y1 = this.originY + this.tickStartMaj * Math.sin(tickAngleRad);
+      let y2 = this.originY + (this.tickStartMaj + this.opt.tickLengthMaj) * Math.sin(tickAngleRad);
+      let x1 = this.originX + this.tickStartMaj * Math.cos(tickAngleRad);
+      let x2 = this.originX + (this.tickStartMaj + this.opt.tickLengthMaj) * Math.cos(tickAngleRad);
+      // Use a D3.JS path generator
+      let lineSVG = d3.line()([
         [x1, y1],
         [x2, y2],
       ]);
@@ -523,14 +520,14 @@ export class DrawGauge {
 
   tickCalcMin() {
     return (d: any, i: any) => {
-      //Offset the tick mark angle so zero is vertically down, then convert to radians
-      var tickAngle = d + 90,
-        tickAngleRad = dToR(tickAngle);
-      var y1 = this.originY + this.tickStartMin * Math.sin(tickAngleRad);
-      var y2 = this.originY + (this.tickStartMin + this.opt.tickLengthMin) * Math.sin(tickAngleRad);
-      var x1 = this.originX + this.tickStartMin * Math.cos(tickAngleRad);
-      var x2 = this.originX + (this.tickStartMin + this.opt.tickLengthMin) * Math.cos(tickAngleRad);
-      var lineSVG = d3.line()([
+      // Offset the tick mark angle so zero is vertically down, then convert to radians
+      let tickAngle = d + 90;
+      let tickAngleRad = dToR(tickAngle);
+      let y1 = this.originY + this.tickStartMin * Math.sin(tickAngleRad);
+      const y2 = this.originY + (this.tickStartMin + this.opt.tickLengthMin) * Math.sin(tickAngleRad);
+      let x1 = this.originX + this.tickStartMin * Math.cos(tickAngleRad);
+      let x2 = this.originX + (this.tickStartMin + this.opt.tickLengthMin) * Math.cos(tickAngleRad);
+      let lineSVG = d3.line()([
         [x1, y1],
         [x2, y2],
       ]);
@@ -540,12 +537,12 @@ export class DrawGauge {
 
   needleCalc() {
     return (d: any, i: any) => {
-      var nAngleRad = dToR(d + 90);
-      var y1 = this.originY + this.needlePathStart * Math.sin(nAngleRad);
-      var y2 = this.originY + (this.needlePathStart + this.needlePathLength) * Math.sin(nAngleRad);
+      let nAngleRad = dToR(d + 90);
+      let y1 = this.originY + this.needlePathStart * Math.sin(nAngleRad);
+      let y2 = this.originY + (this.needlePathStart + this.needlePathLength) * Math.sin(nAngleRad);
       let x1 = this.originX + this.needlePathStart * Math.cos(nAngleRad);
       let x2 = this.originX + (this.needlePathStart + this.needlePathLength) * Math.cos(nAngleRad);
-      var lineSVG = d3.line()([
+      let lineSVG = d3.line()([
         [x1, y1],
         [x2, y2],
       ]);
@@ -553,9 +550,9 @@ export class DrawGauge {
     };
   }
 
-  //Define functions to calcuate the positions of the labels for the tick marks
+  // Define functions to calcuate the positions of the labels for the tick marks
   labelXcalc(d: any, i: any) {
-    var tickAngle = d + 90;
+    let tickAngle = d + 90;
     let tickAngleRad = dToR(tickAngle);
     let labelW = this.opt.labelFontSize / (this.tickLabelText[i].toString().length / 2);
     let x1 = this.originX + (this.labelStart - labelW) * Math.cos(tickAngleRad);
@@ -563,15 +560,15 @@ export class DrawGauge {
   }
 
   labelYcalc(d: any, i: any) {
-    var tickAngle = d + 90;
-    var tickAngleRad = dToR(tickAngle);
-    var y1 = this.originY + this.labelStart * Math.sin(tickAngleRad) + this.opt.labelFontSize / 2;
+    let tickAngle = d + 90;
+    let tickAngleRad = dToR(tickAngle);
+    let y1 = this.originY + this.labelStart * Math.sin(tickAngleRad) + this.opt.labelFontSize / 2;
     return y1;
   }
 }
 
 function dToR(angleDeg: any) {
-  //Turns an angle in degrees to radians
-  var angleRad = angleDeg * (Math.PI / 180);
+  // Turns an angle in degrees to radians
+  let angleRad = angleDeg * (Math.PI / 180);
   return angleRad;
 }
