@@ -3,9 +3,10 @@ import _ from 'lodash';
 import $ from 'jquery';
 import kbn from 'grafana/app/core/utils/kbn';
 import TimeSeries from 'grafana/app/core/time_series2';
-import d3 from 'd3';
+import * as d3 from 'd3';
 
-import { drawGauge } from './libs/d3gauge';
+// @ts-ignore
+import { DrawGauge } from './libs/d3gauge';
 
 const panelDefaults = {
   fontSizes: [
@@ -346,7 +347,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       animateNeedleValueTransitionSpeed: this.panel.gauge.animateNeedleValueTransitionSpeed,
       tickMaps: this.panel.tickMaps,
     };
-    this.gaugeObject = drawGauge(svg, opt);
+    this.gaugeObject = new DrawGauge(svg, opt);
     this.svg = svg;
   }
 

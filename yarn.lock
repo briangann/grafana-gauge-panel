@@ -4050,11 +4050,6 @@ d3-array@1, d3-array@^1.1.1, d3-array@^1.2.0:
   resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-1.2.4.tgz#635ce4d5eea759f6f605863dbcfc30edc737f71f"
   integrity sha512-KHW6M86R+FUPYGb3R5XiYjXPq7VzwxZ22buHhAEVG5ztoEcZZMLov530mmccaqA1GghZArjQV46fuc8kUqhhHw==
 
-"d3-array@1.2.0 - 2":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-2.4.0.tgz#87f8b9ad11088769c82b5ea846bcb1cc9393f242"
-  integrity sha512-KQ41bAF2BMakf/HdKT865ALd4cgND6VcIztVQZUTt0+BH3RWy6ZYnHghVXf6NFjt2ritLr8H1T8LreAAlfiNcw==
-
 d3-axis@1:
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/d3-axis/-/d3-axis-1.0.12.tgz#cdf20ba210cfbb43795af33756886fb3638daac9"
@@ -4118,7 +4113,7 @@ d3-dsv@1:
     iconv-lite "0.4"
     rw "1"
 
-d3-ease@1, d3-ease@~1.0.3:
+d3-ease@1, d3-ease@^1.0.6, d3-ease@~1.0.3:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/d3-ease/-/d3-ease-1.0.6.tgz#ebdb6da22dfac0a22222f2d4da06f66c416a0ec0"
   integrity sha512-SZ/lVU7LRXafqp7XtIcBdxnWl8yyLpgOmzAk0mWBI9gXNzLDx5ybZgnRbH9dN/yY5tzVBqCQ9avltSnqVwessQ==
@@ -4157,7 +4152,7 @@ d3-hierarchy@1:
   resolved "https://registry.yarnpkg.com/d3-hierarchy/-/d3-hierarchy-1.1.9.tgz#2f6bee24caaea43f8dc37545fa01628559647a83"
   integrity sha512-j8tPxlqh1srJHAtxfvOUwKNYJkQuBFdM1+JAUfq6xqH5eAqf93L7oG1NVqDa4CpFZNvnNKtCYEUC8KY9yEn9lQ==
 
-d3-interpolate@1, d3-interpolate@^1.2.0:
+d3-interpolate@1:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/d3-interpolate/-/d3-interpolate-1.4.0.tgz#526e79e2d80daa383f9e0c1c1c7dcc0f0583e987"
   integrity sha512-V9znK0zc3jOPV4VD2zZn0sDhZU3WAE2bmlxdIwwQPPzPjvyLkd8B3JUVdS1IDUFDkWZ72c9qnv1GK2ZagTZ8EA==
@@ -4170,13 +4165,6 @@ d3-interpolate@~1.1.5:
   integrity sha512-mOnv5a+pZzkNIHtw/V6I+w9Lqm9L5bG3OTXPM5A+QO0yyVMQ4W1uZhR+VOJmazaOZXri2ppbiZ5BUNWT0pFM9A==
   dependencies:
     d3-color "1"
-
-d3-line@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/d3-line/-/d3-line-0.0.1.tgz#417091aa2a84792a3d50a09c60098c50b0714a89"
-  integrity sha1-QXCRqiqEeSo9UKCcYAmMULBxSok=
-  dependencies:
-    d3 "^3.5.16"
 
 d3-path@1:
   version "1.0.9"
@@ -4218,18 +4206,7 @@ d3-scale@2:
     d3-time "1"
     d3-time-format "2"
 
-d3-scale@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/d3-scale/-/d3-scale-3.2.1.tgz#da1684adce7261b4bc7a76fe193d887f0e909e69"
-  integrity sha512-huz5byJO/6MPpz6Q8d4lg7GgSpTjIZW/l+1MQkzKfu2u8P6hjaXaStOpmyrD6ymKoW87d2QVFCKvSjLwjzx/rA==
-  dependencies:
-    d3-array "1.2.0 - 2"
-    d3-format "1"
-    d3-interpolate "^1.2.0"
-    d3-time "1"
-    d3-time-format "2"
-
-d3-selection@1, d3-selection@^1.0.2, d3-selection@^1.0.5, d3-selection@^1.1.0:
+d3-selection@1, d3-selection@^1.0.2, d3-selection@^1.1.0:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/d3-selection/-/d3-selection-1.4.1.tgz#98eedbbe085fbda5bafa2f9e3f3a2f4d7d622a98"
   integrity sha512-BTIbRjv/m5rcVTfBs4AMBLKs4x8XaaLkwm28KWu9S2vKNqXkXt2AH2Qf0sdPZHjFxcWg/YL53zcqAz+3g4/7PA==
@@ -4240,13 +4217,6 @@ d3-shape@1:
   integrity sha512-EUkvKjqPFUAZyOlhY5gzCxCeI0Aep04LwIRpsZ/mLFelJiUfnK56jo5JMDSE7yyP2kLSb6LtF+S5chMk7uqPqw==
   dependencies:
     d3-path "1"
-
-d3-svg@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/d3-svg/-/d3-svg-0.2.2.tgz#15a88a1b6494b966552b1b7262ba498ee3899a11"
-  integrity sha1-FaiKG2SUuWZVKxtyYrpJjuOJmhE=
-  dependencies:
-    d3-selection "^1.0.5"
 
 d3-time-format@2:
   version "2.2.3"
@@ -4329,11 +4299,6 @@ d3@5.15.0:
     d3-transition "1"
     d3-voronoi "1"
     d3-zoom "1"
-
-d3@^3.5.16:
-  version "3.5.17"
-  resolved "https://registry.yarnpkg.com/d3/-/d3-3.5.17.tgz#bc46748004378b21a360c9fc7cf5231790762fb8"
-  integrity sha1-vEZ0gAQ3iyGjYMn8fPUjF5B2L7g=
 
 d3@^5.15.1:
   version "5.15.1"
@@ -5402,11 +5367,6 @@ follow-redirects@1.5.10:
   integrity sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
   dependencies:
     debug "=3.1.0"
-
-font-awesome@^4.7.0:
-  version "4.7.0"
-  resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"
-  integrity sha1-j6jPBBGhoxr9B7BtKQK7n8gVoTM=
 
 for-each@~0.3.3:
   version "0.3.3"
