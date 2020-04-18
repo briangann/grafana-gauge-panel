@@ -259,7 +259,7 @@ export class DrawGauge {
       });
     let valueThresholdColor = this.opt.unitsLabelCol;
     if (this.opt.showThresholdColorOnValue) {
-      let boundaries = this.opt.thresholds.split(',');
+      const boundaries = this.opt.thresholds.split(',');
       if (newVal < parseFloat(boundaries[0])) {
         valueThresholdColor = this.opt.thresholdColors[0];
       }

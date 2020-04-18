@@ -538,7 +538,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
   link(scope: any, elem: any, attrs: any, ctrl: any) {
     const gaugeByClass = elem.find('.grafana-d3-gauge');
     gaugeByClass.append('<div id="' + ctrl.containerDivId + '"></div>');
-    let container = gaugeByClass[0].childNodes[0];
+    const container = gaugeByClass[0].childNodes[0];
     ctrl.setContainer(container);
     function render() {
       ctrl.renderGauge();
@@ -637,7 +637,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
     // check value to text mappings if its enabled
     if (this.panel.mappingType === 1) {
       for (let i = 0; i < this.panel.valueMaps.length; i++) {
-        let map = this.panel.valueMaps[i];
+        const map = this.panel.valueMaps[i];
         // special null case
         if (map.value === 'null') {
           if (data.value === null || data.value === void 0) {
@@ -700,7 +700,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
 
   onDataReceived(dataList: any) {
     this.series = dataList.map(this.seriesHandler.bind(this));
-    let data = {
+    const data = {
       value: 0,
       valueFormatted: 0,
       valueRounded: 0,
