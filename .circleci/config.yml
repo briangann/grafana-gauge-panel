@@ -146,8 +146,6 @@ jobs:
   upload_coverage:
     docker:
     - image:  circleci/circleci-cli:alpine
-    #  environment:
-    #    CC_TEST_REPORTER_ID: add_this_to_circleci_config
     working_directory: ~/plugin
     steps:
       - attach_workspace:
