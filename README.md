@@ -99,4 +99,3 @@ This panel is based on the "SingleStat" panel by Grafana, along with large porti
 
 * <https://oliverbinns.com/articles/D3js-gauge/>
 * <http://bl.ocks.org/tomerd/1499279>
-
