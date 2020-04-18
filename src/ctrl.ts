@@ -561,7 +561,7 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       return { decimals: this.panel.decimals, scaledDecimals: null };
     }
 
-    let delta = value / 2;
+    const delta = value / 2;
     let dec = -Math.floor(Math.log(delta) / Math.LN10);
 
     let magn = Math.pow(10, -dec),
