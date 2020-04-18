@@ -3,7 +3,7 @@ version: 2.1
 parameters:
   ssh-fingerprint:
     type: string
-    default:  "{{ .Environment.GITHUB_PUBLISH_KEY }}"
+    default:  {{ .Environment.GITHUB_PUBLISH_KEY }}
 
 aliases:
   # Workflow filters
@@ -274,7 +274,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - "{{ .Environment.GITHUB_PUBLISH_KEY }}"
+            - << pipeline.parameters.ssh-fingerprint >>
       - attach_workspace:
           at: .
       - restore_cache:
