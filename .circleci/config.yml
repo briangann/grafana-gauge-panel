@@ -40,6 +40,7 @@ workflows:
           type: approval
           requires:
             - package
+            - upload_coverage
           filters: *filter-only-master
       - publish_github_release:
           requires:
@@ -329,7 +330,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-          - << pipeline.parameters.ssh-fingerprint >>
+          - "f4:65:af:55:bd:a2:8e:76:0e:0a:80:01:1d:fe:6e:c6"
       - attach_workspace:
           at: .
       - run:
