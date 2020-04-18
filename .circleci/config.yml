@@ -120,8 +120,9 @@ jobs:
     - attach_workspace:
         at: .
     - restore_cache:
+        name: restore node_modules
         keys:
-          - yarn-packages-{{ checksum "yarn.lock" }}
+        - build-cache-{{ .Environment.CACHE_VERSION }}-{{ checksum "yarn.lock" }}
     - run:
         name: Run coverage report
         command: |
@@ -132,7 +133,7 @@ jobs:
         command: yarn global add jest jest-junit
     - run:
         name: Run tests with JUnit as reporter
-        command: jest --ci --runInBand --reporters=default --testResultsProcessor=jest-junit
+        command: jest --ci --runInBand --reporters=default --reporters=jest-junit
         environment:
           JEST_JUNIT_OUTPUT_DIR: "test-results/jest/results.xml"
     - persist_to_workspace:
