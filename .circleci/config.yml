@@ -24,9 +24,6 @@ workflows:
       - build_frontend:
           requires:
             - yarn_install
-      - build_backend:
-          requires:
-            - yarn_install
       - code_coverage_setup
       - code_coverage_frontend:
           requires:
@@ -38,21 +35,11 @@ workflows:
       - package:
           requires:
             - build_frontend
-            - build_backend
             - build_docs
-      - provisioning:
-          requires:
-            - build_frontend
-            - build_backend
-            - build_docs
-      - e2e_canary:
-          requires:
-            - provisioning
-            - package
       - approve_release:
           type: approval
           requires:
-            - e2e_canary
+            - package
           filters: *filter-only-master
       - publish_github_release:
           requires:
