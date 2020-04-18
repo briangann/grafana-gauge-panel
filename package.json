@@ -9,7 +9,7 @@
     "test": "grafana-toolkit plugin:test",
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch",
-    "postinstall": "grafana-toolkit plugin:update-circleci"
+    "nopostinstall": "grafana-toolkit plugin:update-circleci"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,8 @@
     "@types/grafana": "github:CorpGlory/types-grafana.git",
     "@types/jquery": "^3.3.34",
     "@types/lodash": "^4.14.149",
-    "d3": "^5.15.1"
+    "d3": "^5.15.1",
+    "jest-junit": "^10.0.0"
   },
   "dependencies": {
     "d3-ease": "^1.0.6"

@@ -30,7 +30,7 @@ export class DrawGauge {
     this.svg = svg;
     // Set defaults if not supplied
     this.opt = this.initOptDefaults(opt);
-    //Calculate required values
+    // Calculate required values
     this.needleLengthPos = opt.gaugeRadius - opt.padding - opt.edgeWidth - opt.tickEdgeGap - opt.tickLengthMaj - opt.needleTickGap;
     this.needlePathLength = opt.needleLengthNeg + this.needleLengthPos;
     this.needlePathStart = opt.needleLengthNeg * -1;
@@ -54,17 +54,16 @@ export class DrawGauge {
     this.tickSpacingMajDeg = this.valueScale(this.opt.tickSpaceMajVal) - this.valueScale(0);
     this.tickSpacingMinDeg = this.valueScale(this.opt.tickSpaceMinVal) - this.valueScale(0);
     for (let i = this.opt.zeroTickAngle; i <= this.opt.maxTickAngle; i = i + this.tickSpacingMajDeg) {
-      let tickAngle = this.opt.zeroTickAngle + this.tickSpacingMajDeg * counter;
+      const tickAngle = this.opt.zeroTickAngle + this.tickSpacingMajDeg * counter;
       // check if this is the "end" of a full circle, and skip the last tick marker
       if (tickAngle - this.opt.zeroTickAngle < 360) {
-        //console.log("adding tick at angle " + tickAngle)
         this.tickAnglesMaj.push(opt.zeroTickAngle + this.tickSpacingMajDeg * counter);
       }
       counter++;
     }
     counter = 0;
     for (let j = opt.zeroTickAngle; j <= opt.maxTickAngle; j = j + this.tickSpacingMinDeg) {
-      //Check for an existing major tick angle
+      // Check for an existing major tick angle
       let exists = 0;
       this.tickAnglesMaj.forEach((d: any) => {
         if (opt.zeroTickAngle + this.tickSpacingMinDeg * counter === d) {
@@ -76,18 +75,18 @@ export class DrawGauge {
       }
       counter++;
     }
-    //Calculate major tick mark label text
+    // Calculate major tick mark label text
     counter = 0;
     this.tickLabelText = [] as any;
     for (let k = this.opt.zeroTickAngle; k <= this.opt.maxTickAngle; k = k + this.tickSpacingMajDeg) {
-      let tickValue = this.opt.minVal + this.opt.tickSpaceMajVal * counter;
-      let parts = this.opt.tickSpaceMajVal.toString().split('.');
+      const tickValue = this.opt.minVal + this.opt.tickSpaceMajVal * counter;
+      const parts = this.opt.tickSpaceMajVal.toString().split('.');
       let tickText = tickValue;
       if (parts.length > 1) {
         tickText = Number(tickValue).toFixed(parts[1].length);
       }
       // check if there are tickMaps that apply
-      let tickTextFloat = parseFloat(tickText);
+      const tickTextFloat = parseFloat(tickText);
       for (let i = 0; i < this.opt.tickMaps.length; i++) {
         const aTickMap = this.opt.tickMaps[i];
         if (parseFloat(aTickMap.value) === tickTextFloat) {
@@ -104,7 +103,7 @@ export class DrawGauge {
     this.circleGroup = this.createCircleGroup();
     if (this.opt.showThresholdOnGauge && this.opt.thresholds.length > 0) {
       // split the threshold values
-      let boundaries = this.opt.thresholds.split(',');
+      const boundaries = this.opt.thresholds.split(',');
       if (this.opt.showLowerThresholdRange) {
         this.drawBand(this.opt.minVal, parseFloat(boundaries[0]), this.opt.thresholdColors[0]);
       }
@@ -116,11 +115,11 @@ export class DrawGauge {
       }
     }
     let pathTickMaj = this.tickCalcMaj();
-    let pathTickMin = this.tickCalcMin();
+    const pathTickMin = this.tickCalcMin();
     // Add a group to hold the ticks
-    let ticks = this.svg.append('svg:g').attr('id', 'tickMarks');
+    const ticks = this.svg.append('svg:g').attr('id', 'tickMarks');
     // Add a groups for major and minor ticks (minor first, so majors overlay)
-    let ticksMin = ticks.append('svg:g').attr('id', 'minorTickMarks');
+    const ticksMin = ticks.append('svg:g').attr('id', 'minorTickMarks');
     const ticksMaj = ticks.append('svg:g').attr('id', 'majorTickMarks');
     // Draw the tick marks
     ticksMin
@@ -140,7 +139,7 @@ export class DrawGauge {
       .style('stroke', this.opt.tickColMaj)
       .style('stroke-width', this.opt.tickWidthMaj + 'px');
     // Add labels for major tick marks
-    let tickLabels = this.svg.append('svg:g').attr('id', 'tickLabels');
+    const tickLabels = this.svg.append('svg:g').attr('id', 'tickLabels');
     tickLabels
       .selectAll('text')
       .data(this.tickAnglesMaj)
@@ -182,13 +181,13 @@ export class DrawGauge {
       .attr('font-family', this.opt.unitsFont)
       .text(this.opt.needleValText); // was just the units, nothing formatted
     // Draw needle
-    let needleAngle = [this.opt.zeroNeedleAngle];
+    const needleAngle = [this.opt.zeroNeedleAngle];
     // Define a function for calculating the coordinates of the needle paths (see tick mark equivalent)
-    let pathNeedle = this.needleCalc();
+    const pathNeedle = this.needleCalc();
     // Add a group to hold the needle path
     this.needleGroup = this.svg.append('svg:g').attr('id', 'needle');
     // Draw the needle path
-    let needlePath = this.needleGroup
+    const needlePath = this.needleGroup
       .selectAll('path')
       .data(needleAngle)
       .enter()
@@ -214,8 +213,8 @@ export class DrawGauge {
         if (needleAngle < this.opt.zeroTickAngle) {
           needleAngle = this.opt.zeroNeedleAngle;
         }
-        let needleCentre = this.originX + ',' + this.originY;
-        let needleRot = needleAngle - this.opt.zeroNeedleAngle;
+        const needleCentre = this.originX + ',' + this.originY;
+        const needleRot = needleAngle - this.opt.zeroNeedleAngle;
         return d3.interpolateString('rotate(0,' + needleCentre + ')', 'rotate(' + needleRot + ',' + needleCentre + ')');
       });
     this.valueLabelParent.selectAll('text').text(this.opt.needleValText);
@@ -228,8 +227,8 @@ export class DrawGauge {
       newVal = this.opt.minVal;
     }
     // Animate the transistion of the needle to its new value
-    let needlePath = this.needleGroup.selectAll('path');
-    let oldVal = this.opt.needleVal;
+    const needlePath = this.needleGroup.selectAll('path');
+    const oldVal = this.opt.needleVal;
     // snap to new location by default
     let transitionSpeed = 0;
     if (this.opt.animateNeedleValueTransition) {
@@ -255,7 +254,7 @@ export class DrawGauge {
         if (needleAngleNew + this.opt.zeroNeedleAngle < this.opt.zeroTickAngle) {
           needleAngleNew = 0;
         }
-        let needleCentre = this.originX + ',' + this.originY;
+        const needleCentre = this.originX + ',' + this.originY;
         return d3.interpolateString('rotate(' + needleAngleOld + ',' + needleCentre + ')', 'rotate(' + needleAngleNew + ',' + needleCentre + ')');
       });
     let valueThresholdColor = this.opt.unitsLabelCol;
