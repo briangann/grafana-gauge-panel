@@ -67,7 +67,7 @@ executors:
   default_exec: # declares a reusable executor
     docker:
       - image: srclosson/grafana-plugin-ci-alpine:latest
-  e2e_exec: 
+  e2e_exec:
     docker:
       - image: srclosson/grafana-plugin-ci-e2e:latest
 
@@ -346,7 +346,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - "b7:b5:14:2e:43:05:2b:bb:7e:72:35:00:bc:cc:3c:1e"
+          - << pipeline.parameters.ssh-fingerprint >>
       - attach_workspace:
           at: .
       - run:
@@ -373,7 +373,7 @@ jobs:
             git tag -f v${VERSION}
             git push -f origin v${VERSION}
             ghr \
-              -t ${GITHUB_TOKEN} \
+              -t ${GITHUB_ACCESS_TOKEN} \
               -u ${CIRCLE_PROJECT_USERNAME} \
               -r ${CIRCLE_PROJECT_REPONAME} \
               -c ${CIRCLE_SHA1} \
