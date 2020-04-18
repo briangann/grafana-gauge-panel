@@ -164,8 +164,7 @@ export class DrawGauge {
         return this.tickLabelText[i];
       });
     //Add label for units
-    this.valueLabelParent = svg.append("svg:g")
-                .attr("id", "valueLabels");
+    this.valueLabelParent = svg.append('svg:g').attr('id', 'valueLabels');
     this.valueLabel = this.valueLabelParent
       .selectAll('text')
       .data([0])
@@ -222,9 +221,7 @@ export class DrawGauge {
         var needleRot = needleAngle - this.opt.zeroNeedleAngle;
         return d3.interpolateString('rotate(0,' + needleCentre + ')', 'rotate(' + needleRot + ',' + needleCentre + ')');
       });
-    this.valueLabelParent
-        .selectAll('text')
-        .text(this.opt.needleValText);
+    this.valueLabelParent.selectAll('text').text(this.opt.needleValText);
   }
 
   // Function to update the gauge value
@@ -279,9 +276,7 @@ export class DrawGauge {
     }
     // fill color
     this.valueLabel.style('fill', valueThresholdColor);
-    this.valueLabelParent
-      .selectAll('text')
-      .text(newValFormatted);
+    this.valueLabelParent.selectAll('text').text(newValFormatted);
     //Update the current value
     this.opt.needleVal = newVal;
   }
