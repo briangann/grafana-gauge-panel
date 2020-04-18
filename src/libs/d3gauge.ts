@@ -114,7 +114,7 @@ export class DrawGauge {
         this.drawBand(parseFloat(boundaries[1]), this.opt.maxVal, this.opt.thresholdColors[2]);
       }
     }
-    let pathTickMaj = this.tickCalcMaj();
+    const pathTickMaj = this.tickCalcMaj();
     const pathTickMin = this.tickCalcMin();
     // Add a group to hold the ticks
     const ticks = this.svg.append('svg:g').attr('id', 'tickMarks');
@@ -476,7 +476,7 @@ export class DrawGauge {
       .attr('r', this.innerEdgeRadius)
       .style('fill', this.opt.innerCol)
       .style('stroke', 'none');
-    //Draw the circle for the needle 'pivot'
+    // Draw the circle for the needle 'pivot'
     circleGroup
       .append('svg:circle')
       .attr('cx', this.originX)
