@@ -1,5 +1,5 @@
 # Grafana Gauge Panel
-
+[![Twitter Follow](https://img.shields.io/twitter/follow/jepetlefeu.svg?style=social)](https://twitter.com/jepetlefeu)
 [![CircleCI](https://circleci.com/gh/briangann/grafana-gauge-panel.svg?style=svg)](https://circleci.com/gh/briangann/grafana-gauge-panel)
 [![David Dependency Status](https://david-dm.org/briangann/grafana-gauge-panel.svg)](https://david-dm.org/briangann/grafana-gauge-panel)
 [![David Dev Dependency Status](https://david-dm.org/briangann/grafana-gauge-panel/dev-status.svg)](https://david-dm.org/briangann/grafana-gauge-panel/?type=dev)
@@ -7,7 +7,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/1c750faa58c1f7b3c7fa/maintainability)](https://codeclimate.com/github/briangann/grafana-gauge-panel/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1c750faa58c1f7b3c7fa/test_coverage)](https://codeclimate.com/github/briangann/grafana-gauge-panel/test_coverage)
 
-This panel plugin provides a [D3-based](http://www.d3js.org) gauge panel for [Grafana](http://www.grafana.org) 6.x/7.x
+This panel plugin provides a [D3-based](http://www.d3js.org) gauge panel for [Grafana](http://www.grafana.com) 6.x/7.x
 
 ## Screenshots
 
