@@ -262,7 +262,9 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       this.panel.gauge.maxValue = this.panel.gauge.minValue + 1;
       this.alertSrvRef.set(
         'Problem!',
-        'Minimum Value cannot be equal to or greater than Max Value, auto-adjusting Max Value to Minimum+1 (' + this.panel.gauge.maxValue + ')',
+        'Minimum Value cannot be equal to or greater than Max Value, auto-adjusting Max Value to Minimum+1 (' +
+          this.panel.gauge.maxValue +
+          ')',
         'warning',
         10000
       );
@@ -280,7 +282,9 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       this.panel.gauge.minValue = this.panel.gauge.maxValue - 1;
       this.alertSrvRef.set(
         'Problem!',
-        'Maximum Value cannot be equal to or less than Min Value, auto-adjusting Min Value to Maximum-1 (' + this.panel.gauge.minValue + ')',
+        'Maximum Value cannot be equal to or less than Min Value, auto-adjusting Min Value to Maximum-1 (' +
+          this.panel.gauge.minValue +
+          ')',
         'warning',
         10000
       );
@@ -311,7 +315,12 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
     ) {
       // alert about the error, and set it to 60
       this.panel.gauge.zeroTickAngle = 60;
-      this.alertSrvRef.set('Problem!', 'Invalid Value for Zero Tick Angle, auto-setting to default of 60', 'error', 10000);
+      this.alertSrvRef.set(
+        'Problem!',
+        'Invalid Value for Zero Tick Angle, auto-setting to default of 60',
+        'error',
+        10000
+      );
     }
 
     if (
@@ -322,7 +331,12 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
     ) {
       // alert about the error, and set it to 320
       this.panel.gauge.maxTickAngle = 320;
-      this.alertSrvRef.set('Problem!', 'Invalid Value for Max Tick Angle, auto-setting to default of 320', 'error', 10000);
+      this.alertSrvRef.set(
+        'Problem!',
+        'Invalid Value for Max Tick Angle, auto-setting to default of 320',
+        'error',
+        10000
+      );
     }
 
     const gaugeTickDegrees = this.panel.gauge.maxTickAngle - this.panel.gauge.zeroTickAngle;
@@ -331,14 +345,24 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       // set to default values and alert
       this.panel.gauge.zeroTickAngle = 60;
       this.panel.gauge.maxTickAngle = 320;
-      this.alertSrvRef.set('Problem!', 'Gauge tick angle difference is larger than 360 degrees, auto-setting to default values', 'error', 10000);
+      this.alertSrvRef.set(
+        'Problem!',
+        'Gauge tick angle difference is larger than 360 degrees, auto-setting to default values',
+        'error',
+        10000
+      );
     }
     // make sure it is "positive"
     if (gaugeTickDegrees < 0) {
       // set to default values and alert
       this.panel.gauge.zeroTickAngle = 60;
       this.panel.gauge.maxTickAngle = 320;
-      this.alertSrvRef.set('Problem!', 'Gauge tick angle difference is less than 0 degrees, auto-setting to default values', 'error', 10000);
+      this.alertSrvRef.set(
+        'Problem!',
+        'Gauge tick angle difference is less than 0 degrees, auto-setting to default values',
+        'error',
+        10000
+      );
     }
 
     // render
@@ -355,7 +379,12 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
     ) {
       // alert about the error, and set it to 60
       this.panel.gauge.zeroNeedleAngle = 60;
-      this.alertSrvRef.set('Problem!', 'Invalid Value for Zero Needle Angle, auto-setting to default of 60', 'error', 10000);
+      this.alertSrvRef.set(
+        'Problem!',
+        'Invalid Value for Zero Needle Angle, auto-setting to default of 60',
+        'error',
+        10000
+      );
     }
 
     if (
@@ -366,7 +395,12 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
     ) {
       // alert about the error, and set it to 320
       this.panel.gauge.maxNeedleAngle = 320;
-      this.alertSrvRef.set('Problem!', 'Invalid Value for Max Needle Angle, auto-setting to default of 320', 'error', 10000);
+      this.alertSrvRef.set(
+        'Problem!',
+        'Invalid Value for Max Needle Angle, auto-setting to default of 320',
+        'error',
+        10000
+      );
     }
 
     const gaugeNeedleDegrees = this.panel.gauge.maxNeedleAngle - this.panel.gauge.zeroNeedleAngle;
@@ -375,14 +409,24 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       // set to default values and alert
       this.panel.gauge.zeroNeedleAngle = 60;
       this.panel.gauge.maxNeedleAngle = 320;
-      this.alertSrvRef.set('Problem!', 'Gauge needle angle difference is larger than 360 degrees, auto-setting to default values', 'error', 10000);
+      this.alertSrvRef.set(
+        'Problem!',
+        'Gauge needle angle difference is larger than 360 degrees, auto-setting to default values',
+        'error',
+        10000
+      );
     }
     // make sure it is "positive"
     if (gaugeNeedleDegrees < 0) {
       // set to default values and alert
       this.panel.gauge.zeroNeedleAngle = 60;
       this.panel.gauge.maxNeedleAngle = 320;
-      this.alertSrvRef.set('Problem!', 'Gauge needle angle difference is less than 0 degrees, auto-setting to default values', 'error', 10000);
+      this.alertSrvRef.set(
+        'Problem!',
+        'Gauge needle angle difference is less than 0 degrees, auto-setting to default values',
+        'error',
+        10000
+      );
     }
 
     // render
@@ -391,15 +435,33 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
 
   validateRadialMetricValues() {
     // make sure the spacing values are valid
-    if (this.panel.gauge.tickSpaceMinVal === null || this.panel.gauge.tickSpaceMinVal === '' || isNaN(this.panel.gauge.tickSpaceMinVal)) {
+    if (
+      this.panel.gauge.tickSpaceMinVal === null ||
+      this.panel.gauge.tickSpaceMinVal === '' ||
+      isNaN(this.panel.gauge.tickSpaceMinVal)
+    ) {
       // alert about the error, and set it to 1
       this.panel.gauge.tickSpaceMinVal = 1;
-      this.alertSrvRef.set('Problem!', 'Invalid Value for Tick Spacing Minor, auto-setting back to default of 1', 'error', 10000);
+      this.alertSrvRef.set(
+        'Problem!',
+        'Invalid Value for Tick Spacing Minor, auto-setting back to default of 1',
+        'error',
+        10000
+      );
     }
-    if (this.panel.gauge.tickSpaceMajVal === null || this.panel.gauge.tickSpaceMajVal === '' || isNaN(this.panel.gauge.tickSpaceMajVal)) {
+    if (
+      this.panel.gauge.tickSpaceMajVal === null ||
+      this.panel.gauge.tickSpaceMajVal === '' ||
+      isNaN(this.panel.gauge.tickSpaceMajVal)
+    ) {
       // alert about the error, and set it to 10
       this.panel.gauge.tickSpaceMajVal = 10;
-      this.alertSrvRef.set('Problem!', 'Invalid Value for Tick Spacing Major, auto-setting back to default of 10', 'error', 10000);
+      this.alertSrvRef.set(
+        'Problem!',
+        'Invalid Value for Tick Spacing Major, auto-setting back to default of 10',
+        'error',
+        10000
+      );
     }
     if (
       this.panel.gauge.gaugeRadius === null ||
@@ -409,7 +471,12 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
     ) {
       // alert about the error, and set it to 0
       this.panel.gauge.gaugeRadius = 0;
-      this.alertSrvRef.set('Problem!', 'Invalid Value for Gauge Radius, auto-setting back to default of 0', 'error', 10000);
+      this.alertSrvRef.set(
+        'Problem!',
+        'Invalid Value for Gauge Radius, auto-setting back to default of 0',
+        'error',
+        10000
+      );
     }
     this.render();
   }
