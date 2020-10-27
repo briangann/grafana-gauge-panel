@@ -6,7 +6,7 @@ on:
       - master # Run workflow on PR to master
 
 jobs:
-  release:
+  pull_request:
     runs-on: ubuntu-latest
 
     steps:
@@ -48,10 +48,9 @@ jobs:
 
       - name: Code Climate Frontend
         run: |
-          mkdir -p coverage
-          ./ccbin/cc-test-reporter format-coverage -t lcov -o out/codeclimate.frontend.json coverage/lcov.info
           yarn global add jest jest-junit
           jest --ci --runInBand --reporters=default --reporters=jest-junit
+          ./ccbin/cc-test-reporter format-coverage -t lcov -o out/codeclimate.frontend.json coverage/lcov.info
         env:
           JEST_JUNIT_OUTPUT_DIR: "test-results/jest/results.xml"
 
