@@ -59,8 +59,6 @@ jobs:
         with:
           branch: "release-${{env.GRAFANA_PLUGIN_VERSION}}"
 
-      - name: Add dist to release branch
-
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
