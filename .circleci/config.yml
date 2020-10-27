@@ -265,6 +265,5 @@ jobs:
             VERSION=`cat dist/plugin.json|jq '.info.version'| sed s/\"//g`
             git config user.email "bkgann@gmail.com"
             git config user.name "CircleCI Automation"
-            git checkout -b v${VERSION}
             git tag -f v${VERSION}
             git push -f origin v${VERSION}
