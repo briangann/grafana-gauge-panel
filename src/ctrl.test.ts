@@ -1,5 +1,5 @@
 describe('ctrl test', () => {
-  it.skip('ctrl should be defined', () => {
+  it('ctrl should be defined', () => {
     expect(true).toBeTruthy();
   });
 });
