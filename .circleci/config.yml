@@ -266,4 +266,4 @@ jobs:
             git config user.email "bkgann@gmail.com"
             git config user.name "CircleCI Automation"
             git tag -f v${VERSION}
-            git push -f origin v${VERSION}
+            git push -f origin --tags
