@@ -56,6 +56,8 @@ jobs:
           JEST_JUNIT_OUTPUT_DIR: "test-results/jest/results.xml"
 
       - name: Code Climate Upload
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: |
           ./ccbin/cc-test-reporter sum-coverage out/codeclimate.*.json -d -p 1 -o out/codeclimate.total.json
           ./ccbin/cc-test-reporter upload-coverage -i out/codeclimate.total.json
