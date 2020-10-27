@@ -36,15 +36,15 @@ workflows:
           requires:
             - build_frontend
             - build_docs
-      - approve_release:
+      - approve_tag_version:
           type: approval
           requires:
             - package
             - upload_coverage
           filters: *filter-only-master
-      - publish_github_release:
+      - tag_version:
           requires:
-            - approve_release
+            - approve_tag_version
           filters: *filter-only-master
 
 executors:
@@ -228,83 +228,6 @@ jobs:
     - store_artifacts:
         path: ci
 
-  provisioning:
-    executor: default_exec
-    steps:
-    - checkout
-    - add_ssh_keys:
-        fingerprints:
-          - << pipeline.parameters.ssh-fingerprint >>
-    - run:
-        name: Checkout provisioning files
-        command: git clone git@github.com:grafana/plugin-provisioning.git
-    - run:
-        name: Prepare task output dir
-        command: |
-          mkdir ci # Avoid error if not exists
-          mkdir ci/jobs # Avoid error if not exists
-          mkdir ci/jobs/provisioning
-    - persist_to_workspace:
-        root: .
-        paths:
-        - ci/jobs/provisioning
-
-  e2e_canary:
-    executor: e2e_exec
-    steps:
-    - checkout
-    - attach_workspace:
-        at: .
-    - restore_cache:
-        name: Restore node_modules
-        keys:
-        - build-cache-{{ .Environment.CACHE_VERSION }}-{{ checksum "yarn.lock" }}
-    - restore_cache:
-        name: Restore cypress cache
-        keys:
-        - cypress-cache-{{ .Environment.CACHE_VERSION }}-{{ checksum "yarn.lock" }}
-    - run:
-        name: Exit if no e2e tests configured
-        command: |
-          [ -d cypress ] || circleci-agent step halt
-    - run:
-        name: Setup Grafana (local install)
-        command: |
-          ginstall canary
-          /opt/grafana/bin/grafana-server -config ci/grafana-test-env/custom.ini -homepath /opt/grafana &
-          ## To make sure grafana has started up
-          while ! $(netstat -tulpn | grep 3000 >/dev/null 2>&1); do sleep 1; done 
-          /opt/grafana/bin/grafana-cli --version
-
-    - run:
-        name: Copy provisioning files
-        command: cp -r ci/jobs/provisioning provisioning/
-    - run:
-        name: Run e2e tests
-        command: |
-          # If the tests fail, but GRAFANACI_STRICT_E2E=0, don't worry about it
-          ./node_modules/.bin/grafana-e2e run \
-          || (
-            [ "$GRAFANACI_STRICT_E2E" -eq 0 ] && echo "Bypassing fail. ci-nostrict enabled"
-          )
-    - run:
-        when: always
-        name: Prepare task output dir
-        command: |
-          # TODO: probably move all of this to `@grafana/toolkit plugin:ci-test`
-          mkdir ci/jobs/e2e_canary
-          # only copy if they exist
-          cp cypress/screenshots/*.* ci/jobs/e2e_canary 2>/dev/null || :
-          cp cypress/videos/*.* ci/jobs/e2e_canary 2>/dev/null || :
-    - persist_to_workspace:
-        root: .
-        paths:
-        - ci/jobs/e2e_canary
-    - store_test_results:
-        path: ci/jobs/e2e_canary
-    - store_artifacts:
-        path: ci/jobs/e2e_canary
-
   report:
     executor: default_exec
     steps:
@@ -322,7 +245,7 @@ jobs:
     - store_artifacts:
         path: ci
 
-  publish_github_release:
+  tag_version:
     working_directory: ~/briangann-gauge-panel
     docker:
     - image: cibuilds/github:0.13
@@ -336,31 +259,13 @@ jobs:
       - run:
           name: "Publish Release on GitHub"
           command: |
-            # copy ci artifacts
-            mkdir -p artifacts
-            cp -r ci/packages/* artifacts
-            #
             apk add --update --no-cache jq
             PLUGIN_NAME=`cat dist/plugin.json|jq '.id'| sed s/\"//g`
             RELEASE_NOTES=`awk 'BEGIN {FS="##"; RS=""} FNR==4 {print; exit}' CHANGELOG.md`
             VERSION=`cat dist/plugin.json|jq '.info.version'| sed s/\"//g`
             git config user.email "bkgann@gmail.com"
             git config user.name "CircleCI Automation"
-            git checkout -b release-${VERSION}
-            #git add artifacts/
-            git add --force dist/
-            git commit -m "automated release $VERSION [skip ci]"
-            git push -f origin release-${VERSION}
+            git checkout -b v${VERSION}
+            git commit -m "automated tag v$VERSION [skip ci]"
             git tag -f v${VERSION}
             git push -f origin v${VERSION}
-            ghr \
-              -t ${GITHUB_ACCESS_TOKEN} \
-              -u ${CIRCLE_PROJECT_USERNAME} \
-              -r ${CIRCLE_PROJECT_REPONAME} \
-              -c ${CIRCLE_SHA1} \
-              -n "${PLUGIN_NAME} v${VERSION}" \
-              -b "${RELEASE_NOTES}" \
-              -delete \
-              -replace \
-              v${VERSION} \
-              ./artifacts/

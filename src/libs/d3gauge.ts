@@ -31,7 +31,8 @@ export class DrawGauge {
     // Set defaults if not supplied
     this.opt = this.initOptDefaults(opt);
     // Calculate required values
-    this.needleLengthPos = opt.gaugeRadius - opt.padding - opt.edgeWidth - opt.tickEdgeGap - opt.tickLengthMaj - opt.needleTickGap;
+    this.needleLengthPos =
+      opt.gaugeRadius - opt.padding - opt.edgeWidth - opt.tickEdgeGap - opt.tickLengthMaj - opt.needleTickGap;
     this.needlePathLength = opt.needleLengthNeg + this.needleLengthPos;
     this.needlePathStart = opt.needleLengthNeg * -1;
     this.tickStartMaj = opt.gaugeRadius - opt.padding - opt.edgeWidth - opt.tickEdgeGap - opt.tickLengthMaj;
@@ -255,7 +256,10 @@ export class DrawGauge {
           needleAngleNew = 0;
         }
         const needleCentre = this.originX + ',' + this.originY;
-        return d3.interpolateString('rotate(' + needleAngleOld + ',' + needleCentre + ')', 'rotate(' + needleAngleNew + ',' + needleCentre + ')');
+        return d3.interpolateString(
+          'rotate(' + needleAngleOld + ',' + needleCentre + ')',
+          'rotate(' + needleAngleNew + ',' + needleCentre + ')'
+        );
       });
     let valueThresholdColor = this.opt.unitsLabelCol;
     if (this.opt.showThresholdColorOnValue) {
