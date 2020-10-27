@@ -1,4 +1,5 @@
 {
+    "$schema": "https://github.com/grafana/grafana/raw/master/docs/sources/developers/plugins/plugin.schema.json",
     "type": "panel",
     "name": "D3 Gauge",
     "id": "briangann-gauge-panel",
