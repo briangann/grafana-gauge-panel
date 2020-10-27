@@ -45,6 +45,12 @@ jobs:
           echo "GRAFANA_PLUGIN_ARTIFACT=${GRAFANA_PLUGIN_ARTIFACT}" >> $GITHUB_ENV
           echo "GRAFANA_PLUGIN_ARTIFACT_CHECKSUM=${GRAFANA_PLUGIN_ARTIFACT_CHECKSUM}" >> $GITHUB_ENV
 
+      - name: Package plugin
+        run: |
+          mv dist $GRAFANA_PLUGIN_ID
+          zip $GRAFANA_PLUGIN_ARTIFACT $GRAFANA_PLUGIN_ID -r
+          md5sum $GRAFANA_PLUGIN_ARTIFACT > $GRAFANA_PLUGIN_ARTIFACT_CHECKSUM
+
       - name: Create Release Branch
         id: create-release-branch
         uses: peterjgrainger/action-create-branch@v2.0.1
@@ -52,16 +58,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           branch: "release-${{env.GRAFANA_PLUGIN_VERSION}}"
-        run: |
-          git add --force dist
-          git commit -m "add dist"
-          git push origin "release-${{env.GRAFANA_PLUGIN_VERSION}}"
-
-      - name: Package plugin
-        run: |
-          mv dist $GRAFANA_PLUGIN_ID
-          zip $GRAFANA_PLUGIN_ARTIFACT $GRAFANA_PLUGIN_ID -r
-          md5sum $GRAFANA_PLUGIN_ARTIFACT > $GRAFANA_PLUGIN_ARTIFACT_CHECKSUM
 
       - name: Create release
         id: create_release
