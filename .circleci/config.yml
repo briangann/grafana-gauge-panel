@@ -5,15 +5,6 @@ parameters:
     type: string
     default:  ${GITHUB_SSH_FINGERPRINT}
 
-aliases:
-  # Workflow filters
-  - &filter-only-master
-    branches:
-      only: master
-  - &filter-only-release
-    branches:
-      only: /^v[1-9]*[0-9]+\.[1-9]*[0-9]+\.x$/
-
 workflows:
   plugin_workflow:
     jobs:
@@ -36,16 +27,6 @@ workflows:
           requires:
             - build_frontend
             - build_docs
-      - approve_tag_version:
-          type: approval
-          requires:
-            - package
-            - upload_coverage
-          filters: *filter-only-master
-      - tag_version:
-          requires:
-            - approve_tag_version
-          filters: *filter-only-master
 
 executors:
   default_exec: # declares a reusable executor
@@ -244,26 +225,3 @@ jobs:
           ./node_modules/.bin/grafana-toolkit plugin:ci-report
     - store_artifacts:
         path: ci
-
-  tag_version:
-    working_directory: ~/briangann-gauge-panel
-    docker:
-    - image: cibuilds/github:0.13
-    steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints:
-          - << pipeline.parameters.ssh-fingerprint >>
-      - attach_workspace:
-          at: .
-      - run:
-          name: "Publish Release on GitHub"
-          command: |
-            apk add --update --no-cache jq
-            PLUGIN_NAME=`cat dist/plugin.json|jq '.id'| sed s/\"//g`
-            RELEASE_NOTES=`awk 'BEGIN {FS="##"; RS=""} FNR==4 {print; exit}' CHANGELOG.md`
-            VERSION=`cat dist/plugin.json|jq '.info.version'| sed s/\"//g`
-            git config user.email "bkgann@gmail.com"
-            git config user.name "CircleCI Automation"
-            git tag -f v${VERSION}
-            git push -f origin --tags
