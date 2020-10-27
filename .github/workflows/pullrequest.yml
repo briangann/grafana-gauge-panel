@@ -23,36 +23,17 @@ jobs:
       - name: Build plugin
         run: yarn build
 
-      - name: Get plugin information
-        run: |
-          sudo apt-get install jq
+      - name: Build plugin for coverage
+        run: npx @grafana/toolkit@canary plugin:ci-build
 
-          export GRAFANA_PLUGIN_ID=$(cat dist/plugin.json | jq -r .id)
-          export GRAFANA_PLUGIN_VERSION=$(cat dist/plugin.json | jq -r .info.version)
-          export GRAFANA_PLUGIN_TYPE=$(cat dist/plugin.json | jq -r .type)
-          export GRAFANA_PLUGIN_ARTIFACT=${GRAFANA_PLUGIN_ID}-${GRAFANA_PLUGIN_VERSION}.zip
-          export GRAFANA_PLUGIN_ARTIFACT_CHECKSUM=${GRAFANA_PLUGIN_ARTIFACT}.md5
-
-          # Output to $GITHUB_ENV to be able to use the variables in next steps.
-          echo "GRAFANA_PLUGIN_ID=${GRAFANA_PLUGIN_ID}" >> $GITHUB_ENV
-          echo "GRAFANA_PLUGIN_VERSION=${GRAFANA_PLUGIN_VERSION}" >> $GITHUB_ENV
-          echo "GRAFANA_PLUGIN_TYPE=${GRAFANA_PLUGIN_TYPE}" >> $GITHUB_ENV
-          echo "GRAFANA_PLUGIN_ARTIFACT=${GRAFANA_PLUGIN_ARTIFACT}" >> $GITHUB_ENV
-          echo "GRAFANA_PLUGIN_ARTIFACT_CHECKSUM=${GRAFANA_PLUGIN_ARTIFACT_CHECKSUM}" >> $GITHUB_ENV
-
-      - name: Code Climate Setup
+      - name: Code Climate
         run: |
           mkdir -p ccbin/
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./ccbin/cc-test-reporter
           chmod +x ./ccbin/cc-test-reporter
-
-      - name: Code Climate Frontend
-        run: |
-          ./ccbin/cc-test-reporter format-coverage -t lcov -o out/codeclimate.frontend.json coverage/lcov.info
           yarn global add jest jest-junit
+          ./ccbin/cc-test-reporter format-coverage -t lcov -o out/codeclimate.frontend.json coverage/lcov.info
           npx jest --ci --runInBand --reporters=default --reporters=jest-junit
-        env:
-          JEST_JUNIT_OUTPUT_DIR: "test-results/jest/results.xml"
 
       - name: Code Climate Upload
         env:
