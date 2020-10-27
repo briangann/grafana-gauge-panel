@@ -1,4 +1,5 @@
 import { MetricsPanelCtrl } from 'grafana/app/plugins/sdk';
+import { PanelEvents } from '@grafana/data';
 import _ from 'lodash';
 import $ from 'jquery';
 import kbn from 'grafana/app/core/utils/kbn';
@@ -45,10 +46,19 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       valueRounded: 0,
     };
     this.series = [];
-    this.events.on('init-edit-mode', this.onInitEditMode.bind(this));
-    this.events.on('data-received', this.onDataReceived.bind(this));
-    this.events.on('data-error', this.onDataError.bind(this));
-    this.events.on('data-snapshot-load', this.onDataReceived.bind(this));
+    // v6 compat
+    if (typeof PanelEvents === 'undefined') {
+      this.events.on('init-edit-mode', this.onInitEditMode.bind(this));
+      this.events.on('data-received', this.onDataReceived.bind(this));
+      this.events.on('data-error', this.onDataError.bind(this));
+      this.events.on('data-snapshot-load', this.onDataReceived.bind(this));
+    } else {
+      // v7+ compat
+      this.events.on(PanelEvents.editModeInitialized, this.onInitEditMode.bind(this));
+      this.events.on(PanelEvents.dataReceived, this.onDataReceived.bind(this));
+      this.events.on(PanelEvents.dataError, this.onDataError.bind(this));
+      this.events.on(PanelEvents.dataSnapshotLoad, this.onDataReceived.bind(this));
+    }
   }
 
   onInitEditMode() {
