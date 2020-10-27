@@ -5,6 +5,7 @@ All changes noted here.
 ## v0.0.8 - 2020-10-26
 
 - Signed Plugin!
+- Updated build process
 
 ## v0.0.7 - 2020-04-18
 

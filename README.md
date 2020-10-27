@@ -1,7 +1,7 @@
 # Grafana Gauge Panel
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/jepetlefeu.svg?style=social)](https://twitter.com/jepetlefeu)
-[![CircleCI](https://circleci.com/gh/briangann/grafana-gauge-panel.svg?style=svg)](https://circleci.com/gh/briangann/grafana-gauge-panel)
+![Release](https://github.com/briangann/grafana-gauge-panel/workflows/Release/badge.svg)
 [![David Dependency Status](https://david-dm.org/briangann/grafana-gauge-panel.svg)](https://david-dm.org/briangann/grafana-gauge-panel)
 [![David Dev Dependency Status](https://david-dm.org/briangann/grafana-gauge-panel/dev-status.svg)](https://david-dm.org/briangann/grafana-gauge-panel/?type=dev)
 [![Known Vulnerabilities](https://snyk.io/test/github/briangann/grafana-gauge-panel/badge.svg)](https://snyk.io/test/github/briangann/grafana-gauge-panel)
