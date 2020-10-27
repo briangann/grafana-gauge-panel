@@ -36,15 +36,15 @@ workflows:
           requires:
             - build_frontend
             - build_docs
-      - approve_tag_release:
+      - approve_tag_version:
           type: approval
           requires:
             - package
             - upload_coverage
           filters: *filter-only-master
-      - tag_github_release:
+      - tag_version:
           requires:
-            - approve_tag_release
+            - approve_tag_version
           filters: *filter-only-master
 
 executors:
@@ -245,7 +245,7 @@ jobs:
     - store_artifacts:
         path: ci
 
-  tag_github_release:
+  tag_version:
     working_directory: ~/briangann-gauge-panel
     docker:
     - image: cibuilds/github:0.13
@@ -265,9 +265,7 @@ jobs:
             VERSION=`cat dist/plugin.json|jq '.info.version'| sed s/\"//g`
             git config user.email "bkgann@gmail.com"
             git config user.name "CircleCI Automation"
-            git checkout -b release-${VERSION}
-            git add --force dist/
-            git commit -m "automated tag $VERSION [skip ci]"
-            git push -f origin release-${VERSION}
+            git checkout -b v${VERSION}
+            git commit -m "automated tag v$VERSION [skip ci]"
             git tag -f v${VERSION}
             git push -f origin v${VERSION}
