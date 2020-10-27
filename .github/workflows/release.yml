@@ -92,4 +92,4 @@ jobs:
         run: |
           echo Publish your plugin to grafana.com/plugins by opening a PR to https://github.com/grafana/grafana-plugin-repository with the following entry:
           echo
-          echo '{ "id": "${{ env.GRAFANA_PLUGIN_ID }}", "type": "${{ env.GRAFANA_PLUGIN_TYPE }}", "url": "https://github.com/${{ github.repository }}", "url": "https://github.com/${{ github.repository }}", "download": { "any": { "url": "${{ steps.upload-plugin-asset.outputs.browser_download_url }}", "md5": "${{ env.GRAFANA_PLUGIN_CHECKSUM }}" } } } ] }' | jq .
+          echo '{ "id": "${{ env.GRAFANA_PLUGIN_ID }}", "type": "${{ env.GRAFANA_PLUGIN_TYPE }}", "url": "https://github.com/${{ github.repository }}", "versions": [ { "version": "${{ env.GRAFANA_PLUGIN_VERSION }}", "commit": "${{ github.sha }}", "url": "https://github.com/${{ github.repository }}", "download": { "any": { "url": "${{ steps.upload-plugin-asset.outputs.browser_download_url }}", "md5": "${{ env.GRAFANA_PLUGIN_CHECKSUM }}" } } } ] }' | jq .
