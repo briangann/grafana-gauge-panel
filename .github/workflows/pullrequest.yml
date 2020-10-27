@@ -49,7 +49,7 @@ jobs:
       - name: Code Climate Frontend
         run: |
           yarn global add jest jest-junit
-          jest --ci --runInBand --reporters=default --reporters=jest-junit
+          npx jest --ci --runInBand --reporters=default --reporters=jest-junit
           ./ccbin/cc-test-reporter format-coverage -t lcov -o out/codeclimate.frontend.json coverage/lcov.info
         env:
           JEST_JUNIT_OUTPUT_DIR: "test-results/jest/results.xml"
