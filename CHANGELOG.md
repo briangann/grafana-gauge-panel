@@ -2,11 +2,9 @@
 
 All changes noted here.
 
-## v0.0.8 - 2020-10-26
+## v0.0.7 - 2020-10-26
 
 - Signed Plugin!
-
-## v0.0.7 - 2020-04-18
 
 - Fixes
   - Update to typescript and using standardized build process.

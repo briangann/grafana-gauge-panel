@@ -91,7 +91,7 @@ Then browse to <http://localhost:3000>
 
 ## Build Dependencies
 
-* npm/yarn
+* yarn
 
 ## Acknowledgements
 
