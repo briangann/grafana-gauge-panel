@@ -266,6 +266,5 @@ jobs:
             git config user.email "bkgann@gmail.com"
             git config user.name "CircleCI Automation"
             git checkout -b v${VERSION}
-            git commit -m "automated tag v$VERSION [skip ci]"
             git tag -f v${VERSION}
             git push -f origin v${VERSION}
