@@ -481,13 +481,13 @@ export class DrawGauge {
       opt.markerEndEnabled = false;
     }
     if (opt.markerEndShape === undefined) {
-      opt.markerEndShape = 0;
+      opt.markerEndShape = MarkerEndShapes[0];
     }
     if (opt.markerStartEnabled === undefined) {
       opt.markerStartEnabled = false;
     }
     if (opt.markerStartShape === undefined) {
-      opt.markerStartShape = 0;
+      opt.markerStartShape = MarkerStartShapes[0];
     }
     // Calculate absolute values
     opt.padding = opt.padding * opt.gaugeRadius;
