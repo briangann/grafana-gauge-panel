@@ -186,6 +186,29 @@ export class DrawGauge {
     // Define a function for calculating the coordinates of the needle paths (see tick mark equivalent)
     const pathNeedle = this.needleCalc();
     // Add a group to hold the needle path
+
+    const markerTypes = [
+      { id: 0, name: 'circle', path: 'M 0, 0  m -5, 0  a 5,5 0 1,0 10,0  a 5,5 0 1,0 -10,0', viewbox: '-6 -6 12 12' }
+    , { id: 1, name: 'square', path: 'M 0,0 m -5,-5 L 5,-5 L 5,5 L -5,5 Z', viewbox: '-5 -5 10 10' }
+    , { id: 2, name: 'arrow', path: 'M 0,0 m -5,-5 L 5,0 L -5,5 Z', viewbox: '-5 -5 10 10' }
+    , { id: 2, name: 'stub', path: 'M 0,0 m -1,-5 L 1,-5 L 1,5 L -1,5 Z', viewbox: '-1 -5 2 10' }
+    ]
+    // End Marker
+    svg.append("svg:defs").selectAll("marker")
+    .data(["marker_arrow"])
+      .enter().append("svg:marker")
+    .attr("id", String)
+    .attr("viewBox", "-5 -5 10 10")
+    .attr("refX", 0)
+    .attr("refY", 0)
+    .attr("markerWidth", 3)
+    .attr("markerHeight", 3)
+    .attr('markerUnits', 'strokeWidth')
+    .attr("orient", "auto")
+    .attr("fill", this.opt.needleCol)
+    .append("svg:path")
+    .attr("d", "M 0,0 m -5,-5 L 5,0 L -5,5 Z");
+    // End Marker
     this.needleGroup = this.svg.append('svg:g').attr('id', 'needle');
     // Draw the needle path
     const needlePath = this.needleGroup
@@ -193,9 +216,14 @@ export class DrawGauge {
       .data(needleAngle)
       .enter()
       .append('path')
-      .attr('d', pathNeedle)
-      .style('stroke', this.opt.needleCol)
-      .style('stroke-width', this.opt.needleWidth + 'px');
+        .attr('d', pathNeedle)
+        .style('stroke', this.opt.needleCol)
+        .style('stroke-width', this.opt.needleWidth + 'px')
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 6)
+        .attr('stroke-linecap', 'round')
+        .attr('marker-end', "url(#marker_arrow)")
+        .attr("orient", "auto-start-reverse");
     // Animate the transistion of the needle to its starting value
     let transitionSpeed = 0;
     if (this.opt.animateNeedleValueTransition) {
@@ -218,6 +246,7 @@ export class DrawGauge {
         const needleRot = needleAngle - this.opt.zeroNeedleAngle;
         return d3.interpolateString('rotate(0,' + needleCentre + ')', 'rotate(' + needleRot + ',' + needleCentre + ')');
       });
+
     this.valueLabelParent.selectAll('text').text(this.opt.needleValText);
   }
 
