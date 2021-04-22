@@ -8,6 +8,7 @@ import * as d3 from 'd3';
 
 import { panelDefaults } from './defaults';
 import { DrawGauge } from './libs/d3gauge';
+import { MarkerStartShapes, MarkerEndShapes } from './types';
 
 export class D3GaugePanelCtrl extends MetricsPanelCtrl {
   static templateUrl = 'partials/template.html';
@@ -228,10 +229,10 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       animateNeedleValueTransition: this.panel.gauge.animateNeedleValueTransition,
       animateNeedleValueTransitionSpeed: this.panel.gauge.animateNeedleValueTransitionSpeed,
       tickMaps: this.panel.tickMaps,
-      markerEndEnabled: this.panel.gauge.markerEndEnabled,
-      markerEndShape: this.panel.gauge.markerEndShape,
-      markerStartEnabled: this.panel.gauge.markerStartEnabled,
-      markerStartShape: this.panel.gauge.markerStartShape,
+      markerEndEnabled: this.panel.gauge.markerEndEnabled || false,
+      markerEndShape: this.panel.gauge.markerEndShape || MarkerEndShapes[0],
+      markerStartEnabled: this.panel.gauge.markerStartEnabled || false,
+      markerStartShape: this.panel.gauge.markerStartShape || MarkerStartShapes[0],
     };
     this.gaugeObject = new DrawGauge(svg, opt);
     this.svg = svg;
