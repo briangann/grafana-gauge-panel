@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import { MarkerStartShapes, MarkerEndShapes } from '../types';
 
 export class DrawGauge {
   defaultFonts: any;
@@ -186,6 +187,40 @@ export class DrawGauge {
     // Define a function for calculating the coordinates of the needle paths (see tick mark equivalent)
     const pathNeedle = this.needleCalc();
     // Add a group to hold the needle path
+
+    const markerTypes = [
+      { id: 0, name: 'arrow', path: 'M 0,0 m -5,-5 L 5,0 L -5,5 Z', viewbox: '-5 -5 10 10' },
+      { id: 1, name: 'circle', path: 'M 0, 0  m -5, 0  a 5,5 0 1,0 10,0  a 5,5 0 1,0 -10,0', viewbox: '-6 -6 12 12' },
+      { id: 2, name: 'square', path: 'M 0,0 m -5,-5 L 5,-5 L 5,5 L -5,5 Z', viewbox: '-5 -5 10 10' },
+      { id: 3, name: 'stub', path: 'M 0,0 m -1,-5 L 1,-5 L 1,5 L -1,5 Z', viewbox: '-1 -5 2 10' },
+    ];
+    // End Marker
+
+    svg
+      .append('svg:defs')
+      .selectAll('marker')
+      .data(markerTypes)
+      .enter()
+      .append('svg:marker')
+      .attr('id', (d: any) => {
+        return 'marker_' + d.name;
+      })
+      .attr('markerHeight', 3)
+      .attr('markerWidth', 3)
+      .attr('markerUnits', 'strokeWidth')
+      .attr('orient', 'auto')
+      .attr('refX', 0)
+      .attr('refY', 0)
+      .attr('viewBox', (d: any) => {
+        return d.viewbox;
+      })
+      .append('svg:path')
+      .attr('d', (d: any) => {
+        return d.path;
+      })
+      .attr('fill', this.opt.needleCol);
+
+    // End Marker
     this.needleGroup = this.svg.append('svg:g').attr('id', 'needle');
     // Draw the needle path
     const needlePath = this.needleGroup
@@ -195,7 +230,24 @@ export class DrawGauge {
       .append('path')
       .attr('d', pathNeedle)
       .style('stroke', this.opt.needleCol)
-      .style('stroke-width', this.opt.needleWidth + 'px');
+      .style('stroke-width', this.opt.needleWidth + 'px')
+      .attr('markerWidth', 6)
+      .attr('markerHeight', 6)
+      .attr('stroke-linecap', 'round')
+      .attr('marker-end', (d: any) => {
+        if (this.opt.markerEndEnabled) {
+          // arrow
+          return 'url(#marker_' + MarkerEndShapes[this.opt.markerEndShape.id].name + ')';
+        }
+        return null;
+      })
+      .attr('marker-start', (d: any) => {
+        if (this.opt.markerStartEnabled) {
+          // circle, square, stub
+          return 'url(#marker_' + MarkerStartShapes[this.opt.markerStartShape.id].name + ')';
+        }
+        return null;
+      });
     // Animate the transistion of the needle to its starting value
     let transitionSpeed = 0;
     if (this.opt.animateNeedleValueTransition) {
@@ -218,6 +270,7 @@ export class DrawGauge {
         const needleRot = needleAngle - this.opt.zeroNeedleAngle;
         return d3.interpolateString('rotate(0,' + needleCentre + ')', 'rotate(' + needleRot + ',' + needleCentre + ')');
       });
+
     this.valueLabelParent.selectAll('text').text(this.opt.needleValText);
   }
 
@@ -422,6 +475,19 @@ export class DrawGauge {
     //
     if (typeof opt.tickMaps === 'undefined') {
       opt.tickMaps = [];
+    }
+    // markers
+    if (opt.markerEndEnabled === undefined) {
+      opt.markerEndEnabled = false;
+    }
+    if (opt.markerEndShape === undefined) {
+      opt.markerEndShape = 0;
+    }
+    if (opt.markerStartEnabled === undefined) {
+      opt.markerStartEnabled = false;
+    }
+    if (opt.markerStartShape === undefined) {
+      opt.markerStartShape = 0;
     }
     // Calculate absolute values
     opt.padding = opt.padding * opt.gaugeRadius;

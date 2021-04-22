@@ -80,12 +80,35 @@
 		<h5 class="section-heading">Needle Options</h5>
 		<gf-form-switch class="gf-form" label-class="width-13" label="Animate transition" checked="ctrl.panel.gauge.animateNeedleValueTransition" on-change="ctrl.render()"></gf-form-switch>
 		<div class="gf-form">
-		<label class="gf-form-label width-13">Transition Speed (MS)
-			<tip>How fast to move the needle when value changes in milliseconds, default is 500</tip>
-		</label>
-		<input type="number" class="gf-form-input width-6" data-placement="right" ng-model="ctrl.panel.gauge.animateNeedleValueTransitionSpeed" ng-change="ctrl.validateTransitionValue()" ng-model-onblur>
+		  <label class="gf-form-label width-13">Transition Speed (MS)
+			  <tip>How fast to move the needle when value changes in milliseconds, default is 500</tip>
+		  </label>
+		  <input type="number" class="gf-form-input width-6" data-placement="right" ng-model="ctrl.panel.gauge.animateNeedleValueTransitionSpeed" ng-change="ctrl.validateTransitionValue()" ng-model-onblur>
+	  </div>
+		<div class="gf-form-inline">
+			<gf-form-switch class="gf-form" label-class="width-13" label="Show End Marker" checked="ctrl.panel.gauge.markerEndEnabled" on-change="ctrl.render()"></gf-form-switch>
+			<div class="gf-form">
+				<label class="gf-form-label width-12">End Needle Shape
+					<tip>Shape used at the tip/end of the needle</tip>
+				</label>
+				<div class="gf-form-select-wrapper">
+					<select class="gf-form-input" ng-model="ctrl.panel.gauge.markerEndShape" ng-options="item.name for item in ctrl.panel.markerEndShapes" ng-change="ctrl.render()"></select>
+				</div>
+			</div>
+		</div>
+		<div class="gf-form-inline">
+			<gf-form-switch class="gf-form" label-class="width-13" label="Show Start Marker" checked="ctrl.panel.gauge.markerStartEnabled" on-change="ctrl.render()"></gf-form-switch>
+			<div class="gf-form">
+				<label class="gf-form-label width-12">Start Needle Shape
+					<tip>Shape used at the start of the needle</tip>
+				</label>
+				<div class="gf-form-select-wrapper">
+					<select class="gf-form-input" ng-model="ctrl.panel.gauge.markerStartShape" ng-options="item.name for item in ctrl.panel.markerStartShapes" ng-change="ctrl.render()"></select>
+				</div>
+			</div>
+		</div>
 	</div>
-	</div>
+
 
 
 

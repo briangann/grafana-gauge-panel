@@ -1,14 +1,16 @@
 # Grafana Gauge Panel
 
+[![Marketplace](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=marketplace&prefix=v&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22briangann-gauge-panel%22%29%5D.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/briangann-gauge-panel)
+[![Downloads](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=downloads&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22briangann-gauge-panel%22%29%5D.downloads&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/briangann-gauge-panel)
+[![License](https://img.shields.io/github/license/briangann/grafana-gauge-panel)](LICENSE)
+
 [![Twitter Follow](https://img.shields.io/twitter/follow/jepetlefeu.svg?style=social)](https://twitter.com/jepetlefeu)
 ![Release](https://github.com/briangann/grafana-gauge-panel/workflows/Release/badge.svg)
-[![David Dependency Status](https://david-dm.org/briangann/grafana-gauge-panel.svg)](https://david-dm.org/briangann/grafana-gauge-panel)
-[![David Dev Dependency Status](https://david-dm.org/briangann/grafana-gauge-panel/dev-status.svg)](https://david-dm.org/briangann/grafana-gauge-panel/?type=dev)
 [![Known Vulnerabilities](https://snyk.io/test/github/briangann/grafana-gauge-panel/badge.svg)](https://snyk.io/test/github/briangann/grafana-gauge-panel)
 [![Maintainability](https://api.codeclimate.com/v1/badges/1c750faa58c1f7b3c7fa/maintainability)](https://codeclimate.com/github/briangann/grafana-gauge-panel/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1c750faa58c1f7b3c7fa/test_coverage)](https://codeclimate.com/github/briangann/grafana-gauge-panel/test_coverage)
 
-This panel plugin provides a [D3-based](http://www.d3js.org) gauge panel for [Grafana](http://www.grafana.com) 6.x/7.x
+This panel plugin provides a [D3-based](https://www.d3js.org) gauge panel for [Grafana](https://www.grafana.com) 6.x/7.x
 
 ## Screenshots
 
@@ -100,3 +102,4 @@ This panel is based on the "SingleStat" panel by Grafana, along with large porti
 
 * <https://oliverbinns.com/articles/D3js-gauge/>
 * <http://bl.ocks.org/tomerd/1499279>
+* <http://bl.ocks.org/dustinlarimer/5888271> Markers!

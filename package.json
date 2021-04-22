@@ -1,7 +1,7 @@
 {
   "name": "briangann-gauge-panel",
   "private": true,
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Grafana D3 Gauge Panel",
   "main": "module.js",
   "scripts": {
@@ -20,17 +20,20 @@
     "url": "https://github.com/briangann/grafana-gauge-panel/issues"
   },
   "devDependencies": {
-    "@grafana/toolkit": "next",
+    "@grafana/toolkit": "7.5.4",
     "@types/d3": "^5.16.3",
-    "@types/d3-scale": "^3.2.0",
+    "@types/d3-scale": "3.2.2",
     "@types/grafana": "github:CorpGlory/types-grafana.git",
-    "@types/jquery": "^3.5.3",
-    "@types/lodash": "^4.14.162",
+    "@types/jquery": "3.5.5",
+    "@types/lodash": "4.14.168",
     "d3": "5.16.0",
     "jest-junit": "^12.0.0"
   },
   "dependencies": {
     "d3-ease": "^1.0.6"
+  },
+  "resolutions": {
+    "rxjs": "6.6.3"
   },
   "homepage": "https://github.com/briangann/grafana-gauge-panel"
 }

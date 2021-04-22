@@ -1,4 +1,5 @@
 import kbn from 'grafana/app/core/utils/kbn';
+import { MarkerStartShapes, MarkerEndShapes } from './types';
 
 export const panelDefaults = {
   fontSizes: [
@@ -75,6 +76,8 @@ export const panelDefaults = {
   decimals: 2, // decimal precision
   format: 'none', // unit format
   operatorName: 'avg', // operator applied to time series
+  markerEndShapes: MarkerEndShapes,
+  markerStartShapes: MarkerStartShapes,
   gauge: {
     minValue: 0,
     maxValue: 100,
@@ -118,5 +121,9 @@ export const panelDefaults = {
     showUpperThresholdRange: true,
     animateNeedleValueTransition: true,
     animateNeedleValueTransitionSpeed: 100,
+    markerEndEnabled: false,
+    markerEndShape: MarkerEndShapes[0],
+    markerStartEnabled: false,
+    markerStartShape: MarkerStartShapes[0],
   },
 };
