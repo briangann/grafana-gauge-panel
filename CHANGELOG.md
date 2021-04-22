@@ -2,6 +2,11 @@
 
 All changes noted here.
 
+## v0.0.9 - 2021-04-21
+
+- Add option to display needle arrow
+- Update packages
+
 ## v0.0.8 - 2020-10-26
 
 - Signed Plugin!
