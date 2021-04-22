@@ -188,26 +188,29 @@ export class DrawGauge {
     // Add a group to hold the needle path
 
     const markerTypes = [
-      { id: 0, name: 'circle', path: 'M 0, 0  m -5, 0  a 5,5 0 1,0 10,0  a 5,5 0 1,0 -10,0', viewbox: '-6 -6 12 12' }
-    , { id: 1, name: 'square', path: 'M 0,0 m -5,-5 L 5,-5 L 5,5 L -5,5 Z', viewbox: '-5 -5 10 10' }
-    , { id: 2, name: 'arrow', path: 'M 0,0 m -5,-5 L 5,0 L -5,5 Z', viewbox: '-5 -5 10 10' }
-    , { id: 2, name: 'stub', path: 'M 0,0 m -1,-5 L 1,-5 L 1,5 L -1,5 Z', viewbox: '-1 -5 2 10' }
-    ]
+      { id: 0, name: 'circle', path: 'M 0, 0  m -5, 0  a 5,5 0 1,0 10,0  a 5,5 0 1,0 -10,0', viewbox: '-6 -6 12 12' },
+      { id: 1, name: 'square', path: 'M 0,0 m -5,-5 L 5,-5 L 5,5 L -5,5 Z', viewbox: '-5 -5 10 10' },
+      { id: 2, name: 'arrow', path: 'M 0,0 m -5,-5 L 5,0 L -5,5 Z', viewbox: '-5 -5 10 10' },
+      { id: 2, name: 'stub', path: 'M 0,0 m -1,-5 L 1,-5 L 1,5 L -1,5 Z', viewbox: '-1 -5 2 10' }
+    ];
     // End Marker
+
     svg.append("svg:defs").selectAll("marker")
-    .data(["marker_arrow"])
-      .enter().append("svg:marker")
-    .attr("id", String)
-    .attr("viewBox", "-5 -5 10 10")
-    .attr("refX", 0)
-    .attr("refY", 0)
-    .attr("markerWidth", 3)
-    .attr("markerHeight", 3)
-    .attr('markerUnits', 'strokeWidth')
-    .attr("orient", "auto")
-    .attr("fill", this.opt.needleCol)
-    .append("svg:path")
-    .attr("d", "M 0,0 m -5,-5 L 5,0 L -5,5 Z");
+      .data(markerTypes)
+      .enter()
+        .append('svg:marker')
+          .attr('id', function(d: any){ return 'marker_' + d.name})
+          .attr('markerHeight', 3)
+          .attr('markerWidth', 3)
+          .attr('markerUnits', 'strokeWidth')
+          .attr('orient', 'auto')
+          .attr('refX', 0)
+          .attr('refY', 0)
+          .attr('viewBox', function(d: any){ return d.viewbox })
+          .append('svg:path')
+            .attr('d', function(d: any){ return d.path })
+            .attr('fill', this.opt.needleCol);
+
     // End Marker
     this.needleGroup = this.svg.append('svg:g').attr('id', 'needle');
     // Draw the needle path
@@ -222,8 +225,20 @@ export class DrawGauge {
         .attr("markerWidth", 6)
         .attr("markerHeight", 6)
         .attr('stroke-linecap', 'round')
-        .attr('marker-end', "url(#marker_arrow)")
-        .attr("orient", "auto-start-reverse");
+        .attr('marker-end', (d: any) => {
+          if (this.opt.markerEndEnabled) {
+            // arrow
+            return "url(#marker_arrow)";
+          }
+          return null;
+        })
+        .attr('marker-start', (d: any) => {
+          if (this.opt.markerStartEnabled) {
+            // circle, square, stub
+            return "url(#marker_" + this.opt.markerStartType + ")";
+          }
+          return null;
+        });
     // Animate the transistion of the needle to its starting value
     let transitionSpeed = 0;
     if (this.opt.animateNeedleValueTransition) {
@@ -451,6 +466,16 @@ export class DrawGauge {
     //
     if (typeof opt.tickMaps === 'undefined') {
       opt.tickMaps = [];
+    }
+    // markers
+    if (opt.markerEndEnabled === undefined) {
+      opt.markerEndEnabled = true;
+    }
+    if (opt.markerStartEnabled === undefined) {
+      opt.markerStartEnabled = true;
+    }
+    if (opt.markerStartType === undefined) {
+      opt.markerStartType = "circle";
     }
     // Calculate absolute values
     opt.padding = opt.padding * opt.gaugeRadius;
