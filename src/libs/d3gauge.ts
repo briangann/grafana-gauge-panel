@@ -192,25 +192,33 @@ export class DrawGauge {
       { id: 0, name: 'arrow', path: 'M 0,0 m -5,-5 L 5,0 L -5,5 Z', viewbox: '-5 -5 10 10' },
       { id: 1, name: 'circle', path: 'M 0, 0  m -5, 0  a 5,5 0 1,0 10,0  a 5,5 0 1,0 -10,0', viewbox: '-6 -6 12 12' },
       { id: 2, name: 'square', path: 'M 0,0 m -5,-5 L 5,-5 L 5,5 L -5,5 Z', viewbox: '-5 -5 10 10' },
-      { id: 3, name: 'stub', path: 'M 0,0 m -1,-5 L 1,-5 L 1,5 L -1,5 Z', viewbox: '-1 -5 2 10' }
+      { id: 3, name: 'stub', path: 'M 0,0 m -1,-5 L 1,-5 L 1,5 L -1,5 Z', viewbox: '-1 -5 2 10' },
     ];
     // End Marker
 
-    svg.append("svg:defs").selectAll("marker")
+    svg
+      .append('svg:defs')
+      .selectAll('marker')
       .data(markerTypes)
       .enter()
-        .append('svg:marker')
-          .attr('id', function(d: any){ return 'marker_' + d.name})
-          .attr('markerHeight', 3)
-          .attr('markerWidth', 3)
-          .attr('markerUnits', 'strokeWidth')
-          .attr('orient', 'auto')
-          .attr('refX', 0)
-          .attr('refY', 0)
-          .attr('viewBox', function(d: any){ return d.viewbox })
-          .append('svg:path')
-            .attr('d', function(d: any){ return d.path })
-            .attr('fill', this.opt.needleCol);
+      .append('svg:marker')
+      .attr('id', function (d: any) {
+        return 'marker_' + d.name;
+      })
+      .attr('markerHeight', 3)
+      .attr('markerWidth', 3)
+      .attr('markerUnits', 'strokeWidth')
+      .attr('orient', 'auto')
+      .attr('refX', 0)
+      .attr('refY', 0)
+      .attr('viewBox', function (d: any) {
+        return d.viewbox;
+      })
+      .append('svg:path')
+      .attr('d', function (d: any) {
+        return d.path;
+      })
+      .attr('fill', this.opt.needleCol);
 
     // End Marker
     this.needleGroup = this.svg.append('svg:g').attr('id', 'needle');
@@ -220,26 +228,26 @@ export class DrawGauge {
       .data(needleAngle)
       .enter()
       .append('path')
-        .attr('d', pathNeedle)
-        .style('stroke', this.opt.needleCol)
-        .style('stroke-width', this.opt.needleWidth + 'px')
-        .attr("markerWidth", 6)
-        .attr("markerHeight", 6)
-        .attr('stroke-linecap', 'round')
-        .attr('marker-end', (d: any) => {
-          if (this.opt.markerEndEnabled) {
-            // arrow
-            return "url(#marker_" + MarkerEndShapes[this.opt.markerEndShape.id].name + ")";
-          }
-          return null;
-        })
-        .attr('marker-start', (d: any) => {
-          if (this.opt.markerStartEnabled) {
-            // circle, square, stub
-            return "url(#marker_" + MarkerStartShapes[this.opt.markerStartShape.id].name + ")";
-          }
-          return null;
-        });
+      .attr('d', pathNeedle)
+      .style('stroke', this.opt.needleCol)
+      .style('stroke-width', this.opt.needleWidth + 'px')
+      .attr('markerWidth', 6)
+      .attr('markerHeight', 6)
+      .attr('stroke-linecap', 'round')
+      .attr('marker-end', (d: any) => {
+        if (this.opt.markerEndEnabled) {
+          // arrow
+          return 'url(#marker_' + MarkerEndShapes[this.opt.markerEndShape.id].name + ')';
+        }
+        return null;
+      })
+      .attr('marker-start', (d: any) => {
+        if (this.opt.markerStartEnabled) {
+          // circle, square, stub
+          return 'url(#marker_' + MarkerStartShapes[this.opt.markerStartShape.id].name + ')';
+        }
+        return null;
+      });
     // Animate the transistion of the needle to its starting value
     let transitionSpeed = 0;
     if (this.opt.animateNeedleValueTransition) {
