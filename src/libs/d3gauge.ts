@@ -202,7 +202,7 @@ export class DrawGauge {
       .data(markerTypes)
       .enter()
       .append('svg:marker')
-      .attr('id', function (d: any) {
+      .attr('id', (d: any) => {
         return 'marker_' + d.name;
       })
       .attr('markerHeight', 3)
@@ -211,11 +211,11 @@ export class DrawGauge {
       .attr('orient', 'auto')
       .attr('refX', 0)
       .attr('refY', 0)
-      .attr('viewBox', function (d: any) {
+      .attr('viewBox', (d: any) => {
         return d.viewbox;
       })
       .append('svg:path')
-      .attr('d', function (d: any) {
+      .attr('d', (d: any) => {
         return d.path;
       })
       .attr('fill', this.opt.needleCol);
