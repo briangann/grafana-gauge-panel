@@ -118,5 +118,9 @@ export const panelDefaults = {
     showUpperThresholdRange: true,
     animateNeedleValueTransition: true,
     animateNeedleValueTransitionSpeed: 100,
+    markerEndEnabled: true,
+    markerEndShape: 0,
+    markerStartEnabled: true,
+    markerStartShape: 0,
   },
 };

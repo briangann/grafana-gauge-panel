@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import { MarkerStartShapes, MarkerEndShapes } from '../types';
 
 export class DrawGauge {
   defaultFonts: any;
@@ -228,14 +229,14 @@ export class DrawGauge {
         .attr('marker-end', (d: any) => {
           if (this.opt.markerEndEnabled) {
             // arrow
-            return "url(#marker_arrow)";
+            return "url(#marker_" + MarkerEndShapes[this.opt.markerEndShape] + ")";
           }
           return null;
         })
         .attr('marker-start', (d: any) => {
           if (this.opt.markerStartEnabled) {
             // circle, square, stub
-            return "url(#marker_" + this.opt.markerStartType + ")";
+            return "url(#marker_" + MarkerStartShapes[this.opt.markerStartShape] + ")";
           }
           return null;
         });
@@ -469,13 +470,16 @@ export class DrawGauge {
     }
     // markers
     if (opt.markerEndEnabled === undefined) {
-      opt.markerEndEnabled = true;
+      opt.markerEndEnabled = false;
+    }
+    if (opt.markerEndShape === undefined) {
+      opt.markerEndShape = 0;
     }
     if (opt.markerStartEnabled === undefined) {
-      opt.markerStartEnabled = true;
+      opt.markerStartEnabled = false;
     }
-    if (opt.markerStartType === undefined) {
-      opt.markerStartType = "circle";
+    if (opt.markerStartShape === undefined) {
+      opt.markerStartShape = 0;
     }
     // Calculate absolute values
     opt.padding = opt.padding * opt.gaugeRadius;

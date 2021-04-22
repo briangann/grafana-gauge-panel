@@ -228,6 +228,10 @@ export class D3GaugePanelCtrl extends MetricsPanelCtrl {
       animateNeedleValueTransition: this.panel.gauge.animateNeedleValueTransition,
       animateNeedleValueTransitionSpeed: this.panel.gauge.animateNeedleValueTransitionSpeed,
       tickMaps: this.panel.tickMaps,
+      markerEndEnabled: this.panel.gauge.markerEndEnabled,
+      markerEndShape: this.panel.gauge.markerEndShape,
+      markerStartEnabled: this.panel.gauge.markerStartEnabled,
+      markerStartShape: this.panel.gauge.markerStartShape,
     };
     this.gaugeObject = new DrawGauge(svg, opt);
     this.svg = svg;
