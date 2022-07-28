@@ -16,31 +16,31 @@ This panel plugin provides a [D3-based](https://www.d3js.org) gauge panel for [G
 
 ### Example gauges
 
-![Default Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/src/screenshots/default-gauge.png)
-![Default Gauge With Threshold](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/src/screenshots/default-gauge-w-threshold.png)
+![Default Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/default-gauge.png)
+![Default Gauge With Threshold](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/default-gauge-w-threshold.png)
 
-![Custom Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/src/screenshots/alt-gauge.png)
-![Custom Gauge With Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/src/screenshots/alt-gauge-limits.png)
+![Custom Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/alt-gauge.png)
+![Custom Gauge With Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/alt-gauge-limits.png)
 
 ### Options
 
-![Options](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/src/screenshots/options.png)
+![Options](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/options.png)
 
 With Limits
 
-![Options with Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/src/screenshots/options-limits.png)
+![Options with Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/options-limits.png)
 
 ### Limits Shown
 
-![Options With Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/src/screenshots/options-limits.png)
+![Options With Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/options-limits.png)
 
 ### Radial Metrics
 
-![Radial Metrics](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/src/screenshots/radialmetrics.png)
+![Radial Metrics](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/radialmetrics.png)
 
 ### Thresholding
 
-![Thresholding](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/master/src/screenshots/thresholding.png)
+![Thresholding](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/thresholding.png)
 
 -------
 
@@ -56,7 +56,7 @@ With Limits
 
 * Customizable gauge component sizes (needle length, width, tick length, etc)
 
-* Thresholding colors displayed on gauge
+* Threshold colors displayed on gauge
 * Threshold can modify displayed value and background
 
 * Needle animation speed is now configurable

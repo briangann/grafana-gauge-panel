@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build_master:
+  build_main:
     runs-on: ubuntu-latest
 
     steps:
