@@ -7,12 +7,6 @@
 const path = require('path');
 
 module.exports = {
-  collectCoverage: true,
-  collectCoverageFrom: [
-    '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
-    '<rootDir>/src/**/*.{js,jsx,ts,tsx}',
-  ],
-  coveragePathIgnorePatterns: ['<rootDir>/src/libs/'],
   moduleNameMapper: {
     "\\.(css|scss|sass)$": "identity-obj-proxy",
     "react-inlinesvg": path.resolve(__dirname, "mocks", "react-inlinesvg.tsx"),
