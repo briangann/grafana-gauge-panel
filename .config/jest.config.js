@@ -7,6 +7,7 @@
 const path = require('path');
 
 module.exports = {
+  collectCoverage: true,
   moduleNameMapper: {
     "\\.(css|scss|sass)$": "identity-obj-proxy",
     "react-inlinesvg": path.resolve(__dirname, "mocks", "react-inlinesvg.tsx"),
