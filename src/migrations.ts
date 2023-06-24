@@ -1,5 +1,5 @@
 import { PanelModel } from '@grafana/data';
-import { config } from "@grafana/runtime";
+import { config } from '@grafana/runtime';
 import { satisfies, coerce } from 'semver';
 
 import { GaugeOptions } from './components/types';
