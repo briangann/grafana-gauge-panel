@@ -9,6 +9,7 @@ export interface GaugeOptions {
   operatorName: string;
 }
 
+// tslint:disable-next-line
 export interface GaugeModel {}
 
 export const MarkerStartShapes = [
