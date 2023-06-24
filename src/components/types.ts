@@ -1,4 +1,4 @@
-import { SelectableValue } from "@grafana/data";
+import { SelectableValue } from '@grafana/data';
 
 export interface GaugeOptions {
   decimals: number;

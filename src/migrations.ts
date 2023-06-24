@@ -14,7 +14,7 @@ interface AngularOptions {
  * This is called when the panel is imported or reloaded
  */
 export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<GaugeOptions> => {
-  //@ts-ignore
+  // @ts-ignore
   if (!panel.gauge) {
     // not angular, just return the options if currently set
     if (!panel.options) {
@@ -24,10 +24,10 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
     // have settings, return them unchanged
     return panel.options;
   }
-  //@ts-ignore
+  // @ts-ignore
   const newDefaults = migrateDefaults(panel.gauge);
   let options = newDefaults;
-  //@ts-ignore
+  // @ts-ignore
   delete panel.gauge;
   return options;
 };
