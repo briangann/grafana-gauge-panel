@@ -2,7 +2,7 @@ version: '3.0'
 
 services:
   grafana:
-    container_name: 'rianannbkganngmailcom-3auge-panel'
+    container_name: 'briangann-gauge-panel'
     build:
       context: ./.config
       args:
@@ -10,5 +10,5 @@ services:
     ports:
       - 3000:3000/tcp
     volumes:
-      - ./dist:/var/lib/grafana/plugins/rianannbkganngmailcom-3auge-panel
+      - ./dist:/var/lib/grafana/plugins/briangann-gauge-panel
       - ./provisioning:/etc/grafana/provisioning
