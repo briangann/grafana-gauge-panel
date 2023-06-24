@@ -9,8 +9,7 @@ export interface GaugeOptions {
   operatorName: string;
 }
 
-export interface GaugeModel {
-}
+export interface GaugeModel {}
 
 export const MarkerStartShapes = [
   { id: 0, name: 'circle' },

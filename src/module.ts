@@ -68,7 +68,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
           integer: true,
         },
         category: ['General'],
-      })
+      });
 
       // Font Settings
 

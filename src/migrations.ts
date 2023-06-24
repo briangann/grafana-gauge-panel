@@ -1,6 +1,6 @@
 import { PanelModel } from '@grafana/data';
 import { config } from "@grafana/runtime";
-import { satisfies, coerce } from "semver";
+import { satisfies, coerce } from 'semver';
 
 import { GaugeOptions } from './components/types';
 
@@ -26,14 +26,14 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
   }
   // @ts-ignore
   const newDefaults = migrateDefaults(panel.gauge);
-  let options = newDefaults;
+  const options = newDefaults;
   // @ts-ignore
   delete panel.gauge;
   return options;
 };
 
 export const migrateDefaults = (angular: AngularOptions) => {
-  let options: GaugeOptions = {
+  const options: GaugeOptions = {
     panelHeight: undefined,
     panelWidth: undefined,
     panelId: 0,
@@ -67,7 +67,7 @@ export const PanelChangedHandler = (
 export const hasRobotoFont = () => {
   const version = coerce(config.buildInfo.version);
   if (version !== null) {
-    if (satisfies(version, "<9.4.0")) {
+    if (satisfies(version, '<9.4.0')) {
       return true;
     }
   }
