@@ -8,7 +8,15 @@ import {
 
 describe('D3Gauge -> D3GaugeV2 migrations', () => {
   it('only migrates old d3gauge', () => {
-    const panel = {} as PanelModel;
+    const panel: PanelModel = {
+      id: 0,
+      type: 'panel',
+      options: {},
+      fieldConfig: {
+        defaults: {},
+        overrides: [],
+      },
+    };
     const options = PanelMigrationHandler(panel);
     expect(options).toEqual({});
   });
