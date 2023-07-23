@@ -27,6 +27,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const [tickWidthMajorCalc, setTickWidthMajorCalc] = useState(5);
   const [tickWidthMinorCalc, setTickWidthMinorCalc] = useState(1);
   const [labelStart, setLabelStart] = useState(0);
+
   const [innerEdgeRadius, setInnerEdgeRadius] = useState(0);
   const [outerEdgeRadius, setOuterEdgeRadius] = useState(0);
   const [pivotRadius, setPivotRadius] = useState(0);
@@ -35,7 +36,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const [tickAnglesMaj, setTickAnglesMaj] = useState<number[]>([]);
   const [tickAnglesMin, setTickAnglesMin] = useState<number[]>([]);
   const [margin, setMargin] = useState({ top: 0, right: 0, bottom: 0, left: 0 });
-
+  const [tickMajorLabels, setTickMajorLabels] = useState<string[]>([])
+  const [labelFontSize] = useState(18);
   // Calculate required values
   // autosize if radius is set to zero
   if (options.gaugeRadius === 0) {
@@ -58,6 +60,34 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
 
 
   useEffect(() => {
+
+    const generateTickMajorLabels = (tickSpacingMajDeg: number) => {
+      //
+      // Calculate major tick mark label text
+      let counter = 0;
+      const tickLabelText: string[] = [];
+      for (let k = options.zeroTickAngle; k <= options.maxTickAngle; k = k + tickSpacingMajDeg) {
+        const tickValue = options.minValue + options.tickSpacingMajor * counter;
+        const parts = options.tickSpacingMajor.toString().split('.');
+        let tickText = tickValue.toString();
+        if (parts.length > 1) {
+          tickText = Number(tickValue).toFixed(parts[1].length).toString();
+        }
+        // check if there are tickMaps that apply
+        const tickTextFloat = parseFloat(tickText);
+        // TODO: mappings to be implemented
+        //for (let i = 0; i < this.opt.tickMaps.length; i++) {
+        //  const aTickMap = this.opt.tickMaps[i];
+        //  if (parseFloat(aTickMap.value) === tickTextFloat) {
+        //    tickText = aTickMap.text;
+        //    break;
+        //  }
+        //}
+        tickLabelText.push(tickText);
+        counter++;
+    }
+      return ({genTickMajorLabels: tickLabelText});
+  }
 
     const generateTickAngles = (tickSpacingMajDeg: number, tickSpacingMinDeg: number) => {
       const tickAnglesMajX = [];
@@ -113,7 +143,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     const tickStartMinX = gaugeRadiusCalc - options.padding -
       options.edgeWidth - options.tickEdgeGap - options.tickLengthMin;
     setTickStartMin(tickStartMinX);
-    setLabelStart(tickStartMajX - options.labelFontSize);
+    setLabelStart(tickStartMajX - options.tickLabelFontSize);
     setInnerEdgeRadius(gaugeRadiusCalc - options.padding - options.edgeWidth);
     setOuterEdgeRadius(gaugeRadiusCalc - options.padding);
     setPivotRadius(options.pivotRadius * gaugeRadiusCalc);
@@ -133,6 +163,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     const minorA = valueScale(options.tickSpacingMinor) || 1;
     const tickSpacingMinDeg = minorA - scaleZero;
 
+    // tick angles
     const { tickMaj, tickMin } = generateTickAngles(tickSpacingMajDeg, tickSpacingMinDeg);
     if (JSON.stringify(tickAnglesMaj) !== JSON.stringify(tickMaj)) {
       setTickAnglesMaj(tickMaj);
@@ -141,37 +172,20 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       setTickAnglesMin(tickMin);
     }
 
-    //
-    // Calculate major tick mark label text
-    let counter = 0;
-    const tickLabelText = [] as any;
-    for (let k = options.zeroTickAngle; k <= options.maxTickAngle; k = k + tickSpacingMajDeg) {
-      const tickValue = options.minValue + options.tickSpacingMajor * counter;
-      const parts = options.tickSpacingMajor.toString().split('.');
-      let tickText = tickValue.toString();
-      if (parts.length > 1) {
-        tickText = Number(tickValue).toFixed(parts[1].length).toString();
-      }
-      // check if there are tickMaps that apply
-      const tickTextFloat = parseFloat(tickText);
-      // TODO: mappings to be implemented
-      //for (let i = 0; i < this.opt.tickMaps.length; i++) {
-      //  const aTickMap = this.opt.tickMaps[i];
-      //  if (parseFloat(aTickMap.value) === tickTextFloat) {
-      //    tickText = aTickMap.text;
-      //    break;
-      //  }
-      //}
-      tickLabelText.push(tickText);
-      counter++;
+    // labels for major ticks
+    const { genTickMajorLabels } = generateTickMajorLabels(tickSpacingMajDeg);
+    if (JSON.stringify(tickMajorLabels) !== JSON.stringify(genTickMajorLabels)) {
+      setTickMajorLabels(genTickMajorLabels);
     }
 
+    // size of major tick
     const tickWidthMajorX = options.tickWidthMajor * (gaugeRadiusCalc / options.ticknessGaugeBasis);
     setTickWidthMajorCalc(tickWidthMajorX);
+    // size of minor tick
     const tickWidthMinorX = options.tickWidthMinor * (gaugeRadiusCalc / options.ticknessGaugeBasis);
     setTickWidthMinorCalc(tickWidthMinorX);
 
-  }, [gaugeRadiusCalc, tickAnglesMaj, tickAnglesMin, options]);
+  }, [gaugeRadiusCalc, tickAnglesMaj, tickAnglesMin, options, tickMajorLabels]);
 
   const createCircleGroup = () => {
     return (
@@ -180,7 +194,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         <circle cx={originX} cy={originY} r={innerEdgeRadius} fill={options.innerColor} stroke='none'></circle>
         <circle cx={originX} cy={originY} r={pivotRadius} fill={options.pivotColor} stroke='none'></circle>
       </g>
-    );
+    )
   };
 
   const createNeedleMarkers = () => {
@@ -200,10 +214,39 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
               orient={'auto'} >
               <path d={item.path} fill={options.needleColor} />
             </marker>
-          );
+          )
         })}
       </defs>
     );
+  }
+
+  const createMajorTickLabels = () => {
+    let maxLabelLength = 0;
+    for (const item in tickMajorLabels) {
+      if (item.length > maxLabelLength) {
+        maxLabelLength = item.length;
+      }
+    }
+    return (
+      <g id='majorTickLabels'>
+        {tickAnglesMaj.length > 0 && tickAnglesMaj.map((item: number, index: number) => {
+          const labelText = tickMajorLabels[index];
+          return (
+              <text
+                key={`mtl_${index}`}
+              x={labelXCalc(item, maxLabelLength, labelText) || 0}
+                y={labelYCalc(item) || 0}
+                fontSize={labelFontSize || 8}
+                textAnchor='middle'
+                fill={options.tickLabelColor || '#000000'}
+                fontWeight={'bold'}
+                fontFamily={options.tickFont || 'Inter'}>
+              {labelText}
+              </text>
+          )
+        })}
+      </g>
+    )
   }
   const createNeedle = () => {
     const pathNeedle = needleCalc(options.zeroNeedleAngle);
@@ -223,7 +266,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
               strokeWidth={needleWidth + 'px'}
             />
           </>
-        )};
+        )}
       </g>
     );
   };
@@ -251,8 +294,6 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     console.log(`major tick count ${pathTicksMajor.length}`);
     const pathTicksMinor = tickCalcMin(tickAnglesMin);
     console.log(`minor tick count ${pathTicksMinor.length}`);
-    // eslint-disable-next-line no-debugger
-    //debugger;
     return (
       <g id="ticks">
         <g id='minorTickMarks'>
@@ -261,8 +302,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
               <>
                 <path d={d} stroke={options.tickMinorColor} strokeWidth={tickWidthMinorCalc + 'px'} />
               </>
-            );
-          })};
+            )
+          })}
         </g>
         <g id='majorTickMarks'>
           {pathTicksMajor.length > 0 && pathTicksMajor.map((d: string) => {
@@ -270,11 +311,28 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
               <>
                 <path d={d} stroke={options.tickMajorColor} strokeWidth={tickWidthMajorCalc + 'px'} />
               </>
-            );
-          })};
+            )
+          })}
         </g>
       </g>
     )
+  }
+
+  // Define functions to calcuate the positions of the labels for the tick marks
+  const labelXCalc = (position: number, maxLabelLength: number, labelText: string) => {
+    const tickAngle = position + 90;
+    const tickAngleRad = dToR(tickAngle);
+    // the max length of digits needs to be used for proper alignment
+    const labelW = labelFontSize / (labelText.length + maxLabelLength / 2);
+    const x1 = originX + (labelStart - labelW) * Math.cos(tickAngleRad);
+    return x1;
+  }
+
+  const labelYCalc = (position: number) => {
+    const tickAngle = position + 90;
+    const tickAngleRad = dToR(tickAngle);
+    const y1 = originY + labelStart * Math.sin(tickAngleRad) + labelFontSize / 2;
+    return y1;
   }
 
   const tickCalcMin = (degrees: number[]) => {
@@ -321,6 +379,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     return paths;
   }
 
+
+
   const dToR = (angleDeg: any) => {
     // Turns an angle in degrees to radians
     const angleRad = angleDeg * (Math.PI / 180);
@@ -341,6 +401,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         <g>
           {createCircleGroup()}
           {createTicks()}
+          {createMajorTickLabels()}
           {createNeedleMarkers()}
           {createNeedle()}
         </g>

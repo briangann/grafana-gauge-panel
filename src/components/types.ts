@@ -8,9 +8,8 @@ export interface GaugeOptions {
   valueYOffset: number;
 
   // Font Settings
-  labelFontSize: number;
-  valueFontSize: number;
   valueFont: string;
+  valueFontSize: number;
   tickLabelFontSize: number;
   tickFont: string;
 

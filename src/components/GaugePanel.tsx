@@ -58,7 +58,6 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
           markerStartShape={options.markerStartShape}
           minValue={options.minValue}
           maxValue={options.maxValue}
-          labelFontSize={options.labelFontSize}
           gaugeRadius={options.gaugeRadius}
           pivotRadius={options.pivotRadius}
           padding={options.padding}
