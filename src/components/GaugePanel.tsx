@@ -45,7 +45,46 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
           panelHeight={height}
           operatorName={options.operatorName}
           unitFormat={options.unitFormat}
-        />
+          valueYOffset={options.valueYOffset}
+          valueFontSize={options.valueFontSize}
+          valueFont={options.valueFont}
+          tickLabelFontSize={options.tickLabelFontSize}
+          tickFont={options.tickFont}
+          animateNeedleValueTransition={options.animateNeedleValueTransition}
+          animateNeedleValueTransitionSpeed={options.animateNeedleValueTransitionSpeed}
+          markerEndEnabled={options.markerEndEnabled}
+          markerEndShape={options.markerEndShape}
+          markerStartEnabled={options.markerStartEnabled}
+          markerStartShape={options.markerStartShape}
+          minValue={options.minValue}
+          maxValue={options.maxValue}
+          labelFontSize={options.labelFontSize}
+          gaugeRadius={options.gaugeRadius}
+          pivotRadius={options.pivotRadius}
+          padding={options.padding}
+          edgeWidth={options.edgeWidth}
+          tickEdgeGap={options.tickEdgeGap}
+          tickLengthMaj={options.tickLengthMaj}
+          tickLengthMin={options.tickLengthMin}
+          needleTickGap={options.needleTickGap}
+          needleLengthNeg={options.needleLengthNeg}
+          zeroTickAngle={options.zeroTickAngle}
+          maxTickAngle={options.maxTickAngle}
+          zeroNeedleAngle={options.zeroNeedleAngle}
+          maxNeedleAngle={options.maxNeedleAngle}
+          tickSpacingMajor={options.tickSpacingMajor}
+          tickSpacingMinor={options.tickSpacingMinor}
+          outerEdgeColor={options.outerEdgeColor}
+          innerColor={options.innerColor}
+          pivotColor={options.pivotColor}
+          needleColor={options.needleColor}
+          unitsLabelColor={options.unitsLabelColor}
+          tickLabelColor={options.tickLabelColor}
+          tickMajorColor={options.tickMajorColor}
+          tickMinorColor={options.tickMinorColor}
+          ticknessGaugeBasis={200}
+          tickWidthMajor={3}
+          tickWidthMinor={1}        />
       </div>
     </div>
   );

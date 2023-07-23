@@ -40,6 +40,19 @@ export const migrateDefaults = (angular: AngularOptions) => {
     decimals: 2,
     unitFormat: '',
     operatorName: 'avg',
+    valueYOffset: 0,
+    valueFontSize: 0,
+    valueFont: '',
+    tickLabelFontSize: 0,
+    tickFont: '',
+    animateNeedleValueTransition: true,
+    animateNeedleValueTransitionSpeed: 500,
+    markerEndEnabled: false,
+    markerEndShape: '',
+    markerStartEnabled: true,
+    markerStartShape: '',
+    minValue: 0,
+    maxValue: 0
   };
   return options;
 };
