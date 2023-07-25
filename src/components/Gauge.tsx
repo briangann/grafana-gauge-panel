@@ -242,7 +242,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
               fontFamily={options.tickFont || 'Inter'}>
               {labelText}
             </text>
-          )
+          );
         })}
       </g>
     );
@@ -302,7 +302,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
               <>
                 <path d={d} stroke={options.tickMinorColor} strokeWidth={tickWidthMinorCalc + 'px'} />
               </>
-            )
+            );
           })}
         </g>
         <g id='majorTickMarks'>
@@ -311,7 +311,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
               <>
                 <path d={d} stroke={options.tickMajorColor} strokeWidth={tickWidthMajorCalc + 'px'} />
               </>
-            )
+            );
           })}
         </g>
       </g>
@@ -412,7 +412,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           {value}
         </text>
       </g>
-    )
+    );
   };
 
   const createThresholdBands = () => {
@@ -430,7 +430,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           </>
         )}
       </>
-    )
+    );
     /*
     if (options.showThresholdOnGauge && options.thresholds.length > 0) {
       // split the threshold values
@@ -470,7 +470,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           />
         }
       </>
-    )
+    );
   };
 
   return (

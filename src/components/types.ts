@@ -144,7 +144,7 @@ export const FontSizes: SelectableValue[] = [
   { value: 66, label: '66' },
   { value: 68, label: '68' },
   { value: 70, label: '70' },
-]
+];
 
 export const OperatorOptions: SelectableValue[] = [
   { value: 'mean', label: 'Mean (avg)' },
