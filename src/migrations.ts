@@ -52,7 +52,42 @@ export const migrateDefaults = (angular: AngularOptions) => {
     markerStartEnabled: true,
     markerStartShape: '',
     minValue: 0,
-    maxValue: 0
+    maxValue: 0,
+    outerEdgeColor: '',
+    innerColor: '',
+    pivotColor: '',
+    needleColor: '',
+    unitsLabelColor: '',
+    tickLabelColor: '',
+    tickMajorColor: '',
+    tickMinorColor: '',
+    gaugeRadius: 0,
+    pivotRadius: 0,
+    padding: 0,
+    edgeWidth: 0,
+    tickEdgeGap: 0,
+    tickLengthMaj: 0,
+    tickLengthMin: 0,
+    ticknessGaugeBasis: 0,
+    tickWidthMajor: 0,
+    tickWidthMinor: 0,
+    needleTickGap: 0,
+    needleLengthNeg: 0,
+    zeroTickAngle: 0,
+    maxTickAngle: 0,
+    zeroNeedleAngle: 0,
+    maxNeedleAngle: 0,
+    tickSpacingMajor: 0,
+    tickSpacingMinor: 0,
+    tickMapConfig: {
+      tickMaps: []
+    },
+    showThresholdsOnGauge: true,
+    showThresholdColorOnValue: false,
+    showThresholdColorOnBackground: false,
+    showThresholdLowerRange: true,
+    showThresholdMiddleRange: true,
+    showThresholdUpperRange: true
   };
   return options;
 };
