@@ -35,17 +35,17 @@ export const TickMapItem: React.FC<TickMapItemProps> = (props) => {
   };
 
   return (
-    <Card heading="" key={`tickmap-card-${props.ID}`}>
+    <Card heading='' key={`tickmap-card-${props.ID}`}>
       <Card.Meta>
         <FieldSet>
           <Field
-            label="Label"
-            description="Sets the name of the Tick Map in the configuration editor."
+            label='Label'
+            description='Sets the name of the Tick Map in the configuration editor.'
             disabled={!tickMap.enabled}
           >
             <Input
               value={tickMap.label}
-              placeholder=""
+              placeholder=''
               onChange={(e) => setTickMap({ ...tickMap, label: e.currentTarget.value })}
             />
           </Field>
@@ -53,20 +53,20 @@ export const TickMapItem: React.FC<TickMapItemProps> = (props) => {
       </Card.Meta>
 
       <Card.Actions>
-        <IconButton key="moveUp" name="arrow-up" tooltip="Move Up" onClick={moveUp} />
-        <IconButton key="moveDown" name="arrow-down" tooltip="Move Down" onClick={moveDown} />
+        <IconButton key='moveUp' name='arrow-up' tooltip='Move Up' onClick={moveUp} />
+        <IconButton key='moveDown' name='arrow-down' tooltip='Move Down' onClick={moveDown} />
         <IconButton
-          key="tickMapEnabled"
+          key='tickMapEnabled'
           name={tickMap.enabled ? visibleIcon : hiddenIcon}
-          tooltip="Hide/Show Override"
+          tooltip='Hide/Show Override'
           onClick={() => setTickMap({ ...tickMap, enabled: !tickMap.enabled })}
         />
-        <IconButton key="copyOverride" name="copy" tooltip="Duplicate" onClick={createDuplicate} />
+        <IconButton key='copyOverride' name='copy' tooltip='Duplicate' onClick={createDuplicate} />
         <IconButton
-          key="deleteTickMap"
-          variant="destructive"
-          name="trash-alt"
-          tooltip="Delete Tick Map"
+          key='deleteTickMap'
+          variant='destructive'
+          name='trash-alt'
+          tooltip='Delete Tick Map'
           onClick={removeItem}
         />
       </Card.Actions>

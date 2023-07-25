@@ -160,7 +160,7 @@ export const TickMapEditor: React.FC<Props> = ({ item, context, onChange }) => {
 
   return (
     <>
-      <Button fill="solid" variant="primary" icon="plus" onClick={addItem}>
+      <Button fill='solid' variant='primary' icon='plus' onClick={addItem}>
         Add Tick Map
       </Button>
       {tracker &&

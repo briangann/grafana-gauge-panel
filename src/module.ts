@@ -504,7 +504,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         category: ['Thresholds'],
         description: 'Displayed value color changes to state of threshold',
         showIf: (c) => c.showThresholdsOnGauge === true,
-      })
+      });
 
   })
   .setSuggestionsSupplier(new DataSuggestionsSupplier());

@@ -178,10 +178,10 @@ export const MarkerOptions: SelectableValue[] = [
 ];
 
 export interface MarkerType {
-  id: number,
-  name: string,
-  path: string,
-  viewBox: string,
+  id: number;
+  name: string;
+  path: string;
+  viewBox: string;
 }
 export const Markers: MarkerType[] = [
   { id: 0, name: 'arrow', path: 'M 0,0 m -5,-5 L 5,0 L -5,5 Z', viewBox: '-5 -5 10 10' },

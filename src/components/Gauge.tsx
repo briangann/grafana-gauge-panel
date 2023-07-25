@@ -36,7 +36,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const [tickAnglesMaj, setTickAnglesMaj] = useState<number[]>([]);
   const [tickAnglesMin, setTickAnglesMin] = useState<number[]>([]);
   const [margin, setMargin] = useState({ top: 0, right: 0, bottom: 0, left: 0 });
-  const [tickMajorLabels, setTickMajorLabels] = useState<string[]>([])
+  const [tickMajorLabels, setTickMajorLabels] = useState<string[]>([]);
   const [labelFontSize] = useState(18);
   // Calculate required values
   // autosize if radius is set to zero
@@ -86,7 +86,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         counter++;
       }
       return ({ genTickMajorLabels: tickLabelText });
-    }
+    };
 
     const generateTickAngles = (tickSpacingMajDeg: number, tickSpacingMinDeg: number) => {
       const tickAnglesMajX = [];
@@ -193,7 +193,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         <circle cx={originX} cy={originY} r={innerEdgeRadius} fill={options.innerColor} stroke='none'></circle>
         <circle cx={originX} cy={originY} r={pivotRadius} fill={options.pivotColor} stroke='none'></circle>
       </g>
-    )
+    );
   };
 
   const createNeedleMarkers = () => {
@@ -213,11 +213,11 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
               orient={'auto'} >
               <path d={item.path} fill={options.needleColor} />
             </marker>
-          )
+          );
         })}
       </defs>
     );
-  }
+  };
 
   const createMajorTickLabels = () => {
     let maxLabelLength = 0;
@@ -245,8 +245,9 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           )
         })}
       </g>
-    )
-  }
+    );
+  };
+
   const createNeedle = () => {
     const pathNeedle = needleCalc(options.zeroNeedleAngle);
 
@@ -285,7 +286,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       path = lineSVG;
     }
     return path;
-  }
+  };
 
 
   const createTicks = () => {
@@ -294,7 +295,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     const pathTicksMinor = tickCalcMin(tickAnglesMin);
     console.log(`minor tick count ${pathTicksMinor.length}`);
     return (
-      <g id="ticks">
+      <g id='ticks'>
         <g id='minorTickMarks'>
           {pathTicksMinor.length > 0 && pathTicksMinor.map((d: string) => {
             return (
@@ -314,8 +315,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           })}
         </g>
       </g>
-    )
-  }
+    );
+  };
 
   // Define functions to calcuate the positions of the labels for the tick marks
   const labelXCalc = (position: number, maxLabelLength: number, labelText: string) => {
@@ -325,14 +326,14 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     const labelW = labelFontSize / (labelText.length + maxLabelLength / 2);
     const x1 = originX + (labelStart - labelW) * Math.cos(tickAngleRad);
     return x1;
-  }
+  };
 
   const labelYCalc = (position: number) => {
     const tickAngle = position + 90;
     const tickAngleRad = dToR(tickAngle);
     const y1 = originY + labelStart * Math.sin(tickAngleRad) + labelFontSize / 2;
     return y1;
-  }
+  };
 
   const tickCalcMin = (degrees: number[]) => {
     const paths: string[] = [];
@@ -353,7 +354,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       }
     }
     return paths;
-  }
+  };
 
   const tickCalcMaj = (degrees: number[]) => {
     const paths: string[] = [];
@@ -376,7 +377,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       }
     }
     return paths;
-  }
+  };
 
   const valueToDegrees = (value: any) => {
     // degree range is from 60 to 300 (240)  maxTickAngle - zeroTickAngle
@@ -384,17 +385,17 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     const range = options.maxValue - options.minValue;
     const min = options.minValue;
     return (value / range) * degreeRange - ((min / range) * degreeRange + options.zeroTickAngle);
-  }
+  };
 
   const valueToRadians = (value: any) => {
     return (valueToDegrees(value) * Math.PI) / 180;
-  }
+  };
 
   const dToR = (angleDeg: any) => {
     // Turns an angle in degrees to radians
     const angleRad = angleDeg * (Math.PI / 180);
     return angleRad;
-  }
+  };
 
   const createValueLabel = (position: number, value: string) => {
     return (
@@ -412,10 +413,10 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         </text>
       </g>
     )
-  }
+  };
 
   const createThresholdBands = () => {
-    const boundaries = "60,80".split(',');
+    const boundaries = '60,80'.split(',');
     return (
       <>
         { options.showThresholdsOnGauge && (
@@ -445,7 +446,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       }
     }
     */
-  }
+  };
 
   const drawBand = (start: number, end: number, color: string) => {
     if (0 >= end - start) {
@@ -470,7 +471,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         }
       </>
     )
-  }
+  };
 
   return (
     <div className={divStyles}>
