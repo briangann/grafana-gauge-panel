@@ -67,13 +67,13 @@ export const TickMapEditor: React.FC<Props> = ({ item, context, onChange }) => {
     const aTickMap: TickMapItemType = {
       label: `${original.label} Copy`,
       enabled: original.enabled,
-      order: order,
+      order,
       value: original.value,
       text: original.text
     };
     const aTracker: TickMapItemTracker = {
       tickMap: aTickMap,
-      order: order,
+      order,
       ID: uuidv4(),
     };
     setTracker([...tracker, aTracker]);
