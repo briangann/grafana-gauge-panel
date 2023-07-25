@@ -1,4 +1,5 @@
 import { SelectableValue } from '@grafana/data';
+import { TickMapItemType } from './TickMaps/types';
 
 export interface GaugeOptions {
   // General
@@ -58,6 +59,18 @@ export interface GaugeOptions {
   panelWidth: any;
   panelId: number;
 
+  // tickmaps
+  tickMapConfig: {
+    tickMaps: TickMapItemType[];
+  };
+
+  // thresholds
+  showThresholdsOnGauge: boolean;
+  showThresholdColorOnValue: boolean;
+  showThresholdColorOnBackground: boolean;
+  showThresholdLowerRange: boolean;
+  showThresholdMiddleRange: boolean;
+  showThresholdUpperRange: boolean;
 }
 
 // tslint:disable-next-line

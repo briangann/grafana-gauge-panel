@@ -3,12 +3,13 @@ import { GaugePanel } from './components/GaugePanel';
 import { FontFamilyOptions, FontSizes, GaugeOptions, MarkerEndShapes, MarkerOptions, MarkerStartShapes, OperatorOptions } from 'components/types';
 import { DataSuggestionsSupplier } from './components/suggestions';
 import { PanelMigrationHandler } from './migrations';
+import { TickMapEditor } from 'components/TickMaps/TickMapEditor';
+import { TickMapItemType } from 'components/TickMaps/types';
 
 export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
   .setMigrationHandler(PanelMigrationHandler)
   .useFieldConfig({
     disableStandardOptions: [
-      FieldConfigProperty.Thresholds,
       FieldConfigProperty.Color,
       FieldConfigProperty.Decimals,
       FieldConfigProperty.DisplayName,
@@ -444,5 +445,66 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         },
         category: ['Gauge Readings'],
       })
+      // tick maps (value to text mapping)
+      .addCustomEditor({
+        name: 'Tick Maps',
+        id: 'tickMapConfig',
+        path: 'tickMapConfig',
+        description: 'Tick Maps',
+        editor: TickMapEditor,
+        defaultValue: {
+          tickMaps: [] as TickMapItemType[],
+        },
+        category: ['Tick Maps'],
+      })
+      // threshold options
+      .addBooleanSwitch({
+        name: 'Show Threshold Bands On Gauge Face',
+        path: 'showThresholdsOnGauge',
+        defaultValue: true,
+        category: ['Thresholds'],
+        description: 'Thresholds are displayed as bands on face of gauge',
+      })
+      .addBooleanSwitch({
+        name: 'Show Lower Range',
+        path: 'showThresholdLowerRange',
+        defaultValue: true,
+        category: ['Thresholds'],
+        description: 'Lower threshold is displayed on face of gauge',
+        showIf: (c) => c.showThresholdsOnGauge === true,
+      })
+      .addBooleanSwitch({
+        name: 'Show Middle Range',
+        path: 'showThresholdMiddleRange',
+        defaultValue: true,
+        category: ['Thresholds'],
+        description: 'Middle threshold is displayed on face of gauge',
+        showIf: (c) => c.showThresholdsOnGauge === true,
+      })
+      .addBooleanSwitch({
+        name: 'Show Upper Range',
+        path: 'showThresholdUpperRange',
+        defaultValue: true,
+        category: ['Thresholds'],
+        description: 'Upper threshold is displayed on face of gauge',
+        showIf: (c) => c.showThresholdsOnGauge === true,
+      })
+      .addBooleanSwitch({
+        name: 'Show Threshold State on Background',
+        path: 'showThresholdColorOnBackground',
+        defaultValue: false,
+        category: ['Thresholds'],
+        description: 'Gauge face color changes to state of threshold',
+        showIf: (c) => c.showThresholdsOnGauge === true,
+      })
+      .addBooleanSwitch({
+        name: 'Show Threshold Color on Value',
+        path: 'showThresholdColorOnValue',
+        defaultValue: true,
+        category: ['Thresholds'],
+        description: 'Displayed value color changes to state of threshold',
+        showIf: (c) => c.showThresholdsOnGauge === true,
+      })
+
   })
   .setSuggestionsSupplier(new DataSuggestionsSupplier());

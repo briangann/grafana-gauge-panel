@@ -5,7 +5,7 @@ import { css } from '@emotion/css';
 import { GrafanaTheme2 } from '@grafana/data';
 
 import { GaugeOptions, MarkerEndShapes, MarkerStartShapes, MarkerType, Markers } from './types';
-import { scaleLinear, line } from 'd3';
+import { scaleLinear, line, arc } from 'd3';
 
 export const Gauge: React.FC<GaugeOptions> = (options) => {
   const divStyles = useStyles2(getWrapperStyles);
@@ -75,19 +75,18 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         }
         // check if there are tickMaps that apply
         const tickTextFloat = parseFloat(tickText);
-        // TODO: mappings to be implemented
-        //for (let i = 0; i < this.opt.tickMaps.length; i++) {
-        //  const aTickMap = this.opt.tickMaps[i];
-        //  if (parseFloat(aTickMap.value) === tickTextFloat) {
-        //    tickText = aTickMap.text;
-        //    break;
-        //  }
-        //}
+        for (let i = 0; i < options.tickMapConfig.tickMaps.length; i++) {
+          const aTickMap = options.tickMapConfig.tickMaps[i];
+          if (parseFloat(aTickMap.value) === tickTextFloat) {
+            tickText = aTickMap.text;
+            break;
+          }
+        }
         tickLabelText.push(tickText);
         counter++;
+      }
+      return ({ genTickMajorLabels: tickLabelText });
     }
-      return ({genTickMajorLabels: tickLabelText});
-  }
 
     const generateTickAngles = (tickSpacingMajDeg: number, tickSpacingMinDeg: number) => {
       const tickAnglesMajX = [];
@@ -200,7 +199,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const createNeedleMarkers = () => {
     return (
       <defs>
-        { Markers.map((item: MarkerType) => {
+        {Markers.map((item: MarkerType) => {
           return (
             <marker
               key={item.name}
@@ -232,17 +231,17 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         {tickAnglesMaj.length > 0 && tickAnglesMaj.map((item: number, index: number) => {
           const labelText = tickMajorLabels[index];
           return (
-              <text
-                key={`mtl_${index}`}
+            <text
+              key={`mtl_${index}`}
               x={labelXCalc(item, maxLabelLength, labelText) || 0}
-                y={labelYCalc(item) || 0}
-                fontSize={labelFontSize || 8}
-                textAnchor='middle'
-                fill={options.tickLabelColor || '#000000'}
-                fontWeight={'bold'}
-                fontFamily={options.tickFont || 'Inter'}>
+              y={labelYCalc(item) || 0}
+              fontSize={labelFontSize || 8}
+              textAnchor='middle'
+              fill={options.tickLabelColor || '#000000'}
+              fontWeight={'bold'}
+              fontFamily={options.tickFont || 'Inter'}>
               {labelText}
-              </text>
+            </text>
           )
         })}
       </g>
@@ -379,7 +378,17 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     return paths;
   }
 
+  const valueToDegrees = (value: any) => {
+    // degree range is from 60 to 300 (240)  maxTickAngle - zeroTickAngle
+    const degreeRange = options.maxTickAngle - options.zeroTickAngle;
+    const range = options.maxValue - options.minValue;
+    const min = options.minValue;
+    return (value / range) * degreeRange - ((min / range) * degreeRange + options.zeroTickAngle);
+  }
 
+  const valueToRadians = (value: any) => {
+    return (valueToDegrees(value) * Math.PI) / 180;
+  }
 
   const dToR = (angleDeg: any) => {
     // Turns an angle in degrees to radians
@@ -387,6 +396,81 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     return angleRad;
   }
 
+  const createValueLabel = (position: number, value: string) => {
+    return (
+      <g id='valueLabels'>
+        <text
+          x={labelXCalc(position, 0, value)}
+          y={labelYCalc(position) + options.valueYOffset}
+          fontSize={options.valueFontSize}
+          textAnchor='middle'
+          fill={options.unitsLabelColor}
+          fontWeight={'bold'}
+          fontFamily={options.valueFont}
+        >
+          {value}
+        </text>
+      </g>
+    )
+  }
+
+  const createThresholdBands = () => {
+    const boundaries = "60,80".split(',');
+    return (
+      <>
+        { options.showThresholdsOnGauge && (
+          <>
+            {options.showThresholdLowerRange &&
+              drawBand(options.minValue, parseFloat(boundaries[0]), 'green')}
+            {options.showThresholdMiddleRange &&
+              drawBand(parseFloat(boundaries[0]), parseFloat(boundaries[1]), 'yellow')}
+            {options.showThresholdUpperRange &&
+              drawBand(parseFloat(boundaries[1]), options.maxValue, 'red')}
+          </>
+        )}
+      </>
+    )
+    /*
+    if (options.showThresholdOnGauge && options.thresholds.length > 0) {
+      // split the threshold values
+      const boundaries = options.thresholds.split(',');
+      if (options.showLowerThresholdRange) {
+        drawBand(options.minVal, parseFloat(boundaries[0]), options.thresholdColors[0]);
+      }
+      if (options.showMiddleThresholdRange) {
+        drawBand(parseFloat(boundaries[0]), parseFloat(boundaries[1]), options.thresholdColors[1]);
+      }
+      if (options.showUpperThresholdRange) {
+        drawBand(parseFloat(boundaries[1]), options.maxVal, options.thresholdColors[2]);
+      }
+    }
+    */
+  }
+
+  const drawBand = (start: number, end: number, color: string) => {
+    if (0 >= end - start) {
+      return;
+    }
+    const anArc = arc();
+    let xc = anArc({
+      innerRadius: 0.7 * options.gaugeRadius,
+      outerRadius: 0.85 * options.gaugeRadius,
+      startAngle: valueToRadians(start),
+      endAngle: valueToRadians(end),
+    });
+
+    return (
+      <>
+        {xc &&
+          <path
+            fill={color}
+            d={xc || ''}
+            transform={`translate(${originX},${originY}) rotate(${options.maxTickAngle})`}
+          />
+        }
+      </>
+    )
+  }
 
   return (
     <div className={divStyles}>
@@ -400,6 +484,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       >
         <g>
           {createCircleGroup()}
+          {createThresholdBands()}
           {createTicks()}
           {createMajorTickLabels()}
           {createNeedleMarkers()}
@@ -424,3 +509,11 @@ const getSVGStyles = (theme: GrafanaTheme2) => css`
   justify-content: center;
   fill: transparent;
 `;
+
+const getColorForD3 = (theme: GrafanaTheme2, color: string) => {
+  let useColor = color;
+  if (typeof theme.visualization !== 'undefined') {
+    useColor = theme.visualization.getColorByName(color);
+  }
+  return useColor;
+};

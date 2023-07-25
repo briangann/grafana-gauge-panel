@@ -83,7 +83,15 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
           tickMinorColor={options.tickMinorColor}
           ticknessGaugeBasis={200}
           tickWidthMajor={3}
-          tickWidthMinor={1}        />
+          tickWidthMinor={1}
+          tickMapConfig={options.tickMapConfig}
+          showThresholdsOnGauge={options.showThresholdsOnGauge}
+          showThresholdColorOnValue={options.showThresholdColorOnValue}
+          showThresholdColorOnBackground={options.showThresholdColorOnBackground}
+          showThresholdLowerRange={options.showThresholdLowerRange}
+          showThresholdMiddleRange={options.showThresholdMiddleRange}
+          showThresholdUpperRange={options.showThresholdUpperRange}
+        />
       </div>
     </div>
   );
