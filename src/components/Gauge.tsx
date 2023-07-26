@@ -54,12 +54,12 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
 
   useEffect(() => {
 
-    const generateTickMajorLabels = (tickSpacingMajDeg: number) => {
+    const generateTickMajorLabels = (majorDegree: number) => {
       //
       // Calculate major tick mark label text
       let counter = 0;
       const tickLabelText: string[] = [];
-      for (let k = options.zeroTickAngle; k <= options.maxTickAngle; k = k + tickSpacingMajDeg) {
+      for (let k = options.zeroTickAngle; k <= options.maxTickAngle; k = k + majorDegree) {
         const tickValue = options.minValue + options.tickSpacingMajor * counter;
         const parts = options.tickSpacingMajor.toString().split('.');
         let tickText = tickValue.toString();
@@ -80,33 +80,33 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       return ({ genTickMajorLabels: tickLabelText });
     };
 
-    const generateTickAngles = (tickSpacingMajDeg: number, tickSpacingMinDeg: number) => {
-      const tickAnglesMajX = [];
+    const generateTickAngles = (majorDegree: number, minorDegree: number) => {
+      const majorAngles = [];
       let counter = 0;
-      for (let i = options.zeroTickAngle; i <= options.maxTickAngle; i = i + tickSpacingMajDeg) {
-        const tickAngle = options.zeroTickAngle + tickSpacingMajDeg * counter;
+      for (let i = options.zeroTickAngle; i <= options.maxTickAngle; i = i + majorDegree) {
+        const tickAngle = options.zeroTickAngle + majorDegree * counter;
         // check if this is the "end" of a full circle, and skip the last tick marker
         if (tickAngle - options.zeroTickAngle < 360) {
-          tickAnglesMajX.push(options.zeroTickAngle + tickSpacingMajDeg * counter);
+          majorAngles.push(options.zeroTickAngle + majorDegree * counter);
         }
         counter++;
       }
-      const tickAnglesMinX = [];
+      const minorAngles = [];
       counter = 0;
-      for (let j = options.zeroTickAngle; j <= options.maxTickAngle; j = j + tickSpacingMinDeg) {
+      for (let j = options.zeroTickAngle; j <= options.maxTickAngle; j = j + minorDegree) {
         // Check for an existing major tick angle
         let exists = 0;
-        tickAnglesMajX.forEach((d: any) => {
-          if (options.zeroTickAngle + tickSpacingMinDeg * counter === d) {
+        majorAngles.forEach((d: any) => {
+          if (options.zeroTickAngle + minorDegree * counter === d) {
             exists = 1;
           }
         });
         if (exists === 0) {
-          tickAnglesMinX.push(options.zeroTickAngle + tickSpacingMinDeg * counter);
+          minorAngles.push(options.zeroTickAngle + minorDegree * counter);
         }
         counter++;
       }
-      return ({ tickMaj: tickAnglesMajX, tickMin: tickAnglesMinX });
+      return ({ tickMaj: majorAngles, tickMin: minorAngles });
     };
 
 

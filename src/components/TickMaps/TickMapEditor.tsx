@@ -164,20 +164,20 @@ export const TickMapEditor: React.FC<Props> = ({ item, context, onChange }) => {
         Add Tick Map
       </Button>
       {tracker &&
-        tracker.map((tracker: TickMapItemTracker, index: number) => {
+        tracker.map((trackerItem: TickMapItemTracker, index: number) => {
           return (
             <Collapse
-              key={`tickmap-collapse-item-index-${tracker.ID}`}
-              label={tracker.tickMap.label}
+              key={`tickmap-collapse-item-index-${trackerItem.ID}`}
+              label={trackerItem.tickMap.label}
               isOpen={isOpen[index]}
               onToggle={() => toggleOpener(index)}
               collapsible
             >
               <TickMapItem
-                key={`tickmap-item-index-${tracker.ID}`}
-                ID={tracker.ID}
-                tickMap={tracker.tickMap}
-                enabled={tracker.tickMap.enabled}
+                key={`tickmap-item-index-${trackerItem.ID}`}
+                ID={trackerItem.ID}
+                tickMap={trackerItem.tickMap}
+                enabled={trackerItem.tickMap.enabled}
                 setter={updateTickMap}
                 remover={removeTickMap}
                 moveDown={moveDown}
