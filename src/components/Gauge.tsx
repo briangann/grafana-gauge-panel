@@ -42,15 +42,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   // autosize if radius is set to zero
   if (options.gaugeRadius === 0) {
     let tmpGaugeRadius = options.panelHeight / 2;
-    let xspace = options.panelHeight;
     if (options.panelWidth < options.panelHeight) {
       tmpGaugeRadius = options.panelWidth / 2;
-      xspace = options.panelWidth;
-      // TODO: check span/title
-      //if (typeof this.panel.span !== 'undefined' && this.panel.title !== '') {
-      //  // using the width requires more margin in pre-v5
-      //  tmpGaugeRadius -= 5;
-      //}
     }
     if (gaugeRadiusCalc !== tmpGaugeRadius) {
       console.log(`calculated radius ${tmpGaugeRadius}`);
