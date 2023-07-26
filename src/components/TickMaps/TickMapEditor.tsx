@@ -144,13 +144,13 @@ export const TickMapEditor: React.FC<Props> = ({ item, context, onChange }) => {
     const aTickMap: TickMapItemType = {
       label: `TickMap-${order}`,
       enabled: true,
-      order: order,
+      order,
       value: '',
       text: ''
     };
     const aTracker: TickMapItemTracker = {
       tickMap: aTickMap,
-      order: order,
+      order,
       ID: uuidv4(),
     };
     setTracker([...tracker, aTracker]);
