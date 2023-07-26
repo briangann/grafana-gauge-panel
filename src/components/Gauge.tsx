@@ -68,8 +68,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         }
         // check if there are tickMaps that apply
         const tickTextFloat = parseFloat(tickText);
-        for (let i = 0; i < options.tickMapConfig.tickMaps.length; i++) {
-          const aTickMap = options.tickMapConfig.tickMaps[i];
+        for (const aTickMap of options.tickMapConfig.tickMaps){
           if (parseFloat(aTickMap.value) === tickTextFloat) {
             tickText = aTickMap.text;
             break;
@@ -139,8 +138,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     setInnerEdgeRadius(gaugeRadiusCalc - options.padding - options.edgeWidth);
     setOuterEdgeRadius(gaugeRadiusCalc - options.padding);
     setPivotRadius(options.pivotRadius * gaugeRadiusCalc);
-    //setOriginX(options.gaugeRadius);
-    //setOriginY(options.gaugeRadius);
+    // setOriginX(options.gaugeRadius);
+    // setOriginY(options.gaugeRadius);
 
     if (options.tickSpacingMajor === undefined) {
       options.tickSpacingMajor = 10;
@@ -446,7 +445,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       return;
     }
     const anArc = arc();
-    let xc = anArc({
+    const xc = anArc({
       innerRadius: 0.7 * options.gaugeRadius,
       outerRadius: 0.85 * options.gaugeRadius,
       startAngle: valueToRadians(start),
