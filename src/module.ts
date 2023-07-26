@@ -138,6 +138,18 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         category: ['Needle Options'],
         showIf: (c) => c.animateNeedleValueTransition === true,
       })
+      .addNumberInput({
+        name: 'Needle Width',
+        path: 'needleWidth',
+        description: 'Width of Needle, default is 5',
+        defaultValue: 5,
+        settings: {
+          placeHolder: '5',
+          min: 1,
+          integer: false,
+        },
+        category: ['Needle Options'],
+      })
       // markerEndEnabled
       .addBooleanSwitch({
         name: 'Show End Marker',

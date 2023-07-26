@@ -5,6 +5,35 @@ import { satisfies, coerce } from 'semver';
 import { GaugeOptions } from './components/types';
 
 interface AngularOptions {
+  // limits
+  minValue: number;
+  maxValue: number;
+  // tick spacing
+  tickSpaceMinVal: number;
+  tickSpaceMajVal: number;
+  // units
+  gaugeUnits: string;
+  // radius
+  gaugeRadius: number;
+  pivotRadius: number;
+  // padding
+  padding: number;
+  // edgeWidth
+  edgeWidth: number;
+  // tickEdgeGap
+  tickEdgeGap: number;
+  // tickLengths
+  tickLengthMaj: number;
+  tickLengthMin: number;
+  // needleTickGap
+  needleTickGap: number;
+  // needleLengthNeg
+  needleLengthNeg: number;
+  // ticknessGaugeBasis (scaling)
+  ticknessGaugeBasis: number;
+  // needleWidth
+  needleWidth: number;
+  //
   decimals: number;
   format: string;
   operatorName: string;
@@ -51,8 +80,10 @@ export const migrateDefaults = (angular: AngularOptions) => {
     markerEndShape: '',
     markerStartEnabled: true,
     markerStartShape: '',
+    // limits
     minValue: 0,
-    maxValue: 0,
+    maxValue: 100,
+    //
     outerEdgeColor: '',
     innerColor: '',
     pivotColor: '',
@@ -71,12 +102,14 @@ export const migrateDefaults = (angular: AngularOptions) => {
     ticknessGaugeBasis: 0,
     tickWidthMajor: 0,
     tickWidthMinor: 0,
+    needleWidth: 2,
     needleTickGap: 0,
     needleLengthNeg: 0,
     zeroTickAngle: 0,
     maxTickAngle: 0,
     zeroNeedleAngle: 0,
     maxNeedleAngle: 0,
+    // tick spacing
     tickSpacingMajor: 0,
     tickSpacingMinor: 0,
     tickMapConfig: {
@@ -89,6 +122,68 @@ export const migrateDefaults = (angular: AngularOptions) => {
     showThresholdMiddleRange: true,
     showThresholdUpperRange: true
   };
+  // migrate limits
+  if (angular.maxValue) {
+    options.maxValue = angular.maxValue;
+  }
+  if (angular.minValue) {
+    options.minValue = angular.minValue;
+  }
+  // migrate tick spacing
+  if (angular.tickSpaceMinVal) {
+    options.tickSpacingMinor = angular.tickSpaceMinVal;
+  }
+  if (angular.tickSpaceMajVal) {
+    options.tickSpacingMajor = angular.tickSpaceMajVal;
+  }
+  // units
+  // TODO: this is also called .format, and may need a type conversion
+  if (angular.gaugeUnits) {
+    options.unitFormat = angular.gaugeUnits;
+  }
+  // radius settings
+  if (angular.gaugeRadius) {
+    options.gaugeRadius = angular.gaugeRadius;
+  }
+  if (angular.pivotRadius) {
+    options.pivotRadius = angular.pivotRadius;
+  }
+  // padding
+  if (angular.padding) {
+    options.padding = angular.padding;
+  }
+  // edgeWidth
+  if (angular.edgeWidth) {
+    options.edgeWidth = angular.edgeWidth;
+  }
+  // tickEdgeGap
+  if (angular.tickEdgeGap) {
+    options.tickEdgeGap = angular.tickEdgeGap;
+  }
+  // tickLengthMaj/Min
+  if (angular.tickLengthMaj) {
+    options.tickLengthMaj = angular.tickLengthMaj;
+  }
+  if (angular.tickLengthMin) {
+    options.tickLengthMin = angular.tickLengthMin;
+  }
+  // needleTickGap
+  if (angular.needleTickGap) {
+    options.needleTickGap = angular.needleTickGap;
+  }
+  // needleLengthNeg
+  if (angular.needleLengthNeg) {
+    options.needleLengthNeg = angular.needleLengthNeg;
+  }
+  // ticknessGaugeBasis
+  if (angular.ticknessGaugeBasis) {
+    options.ticknessGaugeBasis = angular.ticknessGaugeBasis;
+  }
+  // needleWidth
+  if (angular.needleWidth) {
+    options.needleWidth = angular.needleWidth;
+  }
+  //
   return options;
 };
 

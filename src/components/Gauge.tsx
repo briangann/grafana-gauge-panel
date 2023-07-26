@@ -20,7 +20,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const [needleLengthPos, setNeedleLengthPos] = useState(0);
   const [needlePathLength, setNeedlePathLength] = useState(0);
   const [needlePath, setNeedlePath] = useState([] as any);
-  const [needleWidth] = useState(2);
+  const [needleWidth] = useState(options.needleWidth);
   const [needlePathStart, setNeedlePathStart] = useState(0);
   const [tickStartMaj, setTickStartMaj] = useState(0);
   const [tickStartMin, setTickStartMin] = useState(0);

@@ -91,6 +91,7 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
           showThresholdLowerRange={options.showThresholdLowerRange}
           showThresholdMiddleRange={options.showThresholdMiddleRange}
           showThresholdUpperRange={options.showThresholdUpperRange}
+          needleWidth={options.needleWidth}
         />
       </div>
     </div>

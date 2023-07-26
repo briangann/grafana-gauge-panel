@@ -44,6 +44,7 @@ export interface GaugeOptions {
   ticknessGaugeBasis: number;
   tickWidthMajor: number;
   tickWidthMinor: number;
+  needleWidth: number;
   needleTickGap: number;
   needleLengthNeg: number;
   // Gauge Degrees
