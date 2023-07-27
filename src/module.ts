@@ -66,7 +66,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         defaultValue: 0,
         settings: {
           min: 0,
-          integer: true,
+          integer: false,
         },
         category: ['General'],
       })
@@ -129,9 +129,9 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         name: 'Transition Speed (MS)',
         path: 'animateNeedleValueTransitionSpeed',
         description: 'How fast to move the needle when value changes in milliseconds, default is 500',
-        defaultValue: 500,
+        defaultValue: 100,
         settings: {
-          placeHolder: '500',
+          placeHolder: '100',
           min: 50,
           integer: true,
         },
@@ -146,7 +146,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         settings: {
           placeHolder: '5',
           min: 1,
-          integer: false,
+          integer: true,
         },
         category: ['Needle Options'],
       })
@@ -154,7 +154,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addBooleanSwitch({
         name: 'Show End Marker',
         path: 'markerEndEnabled',
-        defaultValue: true,
+        defaultValue: false,
         category: ['Needle Options'],
         description: 'Display a marker at end of needle',
       })
@@ -174,7 +174,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addBooleanSwitch({
         name: 'Show Start Marker',
         path: 'markerStartEnabled',
-        defaultValue: true,
+        defaultValue: false,
         category: ['Needle Options'],
         description: 'Display a marker at beginning of needle',
       })
@@ -198,7 +198,6 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         defaultValue: 0,
         settings: {
           placeHolder: '0',
-          min: 0,
           integer: false,
         },
         category: ['Limits'],
@@ -210,7 +209,6 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         defaultValue: 100,
         settings: {
           placeHolder: '100',
-          min: 0,
           integer: false,
         },
         category: ['Limits'],
@@ -221,42 +219,42 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         name: 'Outer Edge',
         path: 'outerEdgeColor',
         category: ['Coloring'],
-        defaultValue: '#0099CC',
+        defaultValue: '#0099cc',
         description: 'Color of the outer circle',
       })
       .addColorPicker({
         name: 'Inner (Face)',
         path: 'innerColor',
         category: ['Coloring'],
-        defaultValue: '#FFF',
+        defaultValue: '#ffffff',
         description: 'Color of the gauge face',
       })
       .addColorPicker({
         name: 'Pivot',
         path: 'pivotColor',
         category: ['Coloring'],
-        defaultValue: '#999',
+        defaultValue: '#999999',
         description: 'Color of the central pivot circle',
       })
       .addColorPicker({
         name: 'Needle',
         path: 'needleColor',
         category: ['Coloring'],
-        defaultValue: '#0099CC',
+        defaultValue: '#0099cc',
         description: 'Color of the needle',
       })
       .addColorPicker({
         name: 'Units Label',
         path: 'unitsLabelColor',
         category: ['Coloring'],
-        defaultValue: '#000',
+        defaultValue: '#000000',
         description: 'The color of the units text, at the bottom of the gauge',
       })
       .addColorPicker({
         name: 'Tick Label',
         path: 'tickLabelColor',
         category: ['Coloring'],
-        defaultValue: '#000',
+        defaultValue: '#000000',
         description: 'The color of the tick labels',
       })
       .addColorPicker({
@@ -270,7 +268,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         name: 'Tick Minor',
         path: 'tickMinorColor',
         category: ['Coloring'],
-        defaultValue: '#000',
+        defaultValue: '#000000',
         description: 'Color of the minor ticks',
       })
 
@@ -279,11 +277,23 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         name: 'Radius',
         path: 'gaugeRadius',
         description: 'The radius of the gauge in pixels (0 for autoscaling)',
-        defaultValue: 120,
+        defaultValue: 0,
         settings: {
-          placeHolder: '20',
-          min: 20,
-          integer: false,
+          placeHolder: '0',
+          min: 0,
+          integer: true,
+        },
+        category: ['Radial Customization'],
+      })
+      .addNumberInput({
+        name: 'Tickness Gauge Basis',
+        path: 'ticknessGaugeBasis',
+        description: 'Scaling factor for ticks',
+        defaultValue: 200,
+        settings: {
+          placeHolder: '200',
+          min: 1,
+          integer: true,
         },
         category: ['Radial Customization'],
       })
@@ -363,9 +373,9 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         name: 'Needle Tick Gap',
         path: 'needleTickGap',
         description: 'Spacing between ticks and the outer circle, as a % of the gauge radius',
-        defaultValue: 0.05,
+        defaultValue: 0,
         settings: {
-          placeHolder: '0.05',
+          placeHolder: '0',
           min: 0,
           integer: false,
         },
@@ -473,14 +483,14 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addBooleanSwitch({
         name: 'Show Threshold Bands On Gauge Face',
         path: 'showThresholdsOnGauge',
-        defaultValue: true,
+        defaultValue: false,
         category: ['Thresholds'],
         description: 'Thresholds are displayed as bands on face of gauge',
       })
       .addBooleanSwitch({
         name: 'Show Lower Range',
         path: 'showThresholdLowerRange',
-        defaultValue: true,
+        defaultValue: false,
         category: ['Thresholds'],
         description: 'Lower threshold is displayed on face of gauge',
         showIf: (c) => c.showThresholdsOnGauge === true,
@@ -488,7 +498,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addBooleanSwitch({
         name: 'Show Middle Range',
         path: 'showThresholdMiddleRange',
-        defaultValue: true,
+        defaultValue: false,
         category: ['Thresholds'],
         description: 'Middle threshold is displayed on face of gauge',
         showIf: (c) => c.showThresholdsOnGauge === true,
@@ -496,7 +506,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addBooleanSwitch({
         name: 'Show Upper Range',
         path: 'showThresholdUpperRange',
-        defaultValue: true,
+        defaultValue: false,
         category: ['Thresholds'],
         description: 'Upper threshold is displayed on face of gauge',
         showIf: (c) => c.showThresholdsOnGauge === true,
@@ -512,7 +522,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addBooleanSwitch({
         name: 'Show Threshold Color on Value',
         path: 'showThresholdColorOnValue',
-        defaultValue: true,
+        defaultValue: false,
         category: ['Thresholds'],
         description: 'Displayed value color changes to state of threshold',
         showIf: (c) => c.showThresholdsOnGauge === true,
