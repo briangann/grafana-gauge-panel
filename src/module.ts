@@ -358,6 +358,18 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         category: ['Radial Customization'],
       })
       .addNumberInput({
+        name: 'Tick Width Major',
+        path: 'tickWidthMajor',
+        description: 'Width of the major ticks in pixels',
+        defaultValue: 5,
+        settings: {
+          placeHolder: '5',
+          min: 0,
+          integer: true,
+        },
+        category: ['Radial Customization'],
+      })
+      .addNumberInput({
         name: 'Tick Length Minor',
         path: 'tickLengthMin',
         description: 'Length of the minor ticks, as a % of the gauge radius',
@@ -366,6 +378,18 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
           placeHolder: '0.05',
           min: 0,
           integer: false,
+        },
+        category: ['Radial Customization'],
+      })
+      .addNumberInput({
+        name: 'Tick Width Minor',
+        path: 'tickWidthMinor',
+        description: 'Width of the minor ticks in pixels',
+        defaultValue: 1,
+        settings: {
+          placeHolder: '1',
+          min: 0,
+          integer: true,
         },
         category: ['Radial Customization'],
       })
