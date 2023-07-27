@@ -15,28 +15,31 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   //   return <div className={noTriggerTextStyles}>{options.globalDisplayTextTriggeredEmpty}</div>;
   // }
   const [SVGSize, setSVGSize] = useState(options.gaugeRadius * 2);
-  const [horizontalOffset, setHorizontalOffset] = useState(10);
   const [needleLengthPos, setNeedleLengthPos] = useState(0);
   const [needlePathLength, setNeedlePathLength] = useState(0);
   const [needlePath, setNeedlePath] = useState([] as any);
-  const [needleWidth] = useState(options.needleWidth);
+  const needleWidth = options.needleWidth * (options.gaugeRadius / options.ticknessGaugeBasis);
   const [needlePathStart, setNeedlePathStart] = useState(0);
   const [tickStartMaj, setTickStartMaj] = useState(0);
+  const paddingCalc = options.padding * options.gaugeRadius;
+  const edgeWidthCalc = options.edgeWidth * options.gaugeRadius;
   const [tickStartMin, setTickStartMin] = useState(0);
-  const [tickWidthMajorCalc, setTickWidthMajorCalc] = useState(5);
-  const [tickWidthMinorCalc, setTickWidthMinorCalc] = useState(1);
+  const tickWidthMajorCalc = options.tickWidthMajor * (options.gaugeRadius / options.ticknessGaugeBasis);
+  const tickWidthMinorCalc = options.tickWidthMinor * (options.gaugeRadius / options.ticknessGaugeBasis);
+  const tickLengthMajorCalc = options.gaugeRadius * options.tickLengthMaj;
+  const tickLengthMinorCalc = options.gaugeRadius * options.tickLengthMin;
   const [labelStart, setLabelStart] = useState(0);
 
-  const [innerEdgeRadius, setInnerEdgeRadius] = useState(0);
-  const [outerEdgeRadius, setOuterEdgeRadius] = useState(0);
-  const [pivotRadius, setPivotRadius] = useState(0);
-  const [originX, setOriginX] = useState(options.gaugeRadius);
-  const [originY, setOriginY] = useState(options.gaugeRadius);
+  const innerEdgeRadius = options.gaugeRadius - paddingCalc - edgeWidthCalc;
+  const outerEdgeRadius = options.gaugeRadius - paddingCalc;
+  const pivotRadius = options.pivotRadius * options.gaugeRadius;
+  const originX = options.gaugeRadius;
+  const originY = options.gaugeRadius;
   const [tickAnglesMaj, setTickAnglesMaj] = useState<number[]>([]);
   const [tickAnglesMin, setTickAnglesMin] = useState<number[]>([]);
   const [margin, setMargin] = useState({ top: 0, right: 0, bottom: 0, left: 0 });
   const [tickMajorLabels, setTickMajorLabels] = useState<string[]>([]);
-  const [labelFontSize] = useState(18);
+  const [labelFontSize] = useState(options.valueFontSize);
 
 
   useEffect(() => {
@@ -107,24 +110,21 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       .range([options.zeroTickAngle, options.maxTickAngle]);
     //
     const needleLenPos =
-      options.gaugeRadius - options.padding -
-      options.edgeWidth - options.tickEdgeGap -
-      options.tickLengthMaj - options.needleTickGap;
+      options.gaugeRadius - paddingCalc -
+      edgeWidthCalc - options.tickEdgeGap -
+      tickLengthMajorCalc - (options.needleTickGap * options.gaugeRadius);
     setNeedleLengthPos(needleLenPos);
-    const nLength = options.needleLengthNeg + needleLenPos;
+    const nLength = (options.needleLengthNeg * options.gaugeRadius) + needleLenPos;
     setNeedlePathLength(nLength);
-    const needlePathStartX = options.needleLengthNeg * -1;
+    const needlePathStartX = (options.needleLengthNeg * options.gaugeRadius) * -1;
     setNeedlePathStart(needlePathStartX);
-    const tickStartMajX = options.gaugeRadius - options.padding -
-      options.edgeWidth - options.tickEdgeGap - options.tickLengthMaj;
+    const tickStartMajX = options.gaugeRadius - paddingCalc -
+      edgeWidthCalc - options.tickEdgeGap - tickLengthMajorCalc;
     setTickStartMaj(tickStartMajX);
-    const tickStartMinX = options.gaugeRadius - options.padding -
-      options.edgeWidth - options.tickEdgeGap - options.tickLengthMin;
+    const tickStartMinX = options.gaugeRadius - paddingCalc -
+      edgeWidthCalc - options.tickEdgeGap - tickLengthMinorCalc;
     setTickStartMin(tickStartMinX);
     setLabelStart(tickStartMajX - options.tickLabelFontSize);
-    setInnerEdgeRadius(options.gaugeRadius - options.padding - options.edgeWidth);
-    setOuterEdgeRadius(options.gaugeRadius - options.padding);
-    setPivotRadius(options.pivotRadius * options.gaugeRadius);
 
     if (options.tickSpacingMajor === undefined) {
       options.tickSpacingMajor = 10;
@@ -154,14 +154,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       setTickMajorLabels(genTickMajorLabels);
     }
 
-    // size of major tick
-    const tickWidthMajorX = options.tickWidthMajor * (options.gaugeRadius / options.ticknessGaugeBasis);
-    setTickWidthMajorCalc(tickWidthMajorX);
-    // size of minor tick
-    const tickWidthMinorX = options.tickWidthMinor * (options.gaugeRadius / options.ticknessGaugeBasis);
-    setTickWidthMinorCalc(tickWidthMinorX);
-
-  }, [tickAnglesMaj, tickAnglesMin, options, tickMajorLabels]);
+  }, [paddingCalc, tickAnglesMaj, tickAnglesMin, options, tickMajorLabels, tickLengthMajorCalc, tickLengthMinorCalc, edgeWidthCalc]);
 
   const createCircleGroup = () => {
     return (
@@ -319,9 +312,9 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       const tickAngle = degree + 90;
       const tickAngleRad = dToR(tickAngle);
       const y1 = originY + tickStartMin * Math.sin(tickAngleRad);
-      const y2 = originY + (tickStartMin + options.tickLengthMin) * Math.sin(tickAngleRad);
+      const y2 = originY + (tickStartMin + tickLengthMinorCalc) * Math.sin(tickAngleRad);
       const x1 = originX + tickStartMin * Math.cos(tickAngleRad);
-      const x2 = originX + (tickStartMin + options.tickLengthMin) * Math.cos(tickAngleRad);
+      const x2 = originX + (tickStartMin + tickLengthMinorCalc) * Math.cos(tickAngleRad);
       const lineSVG = line()([
         [x1, y1],
         [x2, y2],
@@ -341,9 +334,9 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       console.log(`tick angle major = ${tickAngle} for degree ${degree}`);
       const tickAngleRad = dToR(tickAngle);
       const y1 = originY + tickStartMaj * Math.sin(tickAngleRad);
-      const y2 = originY + (tickStartMaj + options.tickLengthMaj) * Math.sin(tickAngleRad);
+      const y2 = originY + (tickStartMaj + tickLengthMajorCalc) * Math.sin(tickAngleRad);
       const x1 = originX + tickStartMaj * Math.cos(tickAngleRad);
-      const x2 = originX + (tickStartMaj + options.tickLengthMaj) * Math.cos(tickAngleRad);
+      const x2 = originX + (tickStartMaj + tickLengthMajorCalc) * Math.cos(tickAngleRad);
       // Use a D3.JS path generator
       const lineSVG = line()([
         [x1, y1],
