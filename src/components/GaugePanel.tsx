@@ -27,6 +27,14 @@ const getComponentStyles = (theme: GrafanaTheme2) => {
 
 export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, replaceVariables, fieldConfig }) => {
   const styles = useStyles2(getComponentStyles);
+  let gaugeRadiusCalc = options.gaugeRadius;
+  // autosize if radius is set to zero
+  if (options.gaugeRadius === 0) {
+    gaugeRadiusCalc = height / 2;
+    if (width < height) {
+      gaugeRadiusCalc = width / 2;
+    }
+  }
   return (
     <div
       className={cx(
@@ -58,7 +66,7 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
           markerStartShape={options.markerStartShape}
           minValue={options.minValue}
           maxValue={options.maxValue}
-          gaugeRadius={options.gaugeRadius}
+          gaugeRadius={gaugeRadiusCalc}
           pivotRadius={options.pivotRadius}
           padding={options.padding}
           edgeWidth={options.edgeWidth}

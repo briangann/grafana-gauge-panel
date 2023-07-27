@@ -14,7 +14,6 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   // if (options.processedData && options.processedData.length === 0) {
   //   return <div className={noTriggerTextStyles}>{options.globalDisplayTextTriggeredEmpty}</div>;
   // }
-  const [gaugeRadiusCalc, setGaugeRadiusCalc] = useState(options.gaugeRadius);
   const [SVGSize, setSVGSize] = useState(options.gaugeRadius * 2);
   const [horizontalOffset, setHorizontalOffset] = useState(10);
   const [needleLengthPos, setNeedleLengthPos] = useState(0);
@@ -31,25 +30,13 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const [innerEdgeRadius, setInnerEdgeRadius] = useState(0);
   const [outerEdgeRadius, setOuterEdgeRadius] = useState(0);
   const [pivotRadius, setPivotRadius] = useState(0);
-  const [originX, setOriginX] = useState(gaugeRadiusCalc);
-  const [originY, setOriginY] = useState(gaugeRadiusCalc);
+  const [originX, setOriginX] = useState(options.gaugeRadius);
+  const [originY, setOriginY] = useState(options.gaugeRadius);
   const [tickAnglesMaj, setTickAnglesMaj] = useState<number[]>([]);
   const [tickAnglesMin, setTickAnglesMin] = useState<number[]>([]);
   const [margin, setMargin] = useState({ top: 0, right: 0, bottom: 0, left: 0 });
   const [tickMajorLabels, setTickMajorLabels] = useState<string[]>([]);
   const [labelFontSize] = useState(18);
-  // Calculate required values
-  // autosize if radius is set to zero
-  if (options.gaugeRadius === 0) {
-    let tmpGaugeRadius = options.panelHeight / 2;
-    if (options.panelWidth < options.panelHeight) {
-      tmpGaugeRadius = options.panelWidth / 2;
-    }
-    if (gaugeRadiusCalc !== tmpGaugeRadius) {
-      console.log(`calculated radius ${tmpGaugeRadius}`);
-      setGaugeRadiusCalc(tmpGaugeRadius);
-    }
-  }
 
 
   useEffect(() => {
@@ -110,7 +97,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     };
 
 
-    const svgSize = gaugeRadiusCalc * 2;
+    const svgSize = options.gaugeRadius * 2;
     console.log(`calculated SVGSize ${svgSize}`);
     setSVGSize(svgSize);
 
@@ -120,7 +107,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       .range([options.zeroTickAngle, options.maxTickAngle]);
     //
     const needleLenPos =
-      gaugeRadiusCalc - options.padding -
+      options.gaugeRadius - options.padding -
       options.edgeWidth - options.tickEdgeGap -
       options.tickLengthMaj - options.needleTickGap;
     setNeedleLengthPos(needleLenPos);
@@ -128,18 +115,16 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     setNeedlePathLength(nLength);
     const needlePathStartX = options.needleLengthNeg * -1;
     setNeedlePathStart(needlePathStartX);
-    const tickStartMajX = gaugeRadiusCalc - options.padding -
+    const tickStartMajX = options.gaugeRadius - options.padding -
       options.edgeWidth - options.tickEdgeGap - options.tickLengthMaj;
     setTickStartMaj(tickStartMajX);
-    const tickStartMinX = gaugeRadiusCalc - options.padding -
+    const tickStartMinX = options.gaugeRadius - options.padding -
       options.edgeWidth - options.tickEdgeGap - options.tickLengthMin;
     setTickStartMin(tickStartMinX);
     setLabelStart(tickStartMajX - options.tickLabelFontSize);
-    setInnerEdgeRadius(gaugeRadiusCalc - options.padding - options.edgeWidth);
-    setOuterEdgeRadius(gaugeRadiusCalc - options.padding);
-    setPivotRadius(options.pivotRadius * gaugeRadiusCalc);
-    // setOriginX(options.gaugeRadius);
-    // setOriginY(options.gaugeRadius);
+    setInnerEdgeRadius(options.gaugeRadius - options.padding - options.edgeWidth);
+    setOuterEdgeRadius(options.gaugeRadius - options.padding);
+    setPivotRadius(options.pivotRadius * options.gaugeRadius);
 
     if (options.tickSpacingMajor === undefined) {
       options.tickSpacingMajor = 10;
@@ -170,13 +155,13 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     }
 
     // size of major tick
-    const tickWidthMajorX = options.tickWidthMajor * (gaugeRadiusCalc / options.ticknessGaugeBasis);
+    const tickWidthMajorX = options.tickWidthMajor * (options.gaugeRadius / options.ticknessGaugeBasis);
     setTickWidthMajorCalc(tickWidthMajorX);
     // size of minor tick
-    const tickWidthMinorX = options.tickWidthMinor * (gaugeRadiusCalc / options.ticknessGaugeBasis);
+    const tickWidthMinorX = options.tickWidthMinor * (options.gaugeRadius / options.ticknessGaugeBasis);
     setTickWidthMinorCalc(tickWidthMinorX);
 
-  }, [gaugeRadiusCalc, tickAnglesMaj, tickAnglesMin, options, tickMajorLabels]);
+  }, [tickAnglesMaj, tickAnglesMin, options, tickMajorLabels]);
 
   const createCircleGroup = () => {
     return (
