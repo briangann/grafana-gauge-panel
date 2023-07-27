@@ -25,6 +25,7 @@ export interface GaugeOptions {
   minValue: number;
   maxValue: number;
   // coloring
+  thresholdColors: string[];
   outerEdgeColor: string;
   innerColor: string;
   pivotColor: string;
@@ -56,9 +57,9 @@ export interface GaugeOptions {
   tickSpacingMajor: number;
   tickSpacingMinor: number;
   // passed in by grafana
-  panelHeight: any;
-  panelWidth: any;
-  panelId: number;
+  panelHeight?: any;
+  panelWidth?: any;
+  panelId?: number;
 
   // tickmaps
   tickMapConfig: {
