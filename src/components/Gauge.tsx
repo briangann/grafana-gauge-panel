@@ -15,10 +15,9 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   //   return <div className={noTriggerTextStyles}>{options.globalDisplayTextTriggeredEmpty}</div>;
   // }
   const [SVGSize, setSVGSize] = useState(options.gaugeRadius * 2);
-  const [needleLengthPos, setNeedleLengthPos] = useState(0);
   const [needlePathLength, setNeedlePathLength] = useState(0);
-  const [needlePath, setNeedlePath] = useState([] as any);
   const needleWidth = options.needleWidth * (options.gaugeRadius / options.ticknessGaugeBasis);
+  const needleLengthNegCalc = options.gaugeRadius * options.needleLengthNeg;
   const [needlePathStart, setNeedlePathStart] = useState(0);
   const [tickStartMaj, setTickStartMaj] = useState(0);
   const paddingCalc = options.padding * options.gaugeRadius;
@@ -28,6 +27,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const tickWidthMinorCalc = options.tickWidthMinor * (options.gaugeRadius / options.ticknessGaugeBasis);
   const tickLengthMajorCalc = options.gaugeRadius * options.tickLengthMaj;
   const tickLengthMinorCalc = options.gaugeRadius * options.tickLengthMin;
+  const tickEdgeGapCalc = options.gaugeRadius * options.tickEdgeGap;
   const [labelStart, setLabelStart] = useState(0);
 
   const innerEdgeRadius = options.gaugeRadius - paddingCalc - edgeWidthCalc;
@@ -109,20 +109,18 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       .domain([options.minValue, options.maxValue])
       .range([options.zeroTickAngle, options.maxTickAngle]);
     //
-    const needleLenPos =
+    const needleLenPosCalc =
       options.gaugeRadius - paddingCalc -
-      edgeWidthCalc - options.tickEdgeGap -
+      edgeWidthCalc - tickEdgeGapCalc -
       tickLengthMajorCalc - (options.needleTickGap * options.gaugeRadius);
-    setNeedleLengthPos(needleLenPos);
-    const nLength = (options.needleLengthNeg * options.gaugeRadius) + needleLenPos;
-    setNeedlePathLength(nLength);
-    const needlePathStartX = (options.needleLengthNeg * options.gaugeRadius) * -1;
+    setNeedlePathLength(needleLengthNegCalc + needleLenPosCalc);
+    const needlePathStartX = needleLengthNegCalc * -1;
     setNeedlePathStart(needlePathStartX);
     const tickStartMajX = options.gaugeRadius - paddingCalc -
-      edgeWidthCalc - options.tickEdgeGap - tickLengthMajorCalc;
+      edgeWidthCalc - tickEdgeGapCalc - tickLengthMajorCalc;
     setTickStartMaj(tickStartMajX);
     const tickStartMinX = options.gaugeRadius - paddingCalc -
-      edgeWidthCalc - options.tickEdgeGap - tickLengthMinorCalc;
+      edgeWidthCalc - tickEdgeGapCalc - tickLengthMinorCalc;
     setTickStartMin(tickStartMinX);
     setLabelStart(tickStartMajX - options.tickLabelFontSize);
 
@@ -154,7 +152,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       setTickMajorLabels(genTickMajorLabels);
     }
 
-  }, [paddingCalc, tickAnglesMaj, tickAnglesMin, options, tickMajorLabels, tickLengthMajorCalc, tickLengthMinorCalc, edgeWidthCalc]);
+  }, [paddingCalc, tickAnglesMaj, tickAnglesMin, options, tickMajorLabels, tickLengthMajorCalc, tickLengthMinorCalc, edgeWidthCalc, tickEdgeGapCalc, needleLengthNegCalc]);
 
   const createCircleGroup = () => {
     return (
@@ -205,7 +203,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
               key={`mtl_${index}`}
               x={labelXCalc(item, maxLabelLength, labelText) || 0}
               y={labelYCalc(item) || 0}
-              fontSize={labelFontSize || 8}
+              fontSize={options.tickLabelFontSize || 12}
               textAnchor='middle'
               fill={options.tickLabelColor || '#000000'}
               fontWeight={'bold'}
