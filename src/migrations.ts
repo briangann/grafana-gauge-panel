@@ -123,7 +123,7 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
     // TODO: map the old operators to the new list
   }
   // @ts-ignore
-  delete panel.operatorName
+  delete panel.operatorName;
   // @ts-ignore
   if (panel.rangeMaps) {
     // TODO: migrate rangemaps
