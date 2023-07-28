@@ -60,7 +60,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       })
       // valueYOffset
       .addNumberInput({
-        name: 'ValueYOffset',
+        name: 'Value Y-Offset',
         path: 'valueYOffset',
         description: 'Adjust the displayed value up or down the Y-Axis, use negative value to move up, positive for down',
         defaultValue: 0,
@@ -300,7 +300,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addNumberInput({
         name: 'Pivot Radius',
         path: 'pivotRadius',
-        description: 'Size of the central \'pivot\' circle, on which the needle sits, as a % of the gauge radius',
+        description: 'Size of the central \'pivot\' circle, on which the needle sits, as a percentage of the gauge radius',
         defaultValue: 0.1,
         settings: {
           placeHolder: '0.1',
@@ -312,7 +312,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addNumberInput({
         name: 'Padding',
         path: 'padding',
-        description: 'Padding between gauge radius and the outer circle of the gauge, as a % of the gauge radius',
+        description: 'Padding between gauge radius and the outer circle of the gauge, as a percentage of the gauge radius',
         defaultValue: 0.05,
         settings: {
           placeHolder: '0.05',
@@ -324,19 +324,20 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addNumberInput({
         name: 'Edge Width',
         path: 'edgeWidth',
-        description: 'The thickness of the circle around the edge of the gauge, as a % of the gauge radius',
+        description: 'The thickness of the circle around the edge of the gauge, as a percentage of the gauge radius',
         defaultValue: 0.05,
         settings: {
           placeHolder: '0.05',
           min: 0,
-          integer: false,
+          step: 0.05,
+          integer: false
         },
         category: ['Radial Customization'],
       })
       .addNumberInput({
         name: 'Tick Edge Gap',
         path: 'tickEdgeGap',
-        description: 'Spacing between ticks and the outer circle, as a % of the gauge radius',
+        description: 'Spacing between ticks and the outer circle, as a percentage of the gauge radius',
         defaultValue: 0.05,
         settings: {
           placeHolder: '0.05',
@@ -348,7 +349,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addNumberInput({
         name: 'Tick Length Major',
         path: 'tickLengthMaj',
-        description: 'Length of the major ticks, as a % of the gauge radius',
+        description: 'Length of the major ticks, as a percentage of the gauge radius',
         defaultValue: 0.15,
         settings: {
           placeHolder: '0.15',
@@ -372,7 +373,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addNumberInput({
         name: 'Tick Length Minor',
         path: 'tickLengthMin',
-        description: 'Length of the minor ticks, as a % of the gauge radius',
+        description: 'Length of the minor ticks, as a percentage of the gauge radius',
         defaultValue: 0.05,
         settings: {
           placeHolder: '0.05',
@@ -396,7 +397,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addNumberInput({
         name: 'Needle Tick Gap',
         path: 'needleTickGap',
-        description: 'Spacing between ticks and the outer circle, as a % of the gauge radius',
+        description: 'Spacing between ticks the needle end, as a percentage of the gauge radius',
         defaultValue: 0.05,
         settings: {
           placeHolder: '0.05',
@@ -408,7 +409,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addNumberInput({
         name: 'Needle Length Stem',
         path: 'needleLengthNeg',
-        description: 'Length of the needle section extending beyond the centre of the gauge, as a % of the gauge radius',
+        description: 'Length of the needle section extending beyond the centre of the gauge, as a percentage of the gauge radius',
         defaultValue: 0,
         settings: {
           placeHolder: '0',
