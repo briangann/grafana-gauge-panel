@@ -78,7 +78,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         path: 'valueFontSize',
         description: 'Font Size of Value',
         category: ['Font Settings'],
-        defaultValue: FontSizes[8].value,
+        defaultValue: FontSizes[17].value,
         settings: {
           options: FontSizes,
         },
@@ -100,7 +100,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         path: 'tickLabelFontSize',
         description: 'Font Size of Value Displayed',
         category: ['Font Settings'],
-        defaultValue: FontSizes[4].value,
+        defaultValue: FontSizes[14].value,
         settings: {
           options: FontSizes,
         },
@@ -397,9 +397,9 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         name: 'Needle Tick Gap',
         path: 'needleTickGap',
         description: 'Spacing between ticks and the outer circle, as a % of the gauge radius',
-        defaultValue: 0,
+        defaultValue: 0.05,
         settings: {
-          placeHolder: '0',
+          placeHolder: '0.05',
           min: 0,
           integer: false,
         },
