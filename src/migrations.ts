@@ -156,7 +156,7 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
   return options;
 };
 
-export const migrateFieldConfig = (panel: PanelModel <GaugeOptions,any>, fieldConfig: FieldConfig<any>) => {
+export const migrateFieldConfig = (panel: PanelModel<GaugeOptions, any>, fieldConfig: FieldConfig<any>) => {
   // @ts-ignore
   if (panel.decimals) {
     // @ts-ignore
@@ -169,12 +169,13 @@ export const migrateFieldConfig = (panel: PanelModel <GaugeOptions,any>, fieldCo
   if (panel.gauge) {
     // @ts-ignore
     if (panel.gauge.gaugeUnits) {
-    // @ts-ignore
+      // @ts-ignore
       fieldConfig.unit = panel.gauge.gaugeUnits;
     }
   }
   return fieldConfig;
-}
+};
+
 export const migrateDefaults = (angular: AngularOptions) => {
   // set default values first
   const options: GaugeOptions = {

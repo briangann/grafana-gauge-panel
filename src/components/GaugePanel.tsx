@@ -41,8 +41,8 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
   // code from https://github.com/grafana/grafana/blob/main/public/app/plugins/panel/gauge/GaugePanel.tsx
   const getValues = (): FieldDisplay[] => {
 
-    for (let frame of data.series) {
-      for (let field of frame.fields) {
+    for (const frame of data.series) {
+      for (const field of frame.fields) {
         // Set the Min/Max value automatically for percent and percentunit
         if (field.config.unit === 'percent' || field.config.unit === 'percentunit') {
           const min = field.config.min ?? 0;
