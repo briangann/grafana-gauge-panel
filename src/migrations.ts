@@ -1,4 +1,4 @@
-import { PanelModel } from '@grafana/data';
+import { FieldConfig, PanelModel } from '@grafana/data';
 import { config } from '@grafana/runtime';
 import { satisfies, coerce } from 'semver';
 
@@ -82,6 +82,10 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
   // @ts-ignore
   const newDefaults = migrateDefaults(panel.gauge);
   const options = newDefaults;
+  // using fieldConfig
+  // @ts-ignore
+  const fieldConfigDefaults = migrateFieldConfig(panel, panel.fieldConfig);
+  panel.fieldConfig.defaults = fieldConfigDefaults;
   // @ts-ignore
   if (panel.format) {
     // @ts-ignore
@@ -152,11 +156,28 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
   return options;
 };
 
+export const migrateFieldConfig = (panel: PanelModel <GaugeOptions,any>, fieldConfig: FieldConfig<any>) => {
+  // @ts-ignore
+  if (panel.decimals) {
+    // @ts-ignore
+    fieldConfig.decimals = panel.decimals;
+    // @ts-ignore
+    delete panel.decimals;
+  }
+  // units
+  // @ts-ignore
+  if (panel.gauge) {
+    // @ts-ignore
+    if (panel.gauge.gaugeUnits) {
+    // @ts-ignore
+      fieldConfig.unit = panel.gauge.gaugeUnits;
+    }
+  }
+  return fieldConfig;
+}
 export const migrateDefaults = (angular: AngularOptions) => {
   // set default values first
   const options: GaugeOptions = {
-    decimals: 2,
-    unitFormat: 'short',
     operatorName: 'mean',
     valueYOffset: 0,
     valueFontSize: 22,
@@ -214,7 +235,9 @@ export const migrateDefaults = (angular: AngularOptions) => {
     showThresholdColorOnBackground: false,
     showThresholdLowerRange: false,
     showThresholdMiddleRange: false,
-    showThresholdUpperRange: false
+    showThresholdUpperRange: false,
+    displayFormatted: '',
+    displayValue: null
   };
   // next migrate the angular settings
 
@@ -231,11 +254,6 @@ export const migrateDefaults = (angular: AngularOptions) => {
   }
   if (angular.tickSpaceMinVal) {
     options.tickSpacingMinor = angular.tickSpaceMinVal;
-  }
-  // units
-  // TODO: this is also called .format, and may need a type conversion
-  if (angular.gaugeUnits) {
-    options.unitFormat = angular.gaugeUnits;
   }
   // radius settings
   if (angular.gaugeRadius) {

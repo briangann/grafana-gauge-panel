@@ -354,11 +354,14 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     return angleRad;
   };
 
-  const createValueLabel = (position: number, value: string) => {
+
+
+  const createValueLabel = () => {
+    const position = 0;
     return (
       <g id='valueLabels'>
         <text
-          x={labelXCalc(position, 0, value)}
+          x={labelXCalc(position, 0, options.displayFormatted)}
           y={labelYCalc(position) + options.valueYOffset}
           fontSize={options.valueFontSize}
           textAnchor='middle'
@@ -366,7 +369,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           fontWeight={'bold'}
           fontFamily={options.valueFont}
         >
-          {value}
+          {options.displayFormatted}
         </text>
       </g>
     );
@@ -447,6 +450,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           {createMajorTickLabels()}
           {createNeedleMarkers()}
           {createNeedle()}
+          {createValueLabel()}
         </g>
       </svg>
     </div>

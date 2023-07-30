@@ -5,70 +5,42 @@ import { DataSuggestionsSupplier } from './components/suggestions';
 import { PanelMigrationHandler } from './migrations';
 import { TickMapEditor } from 'components/TickMaps/TickMapEditor';
 import { TickMapItemType } from 'components/TickMaps/types';
+import { Field } from '@grafana/ui';
 
 export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
   .setMigrationHandler(PanelMigrationHandler)
   .useFieldConfig({
     disableStandardOptions: [
       FieldConfigProperty.Color,
-      FieldConfigProperty.Decimals,
       FieldConfigProperty.DisplayName,
+      FieldConfigProperty.Links,
       FieldConfigProperty.Max,
       FieldConfigProperty.Min,
-      FieldConfigProperty.Links,
       FieldConfigProperty.NoValue,
-      FieldConfigProperty.Unit,
     ],
     standardOptions: {
+      [FieldConfigProperty.Unit]: {
+        defaultValue: 'short'
+      },
+      [FieldConfigProperty.Decimals]: {
+        defaultValue: 2
+      },
       [FieldConfigProperty.Mappings]: {},
     },
   })
   .setPanelOptions((builder) => {
     builder
       // General Settings
-
-      // unit to use
-      .addUnitPicker({
-        name: 'Unit',
-        path: 'unitFormat',
-        defaultValue: 'short',
-        category: ['General'],
-        description: 'The Unit Format displayed with the metric value',
-      })
       // stat (operator)
       .addSelect({
         name: 'Stat',
         path: 'operatorName',
         description: 'Statistic to display',
-        category: ['General'],
+        category: ['Standard options'],
         defaultValue: OperatorOptions[0].value,
         settings: {
           options: OperatorOptions,
         },
-      })
-      // decimals
-      .addNumberInput({
-        name: 'Decimals',
-        path: 'decimals',
-        description: 'Display specified number of decimals',
-        defaultValue: 2,
-        settings: {
-          min: 0,
-          integer: true,
-        },
-        category: ['General'],
-      })
-      // valueYOffset
-      .addNumberInput({
-        name: 'Value Y-Offset',
-        path: 'valueYOffset',
-        description: 'Adjust the displayed value up or down the Y-Axis, use negative value to move up, positive for down',
-        defaultValue: 0,
-        settings: {
-          min: 0,
-          integer: false,
-        },
-        category: ['General'],
       })
 
       // Font Settings
@@ -304,6 +276,18 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         defaultValue: 0.1,
         settings: {
           placeHolder: '0.1',
+          min: 0,
+          integer: false,
+        },
+        category: ['Radial Customization'],
+      })
+      // valueYOffset
+      .addNumberInput({
+        name: 'Value Y-Offset',
+        path: 'valueYOffset',
+        description: 'Adjust the displayed value up or down the Y-Axis, use negative value to move up, positive for down',
+        defaultValue: 0,
+        settings: {
           min: 0,
           integer: false,
         },

@@ -1,9 +1,9 @@
 import React from 'react';
-import { PanelProps, GrafanaTheme2 } from '@grafana/data';
+import { PanelProps, GrafanaTheme2, FieldDisplay, getDisplayProcessor, getFieldDisplayValues, formattedValueToString } from '@grafana/data';
 import { GaugeOptions } from './types';
 import { Gauge } from './Gauge';
 import { css, cx } from '@emotion/css';
-import { useStyles2 } from '@grafana/ui';
+import { useStyles2, useTheme2 } from '@grafana/ui';
 
 interface Props extends PanelProps<GaugeOptions> { }
 
@@ -25,8 +25,9 @@ const getComponentStyles = (theme: GrafanaTheme2) => {
   };
 };
 
-export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, replaceVariables, fieldConfig }) => {
+export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, replaceVariables, fieldConfig, timeZone }) => {
   const styles = useStyles2(getComponentStyles);
+  const theme2 = useTheme2();
   let gaugeRadiusCalc = options.gaugeRadius;
   // autosize if radius is set to zero
   if (options.gaugeRadius === 0) {
@@ -35,6 +36,52 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
       gaugeRadiusCalc = width / 2;
     }
   }
+  // calculate the value to be displayed
+  //
+  // code from https://github.com/grafana/grafana/blob/main/public/app/plugins/panel/gauge/GaugePanel.tsx
+  const getValues = (): FieldDisplay[] => {
+
+    for (let frame of data.series) {
+      for (let field of frame.fields) {
+        // Set the Min/Max value automatically for percent and percentunit
+        if (field.config.unit === 'percent' || field.config.unit === 'percentunit') {
+          const min = field.config.min ?? 0;
+          const max = field.config.max ?? (field.config.unit === 'percent' ? 100 : 1);
+          field.state = field.state ?? {};
+          field.state.range = { min, max, delta: max - min };
+          field.display = getDisplayProcessor({ field, theme: theme2 });
+        }
+      }
+    }
+    return getFieldDisplayValues({
+      fieldConfig,
+      reduceOptions: {
+        calcs: [options.operatorName],
+        values: false
+      },
+      replaceVariables,
+      theme: theme2,
+      data: data.series,
+      timeZone,
+    });
+  };
+
+  const getFormattedValue = (index: number) => {
+    const singleMetric =  metrics[index];
+    return formattedValueToString(singleMetric.display);
+  };
+
+  const getDisplayValue = (index: number) => {
+    const singleMetric = metrics[index];
+    if (singleMetric.display.numeric) {
+      return Number(singleMetric.display.text);
+    }
+    return null;
+  };
+
+  // get the formatted metrics
+  const metrics = getValues();
+
   return (
     <div
       className={cx(
@@ -47,12 +94,12 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
     >
       <div className={cx(styles.container)}>
         <Gauge
-          decimals={options.decimals}
+          displayFormatted={getFormattedValue(0)}
+          displayValue={getDisplayValue(0)}
           panelId={id}
           panelWidth={width}
           panelHeight={height}
           operatorName={options.operatorName}
-          unitFormat={options.unitFormat}
           valueYOffset={options.valueYOffset}
           valueFontSize={options.valueFontSize}
           valueFont={options.valueFont}

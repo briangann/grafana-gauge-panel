@@ -1,11 +1,12 @@
-import { SelectableValue } from '@grafana/data';
+import { PanelData, SelectableValue } from '@grafana/data';
 import { TickMapItemType } from './TickMaps/types';
 
 export interface GaugeOptions {
+  // data: PanelData | undefined;
+  displayFormatted: string;
+  displayValue: number | null;
   // General
-  unitFormat: string;
   operatorName: string;
-  decimals: number;
   valueYOffset: number;
 
   // Font Settings
