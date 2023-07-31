@@ -5,7 +5,7 @@ import { css } from '@emotion/css';
 import { GrafanaTheme2 } from '@grafana/data';
 
 import { GaugeOptions, MarkerEndShapes, MarkerStartShapes, MarkerType, Markers } from './types';
-import  { scaleLinear, line, arc, interpolateString, select } from 'd3';
+import { scaleLinear, line, arc, interpolateString, select } from 'd3';
 import { easeQuadIn } from 'd3-ease';
 
 export const Gauge: React.FC<GaugeOptions> = (options) => {
@@ -59,7 +59,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         }
         // check if there are tickMaps that apply
         const tickTextFloat = parseFloat(tickText);
-        for (const aTickMap of options.tickMapConfig.tickMaps){
+        for (const aTickMap of options.tickMapConfig.tickMaps) {
           if (parseFloat(aTickMap.value) === tickTextFloat) {
             tickText = aTickMap.text;
             break;
@@ -147,7 +147,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     }
 
     if (currentNeedleValue !== options.displayValue) {
-      setPreviousNeedleValue(currentNeedleValue|| NaN);
+      setPreviousNeedleValue(currentNeedleValue || NaN);
       setCurrentNeedleValue(options.displayValue || NaN);
     }
 
@@ -383,7 +383,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     const boundaries = '60,80'.split(',');
     return (
       <>
-        { options.showThresholdsOnGauge && (
+        {options.showThresholdsOnGauge && (
           <>
             {options.showThresholdLowerRange &&
               drawBand(options.minValue, parseFloat(boundaries[0]), 'green')}
@@ -448,11 +448,11 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     let needleAngleOld = 0;
     let needleAngleNew = 0;
     if ((valueScale !== undefined) && (oldVal !== null) && (newVal !== null)) {
-      const oldScaleVal = valueScale(oldVal)
+      const oldScaleVal = valueScale(oldVal);
       if (oldScaleVal !== undefined) {
         needleAngleOld = oldScaleVal - options.zeroNeedleAngle;
       }
-      const newScaleVal = valueScale(newVal)
+      const newScaleVal = valueScale(newVal);
       if (newScaleVal !== undefined) {
         needleAngleNew = newScaleVal - options.zeroNeedleAngle;
       }
@@ -485,7 +485,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     let valueThresholdColor = options.unitsLabelColor;
     if (options.showThresholdColorOnValue) {
       const boundaries = '60,80'.split(',');
-      //const boundaries = options.thresholds.split(',');
+      // const boundaries = options.thresholds.split(',');
       if (newVal < parseFloat(boundaries[0])) {
         valueThresholdColor = options.thresholdColors[0];
       }
@@ -497,14 +497,14 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       }
     }
     // fill color
-    //valueLabel.style('fill', valueThresholdColor);
-    //valueLabelParent.selectAll('text').text(newValFormatted);
+    // valueLabel.style('fill', valueThresholdColor);
+    // valueLabelParent.selectAll('text').text(newValFormatted);
     // Update the current value
-    //options.needleValue = newVal;
+    // options.needleValue = newVal;
   }
 
   const ndl = createNeedle();
-  updateGauge(ndl, currentNeedleValue||NaN, options.displayFormatted||'0')
+  updateGauge(ndl, currentNeedleValue || NaN, options.displayFormatted || '0');
   return (
     <div className={divStyles}>
       <svg
