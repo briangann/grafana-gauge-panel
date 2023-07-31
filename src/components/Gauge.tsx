@@ -501,7 +501,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     // valueLabelParent.selectAll('text').text(newValFormatted);
     // Update the current value
     // options.needleValue = newVal;
-  }
+  };
 
   const ndl = createNeedle();
   updateGauge(ndl, currentNeedleValue || NaN, options.displayFormatted || '0');
