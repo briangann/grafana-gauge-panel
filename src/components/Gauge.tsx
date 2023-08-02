@@ -59,7 +59,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         }
         // check if there are tickMaps that apply
         const tickTextFloat = parseFloat(tickText);
-        for (const aTickMap of options.tickMapConfig) {
+        for (const aTickMap of options.tickMapConfig.tickMaps) {
           if (parseFloat(aTickMap.value) === tickTextFloat) {
             tickText = aTickMap.text;
             break;

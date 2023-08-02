@@ -63,7 +63,10 @@ export interface GaugeOptions {
   panelId?: number;
 
   // tickmaps
-  tickMapConfig: TickMapItemType[];
+  tickMapConfig: {
+    tickMaps: TickMapItemType[];
+    enabled: boolean;
+  };
 
   // thresholds
   showThresholdBandOnGauge: boolean;

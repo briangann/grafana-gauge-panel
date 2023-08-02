@@ -287,7 +287,10 @@ export const migrateDefaults = (angular: AngularOptions) => {
     // tick spacing
     tickSpacingMajor: 10,
     tickSpacingMinor: 1,
-    tickMapConfig: [],
+    tickMapConfig: {
+      tickMaps: [],
+      enabled: true,
+    },
     showThresholdBandOnGauge: false,
     showThresholdColorOnValue: false,
     showThresholdColorOnBackground: false,
