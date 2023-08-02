@@ -176,12 +176,12 @@ export const migrateTickMaps = (tickMaps: AngularTickMap[]) => {
       text: item.text,
       enabled: true,
       order: count
-    }
+    };
     newTickMaps.push(aTickMap);
     count++;
   }
   return newTickMaps;
-}
+};
 
 export const migrateFieldConfig = (panel: PanelModel<GaugeOptions, any>, fieldConfig: FieldConfig<any>) => {
   // @ts-ignore

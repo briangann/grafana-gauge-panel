@@ -80,10 +80,10 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
     theme: GrafanaTheme2) => {
 
     if (fieldConfig.defaults.thresholds) {
-      const thresholdResult = getActiveThreshold(value, field.thresholds?.steps);
-      const realColor = theme.visualization.getColorByName(thresholdResult?.color);
-      console.log(`realColor ${realColor} color for value ${value} is ${thresholdResult?.color} matched val ${thresholdResult?.value}`);
-      return thresholdResult;
+      const result = getActiveThreshold(value, field.thresholds?.steps);
+      const realColor = theme.visualization.getColorByName(result?.color);
+      console.log(`realColor ${realColor} color for value ${value} is ${result?.color} matched val ${result?.value}`);
+      return result;
     }
     return null;
   };
