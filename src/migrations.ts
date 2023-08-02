@@ -1,4 +1,4 @@
-import { FieldConfig, PanelModel } from '@grafana/data';
+import { FieldConfig, PanelModel, ValueMapping, convertOldAngularValueMappings } from '@grafana/data';
 import { config } from '@grafana/runtime';
 import { satisfies, coerce } from 'semver';
 
@@ -115,32 +115,22 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
   options.tickMapConfig = migrateTickMaps(panel.tickMaps) || [];
   // @ts-ignore
   delete panel.tickMaps;
-  // TODO: migrate mappingTypes
-  // mappingType: number
-  // @ts-ignore
+  // migrate mappingTypes/Value/RangeMaps
+  const newMaps = migrateValueAndRangeMaps(panel);
+  panel.fieldConfig.defaults.mappings = newMaps;
+  //@ts-ignore
   delete panel.mappingType;
-  // mappingTypes: [] { name: string, value: number }
-  // @ts-ignore
-  delete panel.mappingTypes;
-  // @ts-ignore
-  if (panel.valueMaps) {
-    // TODO: migrate valueMaps
-  }
-  // @ts-ignore
+  //@ts-ignore
+  delete panel.rangeMaps;
+  //@ts-ignore
   delete panel.valueMaps;
   // operator
   // @ts-ignore
-  if (panel.operatorName) {
-    // TODO: map the old operators to the new list
-  }
+  options.operatorName = convertOperators(panel.operatorName);
   // @ts-ignore
   delete panel.operatorName;
   // @ts-ignore
-  if (panel.rangeMaps) {
-    // TODO: migrate rangemaps
-  }
-  // @ts-ignore
-  delete panel.rangeMaps;
+  delete panel.operatorNameOptions;
   // clean up
   // @ts-ignore
   delete panel.fontSizes;
@@ -160,7 +150,28 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
   delete panel.unitFormats;
   // @ts-ignore
   delete panel.gauge;
+  // clean up undefined
+  // @ts-ignore
+  Object.keys(panel).forEach((key) => (panel[key] === undefined ? delete panel[key] : {}));
+  // @ts-ignore
+  Object.keys(options).forEach((key) => (options[key] === undefined ? delete options[key] : {}));
+
   return options;
+};
+
+export const convertOperators = (operator: string) => {
+  switch (operator) {
+    case 'avg':
+      return 'mean';
+    case 'current':
+      return 'last'; // lastNotNull?
+    case 'time_step':
+      return 'step';
+    case 'total':
+      return 'sum';
+    default:
+      return operator;
+  }
 };
 
 export const migrateTickMaps = (tickMaps: AngularTickMap[]) => {
@@ -202,6 +213,27 @@ export const migrateFieldConfig = (panel: PanelModel<GaugeOptions, any>, fieldCo
   }
   return fieldConfig;
 };
+
+export const migrateValueAndRangeMaps = (panel: any) => {
+  // value maps first
+  panel.mappingType = 1;
+  let newValueMappings: ValueMapping[] = [];
+  if (panel.valueMaps !== undefined) {
+    newValueMappings = convertOldAngularValueMappings(panel);
+  }
+  // range maps second
+  panel.mappingType = 2;
+  let newRangeMappings: ValueMapping[] = [];
+  if (panel.rangeMaps !== undefined) {
+    newRangeMappings = convertOldAngularValueMappings(panel);
+  }
+  // append together
+  const newMappings = newValueMappings.concat(newRangeMappings);
+  // get uniques only
+  const uniques = [...new Map(newMappings.map((v) => [JSON.stringify(v), v])).values()];
+  return uniques;
+};
+
 
 export const migrateDefaults = (angular: AngularOptions) => {
   // set default values first
