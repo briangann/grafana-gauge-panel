@@ -1,5 +1,5 @@
 import React from 'react';
-import { PanelProps, GrafanaTheme2, FieldDisplay, getDisplayProcessor, getFieldDisplayValues, formattedValueToString } from '@grafana/data';
+import { PanelProps, GrafanaTheme2, FieldDisplay, getDisplayProcessor, getFieldDisplayValues, formattedValueToString, FieldColorModeId, ThresholdsConfig, ThresholdsMode, getActiveThreshold, Threshold, FieldConfig, DisplayValue } from '@grafana/data';
 import { GaugeOptions } from './types';
 import { Gauge } from './Gauge';
 import { css, cx } from '@emotion/css';
@@ -66,21 +66,52 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
     });
   };
 
+  const DEFAULT_THRESHOLDS: ThresholdsConfig = {
+    mode: ThresholdsMode.Absolute,
+    steps: [
+      { value: -Infinity, color: 'green' },
+      { value: 80, color: 'red' },
+    ],
+  };
+
+  const getThresholdForValue = (
+    field: FieldConfig,
+    value: number,
+    theme: GrafanaTheme2) => {
+
+    if (fieldConfig.defaults.thresholds) {
+      const thresholdResult = getActiveThreshold(value, field.thresholds?.steps);
+      const realColor = theme.visualization.getColorByName(thresholdResult?.color);
+      console.log(`realColor ${realColor} color for value ${value} is ${thresholdResult?.color} matched val ${thresholdResult?.value}`);
+      return thresholdResult;
+    }
+    return null;
+  };
+
   const getFormattedValue = (index: number) => {
     const singleMetric =  metrics[index];
     return formattedValueToString(singleMetric.display);
   };
 
+  const getDisplayValue2 = (index: number) => {
+    const singleMetric = metrics[index];
+    if (singleMetric.display.numeric) {
+      return Number(singleMetric.display.text);
+    }
+    return NaN;
+  };
   const getDisplayValue = (index: number) => {
     const singleMetric = metrics[index];
     if (singleMetric.display.numeric) {
       return Number(singleMetric.display.text);
     }
-    return null;
+    return NaN;
   };
 
   // get the formatted metrics
   const metrics = getValues();
+  const thresholdResult = getThresholdForValue(fieldConfig.defaults, getDisplayValue(0), theme2);
+  console.log(`color is ${thresholdResult?.color} matched val ${thresholdResult?.value}`);
 
   return (
     <div
@@ -140,12 +171,12 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
           tickWidthMajor={options.tickWidthMajor}
           tickWidthMinor={options.tickWidthMinor}
           tickMapConfig={options.tickMapConfig}
-          showThresholdsOnGauge={options.showThresholdsOnGauge}
+          showThresholdBandOnGauge={options.showThresholdBandOnGauge}
           showThresholdColorOnValue={options.showThresholdColorOnValue}
           showThresholdColorOnBackground={options.showThresholdColorOnBackground}
-          showThresholdLowerRange={options.showThresholdLowerRange}
-          showThresholdMiddleRange={options.showThresholdMiddleRange}
-          showThresholdUpperRange={options.showThresholdUpperRange}
+          showThresholdBandLowerRange={options.showThresholdBandLowerRange}
+          showThresholdBandMiddleRange={options.showThresholdBandMiddleRange}
+          showThresholdBandUpperRange={options.showThresholdBandUpperRange}
           needleWidth={options.needleWidth}
           thresholdColors={options.thresholdColors}
         />

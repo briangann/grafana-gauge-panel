@@ -3,6 +3,12 @@ import { config } from '@grafana/runtime';
 import { satisfies, coerce } from 'semver';
 
 import { FontFamilies, GaugeOptions } from './components/types';
+import { TickMapItemType } from 'components/TickMaps/types';
+
+interface AngularTickMap {
+  value: string;
+  text: string;
+}
 
 interface AngularOptions {
   // limits
@@ -105,7 +111,8 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
   delete panel.colors;
   // @ts-ignore
   delete panel.thresholds;
-  // TODO: migrate tickmaps
+  // @ts-ignore
+  options.tickMapConfig = migrateTickMaps(panel.tickMaps) || [];
   // @ts-ignore
   delete panel.tickMaps;
   // TODO: migrate mappingTypes
@@ -155,6 +162,26 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
   delete panel.gauge;
   return options;
 };
+
+export const migrateTickMaps = (tickMaps: AngularTickMap[]) => {
+  const newTickMaps: TickMapItemType[] = [];
+  if (!tickMaps || tickMaps.length === 0) {
+    return newTickMaps;
+  }
+  let count = 0;
+  for (const item of tickMaps) {
+    const aTickMap: TickMapItemType = {
+      label: `Label-${count}`,
+      value: item.value,
+      text: item.text,
+      enabled: true,
+      order: count
+    }
+    newTickMaps.push(aTickMap);
+    count++;
+  }
+  return newTickMaps;
+}
 
 export const migrateFieldConfig = (panel: PanelModel<GaugeOptions, any>, fieldConfig: FieldConfig<any>) => {
   // @ts-ignore
@@ -228,15 +255,13 @@ export const migrateDefaults = (angular: AngularOptions) => {
     // tick spacing
     tickSpacingMajor: 10,
     tickSpacingMinor: 1,
-    tickMapConfig: {
-      tickMaps: []
-    },
-    showThresholdsOnGauge: false,
+    tickMapConfig: [],
+    showThresholdBandOnGauge: false,
     showThresholdColorOnValue: false,
     showThresholdColorOnBackground: false,
-    showThresholdLowerRange: false,
-    showThresholdMiddleRange: false,
-    showThresholdUpperRange: false,
+    showThresholdBandLowerRange: false,
+    showThresholdBandMiddleRange: false,
+    showThresholdBandUpperRange: false,
     displayFormatted: '',
     displayValue: null
   };
@@ -316,13 +341,13 @@ export const migrateDefaults = (angular: AngularOptions) => {
   }
   //
   if (angular.showLowerThresholdRange) {
-    options.showThresholdLowerRange = angular.showLowerThresholdRange;
+    options.showThresholdBandLowerRange = angular.showLowerThresholdRange;
   }
   if (angular.showMiddleThresholdRange) {
-    options.showThresholdMiddleRange = angular.showMiddleThresholdRange;
+    options.showThresholdBandMiddleRange = angular.showMiddleThresholdRange;
   }
   if (angular.showUpperThresholdRange) {
-    options.showThresholdUpperRange = angular.showUpperThresholdRange;
+    options.showThresholdBandUpperRange = angular.showUpperThresholdRange;
   }
   if (angular.showThresholdColorOnBackground) {
     options.showThresholdColorOnBackground = angular.showThresholdColorOnBackground;
@@ -331,7 +356,7 @@ export const migrateDefaults = (angular: AngularOptions) => {
     options.showThresholdColorOnValue = angular.showThresholdColorOnValue;
   }
   if (angular.showThresholdOnGauge) {
-    options.showThresholdsOnGauge = angular.showThresholdOnGauge;
+    options.showThresholdBandOnGauge = angular.showThresholdOnGauge;
   }
   // font
   if (angular.tickFont) {

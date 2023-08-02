@@ -59,7 +59,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         }
         // check if there are tickMaps that apply
         const tickTextFloat = parseFloat(tickText);
-        for (const aTickMap of options.tickMapConfig.tickMaps) {
+        for (const aTickMap of options.tickMapConfig) {
           if (parseFloat(aTickMap.value) === tickTextFloat) {
             tickText = aTickMap.text;
             break;
@@ -383,13 +383,13 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     const boundaries = '60,80'.split(',');
     return (
       <>
-        {options.showThresholdsOnGauge && (
+        {options.showThresholdBandOnGauge && (
           <>
-            {options.showThresholdLowerRange &&
+            {options.showThresholdBandLowerRange &&
               drawBand(options.minValue, parseFloat(boundaries[0]), 'green')}
-            {options.showThresholdMiddleRange &&
+            {options.showThresholdBandMiddleRange &&
               drawBand(parseFloat(boundaries[0]), parseFloat(boundaries[1]), 'yellow')}
-            {options.showThresholdUpperRange &&
+            {options.showThresholdBandUpperRange &&
               drawBand(parseFloat(boundaries[1]), options.maxValue, 'red')}
           </>
         )}
@@ -482,6 +482,11 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           'rotate(' + needleAngleNew + ',' + needleCentre + ')'
         );
       });
+
+    // see this for threshold example
+    // https://github.com/grafana/grafana/blob/main/packages/grafana-ui/src/components/Gauge/utils.ts
+    // https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/field/thresholds.ts
+    //
     let valueThresholdColor = options.unitsLabelColor;
     if (options.showThresholdColorOnValue) {
       const boundaries = '60,80'.split(',');

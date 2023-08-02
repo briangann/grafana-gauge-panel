@@ -49,6 +49,28 @@ export const TickMapItem: React.FC<TickMapItemProps> = (props) => {
               onChange={(e) => setTickMap({ ...tickMap, label: e.currentTarget.value })}
             />
           </Field>
+          <Field
+            label='Value'
+            description='Tick Value where the text will be placed'
+            disabled={!tickMap.enabled}
+          >
+            <Input
+              value={tickMap.value}
+              placeholder=''
+              onChange={(e) => setTickMap({ ...tickMap, value: e.currentTarget.value })}
+            />
+          </Field>
+          <Field
+            label='Text'
+            description='Text to be displayed for tick value.'
+            disabled={!tickMap.enabled}
+          >
+            <Input
+              value={tickMap.text}
+              placeholder=''
+              onChange={(e) => setTickMap({ ...tickMap, text: e.currentTarget.value })}
+            />
+          </Field>
         </FieldSet>
       </Card.Meta>
 

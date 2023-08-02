@@ -63,17 +63,15 @@ export interface GaugeOptions {
   panelId?: number;
 
   // tickmaps
-  tickMapConfig: {
-    tickMaps: TickMapItemType[];
-  };
+  tickMapConfig: TickMapItemType[];
 
   // thresholds
-  showThresholdsOnGauge: boolean;
+  showThresholdBandOnGauge: boolean;
   showThresholdColorOnValue: boolean;
   showThresholdColorOnBackground: boolean;
-  showThresholdLowerRange: boolean;
-  showThresholdMiddleRange: boolean;
-  showThresholdUpperRange: boolean;
+  showThresholdBandLowerRange: boolean;
+  showThresholdBandMiddleRange: boolean;
+  showThresholdBandUpperRange: boolean;
 }
 
 // tslint:disable-next-line
