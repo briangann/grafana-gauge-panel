@@ -288,8 +288,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         description: 'Adjust the displayed value up or down the Y-Axis, use negative value to move up, positive for down',
         defaultValue: 0,
         settings: {
-          min: 0,
-          integer: false,
+          integer: true,
         },
         category: ['Radial Customization'],
       })
@@ -490,51 +489,49 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       })
       // threshold options
       .addBooleanSwitch({
-        name: 'Show Threshold Bands On Gauge Face',
-        path: 'showThresholdsOnGauge',
+        name: 'Show Threshold Band On Gauge',
+        path: 'showThresholdBandOnGauge',
         defaultValue: false,
         category: ['Thresholds'],
-        description: 'Thresholds are displayed as bands on face of gauge',
+        description: 'Thresholds are displayed as a band on face of gauge along the needle arc',
       })
       .addBooleanSwitch({
         name: 'Show Lower Range',
-        path: 'showThresholdLowerRange',
-        defaultValue: false,
+        path: 'showThresholdBandLowerRange',
+        defaultValue: true,
         category: ['Thresholds'],
-        description: 'Lower threshold is displayed on face of gauge',
-        showIf: (c) => c.showThresholdsOnGauge === true,
+        description: 'Lower threshold is displayed on band',
+        showIf: (c) => c.showThresholdBandOnGauge === true,
       })
       .addBooleanSwitch({
         name: 'Show Middle Range',
-        path: 'showThresholdMiddleRange',
-        defaultValue: false,
+        path: 'showThresholdBandMiddleRange',
+        defaultValue: true,
         category: ['Thresholds'],
-        description: 'Middle threshold is displayed on face of gauge',
-        showIf: (c) => c.showThresholdsOnGauge === true,
+        description: 'Middle threshold is displayed on band',
+        showIf: (c) => c.showThresholdBandOnGauge === true,
       })
       .addBooleanSwitch({
         name: 'Show Upper Range',
-        path: 'showThresholdUpperRange',
-        defaultValue: false,
+        path: 'showThresholdBandUpperRange',
+        defaultValue: true,
         category: ['Thresholds'],
-        description: 'Upper threshold is displayed on face of gauge',
-        showIf: (c) => c.showThresholdsOnGauge === true,
+        description: 'Upper threshold is displayed on band',
+        showIf: (c) => c.showThresholdBandOnGauge === true,
       })
       .addBooleanSwitch({
         name: 'Show Threshold State on Background',
-        path: 'showThresholdColorOnBackground',
+        path: 'showThresholdStateOnBackground',
         defaultValue: false,
         category: ['Thresholds'],
         description: 'Gauge face color changes to state of threshold',
-        showIf: (c) => c.showThresholdsOnGauge === true,
       })
       .addBooleanSwitch({
-        name: 'Show Threshold Color on Value',
-        path: 'showThresholdColorOnValue',
+        name: 'Show Threshold State on Value',
+        path: 'showThresholdStateOnValue',
         defaultValue: false,
         category: ['Thresholds'],
         description: 'Displayed value color changes to state of threshold',
-        showIf: (c) => c.showThresholdsOnGauge === true,
       });
 
   })
