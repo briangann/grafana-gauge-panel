@@ -118,20 +118,20 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
   // migrate mappingTypes/Value/RangeMaps
   const newMaps = migrateValueAndRangeMaps(panel);
   panel.fieldConfig.defaults.mappings = newMaps;
-  //@ts-ignore
+  // @ts-ignore
   delete panel.mappingType;
-  //@ts-ignore
+  // @ts-ignore
   delete panel.rangeMaps;
-  //@ts-ignore
+  // @ts-ignore
   delete panel.valueMaps;
-  // operator
+  // operator conversion
   // @ts-ignore
   options.operatorName = convertOperators(panel.operatorName);
   // @ts-ignore
   delete panel.operatorName;
   // @ts-ignore
   delete panel.operatorNameOptions;
-  // clean up
+  // general clean up
   // @ts-ignore
   delete panel.fontSizes;
   // @ts-ignore
