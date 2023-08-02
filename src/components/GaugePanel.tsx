@@ -93,13 +93,6 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
     return formattedValueToString(singleMetric.display);
   };
 
-  const getDisplayValue2 = (index: number) => {
-    const singleMetric = metrics[index];
-    if (singleMetric.display.numeric) {
-      return Number(singleMetric.display.text);
-    }
-    return NaN;
-  };
   const getDisplayValue = (index: number) => {
     const singleMetric = metrics[index];
     if (singleMetric.display.numeric) {
