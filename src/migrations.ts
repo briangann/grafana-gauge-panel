@@ -1,4 +1,4 @@
-import { FieldConfig, PanelModel, ValueMapping, convertOldAngularValueMappings } from '@grafana/data';
+import { FieldConfig, FieldConfigSource, PanelModel, ThresholdsConfig, ThresholdsMode, ValueMapping, convertOldAngularValueMappings } from '@grafana/data';
 import { config } from '@grafana/runtime';
 import { satisfies, coerce } from 'semver';
 
@@ -54,6 +54,7 @@ interface AngularOptions {
   showThresholdColorOnBackground: boolean;
   showThresholdColorOnValue: boolean;
   showThresholdOnGauge: boolean;
+  thresholdColors: string[];
   // fonts
   tickFont: string;
   unitsFont: string;
@@ -90,8 +91,7 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
   const options = newDefaults;
   // using fieldConfig
   // @ts-ignore
-  const fieldConfigDefaults = migrateFieldConfig(panel, panel.fieldConfig);
-  panel.fieldConfig.defaults = fieldConfigDefaults;
+  panel.fieldConfig = migrateFieldConfig(panel, panel.fieldConfig);
   // @ts-ignore
   if (panel.format) {
     // @ts-ignore
@@ -106,11 +106,18 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
     // @ts-ignore
     delete panel.decimals;
   }
-  // TODO: migrate thresholds and colors
+  // @ts-ignore
+  if (panel.thresholds) {
+    // @ts-ignore
+    const migratedThresholds = migrateThresholds(panel.thresholds, panel.colors)
+    panel.fieldConfig.defaults.thresholds = migratedThresholds;
+  }
   // @ts-ignore
   delete panel.colors;
   // @ts-ignore
   delete panel.thresholds;
+  // eslint-disable-next-line no-debugger
+  debugger;
   // @ts-ignore
   options.tickMapConfig = migrateTickMaps(panel.tickMaps) || [];
   // @ts-ignore
@@ -120,6 +127,8 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
   panel.fieldConfig.defaults.mappings = newMaps;
   // @ts-ignore
   delete panel.mappingType;
+  // @ts-ignore
+  delete panel.mappingTypes;
   // @ts-ignore
   delete panel.rangeMaps;
   // @ts-ignore
@@ -177,7 +186,9 @@ export const convertOperators = (operator: string) => {
 export const migrateTickMaps = (tickMaps: AngularTickMap[]) => {
   const newTickMaps: TickMapItemType[] = [];
   if (!tickMaps || tickMaps.length === 0) {
-    return newTickMaps;
+    return {
+      tickMaps: newTickMaps
+    };
   }
   let count = 0;
   for (const item of tickMaps) {
@@ -191,10 +202,12 @@ export const migrateTickMaps = (tickMaps: AngularTickMap[]) => {
     newTickMaps.push(aTickMap);
     count++;
   }
-  return newTickMaps;
+  return {
+    tickMaps: newTickMaps
+  };
 };
 
-export const migrateFieldConfig = (panel: PanelModel<GaugeOptions, any>, fieldConfig: FieldConfig<any>) => {
+export const migrateFieldConfig = (panel: PanelModel<GaugeOptions, any>, fieldConfig: FieldConfigSource<any>) => {
   // @ts-ignore
   if (panel.decimals) {
     // @ts-ignore
@@ -254,11 +267,6 @@ export const migrateDefaults = (angular: AngularOptions) => {
     minValue: 0,
     maxValue: 100,
     //
-    thresholdColors: [
-      'rgba(245, 54, 54, 0.9)',
-      'rgba(237, 129, 40, 0.89)',
-      'rgba(50, 172, 45, 0.97)'
-    ],
     outerEdgeColor: '#0099cc',
     innerColor: '#ffffff',
     pivotColor: '#999999',
@@ -421,6 +429,56 @@ export const migrateDefaults = (angular: AngularOptions) => {
   }
   return options;
 };
+
+const migrateThresholds = (thresholds: string, thresholdColors: string[]) => {
+  // default colors are used in case the array passed in is empty
+  const defaultColors = [
+    'rgba(50, 172, 45, 0.97)',
+    'rgba(237, 129, 40, 0.89)',
+    'rgba(245, 54, 54, 0.9)'
+  ];
+
+  const defaultThresholds: ThresholdsConfig = {
+      mode: ThresholdsMode.Absolute,
+      steps: [
+        {
+          color: 'green',
+          value: -Infinity,
+        }
+      ]
+  }
+  if (thresholds.length === 0) {
+    return defaultThresholds;
+  }
+  // convert existing thresholds to new format, the only option is "absolute" in the old panel
+  // there should be colors defined, but if there are none, use the defaults
+  const migratedThresholds: ThresholdsConfig = {
+      mode: ThresholdsMode.Absolute,
+      steps: [],
+  }
+  const allThresholds = thresholds.split(',');
+  let useColors = thresholdColors;
+  if (thresholdColors.length === 0) {
+    useColors = defaultColors;
+  }
+  // there should only be two values for thresholds
+  // the values up to the first is implied -Infinity to first value
+  migratedThresholds.steps.push(
+    {
+      color: useColors[0],
+      value: -Infinity,
+    },
+    {
+      color: useColors[1],
+      value: Number(allThresholds[0]),
+    },
+    {
+      color: useColors[2],
+      value: Number(allThresholds[1]),
+    }
+  );
+  return migratedThresholds;
+}
 
 /**
  * This is called when the panel changes from another panel
