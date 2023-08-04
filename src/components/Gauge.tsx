@@ -153,6 +153,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
 
   }, [tickAnglesMaj, tickAnglesMin, options, tickMajorLabels, needleLengthNegCalc, previousNeedleValue, currentNeedleValue]);
 
+  // TODO: convert colors (getColorForD3)
   const createCircleGroup = () => {
     return (
       <g id='circles'>
@@ -380,6 +381,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   };
 
   const createThresholdBands = () => {
+    // TODO: implement new threshold config
     const boundaries = '60,80'.split(',');
     return (
       <>
@@ -397,6 +399,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     );
   };
 
+  // TODO: convert colors (getColorForD3)
   const drawBand = (start: number, end: number, color: string) => {
     if (0 >= end - start) {
       return;
@@ -488,7 +491,10 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     // https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/field/thresholds.ts
     //
     let valueThresholdColor = options.unitsLabelColor;
+    // TODO: used new threshold settings
+    // getColorForD3
     if (options.showThresholdColorOnValue) {
+      /*
       const boundaries = '60,80'.split(',');
       // const boundaries = options.thresholds.split(',');
       if (newVal < parseFloat(boundaries[0])) {
@@ -500,6 +506,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       if (newVal >= parseFloat(boundaries[1])) {
         valueThresholdColor = options.thresholdColors[2];
       }
+      */
     }
     // fill color
     // valueLabel.style('fill', valueThresholdColor);
