@@ -508,7 +508,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         path: 'showThresholdBandMiddleRange',
         defaultValue: true,
         category: ['Thresholds'],
-        description: 'Middle threshold is displayed on band',
+        description: 'Middle thresholds are displayed on band',
         showIf: (c) => c.showThresholdBandOnGauge === true,
       })
       .addBooleanSwitch({
