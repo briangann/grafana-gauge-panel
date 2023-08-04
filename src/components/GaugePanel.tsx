@@ -171,7 +171,6 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
           showThresholdBandMiddleRange={options.showThresholdBandMiddleRange}
           showThresholdBandUpperRange={options.showThresholdBandUpperRange}
           needleWidth={options.needleWidth}
-          thresholdColors={options.thresholdColors}
         />
       </div>
     </div>
