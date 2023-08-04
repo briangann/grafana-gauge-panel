@@ -116,8 +116,6 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
   delete panel.colors;
   // @ts-ignore
   delete panel.thresholds;
-  // eslint-disable-next-line no-debugger
-  debugger;
   // @ts-ignore
   options.tickMapConfig = migrateTickMaps(panel.tickMaps) || [];
   // @ts-ignore
