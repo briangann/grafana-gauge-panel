@@ -490,7 +490,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     // https://github.com/grafana/grafana/blob/main/packages/grafana-ui/src/components/Gauge/utils.ts
     // https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/field/thresholds.ts
     //
-    let valueThresholdColor = options.unitsLabelColor;
+    const valueThresholdColor = options.unitsLabelColor;
     // TODO: used new threshold settings
     // getColorForD3
     if (options.showThresholdColorOnValue) {

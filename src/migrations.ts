@@ -109,7 +109,7 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
   // @ts-ignore
   if (panel.thresholds) {
     // @ts-ignore
-    const migratedThresholds = migrateThresholds(panel.thresholds, panel.colors)
+    const migratedThresholds = migrateThresholds(panel.thresholds, panel.colors);
     panel.fieldConfig.defaults.thresholds = migratedThresholds;
   }
   // @ts-ignore
@@ -444,7 +444,7 @@ const migrateThresholds = (thresholds: string, thresholdColors: string[]) => {
           value: -Infinity,
         }
       ]
-  }
+  };
   if (thresholds.length === 0) {
     return defaultThresholds;
   }
@@ -453,7 +453,7 @@ const migrateThresholds = (thresholds: string, thresholdColors: string[]) => {
   const migratedThresholds: ThresholdsConfig = {
       mode: ThresholdsMode.Absolute,
       steps: [],
-  }
+  };
   const allThresholds = thresholds.split(',');
   let useColors = thresholdColors;
   if (thresholdColors.length === 0) {
@@ -476,7 +476,7 @@ const migrateThresholds = (thresholds: string, thresholdColors: string[]) => {
     }
   );
   return migratedThresholds;
-}
+};
 
 /**
  * This is called when the panel changes from another panel
