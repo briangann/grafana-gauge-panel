@@ -26,7 +26,6 @@ export interface GaugeOptions {
   minValue: number;
   maxValue: number;
   // coloring
-  thresholdColors: string[];
   outerEdgeColor: string;
   innerColor: string;
   pivotColor: string;
