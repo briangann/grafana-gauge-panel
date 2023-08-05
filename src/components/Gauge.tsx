@@ -395,25 +395,23 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       min = options.minValue;
     }
     // get the lower band
-    let lowerBand: ExpandedThresholdBand = {
+    return {
       index: 0,
-      min: min,
+      min,
       max: nextThresholdValue,
       color: sorted[0].color,
     };
-    return lowerBand;
   }
 
   // TODO: handle returning undefined when there is no upper band
   const getUpperBand = (sorted: Threshold[]) => {
     const index = sorted.length - 1;
-    let upperBand: ExpandedThresholdBand = {
-      index: index,
+    return {
+      index,
       min: sorted[index].value,
       max: options.maxValue,
       color: sorted[index].color,
     };
-    return upperBand;
   }
 
   // TODO: handle returning undefined when there are no inner bands
@@ -421,9 +419,9 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     const innerBands: ExpandedThresholdBand[] = [];
     for (let index = lower.index + 1; index < upper.index; index++) {
       innerBands.push({
-        index: index,
+        index,
         min: sorted[index].value,
-        max: sorted[index+1].value,
+        max: sorted[index + 1].value,
         color: sorted[index].color,
       });
     }
@@ -441,8 +439,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     // get the upper band
     const upperBand = getUpperBand(sorted);
     // get the inner bands
-    const innerBands = getInnerBands(sorted, lowerBand, upperBand)
-    return ({ lowerBand: lowerBand, innerBands: innerBands, upperBand: upperBand });
+    const innerBands = getInnerBands(sorted, lowerBand, upperBand);
+    return ({ lowerBand, innerBands, upperBand });
   }
 
   const createThresholdBands = () => {
@@ -450,18 +448,18 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     if (!options.showThresholdBandOnGauge) {
       return;
     }
-    const {lowerBand, innerBands, upperBand} = expandThresholdBands();
+    const { lowerBand, innerBands, upperBand } = expandThresholdBands();
 
     return (
       <>
-        { options.showThresholdBandLowerRange && lowerBand &&
+        {options.showThresholdBandLowerRange && lowerBand &&
           drawBand(lowerBand.min, lowerBand.max, lowerBand.color)}
-        { options.showThresholdBandMiddleRange && innerBands &&
+        {options.showThresholdBandMiddleRange && innerBands &&
           innerBands.map((aBand: ExpandedThresholdBand) => {
             return drawBand(aBand.min, aBand.max, aBand.color);
           })
         }
-        { options.showThresholdBandUpperRange && upperBand &&
+        {options.showThresholdBandUpperRange && upperBand &&
           drawBand(upperBand.min, upperBand.max, upperBand.color)}
       </>
     );
