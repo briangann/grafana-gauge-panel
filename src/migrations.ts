@@ -41,6 +41,7 @@ interface AngularOptions {
   needleWidth: number;
   // colors
   outerEdgeCol: string;
+  innerCol: string;
   pivotCol: string;
   tickColMaj: string;
   tickColMin: string;
@@ -304,7 +305,8 @@ export const migrateDefaults = (angular: AngularOptions) => {
     showThresholdBandMiddleRange: false,
     showThresholdBandUpperRange: false,
     displayFormatted: '',
-    displayValue: null
+    displayValue: null,
+    thresholds: undefined
   };
   // next migrate the angular settings
 
@@ -367,6 +369,9 @@ export const migrateDefaults = (angular: AngularOptions) => {
   // color
   if (angular.outerEdgeCol) {
     options.outerEdgeColor = angular.outerEdgeCol;
+  }
+  if (angular.innerCol) {
+    options.innerColor = angular.innerCol;
   }
   if (angular.pivotCol) {
     options.pivotColor = angular.pivotCol;
