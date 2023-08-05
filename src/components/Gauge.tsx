@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { useStyles2 } from '@grafana/ui';
+import { useStyles2, useTheme2 } from '@grafana/ui';
 import { css } from '@emotion/css';
 import { GrafanaTheme2, Threshold, sortThresholds } from '@grafana/data';
 
@@ -14,6 +14,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const needleRef = useRef<SVGPathElement>(null);
   const [previousNeedleValue, setPreviousNeedleValue] = useState(NaN);
   const [currentNeedleValue, setCurrentNeedleValue] = useState(NaN);
+  const theme2 = useTheme2();
 
   // if (options.processedData && options.processedData.length === 0) {
   //   return <div className={noTriggerTextStyles}>{options.globalDisplayTextTriggeredEmpty}</div>;
@@ -153,13 +154,12 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
 
   }, [tickAnglesMaj, tickAnglesMin, options, tickMajorLabels, needleLengthNegCalc, previousNeedleValue, currentNeedleValue]);
 
-  // TODO: convert colors (getColorForD3)
   const createCircleGroup = () => {
     return (
       <g id='circles'>
-        <circle cx={originX} cy={originY} r={outerEdgeRadius} fill={options.outerEdgeColor} stroke='none'></circle>
-        <circle cx={originX} cy={originY} r={innerEdgeRadius} fill={options.innerColor} stroke='none'></circle>
-        <circle cx={originX} cy={originY} r={options.pivotRadius} fill={options.pivotColor} stroke='none'></circle>
+        <circle cx={originX} cy={originY} r={outerEdgeRadius} fill={theme2.visualization.getColorByName(options.outerEdgeColor)} stroke='none'></circle>
+        <circle cx={originX} cy={originY} r={innerEdgeRadius} fill={theme2.visualization.getColorByName(options.innerColor)} stroke='none'></circle>
+        <circle cx={originX} cy={originY} r={options.pivotRadius} fill={theme2.visualization.getColorByName(options.pivotColor)} stroke='none'></circle>
       </g>
     );
   };
@@ -205,7 +205,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
               y={labelYCalc(item) || 0}
               fontSize={options.tickLabelFontSize || 12}
               textAnchor='middle'
-              fill={options.tickLabelColor || '#000000'}
+              fill={theme2.visualization.getColorByName(options.tickLabelColor) || '#000000'}
               fontWeight={'bold'}
               fontFamily={options.tickFont || 'Inter'}>
               {labelText}
@@ -465,7 +465,6 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     );
   };
 
-  // TODO: convert colors (getColorForD3)
   const drawBand = (start: number, end: number, color: string) => {
     if (0 >= end - start) {
       return;
@@ -482,7 +481,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       <>
         {xc &&
           <path
-            fill={color}
+            fill={theme2.visualization.getColorByName(color)}
             d={xc || ''}
             transform={`translate(${originX},${originY}) rotate(${options.maxTickAngle})`}
           />
@@ -621,11 +620,3 @@ const getSVGStyles = (theme: GrafanaTheme2) => css`
   justify-content: center;
   fill: transparent;
 `;
-
-const getColorForD3 = (theme: GrafanaTheme2, color: string) => {
-  let useColor = color;
-  if (typeof theme.visualization !== 'undefined') {
-    useColor = theme.visualization.getColorByName(color);
-  }
-  return useColor;
-};

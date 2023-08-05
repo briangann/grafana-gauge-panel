@@ -81,8 +81,8 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
 
     if (fieldConfig.defaults.thresholds) {
       const result = getActiveThreshold(value, field.thresholds?.steps);
-      const realColor = theme.visualization.getColorByName(result?.color);
-      console.log(`realColor ${realColor} color for value ${value} is ${result?.color} matched val ${result?.value}`);
+      //const realColor = theme.visualization.getColorByName(result?.color);
+      //console.log(`realColor ${realColor} color for value ${value} is ${result?.color} matched val ${result?.value}`);
       return result;
     }
     return null;
@@ -95,8 +95,8 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
 
   const getDisplayValue = (index: number) => {
     const singleMetric = metrics[index];
-    if (singleMetric.display.numeric) {
-      return Number(singleMetric.display.text);
+    if (!isNaN(singleMetric.display.numeric)) {
+      return singleMetric.display.numeric;
     }
     return NaN;
   };
@@ -104,7 +104,6 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
   // get the formatted metrics
   const metrics = getValues();
   const thresholdResult = getThresholdForValue(fieldConfig.defaults, getDisplayValue(0), theme2);
-  console.log(`color is ${thresholdResult?.color} matched val ${thresholdResult?.value}`);
 
   return (
     <div
