@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { useStyles2 } from '@grafana/ui';
 import { css } from '@emotion/css';
-import { GrafanaTheme2 } from '@grafana/data';
+import { GrafanaTheme2, Threshold, sortThresholds } from '@grafana/data';
 
-import { GaugeOptions, MarkerEndShapes, MarkerStartShapes, MarkerType, Markers } from './types';
+import { ExpandedThresholdBand, GaugeOptions, MarkerEndShapes, MarkerStartShapes, MarkerType, Markers } from './types';
 import { scaleLinear, line, arc, interpolateString, select } from 'd3';
 import { easeQuadIn } from 'd3-ease';
 
@@ -380,21 +380,89 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     );
   };
 
+  const getLowerBand = (sorted: Threshold[]) => {
+    const numBands = sorted.length;
+    // if there is just one threshold
+    let nextThresholdValue = options.maxValue;
+    if (numBands > 1) {
+      nextThresholdValue = sorted[1].value;
+    }
+    if (nextThresholdValue === Infinity) {
+      nextThresholdValue = options.maxValue;
+    }
+    let min = sorted[0].value;
+    if (min === -Infinity) {
+      min = options.minValue;
+    }
+    // get the lower band
+    let lowerBand: ExpandedThresholdBand = {
+      index: 0,
+      min: min,
+      max: nextThresholdValue,
+      color: sorted[0].color,
+    };
+    return lowerBand;
+  }
+
+  // TODO: handle returning undefined when there is no upper band
+  const getUpperBand = (sorted: Threshold[]) => {
+    const index = sorted.length - 1;
+    let upperBand: ExpandedThresholdBand = {
+      index: index,
+      min: sorted[index].value,
+      max: options.maxValue,
+      color: sorted[index].color,
+    };
+    return upperBand;
+  }
+
+  // TODO: handle returning undefined when there are no inner bands
+  const getInnerBands = (sorted: Threshold[], lower: ExpandedThresholdBand, upper: ExpandedThresholdBand) => {
+    const innerBands: ExpandedThresholdBand[] = [];
+    for (let index = lower.index + 1; index < upper.index; index++) {
+      innerBands.push({
+        index: index,
+        min: sorted[index].value,
+        max: sorted[index+1].value,
+        color: sorted[index].color,
+      });
+    }
+    return innerBands;
+  }
+
+  const expandThresholdBands = () => {
+    // check if there are no thresholds
+    if (options.thresholds && options.thresholds!.steps.length === 0) {
+      return ({ lowerBand: undefined, innerBands: undefined, upperBand: undefined })
+    }
+    const sorted = sortThresholds(options.thresholds!.steps);
+    // get the lower band
+    const lowerBand = getLowerBand(sorted);
+    // get the upper band
+    const upperBand = getUpperBand(sorted);
+    // get the inner bands
+    const innerBands = getInnerBands(sorted, lowerBand, upperBand)
+    return ({ lowerBand: lowerBand, innerBands: innerBands, upperBand: upperBand });
+  }
+
   const createThresholdBands = () => {
-    // TODO: implement new threshold config
-    const boundaries = '60,80'.split(',');
+    // do not show thresholds if this is false
+    if (!options.showThresholdBandOnGauge) {
+      return;
+    }
+    const {lowerBand, innerBands, upperBand} = expandThresholdBands();
+
     return (
       <>
-        {options.showThresholdBandOnGauge && (
-          <>
-            {options.showThresholdBandLowerRange &&
-              drawBand(options.minValue, parseFloat(boundaries[0]), 'green')}
-            {options.showThresholdBandMiddleRange &&
-              drawBand(parseFloat(boundaries[0]), parseFloat(boundaries[1]), 'yellow')}
-            {options.showThresholdBandUpperRange &&
-              drawBand(parseFloat(boundaries[1]), options.maxValue, 'red')}
-          </>
-        )}
+        { options.showThresholdBandLowerRange && lowerBand &&
+          drawBand(lowerBand.min, lowerBand.max, lowerBand.color)}
+        { options.showThresholdBandMiddleRange && innerBands &&
+          innerBands.map((aBand: ExpandedThresholdBand) => {
+            return drawBand(aBand.min, aBand.max, aBand.color);
+          })
+        }
+        { options.showThresholdBandUpperRange && upperBand &&
+          drawBand(upperBand.min, upperBand.max, upperBand.color)}
       </>
     );
   };

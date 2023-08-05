@@ -1,4 +1,4 @@
-import { PanelData, SelectableValue } from '@grafana/data';
+import { SelectableValue, ThresholdsConfig } from '@grafana/data';
 import { TickMapItemType } from './TickMaps/types';
 
 export interface GaugeOptions {
@@ -74,6 +74,8 @@ export interface GaugeOptions {
   showThresholdBandLowerRange: boolean;
   showThresholdBandMiddleRange: boolean;
   showThresholdBandUpperRange: boolean;
+  //
+  thresholds: ThresholdsConfig | undefined;
 }
 
 // tslint:disable-next-line
@@ -192,3 +194,10 @@ export const Markers: MarkerType[] = [
   { id: 2, name: 'square', path: 'M 0,0 m -5,-5 L 5,-5 L 5,5 L -5,5 Z', viewBox: '-5 -5 10 10' },
   { id: 3, name: 'stub', path: 'M 0,0 m -1,-5 L 1,-5 L 1,5 L -1,5 Z', viewBox: '-1 -5 2 10' },
 ];
+
+export interface ExpandedThresholdBand {
+  index: number;
+  min: number,
+  max: number,
+  color: string
+}
