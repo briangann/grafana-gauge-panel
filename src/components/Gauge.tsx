@@ -401,7 +401,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       max: nextThresholdValue,
       color: sorted[0].color,
     };
-  }
+  };
 
   // TODO: handle returning undefined when there is no upper band
   const getUpperBand = (sorted: Threshold[]) => {
@@ -412,7 +412,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       max: options.maxValue,
       color: sorted[index].color,
     };
-  }
+  };
 
   // TODO: handle returning undefined when there are no inner bands
   const getInnerBands = (sorted: Threshold[], lower: ExpandedThresholdBand, upper: ExpandedThresholdBand) => {
@@ -426,12 +426,12 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       });
     }
     return innerBands;
-  }
+  };
 
   const expandThresholdBands = () => {
     // check if there are no thresholds
     if (options.thresholds && options.thresholds!.steps.length === 0) {
-      return ({ lowerBand: undefined, innerBands: undefined, upperBand: undefined })
+      return ({ lowerBand: undefined, innerBands: undefined, upperBand: undefined });
     }
     const sorted = sortThresholds(options.thresholds!.steps);
     // get the lower band
@@ -441,7 +441,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     // get the inner bands
     const innerBands = getInnerBands(sorted, lowerBand, upperBand);
     return ({ lowerBand, innerBands, upperBand });
-  }
+  };
 
   const createThresholdBands = () => {
     // do not show thresholds if this is false

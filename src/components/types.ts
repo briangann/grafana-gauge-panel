@@ -197,7 +197,7 @@ export const Markers: MarkerType[] = [
 
 export interface ExpandedThresholdBand {
   index: number;
-  min: number,
-  max: number,
-  color: string
+  min: number;
+  max: number;
+  color: string;
 }
