@@ -81,8 +81,6 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
 
     if (fieldConfig.defaults.thresholds) {
       const result = getActiveThreshold(value, field.thresholds?.steps);
-      //const realColor = theme.visualization.getColorByName(result?.color);
-      //console.log(`realColor ${realColor} color for value ${value} is ${result?.color} matched val ${result?.value}`);
       return result;
     }
     return null;

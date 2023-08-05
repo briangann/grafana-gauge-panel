@@ -495,9 +495,9 @@ export const PanelChangedHandler = (
 ) => {
   // Changing from angular polystat panel
   if (prevPluginId === 'd3gauge' && prevOptions.angular) {
-    console.log('detected old panel');
+    // console.log('detected old panel');
     const oldOpts = prevOptions.angular;
-    console.log(JSON.stringify(oldOpts));
+    // console.log(JSON.stringify(oldOpts));
   }
   return {};
 };
