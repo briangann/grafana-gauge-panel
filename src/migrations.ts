@@ -1,4 +1,4 @@
-import { FieldConfig, FieldConfigSource, PanelModel, ThresholdsConfig, ThresholdsMode, ValueMapping, convertOldAngularValueMappings } from '@grafana/data';
+import { FieldConfigSource, PanelModel, ThresholdsConfig, ThresholdsMode, ValueMapping, convertOldAngularValueMappings } from '@grafana/data';
 import { config } from '@grafana/runtime';
 import { satisfies, coerce } from 'semver';
 
@@ -299,14 +299,14 @@ export const migrateDefaults = (angular: AngularOptions) => {
       enabled: true,
     },
     showThresholdBandOnGauge: false,
-    showThresholdColorOnValue: false,
-    showThresholdColorOnBackground: false,
     showThresholdBandLowerRange: false,
     showThresholdBandMiddleRange: false,
     showThresholdBandUpperRange: false,
     displayFormatted: '',
     displayValue: null,
-    thresholds: undefined
+    thresholds: undefined,
+    showThresholdStateOnValue: false,
+    showThresholdStateOnBackground: false
   };
   // next migrate the angular settings
 
@@ -396,10 +396,10 @@ export const migrateDefaults = (angular: AngularOptions) => {
     options.showThresholdBandUpperRange = angular.showUpperThresholdRange;
   }
   if (angular.showThresholdColorOnBackground) {
-    options.showThresholdColorOnBackground = angular.showThresholdColorOnBackground;
+    options.showThresholdStateOnBackground = angular.showThresholdColorOnBackground;
   }
   if (angular.showThresholdColorOnValue) {
-    options.showThresholdColorOnValue = angular.showThresholdColorOnValue;
+    options.showThresholdStateOnValue = angular.showThresholdColorOnValue;
   }
   if (angular.showThresholdOnGauge) {
     options.showThresholdBandOnGauge = angular.showThresholdOnGauge;

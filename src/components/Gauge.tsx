@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { useStyles2, useTheme2 } from '@grafana/ui';
 import { css } from '@emotion/css';
-import { GrafanaTheme2, Threshold, sortThresholds } from '@grafana/data';
+import { getActiveThreshold, GrafanaTheme2, Threshold, sortThresholds } from '@grafana/data';
 
 import { ExpandedThresholdBand, GaugeOptions, MarkerEndShapes, MarkerStartShapes, MarkerType, Markers } from './types';
 import { scaleLinear, line, arc, interpolateString, select } from 'd3';
@@ -155,10 +155,18 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   }, [tickAnglesMaj, tickAnglesMin, options, tickMajorLabels, needleLengthNegCalc, previousNeedleValue, currentNeedleValue]);
 
   const createCircleGroup = () => {
+    let gaugeFaceColor = options.innerColor;
+    // the innerColor gets change to the state if the user has selected this option
+    if (options.showThresholdStateOnBackground) {
+      if (options.displayValue && options.thresholds) {
+        const aThreshold = getActiveThreshold(options.displayValue, options.thresholds.steps);
+        gaugeFaceColor = aThreshold.color;
+      }
+    }
     return (
       <g id='circles'>
         <circle cx={originX} cy={originY} r={outerEdgeRadius} fill={theme2.visualization.getColorByName(options.outerEdgeColor)} stroke='none'></circle>
-        <circle cx={originX} cy={originY} r={innerEdgeRadius} fill={theme2.visualization.getColorByName(options.innerColor)} stroke='none'></circle>
+        <circle cx={originX} cy={originY} r={innerEdgeRadius} fill={theme2.visualization.getColorByName(gaugeFaceColor)} stroke='none'></circle>
         <circle cx={originX} cy={originY} r={options.pivotRadius} fill={theme2.visualization.getColorByName(options.pivotColor)} stroke='none'></circle>
       </g>
     );
@@ -179,7 +187,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
               markerHeight={3}
               markerUnits={'strokeWidth'}
               orient={'auto'} >
-              <path d={item.path} fill={options.needleColor} />
+              <path d={item.path} fill={theme2.visualization.getColorByName(options.needleColor)} />
             </marker>
           );
         })}
@@ -230,7 +238,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
               markerHeight={6}
               markerWidth={6}
               strokeLinecap='round'
-              stroke={options.needleColor}
+              stroke={theme2.visualization.getColorByName(options.needleColor)}
               strokeWidth={needleWidth + 'px'}
             />
           </>
@@ -265,7 +273,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           {pathTicksMinor.length > 0 && pathTicksMinor.map((d: string) => {
             return (
               <>
-                <path d={d} stroke={options.tickMinorColor} strokeWidth={tickWidthMinorCalc + 'px'} />
+                <path d={d} stroke={theme2.visualization.getColorByName(options.tickMinorColor)} strokeWidth={tickWidthMinorCalc + 'px'} />
               </>
             );
           })}
@@ -274,7 +282,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           {pathTicksMajor.length > 0 && pathTicksMajor.map((d: string) => {
             return (
               <>
-                <path d={d} stroke={options.tickMajorColor} strokeWidth={tickWidthMajorCalc + 'px'} />
+                <path d={d} stroke={theme2.visualization.getColorByName(options.tickMajorColor)} strokeWidth={tickWidthMajorCalc + 'px'} />
               </>
             );
           })}
@@ -361,7 +369,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     return angleRad;
   };
 
-  const createValueLabel = () => {
+  const createValueLabel = (color: string) => {
     const position = 0;
     return (
       <g id='valueLabels'>
@@ -370,7 +378,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           y={labelYCalc(position) + options.valueYOffset}
           fontSize={options.valueFontSize}
           textAnchor='middle'
-          fill={options.unitsLabelColor}
+          fill={theme2.visualization.getColorByName(color)}
           fontWeight={'bold'}
           fontFamily={options.valueFont}
         >
@@ -380,6 +388,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     );
   };
 
+  // TODO: handle returning undefined when there is no upper band
   const getLowerBand = (sorted: Threshold[]) => {
     const numBands = sorted.length;
     // if there is just one threshold
@@ -550,38 +559,18 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           'rotate(' + needleAngleNew + ',' + needleCentre + ')'
         );
       });
-
-    // see this for threshold example
-    // https://github.com/grafana/grafana/blob/main/packages/grafana-ui/src/components/Gauge/utils.ts
-    // https://github.com/grafana/grafana/blob/main/packages/grafana-data/src/field/thresholds.ts
-    //
-    const valueThresholdColor = options.unitsLabelColor;
-    // TODO: used new threshold settings
-    // getColorForD3
-    if (options.showThresholdColorOnValue) {
-      /*
-      const boundaries = '60,80'.split(',');
-      // const boundaries = options.thresholds.split(',');
-      if (newVal < parseFloat(boundaries[0])) {
-        valueThresholdColor = options.thresholdColors[0];
-      }
-      if (newVal > parseFloat(boundaries[0]) && newVal <= parseFloat(boundaries[1])) {
-        valueThresholdColor = options.thresholdColors[1];
-      }
-      if (newVal >= parseFloat(boundaries[1])) {
-        valueThresholdColor = options.thresholdColors[2];
-      }
-      */
-    }
-    // fill color
-    // valueLabel.style('fill', valueThresholdColor);
-    // valueLabelParent.selectAll('text').text(newValFormatted);
-    // Update the current value
-    // options.needleValue = newVal;
   };
 
   const ndl = createNeedle();
   updateGauge(ndl, currentNeedleValue || NaN, options.displayFormatted || '0');
+  let valueColor = options.unitsLabelColor;
+  if (options.showThresholdStateOnValue) {
+    if (options.displayValue && options.thresholds) {
+      const aThreshold = getActiveThreshold(options.displayValue, options.thresholds.steps);
+      valueColor = aThreshold.color;
+    }
+  }
+
   return (
     <div className={divStyles}>
       <svg
@@ -599,7 +588,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           {createMajorTickLabels()}
           {createNeedleMarkers()}
           {ndl}
-          {createValueLabel()}
+          {createValueLabel(valueColor)}
         </g>
       </svg>
     </div>

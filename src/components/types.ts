@@ -69,11 +69,12 @@ export interface GaugeOptions {
 
   // thresholds
   showThresholdBandOnGauge: boolean;
-  showThresholdColorOnValue: boolean;
-  showThresholdColorOnBackground: boolean;
   showThresholdBandLowerRange: boolean;
   showThresholdBandMiddleRange: boolean;
   showThresholdBandUpperRange: boolean;
+  //
+  showThresholdStateOnValue: boolean;
+  showThresholdStateOnBackground: boolean;
   //
   thresholds: ThresholdsConfig | undefined;
 }
