@@ -417,7 +417,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addNumberInput({
         name: 'Max Tick Angle',
         path: 'maxTickAngle',
-        description: 'Angle where the tick value ends (default 320)',
+        description: 'Angle where the tick value ends (default 300)',
         defaultValue: 300,
         settings: {
           placeHolder: '300',
@@ -429,10 +429,10 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addNumberInput({
         name: 'Zero Needle Angle',
         path: 'zeroNeedleAngle',
-        description: 'Angle where needle is at minimum value (default 60)',
-        defaultValue: 60,
+        description: 'Angle where needle is at minimum value (default 40)',
+        defaultValue: 40,
         settings: {
-          placeHolder: '60',
+          placeHolder: '40',
           min: 0,
           integer: false,
         },
