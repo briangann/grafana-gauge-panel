@@ -11,7 +11,7 @@ export const dToR = (angleDeg: any) => {
   return angleRad;
 };
 
-export const valueToDegrees = (value: any, maxTickAngle: number, zeroTickAngle: number, maxValue: number, minValue: number) => {
+export const valueToDegrees = (value: any, minValue: number, maxValue: number, zeroTickAngle: number, maxTickAngle: number) => {
   // example: degree range is from 60 to 300 (240)  maxTickAngle - zeroTickAngle
   const degreeRange = maxTickAngle - zeroTickAngle;
   const range = maxValue - minValue;
@@ -19,8 +19,8 @@ export const valueToDegrees = (value: any, maxTickAngle: number, zeroTickAngle: 
   return (value / range) * degreeRange - ((min / range) * degreeRange + zeroTickAngle);
 };
 
-export const valueToRadians = (value: any, maxTickAngle: number, zeroTickAngle: number, maxValue: number, minValue: number) => {
-  return (valueToDegrees(value, maxTickAngle, zeroTickAngle, maxValue, minValue) * Math.PI) / 180;
+export const valueToRadians = (value: any, minValue: number, maxValue: number, zeroTickAngle: number, maxTickAngle: number) => {
+  return (valueToDegrees(value, minValue, maxValue, zeroTickAngle, maxTickAngle) * Math.PI) / 180;
 };
 
 // Define functions to calcuate the positions of the labels for the tick marks
@@ -48,8 +48,8 @@ export const drawBand = (start: number, end: number, color: string, originX: num
   const xc = anArc({
     innerRadius: 0.7 * options.gaugeRadius,
     outerRadius: 0.85 * options.gaugeRadius,
-    startAngle: valueToRadians(start, options.maxTickAngle, options.zeroTickAngle, options.maxValue, options.minValue),
-    endAngle: valueToRadians(end, options.maxTickAngle, options.zeroTickAngle, options.maxValue, options.minValue),
+    startAngle: valueToRadians(start, options.minValue, options.maxValue, options.zeroTickAngle, options.maxTickAngle),
+    endAngle: valueToRadians(end, options.minValue, options.maxValue, options.zeroTickAngle, options.maxTickAngle),
   });
 
   return (

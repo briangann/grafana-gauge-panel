@@ -4,8 +4,8 @@ import { useStyles2, useTheme2 } from '@grafana/ui';
 import { css } from '@emotion/css';
 import { getActiveThreshold, GrafanaTheme2, Threshold, sortThresholds } from '@grafana/data';
 
-import { ExpandedThresholdBand, GaugeOptions, MarkerEndShapes, MarkerStartShapes, MarkerType, Markers } from './types';
-import { scaleLinear, line, arc, interpolateString, select } from 'd3';
+import { ExpandedThresholdBand, GaugeOptions, MarkerEndShapes, MarkerStartShapes } from './types';
+import { scaleLinear, line, interpolateString, select } from 'd3';
 import { easeQuadIn } from 'd3-ease';
 
 import { createNeedleMarkers, dToR, drawBand, labelXCalc, labelYCalc, needleCalc } from './utils';
