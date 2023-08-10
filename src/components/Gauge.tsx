@@ -8,12 +8,18 @@ import { ExpandedThresholdBand, GaugeOptions, MarkerEndShapes, MarkerStartShapes
 import { scaleLinear, line, arc, interpolateString, select } from 'd3';
 import { easeQuadIn } from 'd3-ease';
 
+import { createNeedleMarkers, dToR, drawBand, labelXCalc, labelYCalc, needleCalc } from './utils';
+
 export const Gauge: React.FC<GaugeOptions> = (options) => {
+  // pull in styles
   const divStyles = useStyles2(getWrapperStyles);
   const svgStyles = useStyles2(getSVGStyles);
+  // need a Ref to the needle to update it
   const needleRef = useRef<SVGPathElement>(null);
-  const [previousNeedleValue, setPreviousNeedleValue] = useState(NaN);
-  const [currentNeedleValue, setCurrentNeedleValue] = useState(NaN);
+  // keeps the previous value, initially it is the same, this is used for animation
+  const [previousNeedleValue, setPreviousNeedleValue] = useState(options.displayValue);
+  const [currentNeedleValue, setCurrentNeedleValue] = useState(options.displayValue);
+  // pull in theme reference
   const theme2 = useTheme2();
 
   // if (options.processedData && options.processedData.length === 0) {
@@ -43,6 +49,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   // center of gauge
   const originX = options.gaugeRadius;
   const originY = options.gaugeRadius;
+  let needleElement: JSX.Element | null = null;
+
 
   useEffect(() => {
 
@@ -147,12 +155,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       setTickMajorLabels(genTickMajorLabels);
     }
 
-    if (currentNeedleValue !== options.displayValue) {
-      setPreviousNeedleValue(currentNeedleValue || NaN);
-      setCurrentNeedleValue(options.displayValue || NaN);
-    }
+  }, [tickAnglesMaj, tickAnglesMin, options, tickMajorLabels, needleLengthNegCalc]);
 
-  }, [tickAnglesMaj, tickAnglesMin, options, tickMajorLabels, needleLengthNegCalc, previousNeedleValue, currentNeedleValue]);
 
   const createCircleGroup = () => {
     let gaugeFaceColor = options.innerColor;
@@ -172,28 +176,6 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     );
   };
 
-  const createNeedleMarkers = () => {
-    return (
-      <defs>
-        {Markers.map((item: MarkerType) => {
-          return (
-            <marker
-              key={item.name}
-              id={`marker_${item.name}`}
-              viewBox={item.viewBox}
-              refX={0}
-              refY={0}
-              markerWidth={3}
-              markerHeight={3}
-              markerUnits={'strokeWidth'}
-              orient={'auto'} >
-              <path d={item.path} fill={theme2.visualization.getColorByName(options.needleColor)} />
-            </marker>
-          );
-        })}
-      </defs>
-    );
-  };
 
   const createMajorTickLabels = () => {
     let maxLabelLength = 0;
@@ -209,8 +191,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           return (
             <text
               key={`mtl_${index}`}
-              x={labelXCalc(item, maxLabelLength, labelText) || 0}
-              y={labelYCalc(item) || 0}
+              x={labelXCalc(item, maxLabelLength, labelText, labelFontSize, labelStart, originX) || 0}
+              y={labelYCalc(item, labelFontSize, labelStart, originY) || 0}
               fontSize={options.tickLabelFontSize || 12}
               textAnchor='middle'
               fill={theme2.visualization.getColorByName(options.tickLabelColor) || '#000000'}
@@ -225,7 +207,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   };
 
   const createNeedle = () => {
-    const pathNeedle = needleCalc(options.zeroNeedleAngle);
+    const pathNeedle = needleCalc(options.zeroNeedleAngle, originX, originY, needlePathStart, needlePathLength);
     return (
       <g id='needle'>
         {pathNeedle.length > 0 && (
@@ -247,22 +229,6 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     );
   };
 
-  const needleCalc = (degree: number) => {
-    let path = '';
-    const nAngleRad = dToR(degree + 90);
-    const y1 = originY + needlePathStart * Math.sin(nAngleRad);
-    const y2 = originY + (needlePathStart + needlePathLength) * Math.sin(nAngleRad);
-    const x1 = originX + needlePathStart * Math.cos(nAngleRad);
-    const x2 = originX + (needlePathStart + needlePathLength) * Math.cos(nAngleRad);
-    const lineSVG = line()([
-      [x1, y1],
-      [x2, y2],
-    ]);
-    if (lineSVG) {
-      path = lineSVG;
-    }
-    return path;
-  };
 
   const createTicks = () => {
     const pathTicksMajor = tickCalcMaj(tickAnglesMaj);
@@ -289,23 +255,6 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         </g>
       </g>
     );
-  };
-
-  // Define functions to calcuate the positions of the labels for the tick marks
-  const labelXCalc = (position: number, maxLabelLength: number, labelText: string) => {
-    const tickAngle = position + 90;
-    const tickAngleRad = dToR(tickAngle);
-    // the max length of digits needs to be used for proper alignment
-    const labelW = labelFontSize / (labelText.length + maxLabelLength / 2);
-    const x1 = originX + (labelStart - labelW) * Math.cos(tickAngleRad);
-    return x1;
-  };
-
-  const labelYCalc = (position: number) => {
-    const tickAngle = position + 90;
-    const tickAngleRad = dToR(tickAngle);
-    const y1 = originY + labelStart * Math.sin(tickAngleRad) + labelFontSize / 2;
-    return y1;
   };
 
   const tickCalcMin = (degrees: number[]) => {
@@ -351,31 +300,14 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     return paths;
   };
 
-  const valueToDegrees = (value: any) => {
-    // degree range is from 60 to 300 (240)  maxTickAngle - zeroTickAngle
-    const degreeRange = options.maxTickAngle - options.zeroTickAngle;
-    const range = options.maxValue - options.minValue;
-    const min = options.minValue;
-    return (value / range) * degreeRange - ((min / range) * degreeRange + options.zeroTickAngle);
-  };
-
-  const valueToRadians = (value: any) => {
-    return (valueToDegrees(value) * Math.PI) / 180;
-  };
-
-  const dToR = (angleDeg: any) => {
-    // Turns an angle in degrees to radians
-    const angleRad = angleDeg * (Math.PI / 180);
-    return angleRad;
-  };
 
   const createValueLabel = (color: string) => {
     const position = 0;
     return (
       <g id='valueLabels'>
         <text
-          x={labelXCalc(position, 0, options.displayFormatted)}
-          y={labelYCalc(position) + options.valueYOffset}
+          x={labelXCalc(position, 0, options.displayFormatted, labelFontSize, labelStart, originX)}
+          y={labelYCalc(position, labelFontSize, labelStart, originY) + options.valueYOffset}
           fontSize={options.valueFontSize}
           textAnchor='middle'
           fill={theme2.visualization.getColorByName(color)}
@@ -462,107 +394,105 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     return (
       <>
         {options.showThresholdBandLowerRange && lowerBand &&
-          drawBand(lowerBand.min, lowerBand.max, lowerBand.color)}
+          drawBand(lowerBand.min, lowerBand.max, lowerBand.color, originX, originY, options, theme2)}
         {options.showThresholdBandMiddleRange && innerBands &&
           innerBands.map((aBand: ExpandedThresholdBand) => {
-            return drawBand(aBand.min, aBand.max, aBand.color);
+            return drawBand(aBand.min, aBand.max, aBand.color, originX, originY, options, theme2);
           })
         }
         {options.showThresholdBandUpperRange && upperBand &&
-          drawBand(upperBand.min, upperBand.max, upperBand.color)}
+          drawBand(upperBand.min, upperBand.max, upperBand.color, originX, originY, options, theme2)}
       </>
     );
   };
 
-  const drawBand = (start: number, end: number, color: string) => {
-    if (0 >= end - start) {
-      return;
-    }
-    const anArc = arc();
-    const xc = anArc({
-      innerRadius: 0.7 * options.gaugeRadius,
-      outerRadius: 0.85 * options.gaugeRadius,
-      startAngle: valueToRadians(start),
-      endAngle: valueToRadians(end),
-    });
+  if (needleElement === null) {
+    needleElement = createNeedle();
+  }
 
-    return (
-      <>
-        {xc &&
-          <path
-            fill={theme2.visualization.getColorByName(color)}
-            d={xc || ''}
-            transform={`translate(${originX},${originY}) rotate(${options.maxTickAngle})`}
-          />
+  useEffect(() => {
+
+    const updateGauge = (needleGroup: JSX.Element | null, newVal: number, newValFormatted: string) => {
+      // Animate the transistion of the needle to its new value
+      const oldVal = previousNeedleValue;
+      // Set default values if necessary
+      if (newVal === undefined) {
+        newVal = options.minValue;
+      }
+      if (newVal > options.maxValue) {
+        newVal = options.maxValue;
+      }
+      // snap to new location by default
+      let transitionSpeed = 0;
+      if (options.animateNeedleValueTransition) {
+        transitionSpeed = options.animateNeedleValueTransitionSpeed;
+        // no transition when previous value is NaN
+        if (Number.isNaN(oldVal)) {
+          transitionSpeed = 0;
         }
-      </>
-    );
-  };
+      }
+      const needlePath = select(needleRef.current);
+      const valueScale = scaleLinear()
+        .domain([options.minValue, options.maxValue])
+        .range([options.zeroTickAngle, options.maxTickAngle]);
+      let needleAngleOld = options.zeroNeedleAngle;
 
-  const updateGauge = (needleGroup: JSX.Element, newVal: number, newValFormatted: string) => {
-    // Animate the transistion of the needle to its new value
-    const oldVal = previousNeedleValue;
-    // Set default values if necessary
-    if (newVal === undefined) {
-      newVal = options.minValue;
-    }
-    if (newVal > options.maxValue) {
-      newVal = options.maxValue;
-    }
-    // snap to new location by default
-    let transitionSpeed = 0;
-    if (options.animateNeedleValueTransition) {
-      transitionSpeed = options.animateNeedleValueTransitionSpeed;
-      // no transition when previous value is NaN
-      if (Number.isNaN(oldVal)) {
-        transitionSpeed = 0;
-      }
-    }
-    const needlePath = select(needleRef.current);
-    const valueScale = scaleLinear()
-      .domain([options.minValue, options.maxValue])
-      .range([options.zeroTickAngle, options.maxTickAngle]);
-    let needleAngleOld = 0;
-    let needleAngleNew = 0;
-    if ((valueScale !== undefined) && (oldVal !== null) && (newVal !== null)) {
-      const oldScaleVal = valueScale(oldVal);
-      if (oldScaleVal !== undefined) {
-        needleAngleOld = oldScaleVal - options.zeroNeedleAngle;
-      }
       const newScaleVal = valueScale(newVal);
+
+      let needleAngleNew = options.zeroNeedleAngle;
       if (newScaleVal !== undefined) {
         needleAngleNew = newScaleVal - options.zeroNeedleAngle;
       }
+
+      if (valueScale !== undefined && !isNaN(Number(oldVal)) && !isNaN(newVal)) {
+        const oldScaleVal = valueScale(Number(oldVal));
+        if (oldScaleVal !== undefined) {
+          needleAngleOld = oldScaleVal - options.zeroNeedleAngle;
+        }
+        if (newScaleVal !== undefined) {
+          needleAngleNew = newScaleVal - options.zeroNeedleAngle;
+        }
+      }
+
+      needlePath
+        .transition()
+        .duration(transitionSpeed)
+        .ease(easeQuadIn)
+        .attrTween('transform', () => {
+          // Check for min/max ends of the needle
+          if (needleAngleOld + options.zeroNeedleAngle > options.maxTickAngle) {
+            needleAngleOld = options.maxNeedleAngle - options.zeroNeedleAngle;
+          }
+          if (needleAngleOld + options.zeroNeedleAngle < options.zeroTickAngle) {
+            needleAngleOld = 0;
+          }
+          if (needleAngleNew + options.zeroNeedleAngle > options.maxTickAngle) {
+            needleAngleNew = options.maxNeedleAngle - options.zeroNeedleAngle;
+          }
+          if (needleAngleNew + options.zeroNeedleAngle < options.zeroTickAngle) {
+            needleAngleNew = 0;
+          }
+          const needleCentre = originX + ',' + originY;
+          return interpolateString(
+            'rotate(' + needleAngleOld + ',' + needleCentre + ')',
+            'rotate(' + needleAngleNew + ',' + needleCentre + ')'
+          );
+        });
+    };
+
+    if (currentNeedleValue !== null && !isNaN(currentNeedleValue)) {
+      updateGauge(needleElement, currentNeedleValue, options.displayFormatted);
     }
+  }, [options.displayValue, tickAnglesMaj, tickAnglesMin, tickMajorLabels, needleLengthNegCalc, previousNeedleValue, currentNeedleValue, originX, originY, needleElement, options.maxValue, options.animateNeedleValueTransition, options.minValue, options.zeroTickAngle, options.maxTickAngle, options.zeroNeedleAngle, options.animateNeedleValueTransitionSpeed, options.maxNeedleAngle, options.displayFormatted]);
 
-    needlePath
-      .transition()
-      .duration(transitionSpeed)
-      .ease(easeQuadIn)
-      .attrTween('transform', (d: any, i: any, a: any) => {
-        // Check for min/max ends of the needle
-        if (needleAngleOld + options.zeroNeedleAngle > options.maxTickAngle) {
-          needleAngleOld = options.maxNeedleAngle - options.zeroNeedleAngle;
-        }
-        if (needleAngleOld + options.zeroNeedleAngle < options.zeroTickAngle) {
-          needleAngleOld = 0;
-        }
-        if (needleAngleNew + options.zeroNeedleAngle > options.maxTickAngle) {
-          needleAngleNew = options.maxNeedleAngle - options.zeroNeedleAngle;
-        }
-        if (needleAngleNew + options.zeroNeedleAngle < options.zeroTickAngle) {
-          needleAngleNew = 0;
-        }
-        const needleCentre = originX + ',' + originY;
-        return interpolateString(
-          'rotate(' + needleAngleOld + ',' + needleCentre + ')',
-          'rotate(' + needleAngleNew + ',' + needleCentre + ')'
-        );
-      });
-  };
+  useEffect(() => {
+    // this will trigger updating the gauge
+    if (currentNeedleValue !== options.displayValue) {
+      setPreviousNeedleValue(currentNeedleValue);
+      setCurrentNeedleValue(options.displayValue);
+    }
+  }, [currentNeedleValue, options.displayValue, previousNeedleValue]);
 
-  const ndl = createNeedle();
-  updateGauge(ndl, currentNeedleValue || NaN, options.displayFormatted || '0');
   let valueColor = options.unitsLabelColor;
   if (options.showThresholdStateOnValue) {
     if (options.displayValue && options.thresholds) {
@@ -570,6 +500,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       valueColor = aThreshold.color;
     }
   }
+
 
   return (
     <div className={divStyles}>
@@ -586,8 +517,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           {createThresholdBands()}
           {createTicks()}
           {createMajorTickLabels()}
-          {createNeedleMarkers()}
-          {ndl}
+          {createNeedleMarkers(options.needleColor, theme2)}
+          {needleElement}
           {createValueLabel(valueColor)}
         </g>
       </svg>
