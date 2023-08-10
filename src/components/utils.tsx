@@ -16,14 +16,14 @@ export interface ValueToDegreesOptions {
   maxValue: number;
   zeroTickAngle: number;
   maxTickAngle: number;
-};
+}
 
 export interface ValueToRadiansOptions {
   minValue: number;
   maxValue: number;
   zeroTickAngle: number;
   maxTickAngle: number;
-};
+}
 
 export const valueToDegrees = (value: number, options: ValueToDegreesOptions) => {
   // example: degree range is from 60 to 300 (240)  maxTickAngle - zeroTickAngle
