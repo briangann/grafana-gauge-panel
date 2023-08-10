@@ -11,16 +11,36 @@ export const dToR = (angleDeg: any) => {
   return angleRad;
 };
 
-export const valueToDegrees = (value: any, minValue: number, maxValue: number, zeroTickAngle: number, maxTickAngle: number) => {
-  // example: degree range is from 60 to 300 (240)  maxTickAngle - zeroTickAngle
-  const degreeRange = maxTickAngle - zeroTickAngle;
-  const range = maxValue - minValue;
-  const min = minValue;
-  return (value / range) * degreeRange - ((min / range) * degreeRange + zeroTickAngle);
+export interface ValueToDegreesOptions {
+  minValue: number;
+  maxValue: number;
+  zeroTickAngle: number;
+  maxTickAngle: number;
 };
 
-export const valueToRadians = (value: any, minValue: number, maxValue: number, zeroTickAngle: number, maxTickAngle: number) => {
-  return (valueToDegrees(value, minValue, maxValue, zeroTickAngle, maxTickAngle) * Math.PI) / 180;
+export interface ValueToRadiansOptions {
+  minValue: number;
+  maxValue: number;
+  zeroTickAngle: number;
+  maxTickAngle: number;
+};
+
+export const valueToDegrees = (value: number, options: ValueToDegreesOptions) => {
+  // example: degree range is from 60 to 300 (240)  maxTickAngle - zeroTickAngle
+  const degreeRange = options.maxTickAngle - options.zeroTickAngle;
+  const range = options.maxValue - options.minValue;
+  const min = options.minValue;
+  return (value / range) * degreeRange - ((min / range) * degreeRange + options.zeroTickAngle);
+};
+
+export const valueToRadians = (value: number, options: ValueToRadiansOptions) => {
+  const opts: ValueToDegreesOptions = {
+    minValue: options.minValue,
+    maxValue: options.maxValue,
+    zeroTickAngle: options.zeroTickAngle,
+    maxTickAngle: options.maxTickAngle
+  };
+  return (valueToDegrees(value, opts) * Math.PI) / 180;
 };
 
 // Define functions to calcuate the positions of the labels for the tick marks
@@ -45,11 +65,17 @@ export const drawBand = (start: number, end: number, color: string, originX: num
     return;
   }
   const anArc = arc();
+  const vToROptions: ValueToRadiansOptions = {
+    minValue: options.minValue,
+    maxValue: options.maxValue,
+    zeroTickAngle: options.zeroTickAngle,
+    maxTickAngle: options.maxTickAngle
+  };
   const xc = anArc({
     innerRadius: 0.7 * options.gaugeRadius,
     outerRadius: 0.85 * options.gaugeRadius,
-    startAngle: valueToRadians(start, options.minValue, options.maxValue, options.zeroTickAngle, options.maxTickAngle),
-    endAngle: valueToRadians(end, options.minValue, options.maxValue, options.zeroTickAngle, options.maxTickAngle),
+    startAngle: valueToRadians(start, vToROptions),
+    endAngle: valueToRadians(end, vToROptions),
   });
 
   return (
