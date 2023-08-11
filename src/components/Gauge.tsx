@@ -419,11 +419,9 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       if (newVal === undefined) {
         newVal = options.minValue;
       }
-      if (newVal > options.maxValue) {
-        newVal = options.maxValue;
-      }
       // snap to new location by default
       let transitionSpeed = 0;
+
       if (options.animateNeedleValueTransition) {
         transitionSpeed = options.animateNeedleValueTransitionSpeed;
         // no transition when previous value is NaN
@@ -431,6 +429,18 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           transitionSpeed = 0;
         }
       }
+
+      if (!options.allowNeedleCrossLimits) {
+        if (newVal < options.minValue) {
+          newVal = options.minValue;
+          transitionSpeed = 0;
+        }
+        if (newVal > options.maxValue) {
+          newVal = options.maxValue;
+          transitionSpeed = 0;
+        }
+      }
+
       const needlePath = select(needleRef.current);
       const valueScale = scaleLinear()
         .domain([options.minValue, options.maxValue])
@@ -459,6 +469,9 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         .duration(transitionSpeed)
         .ease(easeQuadIn)
         .attrTween('transform', () => {
+          //
+          // TODO: allow burying the needle if there is "space", otherwise lock to min/max
+          //
           // Check for min/max ends of the needle
           if (needleAngleOld + options.zeroNeedleAngle > options.maxTickAngle) {
             needleAngleOld = options.maxNeedleAngle - options.zeroNeedleAngle;
@@ -483,7 +496,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     if (currentNeedleValue !== null && !isNaN(currentNeedleValue)) {
       updateGauge(needleElement, currentNeedleValue, options.displayFormatted);
     }
-  }, [options.displayValue, tickAnglesMaj, tickAnglesMin, tickMajorLabels, needleLengthNegCalc, previousNeedleValue, currentNeedleValue, originX, originY, needleElement, options.maxValue, options.animateNeedleValueTransition, options.minValue, options.zeroTickAngle, options.maxTickAngle, options.zeroNeedleAngle, options.animateNeedleValueTransitionSpeed, options.maxNeedleAngle, options.displayFormatted]);
+  }, [options, tickAnglesMaj, tickAnglesMin, tickMajorLabels, needleLengthNegCalc, previousNeedleValue, currentNeedleValue, originX, originY, needleElement]);
+//}, [options.displayValue, tickAnglesMaj, tickAnglesMin, tickMajorLabels, needleLengthNegCalc, previousNeedleValue, currentNeedleValue, originX, originY, needleElement, options.maxValue, options.animateNeedleValueTransition, options.minValue, options.zeroTickAngle, options.maxTickAngle, options.zeroNeedleAngle, options.animateNeedleValueTransitionSpeed, options.maxNeedleAngle, options.displayFormatted, options.allowNeedleCrossLimits]);
 
   useEffect(() => {
     // this will trigger updating the gauge

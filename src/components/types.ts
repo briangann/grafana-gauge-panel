@@ -18,6 +18,7 @@ export interface GaugeOptions {
   // Needle Options
   animateNeedleValueTransition: boolean;
   animateNeedleValueTransitionSpeed: number;
+  allowNeedleCrossLimits: boolean;
   markerEndEnabled: boolean;
   markerEndShape: string;
   markerStartEnabled: boolean;

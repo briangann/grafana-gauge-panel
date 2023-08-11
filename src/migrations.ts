@@ -258,6 +258,7 @@ export const migrateDefaults = (angular: AngularOptions) => {
     tickFont: FontFamilies.INTER,
     animateNeedleValueTransition: true,
     animateNeedleValueTransitionSpeed: 100,
+    allowNeedleCrossLimits: true,
     markerEndEnabled: false,
     markerEndShape: 'arrow',
     markerStartEnabled: false,

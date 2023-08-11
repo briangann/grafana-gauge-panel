@@ -110,6 +110,14 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         category: ['Needle Options'],
         showIf: (c) => c.animateNeedleValueTransition === true,
       })
+      // toggle ability to bury the needle (below min, beyond max)
+      .addBooleanSwitch({
+        name: 'Allow Crossing Limits',
+        path: 'allowNeedleCrossLimits',
+        defaultValue: true,
+        category: ['Needle Options'],
+        description: 'Allow needle to render below and above limits',
+      })
       .addNumberInput({
         name: 'Needle Width',
         path: 'needleWidth',
