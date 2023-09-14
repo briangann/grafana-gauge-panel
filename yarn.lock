@@ -3815,13 +3815,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/grafana@github:CorpGlory/types-grafana.git":
-  version: 4.6.3
-  resolution: "@types/grafana@https://github.com/CorpGlory/types-grafana.git#commit=4beede5fa0e5bdebdb23b09e4e1e214dcc4c267f"
-  checksum: bc0b2c2769fe3918440bb2b65f9fa51299332c4f43665501d605675c7a682362aaac549e6aba3536bad1b5a9c6c124a87c98515604533ab259cb9ed21b23a56a
-  languageName: node
-  linkType: hard
-
 "@types/hoist-non-react-statics@npm:^3.3.0":
   version: 3.3.1
   resolution: "@types/hoist-non-react-statics@npm:3.3.1"
@@ -4010,9 +4003,9 @@ __metadata:
   linkType: hard
 
 "@types/semver@npm:^7.3.12":
-  version: 7.5.1
-  resolution: "@types/semver@npm:7.5.1"
-  checksum: 2fffe938c7ac168711f245a16e1856a3578d77161ca17e29a05c3e02c7be3e9c5beefa29a3350f6c1bd982fb70aa28cc52e4845eb7d36246bcdc0377170d584d
+  version: 7.5.2
+  resolution: "@types/semver@npm:7.5.2"
+  checksum: 743aa8a2b58e20b329c19bd2459152cb049d12fafab7279b90ac11e0f268c97efbcb606ea0c681cca03f79015381b40d9b1244349b354270bec3f939ed49f6e9
   languageName: node
   linkType: hard
 
@@ -5325,7 +5318,6 @@ __metadata:
     "@types/d3": ^5.16.3
     "@types/d3-scale": 3.2.2
     "@types/glob": ^8.0.0
-    "@types/grafana": "github:CorpGlory/types-grafana.git"
     "@types/jest": ^29.5.0
     "@types/jquery": 3.5.5
     "@types/lodash": ^4.14.194
