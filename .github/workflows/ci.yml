@@ -25,32 +25,15 @@ jobs:
 
       - name: Check types
         run: yarn typecheck
+
       - name: Lint
-        run: yarn lint
+        run: NODE_OPTIONS=--max_old_space_size=4096 yarn lint
+
       - name: Unit tests
         run: yarn test:ci
+
       - name: Build frontend
         run: yarn build
-
-      - name: E2E - Check for Frontend Tests
-        id: check-for-e2e-frontend-tests
-        run: |
-          if [ -d "cypress" ]
-          then
-            echo "has-e2e-frontend-tests=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: E2E - Start grafana docker
-        if: steps.check-for-e2e-frontend-tests.outputs.has-e2e-frontend-tests == 'true'
-        run: yarn server -d
-
-      - name: E2E - Run tests
-        if: steps.check-for-e2e-frontend-tests.outputs.has-e2e-frontend-tests == 'true'
-        run: yarn e2e
-
-      - name: E2E - Stop grafana docker
-        if: steps.check-for-e2e-frontend-tests.outputs.has-e2e-frontend-tests == 'true'
-        run: docker-compose down
 
       - name: Check for backend
         id: check-for-backend
@@ -79,6 +62,34 @@ jobs:
         with:
           version: latest
           args: buildAll
+
+      - name: E2E - Check for Frontend Tests
+        id: check-for-e2e-frontend-tests
+        run: |
+          if [ -d "cypress" ]
+          then
+            echo "has-e2e-frontend-tests=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: E2E - Start grafana docker
+        if: steps.check-for-e2e-frontend-tests.outputs.has-e2e-frontend-tests == 'true'
+        run: yarn server -d
+
+      - name: E2E - Run tests
+        if: steps.check-for-e2e-frontend-tests.outputs.has-e2e-frontend-tests == 'true'
+        run: yarn e2e
+
+      - name: Archive E2E output
+        uses: actions/upload-artifact@v3
+        if: steps.check-for-e2e-frontend-tests.outputs.has-e2e-frontend-tests == 'true'
+        with:
+          name: cypress-videos
+          path: cypress/videos
+          retention-days: 5
+
+      - name: E2E - Stop grafana docker
+        if: steps.check-for-e2e-frontend-tests.outputs.has-e2e-frontend-tests == 'true'
+        run: docker-compose down
 
       - name: Code Climate - Check environment
         id: check-for-codeclimate
