@@ -197,13 +197,13 @@ const config = async (env): Promise<Configuration> => {
       modules: [path.resolve(process.cwd(), 'src'), 'node_modules'],
       unsafeCache: true,
     },
-  }
+  };
 
   if(isWSL()) {
     baseConfig.watchOptions = {
       poll: 3000,
       ignored: /node_modules/,
-    }}
+    }};
 
 
   return baseConfig;
