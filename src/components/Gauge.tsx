@@ -497,7 +497,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       updateGauge(needleElement, currentNeedleValue, options.displayFormatted);
     }
   }, [options, tickAnglesMaj, tickAnglesMin, tickMajorLabels, needleLengthNegCalc, previousNeedleValue, currentNeedleValue, originX, originY, needleElement]);
-//}, [options.displayValue, tickAnglesMaj, tickAnglesMin, tickMajorLabels, needleLengthNegCalc, previousNeedleValue, currentNeedleValue, originX, originY, needleElement, options.maxValue, options.animateNeedleValueTransition, options.minValue, options.zeroTickAngle, options.maxTickAngle, options.zeroNeedleAngle, options.animateNeedleValueTransitionSpeed, options.maxNeedleAngle, options.displayFormatted, options.allowNeedleCrossLimits]);
+  // }, [options.displayValue, tickAnglesMaj, tickAnglesMin, tickMajorLabels, needleLengthNegCalc, previousNeedleValue, currentNeedleValue, originX, originY, needleElement, options.maxValue, options.animateNeedleValueTransition, options.minValue, options.zeroTickAngle, options.maxTickAngle, options.zeroNeedleAngle, options.animateNeedleValueTransitionSpeed, options.maxNeedleAngle, options.displayFormatted, options.allowNeedleCrossLimits]);
 
   useEffect(() => {
     // this will trigger updating the gauge

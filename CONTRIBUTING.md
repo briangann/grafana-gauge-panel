@@ -25,7 +25,8 @@ docker-compose up
 
 Then browse to <http://localhost:3000>
 
-There is also a catalog-review directory with a more complete setup that includes a datasource and sample dashboards.
+There is also a catalog-review directory with a more complete setup that includes
+a datasource and sample dashboards.
 
 ## External Dependencies
 

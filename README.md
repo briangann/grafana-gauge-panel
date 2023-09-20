@@ -9,7 +9,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/1c750faa58c1f7b3c7fa/maintainability)](https://codeclimate.com/github/briangann/grafana-gauge-panel/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1c750faa58c1f7b3c7fa/test_coverage)](https://codeclimate.com/github/briangann/grafana-gauge-panel/test_coverage)
 
-This panel plugin provides a [D3-based](https://www.d3js.org) gauge panel for [Grafana](https://www.grafana.com) 8.4+/9.x/10.x
+This panel plugin provides a [D3-based](https://www.d3js.org) gauge panel
+for [Grafana](https://www.grafana.com) 8.4.10+/9.x/10.x
 
 ## Screenshots
 
@@ -64,7 +65,8 @@ With Limits
 
 ## Contributing
 
-All contributions are welcome! See the [CONTRIBUTING.md](CONTRIBUTING.md) doc for more information.
+All contributions are welcome!
+See the [CONTRIBUTING.md](CONTRIBUTING.md) doc for more information.
 
 ## Acknowledgements
 
