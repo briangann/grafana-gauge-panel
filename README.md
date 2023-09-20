@@ -6,17 +6,16 @@
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/jepetlefeu.svg?style=social)](https://twitter.com/jepetlefeu)
 ![Release](https://github.com/briangann/grafana-gauge-panel/workflows/Release/badge.svg)
-[![Known Vulnerabilities](https://snyk.io/test/github/briangann/grafana-gauge-panel/badge.svg)](https://snyk.io/test/github/briangann/grafana-gauge-panel)
 [![Maintainability](https://api.codeclimate.com/v1/badges/1c750faa58c1f7b3c7fa/maintainability)](https://codeclimate.com/github/briangann/grafana-gauge-panel/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1c750faa58c1f7b3c7fa/test_coverage)](https://codeclimate.com/github/briangann/grafana-gauge-panel/test_coverage)
 
-This panel plugin provides a [D3-based](https://www.d3js.org) gauge panel for [Grafana](https://www.grafana.com) 6.x/7.x/8.x/9.x
+This panel plugin provides a [D3-based](https://www.d3js.org) gauge panel for [Grafana](https://www.grafana.com) 8.4+/9.x/10.x
 
 ## Screenshots
 
 ### Example gauges
 
-![Default Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/default-gauge.png)
+![Default Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-gauge-default-settings.png)
 ![Default Gauge With Threshold](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/default-gauge-w-threshold.png)
 
 ![Custom Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/alt-gauge.png)
@@ -63,38 +62,9 @@ With Limits
 * Arbitrary degree gauges now supported (default is from 60 to 320)
 * Value text on gauge can now be moved up/down as needed
 
-## Building
+## Contributing
 
-This plugin relies on Grunt/NPM/Bower, typical build sequence:
-
-```BASH
-yarn install
-yarn build
-```
-
-For development, you can run:
-
-```BASH
-yarn watch
-```
-
-## Docker Support
-
-A docker-compose.yml file is include for easy development and testing, just run
-
-```BASH
-docker-compose up
-```
-
-Then browse to <http://localhost:3000>
-
-## External Dependencies
-
-* Grafana 6.x
-
-## Build Dependencies
-
-* yarn
+All contributions are welcome! See the [CONTRIBUTING.md](CONTRIBUTING.md) doc for more information.
 
 ## Acknowledgements
 

@@ -79,7 +79,7 @@ jobs:
         if: steps.check-for-e2e-frontend-tests.outputs.has-e2e-frontend-tests == 'true'
         run: yarn e2e
 
-      - name: Archive E2E output
+      - name: E2E - Archive Output
         uses: actions/upload-artifact@v3
         if: steps.check-for-e2e-frontend-tests.outputs.has-e2e-frontend-tests == 'true'
         with:
