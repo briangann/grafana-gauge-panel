@@ -203,8 +203,8 @@ const config = async (env): Promise<Configuration> => {
     baseConfig.watchOptions = {
       poll: 3000,
       ignored: /node_modules/,
-    }};
-
+    };
+  }
 
   return baseConfig;
 
