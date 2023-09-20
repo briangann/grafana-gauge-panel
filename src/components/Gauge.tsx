@@ -320,9 +320,11 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     );
   };
 
-  // TODO: handle returning undefined when there is no upper band
   const getLowerBand = (sorted: Threshold[]) => {
     const numBands = sorted.length;
+    if (numBands === 0) {
+      return undefined;
+    }
     // if there is just one threshold
     let nextThresholdValue = options.maxValue;
     if (numBands > 1) {
@@ -344,9 +346,12 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     };
   };
 
-  // TODO: handle returning undefined when there is no upper band
   const getUpperBand = (sorted: Threshold[]) => {
     const index = sorted.length - 1;
+    // upper band always has an index greater than zero
+    if (index === 0) {
+      return undefined;
+    }
     return {
       index,
       min: sorted[index].value,
@@ -355,9 +360,16 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     };
   };
 
-  // TODO: handle returning undefined when there are no inner bands
-  const getInnerBands = (sorted: Threshold[], lower: ExpandedThresholdBand, upper: ExpandedThresholdBand) => {
+  const getInnerBands = (
+    sorted: Threshold[],
+    lower: ExpandedThresholdBand | undefined,
+    upper: ExpandedThresholdBand | undefined) => {
     const innerBands: ExpandedThresholdBand[] = [];
+
+    // inner bands only exist if there are valid lower and upper bands
+    if ((lower === undefined) || upper === undefined) {
+      return undefined;
+    }
     for (let index = lower.index + 1; index < upper.index; index++) {
       innerBands.push({
         index,
