@@ -27,7 +27,7 @@ export const getNeedleAngleMinimum =
       if (allowNeedleCrossLimits) {
         // make sure it is not below zero when accounting for the zeroNeedleAngle
         if (zeroTickAngle >= crossLimitDegree) {
-          // allow it to be set to zeroTickAngle minus 5 degrees, without going below zerp
+          // allow it to be set to zeroTickAngle minus 5 degrees, without going below zero
           return (-crossLimitDegree);
         } else {
           return (zeroTickAngle);
@@ -49,7 +49,7 @@ export const getNeedleAngleMaximum = (allowNeedleCrossLimits: boolean, needleAng
       if (testMaxAngle > maxTickAngle) {
         // make sure it is not above 360 minus cross limit
         if (maxTickAngle < (360 - crossLimitDegree)) {
-          // allow it to be set to maxTickAngle plus 5 degrees, without going below zerp
+          // allow it to be set to maxTickAngle plus 5 degrees, without going below zero
           return(maxTickAngle + crossLimitDegree - zeroTickAngle);
         } else {
           // console.log(`needle cannot be buried beyond maxNeedleAngle ${testMaxAngle}`);

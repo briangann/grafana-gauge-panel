@@ -43,7 +43,7 @@ export const valueToRadians = (value: number, options: ValueToRadiansOptions) =>
   return (valueToDegrees(value, opts) * Math.PI) / 180;
 };
 
-// Define functions to calcuate the positions of the labels for the tick marks
+// Define functions to calculate the positions of the labels for the tick marks
 export const labelXCalc = (position: number, maxLabelLength: number, labelText: string, labelFontSize: number, labelStart: number, originX: number) => {
   const tickAngle = position + 90;
   const tickAngleRad = dToR(tickAngle);
