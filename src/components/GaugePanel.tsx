@@ -129,6 +129,7 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
           animateNeedleValueTransition={options.animateNeedleValueTransition}
           animateNeedleValueTransitionSpeed={options.animateNeedleValueTransitionSpeed}
           allowNeedleCrossLimits={options.allowNeedleCrossLimits}
+          needleCrossLimitDegrees={options.needleCrossLimitDegrees}
           markerEndEnabled={options.markerEndEnabled}
           markerEndShape={options.markerEndShape}
           markerStartEnabled={options.markerStartEnabled}

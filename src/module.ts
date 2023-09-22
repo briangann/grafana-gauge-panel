@@ -119,6 +119,20 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         description: 'Allow needle to render below and above limits',
       })
       .addNumberInput({
+        name: 'Needle Cross Limit Degrees',
+        path: 'needleCrossLimitDegrees',
+        description: 'How many degrees to cross below and above minimum and maximum limit, default is 5 degrees',
+        defaultValue: 10,
+        settings: {
+          placeHolder: '10',
+          min: 0,
+          integer: true,
+        },
+        category: ['Needle Options'],
+        showIf: (c) => c.allowNeedleCrossLimits === true,
+      })
+
+      .addNumberInput({
         name: 'Needle Width',
         path: 'needleWidth',
         description: 'Width of Needle, default is 5',

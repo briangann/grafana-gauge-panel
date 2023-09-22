@@ -9,6 +9,7 @@ import { scaleLinear, line, interpolateString, select } from 'd3';
 import { easeQuadIn } from 'd3-ease';
 
 import { createNeedleMarkers, dToR, drawBand, labelXCalc, labelYCalc, needleCalc } from './utils';
+import { getNeedleAngleMaximum, getNeedleAngleMinimum } from './needle_utils';
 
 export const Gauge: React.FC<GaugeOptions> = (options) => {
   // pull in styles
@@ -482,7 +483,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         .ease(easeQuadIn)
         .attrTween('transform', () => {
           //
-          // TODO: allow burying the needle if there is "space", otherwise lock to min/max
+          // Allow burying the needle if there is space, otherwise lock to min/max
           //
           // Check for min/max ends of the needle
           if (needleAngleOld + options.zeroNeedleAngle > options.maxTickAngle) {
@@ -492,10 +493,10 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
             needleAngleOld = 0;
           }
           if (needleAngleNew + options.zeroNeedleAngle > options.maxTickAngle) {
-            needleAngleNew = options.maxNeedleAngle - options.zeroNeedleAngle;
+            needleAngleNew = getNeedleAngleMaximum(options.allowNeedleCrossLimits, needleAngleNew, options.zeroTickAngle, options.maxTickAngle, options.needleCrossLimitDegrees);
           }
           if (needleAngleNew + options.zeroNeedleAngle < options.zeroTickAngle) {
-            needleAngleNew = 0;
+            needleAngleNew = getNeedleAngleMinimum(options.allowNeedleCrossLimits, needleAngleNew, options.zeroTickAngle, options.needleCrossLimitDegrees);
           }
           const needleCentre = originX + ',' + originY;
           return interpolateString(
@@ -509,7 +510,6 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       updateGauge(needleElement, currentNeedleValue, options.displayFormatted);
     }
   }, [options, tickAnglesMaj, tickAnglesMin, tickMajorLabels, needleLengthNegCalc, previousNeedleValue, currentNeedleValue, originX, originY, needleElement]);
-  // }, [options.displayValue, tickAnglesMaj, tickAnglesMin, tickMajorLabels, needleLengthNegCalc, previousNeedleValue, currentNeedleValue, originX, originY, needleElement, options.maxValue, options.animateNeedleValueTransition, options.minValue, options.zeroTickAngle, options.maxTickAngle, options.zeroNeedleAngle, options.animateNeedleValueTransitionSpeed, options.maxNeedleAngle, options.displayFormatted, options.allowNeedleCrossLimits]);
 
   useEffect(() => {
     // this will trigger updating the gauge

@@ -259,6 +259,7 @@ export const migrateDefaults = (angular: AngularOptions) => {
     animateNeedleValueTransition: true,
     animateNeedleValueTransitionSpeed: 100,
     allowNeedleCrossLimits: true,
+    needleCrossLimitDegrees: 10,
     markerEndEnabled: false,
     markerEndShape: 'arrow',
     markerStartEnabled: false,

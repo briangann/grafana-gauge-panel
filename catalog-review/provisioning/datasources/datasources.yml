@@ -5,4 +5,5 @@ deleteDatasources:
 datasources:  
   - name: TestData DB
     type: testdata
+    uid: P53465F745837BCFD
     version: 1
