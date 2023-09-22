@@ -41,7 +41,6 @@ export const getNeedleAngleMinimum =
 
 export const getNeedleAngleMaximum = (allowNeedleCrossLimits: boolean, needleAngle: number, zeroTickAngle: number, maxTickAngle: number, crossLimitDegree: number) => {
   // angle passed in is relative to zeroTickAngle
-  let needleAngleFinal = needleAngle;
   if (needleAngle + zeroTickAngle > maxTickAngle) {
     if (allowNeedleCrossLimits) {
       // check if the needle can be extended beyond max (it is less than 360)
@@ -51,17 +50,16 @@ export const getNeedleAngleMaximum = (allowNeedleCrossLimits: boolean, needleAng
         // make sure it is not above 360 minus cross limit
         if (maxTickAngle < (360 - crossLimitDegree)) {
           // allow it to be set to maxTickAngle plus 5 degrees, without going below zerp
-          needleAngleFinal = maxTickAngle + crossLimitDegree;
+          return(maxTickAngle + crossLimitDegree - zeroTickAngle);
         } else {
           // console.log(`needle cannot be buried beyond maxNeedleAngle ${testMaxAngle}`);
-          needleAngleFinal = maxTickAngle;
+          return(maxTickAngle - zeroTickAngle);
         }
       }
     } else {
-      needleAngleFinal = maxTickAngle;
+      return (maxTickAngle - zeroTickAngle);
     }
   }
   // remove the zeroTickAngle to get the relative value again
-  needleAngleFinal -= zeroTickAngle;
-  return needleAngleFinal;
+  return (needleAngle - zeroTickAngle);
 };
