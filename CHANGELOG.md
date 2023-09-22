@@ -7,7 +7,8 @@ All changes noted here.
 - Rewritten from Angular to React
 - NEW: Needle Width can now be set
 - NEW: Thresholds now use the standard Grafana threshold mechanics
-- NEW: Needle can optionally exceed the tick mark (min and max) to show values that are outside of limits
+- NEW: Needle can optionally exceed the tick mark (min and max) to show values
+       that are outside of limits
 - NEW: Preset gauge types can be selected and then modified
 
 ## v0.0.9 - 2021-04-21

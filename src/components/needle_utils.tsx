@@ -21,24 +21,22 @@ import React from 'react';
 export const getNeedleAngleMinimum =
   (allowNeedleCrossLimits: boolean, needleAngle: number, zeroTickAngle: number, crossLimitDegree: number) => {
     // the angle is relative to the zeroNeedleAngle
-    let needleAngleFinal = needleAngle;
     // check if the needleAngle is below the zeroNeedleAngle
-    if (needleAngleFinal + zeroTickAngle < zeroTickAngle) {
+    if (needleAngle + zeroTickAngle < zeroTickAngle) {
       // check if burying the needle is enabled
       if (allowNeedleCrossLimits) {
         // make sure it is not below zero when accounting for the zeroNeedleAngle
         if (zeroTickAngle >= crossLimitDegree) {
           // allow it to be set to zeroTickAngle minus 5 degrees, without going below zerp
-          needleAngleFinal = -crossLimitDegree;
+          return (-crossLimitDegree);
         } else {
-          // console.log("needle cannot be buried below zeroNeedleAngle");
-          needleAngleFinal = zeroTickAngle;
+          return (zeroTickAngle);
         }
       } else {
-        needleAngleFinal = zeroTickAngle;
+        return (zeroTickAngle);
       }
     }
-    return needleAngleFinal;
+    return needleAngle;
   };
 
 export const getNeedleAngleMaximum = (allowNeedleCrossLimits: boolean, needleAngle: number, zeroTickAngle: number, maxTickAngle: number, crossLimitDegree: number) => {
