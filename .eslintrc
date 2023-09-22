@@ -1,0 +1,6 @@
+{
+  "extends": "./.config/.eslintrc",
+  "rules": {
+    "semi": "error"
+  }
+}

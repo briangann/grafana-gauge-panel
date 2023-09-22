@@ -1,0 +1,9 @@
+apiVersion: 1
+deleteDatasources:
+  - name: TestData DB
+    orgId: 1
+datasources:  
+  - name: TestData DB
+    type: testdata
+    uid: P53465F745837BCFD
+    version: 1

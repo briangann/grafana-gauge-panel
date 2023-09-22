@@ -1,9 +1,0 @@
-grafana:
-  #image: grafana/grafana:4.6.3
-  image: grafana/grafana:6.7.2
-  ports:
-    - "3000:3000"
-  volumes:
-    - ./dist:/var/lib/grafana/plugins/briangann-gauge-panel
-  environment:
-    - TERM=linux

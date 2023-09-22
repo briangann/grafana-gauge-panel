@@ -1,5 +1,5 @@
 {
-    "$schema": "https://github.com/grafana/grafana/raw/master/docs/sources/developers/plugins/plugin.schema.json",
+    "$schema": "https://github.com/grafana/grafana/raw/main/docs/sources/developers/plugins/plugin.schema.json",
     "type": "panel",
     "name": "D3 Gauge",
     "id": "briangann-gauge-panel",
@@ -39,8 +39,8 @@
     },
 
     "dependencies": {
-        "grafanaDependency": ">=6.3.0",
-        "grafanaVersion": "6.x.x",
+        "grafanaVersion": "8.4.x",
+        "grafanaDependency": ">=8.4.10",
         "plugins": []
     }
 }
