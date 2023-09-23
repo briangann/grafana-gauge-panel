@@ -15,6 +15,8 @@ export interface GaugeOptions {
   tickLabelFontSize: number;
   tickFont: string;
 
+  // preset index
+  //presetIndex: number;
   // Needle Options
   animateNeedleValueTransition: boolean;
   animateNeedleValueTransitionSpeed: number;
@@ -204,3 +206,15 @@ export interface ExpandedThresholdBand {
   max: number;
   color: string;
 }
+
+export interface GaugePresetType {
+  id: number;
+  name: string;
+  faceColor: string;
+}
+
+export const GaugePresetOptions: GaugePresetType[] = [
+  { id: 0, name: 'Default', faceColor: '#FFFFFF' },
+  { id: 1, name: 'Red', faceColor: '#FF0000' },
+  { id: 2, name: 'Compass', faceColor: '#00F0FF' },
+];
