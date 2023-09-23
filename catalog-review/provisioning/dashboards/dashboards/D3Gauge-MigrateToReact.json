@@ -30,7 +30,7 @@
       ],
       "datasource": {
         "type": "testdata",
-        "uid": "bb05885e-2479-42ae-bd96-7bdc448b8b3a"
+        "uid": "P53465F745837BCFD"
       },
       "decimals": 2,
       "fontSizes": [
@@ -202,7 +202,7 @@
         {
           "datasource": {
             "type": "testdata",
-            "uid": "bb05885e-2479-42ae-bd96-7bdc448b8b3a"
+            "uid": "P53465F745837BCFD"
           },
           "refId": "A",
           "scenarioId": "random_walk",
@@ -211,7 +211,7 @@
       ],
       "thresholds": "1000,1100",
       "tickMaps": [],
-      "title": "KP115 AMUNRA",
+      "title": "Simple Gauge",
       "type": "briangann-gauge-panel",
       "unitFormats": [
         {

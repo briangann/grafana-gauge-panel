@@ -15,7 +15,8 @@
     "sign": "npx --yes @grafana/sign-plugin@latest",
     "test": "jest --watch --onlyChanged",
     "test:ci": "jest --passWithNoTests --maxWorkers 4",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "spellcheck": "cspell -c cspell.config.json \"**/*.{ts,tsx,js,go,md,mdx,yml,yaml,json,scss,css}\""
   },
   "repository": {
     "type": "git",

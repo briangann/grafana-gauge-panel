@@ -426,7 +426,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   useEffect(() => {
 
     const updateGauge = (needleGroup: JSX.Element | null, newVal: number, newValFormatted: string) => {
-      // Animate the transistion of the needle to its new value
+      // Animate the transition of the needle to its new value
       const oldVal = previousNeedleValue;
       // Set default values if necessary
       if (newVal === undefined) {
