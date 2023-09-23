@@ -2,7 +2,7 @@ import { FieldConfigSource, PanelModel, ThresholdsConfig, ThresholdsMode, ValueM
 import { config } from '@grafana/runtime';
 import { satisfies, coerce } from 'semver';
 
-import { FontFamilies, GaugeOptions } from './components/types';
+import { FontFamilies, GaugeOptions, GaugePresetOptions } from './components/types';
 import { TickMapItemType } from 'components/TickMaps/types';
 
 interface AngularTickMap {

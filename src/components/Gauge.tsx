@@ -4,7 +4,7 @@ import { useStyles2, useTheme2 } from '@grafana/ui';
 import { css } from '@emotion/css';
 import { getActiveThreshold, GrafanaTheme2, Threshold, sortThresholds } from '@grafana/data';
 
-import { ExpandedThresholdBand, GaugeOptions, MarkerEndShapes, MarkerStartShapes } from './types';
+import { ExpandedThresholdBand, GaugeOptions, GaugePresetOptions, MarkerEndShapes, MarkerStartShapes } from './types';
 import { scaleLinear, line, interpolateString, select } from 'd3';
 import { easeQuadIn } from 'd3-ease';
 
@@ -52,6 +52,12 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const originY = options.gaugeRadius;
   let needleElement: JSX.Element | null = null;
 
+  /*
+  useEffect(() => {
+    console.log(`presetIndex set to ${options.presetIndex}`);
+    options.innerColor = GaugePresetOptions[options.presetIndex].faceColor;
+  }, [options]);
+  */
 
   useEffect(() => {
 
@@ -207,6 +213,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     );
   };
 
+  // TODO: fix marker start/end configuration
   const createNeedle = () => {
     const pathNeedle = needleCalc(options.zeroNeedleAngle, originX, originY, needlePathStart, needlePathLength);
     return (
