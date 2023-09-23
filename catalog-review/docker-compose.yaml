@@ -2,13 +2,16 @@ version: '3.0'
 
 services:
   grafana:
-    container_name: 'briangann-gauge-panel-catalog-review'
-    build:
-      context: ../.config
-      args:
-        grafana_version: ${GRAFANA_VERSION:-10.1.1}
+    container_name: briangann-gauge-panel-catalog-review
+    image: grafana/grafana:${GRAFANA_VERSION:-10.1.2}
     ports:
       - 3000:3000/tcp
     volumes:
       - ../dist:/var/lib/grafana/plugins/briangann-gauge-panel
       - ./provisioning:/etc/grafana/provisioning
+    environment:
+      TERM: linux
+      GF_LIVE_ALLOWED_ORIGINS: '*'
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: briangann-gauge-panel
+      GF_AUTH_ANONYMOUS_ENABLED: 1
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
