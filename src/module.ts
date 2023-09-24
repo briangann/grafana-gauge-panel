@@ -196,7 +196,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         path: 'markerStartShape',
         description: 'Shape used at the end of the needle',
         category: ['Needle Options'],
-        defaultValue: MarkerOptions[2].value,
+        defaultValue: MarkerOptions[1].value,
         settings: {
           options: MarkerOptions,
         },
