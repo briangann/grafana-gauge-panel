@@ -16,7 +16,7 @@ export interface GaugeOptions {
   tickFont: string;
 
   // preset index
-  //presetIndex: number;
+  // presetIndex: number;
   // Needle Options
   animateNeedleValueTransition: boolean;
   animateNeedleValueTransitionSpeed: number;
