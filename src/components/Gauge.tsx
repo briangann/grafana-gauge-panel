@@ -213,7 +213,6 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     );
   };
 
-  // TODO: fix marker start/end configuration
   const createNeedle = () => {
     const pathNeedle = needleCalc(options.zeroNeedleAngle, originX, originY, needlePathStart, needlePathLength);
     const markerEndShape = Markers.find(e => e.name === options.markerEndShape) || Markers[0];
