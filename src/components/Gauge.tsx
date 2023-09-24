@@ -4,7 +4,7 @@ import { useStyles2, useTheme2 } from '@grafana/ui';
 import { css } from '@emotion/css';
 import { getActiveThreshold, GrafanaTheme2, Threshold, sortThresholds } from '@grafana/data';
 
-import { ExpandedThresholdBand, GaugeOptions, GaugePresetOptions, MarkerEndShapes, MarkerStartShapes } from './types';
+import { ExpandedThresholdBand, GaugeOptions, Markers } from './types';
 import { scaleLinear, line, interpolateString, select } from 'd3';
 import { easeQuadIn } from 'd3-ease';
 
@@ -216,6 +216,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   // TODO: fix marker start/end configuration
   const createNeedle = () => {
     const pathNeedle = needleCalc(options.zeroNeedleAngle, originX, originY, needlePathStart, needlePathLength);
+    const markerEndShape = Markers.find(e => e.name === options.markerEndShape) || Markers[0];
+    const markerStartShape = Markers.find(e => e.name === options.markerStartShape) || Markers[1];
     return (
       <g id='needle'>
         {pathNeedle.length > 0 && (
@@ -223,8 +225,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
             <path
               ref={needleRef}
               d={pathNeedle}
-              markerEnd={options.markerEndEnabled ? 'url(#marker_' + MarkerEndShapes[0].name + ')' : undefined}
-              markerStart={options.markerStartEnabled ? 'url(#marker_' + MarkerStartShapes[0].name + ')' : undefined}
+              markerEnd={options.markerEndEnabled ? 'url(#marker_' + markerEndShape.name + ')' : undefined}
+              markerStart={options.markerStartEnabled ? 'url(#marker_' + markerStartShape.name + ')' : undefined}
               markerHeight={6}
               markerWidth={6}
               strokeLinecap='round'
