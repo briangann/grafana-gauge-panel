@@ -2,7 +2,7 @@ import { FieldConfigSource, PanelModel, ThresholdsConfig, ThresholdsMode, ValueM
 import { config } from '@grafana/runtime';
 import { satisfies, coerce } from 'semver';
 
-import { FontFamilies, GaugeOptions, GaugePresetOptions } from './components/types';
+import { FontFamilies, GaugeOptions, GaugePresetOptions, Markers } from './components/types';
 import { TickMapItemType } from 'components/TickMaps/types';
 
 interface AngularTickMap {
@@ -147,7 +147,15 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
   // @ts-ignore
   delete panel.gaugeDivId;
   // @ts-ignore
+  options.markerEndEnabled = panel.markerEndEnabled;
+  // @ts-ignore
+  options.markerEndShape = Markers.find(e => e.name === panel.markerEndShape) || Markers[0];
+  // @ts-ignore
   delete panel.markerEndShapes;
+  // @ts-ignore
+  options.markerStartEnabled = panel.markerStartEnabled;
+  // @ts-ignore
+  options.markerStartShape = Markers.find(e => e.name === panel.markerStartShape) || Markers[1];
   // @ts-ignore
   delete panel.markerStartShapes;
   // @ts-ignore
