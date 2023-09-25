@@ -19,6 +19,7 @@ for [Grafana](https://www.grafana.com) 8.4.10+/9.x/10.x
 ### Example gauges
 
 ![Default Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-gauge-default-settings.png)
+
 ![Default Gauge With Threshold](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/default-gauge-w-threshold.png)
 
 ![Custom Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/alt-gauge.png)
