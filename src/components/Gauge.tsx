@@ -501,10 +501,10 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
             needleAngleOld = 0;
           }
           if (needleAngleNew + options.zeroNeedleAngle > options.maxTickAngle) {
-            needleAngleNew = getNeedleAngleMaximum(options.allowNeedleCrossLimits, needleAngleNew, options.zeroTickAngle, options.maxTickAngle, options.needleCrossLimitDegrees);
+            needleAngleNew = getNeedleAngleMaximum(options.allowNeedleCrossLimits, needleAngleNew, options.zeroTickAngle, options.zeroNeedleAngle, options.maxTickAngle, options.needleCrossLimitDegrees);
           }
           if (needleAngleNew + options.zeroNeedleAngle < options.zeroTickAngle) {
-            needleAngleNew = getNeedleAngleMinimum(options.allowNeedleCrossLimits, needleAngleNew, options.zeroTickAngle, options.needleCrossLimitDegrees);
+            needleAngleNew = getNeedleAngleMinimum(options.allowNeedleCrossLimits, needleAngleNew, options.zeroTickAngle, options.zeroNeedleAngle, options.needleCrossLimitDegrees);
           }
           const needleCentre = originX + ',' + originY;
           return interpolateString(
