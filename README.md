@@ -9,6 +9,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/1c750faa58c1f7b3c7fa/maintainability)](https://codeclimate.com/github/briangann/grafana-gauge-panel/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1c750faa58c1f7b3c7fa/test_coverage)](https://codeclimate.com/github/briangann/grafana-gauge-panel/test_coverage)
 
+[![All Contributors](https://img.shields.io/github/all-contributors/briangann/grafana-gauge-panel?color=ee8449&style=flat-square)](#contributors)
+
 This panel plugin provides a [D3-based](https://www.d3js.org) gauge panel
 for [Grafana](https://www.grafana.com) 8.4.10+/9.x/10.x
 
@@ -76,3 +78,14 @@ This panel is based on the "SingleStat" panel by Grafana, along with large
 * <https://oliverbinns.com/articles/D3js-gauge/>
 * <http://bl.ocks.org/tomerd/1499279>
 * <http://bl.ocks.org/dustinlarimer/5888271> Markers!
+
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
