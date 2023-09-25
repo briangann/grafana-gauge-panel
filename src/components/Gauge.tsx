@@ -4,7 +4,7 @@ import { useStyles2, useTheme2 } from '@grafana/ui';
 import { css } from '@emotion/css';
 import { getActiveThreshold, GrafanaTheme2, Threshold, sortThresholds } from '@grafana/data';
 
-import { ExpandedThresholdBand, GaugeOptions, MarkerEndShapes, MarkerStartShapes } from './types';
+import { ExpandedThresholdBand, GaugeOptions, Markers } from './types';
 import { scaleLinear, line, interpolateString, select } from 'd3';
 import { easeQuadIn } from 'd3-ease';
 
@@ -52,6 +52,12 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const originY = options.gaugeRadius;
   let needleElement: JSX.Element | null = null;
 
+  /*
+  useEffect(() => {
+    console.log(`presetIndex set to ${options.presetIndex}`);
+    options.innerColor = GaugePresetOptions[options.presetIndex].faceColor;
+  }, [options]);
+  */
 
   useEffect(() => {
 
@@ -209,6 +215,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
 
   const createNeedle = () => {
     const pathNeedle = needleCalc(options.zeroNeedleAngle, originX, originY, needlePathStart, needlePathLength);
+    const markerEndShape = Markers.find(e => e.name === options.markerEndShape) || Markers[0];
+    const markerStartShape = Markers.find(e => e.name === options.markerStartShape) || Markers[1];
     return (
       <g id='needle'>
         {pathNeedle.length > 0 && (
@@ -216,8 +224,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
             <path
               ref={needleRef}
               d={pathNeedle}
-              markerEnd={options.markerEndEnabled ? 'url(#marker_' + MarkerEndShapes[0].name + ')' : undefined}
-              markerStart={options.markerStartEnabled ? 'url(#marker_' + MarkerStartShapes[0].name + ')' : undefined}
+              markerEnd={options.markerEndEnabled ? 'url(#marker_' + markerEndShape.name + ')' : undefined}
+              markerStart={options.markerStartEnabled ? 'url(#marker_' + markerStartShape.name + ')' : undefined}
               markerHeight={6}
               markerWidth={6}
               strokeLinecap='round'
@@ -493,10 +501,10 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
             needleAngleOld = 0;
           }
           if (needleAngleNew + options.zeroNeedleAngle > options.maxTickAngle) {
-            needleAngleNew = getNeedleAngleMaximum(options.allowNeedleCrossLimits, needleAngleNew, options.zeroTickAngle, options.maxTickAngle, options.needleCrossLimitDegrees);
+            needleAngleNew = getNeedleAngleMaximum(options.allowNeedleCrossLimits, needleAngleNew, options.zeroTickAngle, options.zeroNeedleAngle, options.maxTickAngle, options.needleCrossLimitDegrees);
           }
           if (needleAngleNew + options.zeroNeedleAngle < options.zeroTickAngle) {
-            needleAngleNew = getNeedleAngleMinimum(options.allowNeedleCrossLimits, needleAngleNew, options.zeroTickAngle, options.needleCrossLimitDegrees);
+            needleAngleNew = getNeedleAngleMinimum(options.allowNeedleCrossLimits, needleAngleNew, options.zeroTickAngle, options.zeroNeedleAngle, options.needleCrossLimitDegrees);
           }
           const needleCentre = originX + ',' + originY;
           return interpolateString(

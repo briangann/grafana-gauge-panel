@@ -7,7 +7,7 @@ import {
 } from './migrations';
 
 describe('D3Gauge -> D3GaugeV2 migrations', () => {
-  it('only migrates old d3gauge', () => {
+  it('migrates empty d3gauge', () => {
     const panel: PanelModel = {
       id: 0,
       type: 'panel',
@@ -19,6 +19,53 @@ describe('D3Gauge -> D3GaugeV2 migrations', () => {
     };
     const options = PanelMigrationHandler(panel);
     expect(options).toEqual({});
+  });
+
+  it('migrates start and end markers from angular d3gauge', () => {
+    const panel: PanelModel = {
+      id: 0,
+      type: 'panel',
+      options: {
+        markerStartEnabled: true,
+        markerStartShape: 'circle',
+        markerEndEnabled: true,
+        markerEndShape: 'arrow',
+      },
+      fieldConfig: {
+        defaults: {},
+        overrides: [],
+      },
+    };
+    const options = PanelMigrationHandler(panel);
+    expect(options).toEqual({
+      markerStartEnabled: true,
+      markerStartShape: 'circle',
+      markerEndEnabled: true,
+      markerEndShape: 'arrow',
+    });
+  });
+  it('migrates start and end disabled markers from angular d3gauge', () => {
+    const panel: PanelModel = {
+      id: 0,
+      type: 'panel',
+      options: {
+        markerStartEnabled: false,
+        markerStartShape: 'circle',
+        markerEndEnabled: true,
+        markerEndShape: 'arrow',
+      },
+      fieldConfig: {
+        defaults: {},
+        overrides: [],
+      },
+    };
+    const options = PanelMigrationHandler(panel);
+    expect(options).toEqual({
+      markerStartEnabled: false,
+      markerStartShape: 'circle',
+      markerEndEnabled: true,
+      markerEndShape: 'arrow',
+    });
   });
 
   it('checks if roboto is available to runtime', () => {

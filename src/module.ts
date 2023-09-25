@@ -1,11 +1,11 @@
 import { FieldConfigProperty, PanelPlugin } from '@grafana/data';
 import { GaugePanel } from './components/GaugePanel';
-import { FontFamilyOptions, FontSizes, GaugeOptions, MarkerEndShapes, MarkerOptions, MarkerStartShapes, OperatorOptions } from 'components/types';
+import { FontFamilyOptions, FontSizes, GaugeOptions, GaugePresetOptions, MarkerOptions, OperatorOptions } from 'components/types';
 import { DataSuggestionsSupplier } from './components/suggestions';
 import { PanelMigrationHandler } from './migrations';
 import { TickMapEditor } from 'components/TickMaps/TickMapEditor';
 import { TickMapItemType } from 'components/TickMaps/types';
-import { Field } from '@grafana/ui';
+
 
 export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
   .setMigrationHandler(PanelMigrationHandler)
@@ -88,6 +88,24 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
           options: FontFamilyOptions,
         },
       })
+
+      // Presets
+      /*
+      .addSelect({
+        name: 'Preset',
+        path: 'presetIndex',
+        description: 'Modify current gauge with preset values',
+        settings: {
+          options: [
+            { value: GaugePresetOptions[0].id, label: GaugePresetOptions[0].name },
+            { value: GaugePresetOptions[1].id, label: GaugePresetOptions[1].name },
+            { value: GaugePresetOptions[2].id, label: GaugePresetOptions[2].name },
+          ],
+        },
+        defaultValue: GaugePresetOptions[0].id,
+        category: ['Presets'],
+      })
+      */
       // animateNeedleValueTransition
       .addBooleanSwitch({
         name: 'Animate Needle Transition',
@@ -178,7 +196,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         path: 'markerStartShape',
         description: 'Shape used at the end of the needle',
         category: ['Needle Options'],
-        defaultValue: MarkerOptions[2].value,
+        defaultValue: MarkerOptions[1].value,
         settings: {
           options: MarkerOptions,
         },

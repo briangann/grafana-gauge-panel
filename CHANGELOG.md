@@ -2,14 +2,14 @@
 
 All changes noted here.
 
-## v2.0.0 - 2023-09-21
+## v2.0.0 - 2023-09-23
 
 - Rewritten from Angular to React
-- NEW: Needle Width can now be set
+- NEW: Needle Width can now be specified
 - NEW: Thresholds now use the standard Grafana threshold mechanics
 - NEW: Needle can optionally exceed the tick mark (min and max) to show values
        that are outside of limits
-- NEW: Preset gauge types can be selected and then modified
+- NEW: Needle Center can use all marker types, with arrow-inverse added to options
 
 ## v0.0.9 - 2021-04-21
 

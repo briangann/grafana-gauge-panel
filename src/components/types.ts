@@ -15,6 +15,8 @@ export interface GaugeOptions {
   tickLabelFontSize: number;
   tickFont: string;
 
+  // preset index
+  // presetIndex: number;
   // Needle Options
   animateNeedleValueTransition: boolean;
   animateNeedleValueTransitionSpeed: number;
@@ -84,13 +86,7 @@ export interface GaugeOptions {
 // tslint:disable-next-line
 export interface GaugeModel {}
 
-export const MarkerStartShapes = [
-  { id: 0, name: 'circle' },
-  { id: 1, name: 'square' },
-  { id: 2, name: 'stub' },
-];
 
-export const MarkerEndShapes = [{ id: 0, name: 'arrow' }];
 
 export enum FontFamilies {
   ARIAL = 'Arial',
@@ -178,12 +174,6 @@ export const OperatorOptions: SelectableValue[] = [
   { value: 'step', label: 'Step' },
 ];
 
-export const MarkerOptions: SelectableValue[] = [
-  { value: 0, label: 'arrow' },
-  { value: 1, label: 'circle' },
-  { value: 2, label: 'square' },
-  { value: 3, label: 'stub' },
-];
 
 export interface MarkerType {
   id: number;
@@ -196,6 +186,27 @@ export const Markers: MarkerType[] = [
   { id: 1, name: 'circle', path: 'M 0, 0  m -5, 0  a 5,5 0 1,0 10,0  a 5,5 0 1,0 -10,0', viewBox: '-6 -6 12 12' },
   { id: 2, name: 'square', path: 'M 0,0 m -5,-5 L 5,-5 L 5,5 L -5,5 Z', viewBox: '-5 -5 10 10' },
   { id: 3, name: 'stub', path: 'M 0,0 m -1,-5 L 1,-5 L 1,5 L -1,5 Z', viewBox: '-1 -5 2 10' },
+  { id: 4, name: 'arrow-inverse', path: 'M 0,0 m 5,5 L -5,0 L 5,-5 Z', viewBox: '-5 -5 10 10' },
+];
+
+/*
+export const MarkerStartShapes = [
+  { id: 0, name: 'circle' },
+  { id: 1, name: 'square' },
+  { id: 2, name: 'stub' },
+];
+
+export const MarkerEndShapes = [
+  { id: 0, name: 'arrow' }
+];
+*/
+
+export const MarkerOptions: SelectableValue[] = [
+  { value: 'arrow', label: 'arrow' },
+  { value: 'circle', label: 'circle' },
+  { value: 'square', label: 'square' },
+  { value: 'stub', label: 'stub' },
+  { value: 'arrow-inverse', label: 'arrow-inverse' },
 ];
 
 export interface ExpandedThresholdBand {
@@ -204,3 +215,15 @@ export interface ExpandedThresholdBand {
   max: number;
   color: string;
 }
+
+export interface GaugePresetType {
+  id: number;
+  name: string;
+  faceColor: string;
+}
+
+export const GaugePresetOptions: GaugePresetType[] = [
+  { id: 0, name: 'Default', faceColor: '#FFFFFF' },
+  { id: 1, name: 'Red', faceColor: '#FF0000' },
+  { id: 2, name: 'Compass', faceColor: '#00F0FF' },
+];
