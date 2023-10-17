@@ -20,30 +20,109 @@ for [Grafana](https://www.grafana.com) 8.4.10+/9.x/10.x
 
 ![Default Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-gauge-default-settings.png)
 
-![Default Gauge With Threshold](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/default-gauge-w-threshold.png)
+![Default Gauge With Threshold](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-gauge-threshold-middle-upper.png)
+
+![Default Gauge With All Thresholds](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-threshold-all.png)
 
 ![Custom Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/alt-gauge.png)
 ![Custom Gauge With Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/alt-gauge-limits.png)
 
-### Options
+### Configuration Options
 
-![Options](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/options.png)
+The React port has separated the configuration options into multiple searchable sections.
 
-With Limits
+#### Standard Options
 
-![Options with Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/options-limits.png)
+![Standard Options](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-standard-options.png)
 
-### Limits Shown
+Stat
+Unit
+Decimals
 
-![Options With Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/options-limits.png)
+#### Font Settings
 
-### Radial Metrics
+![Font Settings](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-font-settings.png)
 
-![Radial Metrics](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/radialmetrics.png)
+Value Font
+Value Font Size
+Tick Label Font
+Tick Label Font Size
 
-### Thresholding
+#### Needle Options
 
-![Thresholding](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/thresholding.png)
+![Needle Options](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-needle-options.png)
+
+Animate Needle Transition
+Transition Speed (MS)
+Allow Crossing Limits
+Needle Cross Limit Degrees
+Needle Width
+Show End Marker
+Show Start Marker
+
+#### Limits
+
+![Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-limits.png)
+
+Minimum Value
+Maximum Value
+
+#### Coloring
+
+![Coloring](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-coloring.png)
+
+Outer Edge
+Inner (Face)
+Pivot
+Needle
+Units Label
+Tick Label
+Tick Major
+Tick Minor
+
+#### Radial Customization
+
+![Radial Customization](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-radial-customization.png)
+
+Radius
+Tickness Gauge Basis
+Pivot Radius
+Value Y-Offset
+Padding
+Edge Width
+Tick Edge Gap
+Tick Length Major
+Tick Width Major
+Tick Length Minor
+Tick Width Minor
+Needle Tick Gap
+Needle Length Stem
+
+#### Gauge Degrees
+
+![Gauge Degrees](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-gauge-degrees.png)
+
+Zero Tick Angle
+Max Tick Angle
+Zero Needle Angle
+Max Needle Angle
+
+#### Gauge Readings
+
+![Gauge Readings](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-gauge-readings.png)
+
+Tick Spacing Major
+Tick Spacing Minor
+
+#### Tick Maps
+
+![Tick Maps](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-tickmaps.png)
+
+Use the `Add Tick Map` button to create a tick map.
+
+### Thresholds
+
+![Thresholds](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-thresholds.png)
 
 -------
 
@@ -62,7 +141,7 @@ With Limits
 * Threshold colors displayed on gauge
 * Threshold can modify displayed value and background
 
-* Needle animation speed is now configurable
+* Needle animation speed is configurable
 * Arbitrary degree gauges now supported (default is from 60 to 320)
 * Value text on gauge can now be moved up/down as needed
 
