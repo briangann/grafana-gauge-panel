@@ -124,6 +124,16 @@ Use the `Add Tick Map` button to create a tick map.
 
 ![Thresholds](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-thresholds.png)
 
+![Thresholds Middle Upper](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-gauge-threshold-settings-middle-upper.png)
+
+![Threshold on Face](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-gauge-threshold-on-face.png)
+
+![Threshold on Value](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-gauge-threshold-on-value.png)
+
+### Value Mappings
+
+![Value Mappings](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-value-mappings.png)
+
 -------
 
 ## Features
