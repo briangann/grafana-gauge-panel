@@ -25,40 +25,53 @@ for [Grafana](https://www.grafana.com) 8.4.10+/9.x/10.x
 ![Default Gauge With All Thresholds](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-threshold-all.png)
 
 ![Custom Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/alt-gauge.png)
+
 ![Custom Gauge With Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/alt-gauge-limits.png)
 
 ### Configuration Options
 
-The React port has separated the configuration options into multiple searchable sections.
+The React port has separated the configuration options into multiple searchable sections and added new features.
 
 #### Standard Options
 
 ![Standard Options](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-standard-options.png)
 
-Stat
-Unit
-Decimals
+|Option     | Description |
+|-----------|-------------|
+| Stat      | The statistic to be displayed on the gauge |
+| Unit      | A unit for the value displayed. This will be used to abbreviate as needed |
+| Decimals  | Maximum number of decimals to display if any are required
 
 #### Font Settings
 
 ![Font Settings](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-font-settings.png)
 
-Value Font
-Value Font Size
-Tick Label Font
-Tick Label Font Size
+|Option               | Description |
+|---------------------|-------------|
+|Value Font           | Font to be used on the value displayed      |
+|Value Font Size      | Font Size for the value displayed           |
+|Tick Label Font      | Font to be used on the tick labels          |
+|Tick Label Font Size | Font size to be used on for the tick labels |
 
 #### Needle Options
 
 ![Needle Options](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-needle-options.png)
 
-Animate Needle Transition
-Transition Speed (MS)
-Allow Crossing Limits
-Needle Cross Limit Degrees
-Needle Width
-Show End Marker
-Show Start Marker
+|Option                      | Description |
+|----------------------------|-------------|
+| Animate Needle Transition  | Enables needle animation between values                                     |
+| Transition Speed (MS)      | When animation is enabled, set how fast the transition occurs               |
+| Allow Crossing Limits      | Enable this to allow the needle to go below and above the limit             |
+| Needle Cross Limit Degrees | When crossing limits is enabled, this sets the degrees that can be exceeded |
+| Needle Width               | Specifies the width of the needle                                           |
+| Show End Marker            | This will create a marker at the end of the needle of the specified shape   |
+| Show Start Marker          | This will create a marker at the start of the needle of the specified shape |
+
+When the options `Allow Crossing Limits` is enabled, the needle can exceed
+the maximum or minimum limit by the specified degrees. The example below shows a gauge with a limit of 100,
+and allows the needle to cross the limit (burying the needle).
+
+![Needle Cross Enabled](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-needle-cross-enabled.png)
 
 #### Limits
 
