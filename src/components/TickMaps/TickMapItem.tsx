@@ -40,7 +40,7 @@ export const TickMapItem: React.FC<TickMapItemProps> = (props) => {
         <FieldSet>
           <Field
             label='Label'
-            description='Sets the name of the Tick Map in the configuration editor.'
+            description='Sets the name of the Tick Map in the configuration editor'
             disabled={!tickMap.enabled}
           >
             <Input
@@ -62,7 +62,7 @@ export const TickMapItem: React.FC<TickMapItemProps> = (props) => {
           </Field>
           <Field
             label='Text'
-            description='Text to be displayed for tick value.'
+            description='Text to be displayed for tick value'
             disabled={!tickMap.enabled}
           >
             <Input
