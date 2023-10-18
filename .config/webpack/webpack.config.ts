@@ -82,7 +82,7 @@ const config = async (env): Promise<Configuration> => {
             loader: 'swc-loader',
             options: {
               jsc: {
-                baseUrl: './src',
+                baseUrl: path.resolve(__dirname, 'src'),
                 target: 'es2015',
                 loose: false,
                 parser: {
@@ -97,7 +97,7 @@ const config = async (env): Promise<Configuration> => {
         },
         {
           test: /\.css$/,
-          use: ["style-loader", "css-loader"]
+          use: ['style-loader', 'css-loader'],
         },
         {
           test: /\.s[ac]ss$/,
@@ -135,7 +135,8 @@ const config = async (env): Promise<Configuration> => {
         type: 'amd',
       },
       path: path.resolve(process.cwd(), DIST_DIR),
-      publicPath: '/',
+      publicPath: `public/plugins/${pluginJson.id}/`,
+      uniqueName: pluginJson.id,
     },
 
     plugins: [
@@ -197,17 +198,16 @@ const config = async (env): Promise<Configuration> => {
       modules: [path.resolve(process.cwd(), 'src'), 'node_modules'],
       unsafeCache: true,
     },
-  }
+  };
 
-  if(isWSL()) {
+  if (isWSL()) {
     baseConfig.watchOptions = {
       poll: 3000,
       ignored: /node_modules/,
-    }}
-
+    };
+  }
 
   return baseConfig;
-
 };
 
 export default config;
