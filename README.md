@@ -36,7 +36,7 @@ The React port has separated the configuration options into multiple searchable 
 
 ![Standard Options](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-standard-options.png)
 
-|Option     | Description |
+| Option    | Description |
 |-----------|-------------|
 | Stat      | The statistic to be displayed on the gauge |
 | Unit      | A unit for the value displayed. This will be used to abbreviate as needed |
@@ -46,7 +46,7 @@ The React port has separated the configuration options into multiple searchable 
 
 ![Font Settings](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-font-settings.png)
 
-|Option               | Description |
+| Option              | Description |
 |---------------------|-------------|
 |Value Font           | Font to be used on the value displayed      |
 |Value Font Size      | Font Size for the value displayed           |
@@ -57,7 +57,7 @@ The React port has separated the configuration options into multiple searchable 
 
 ![Needle Options](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-needle-options.png)
 
-|Option                      | Description |
+| Option                     | Description |
 |----------------------------|-------------|
 | Animate Needle Transition  | Enables needle animation between values                                     |
 | Transition Speed (MS)      | When animation is enabled, set how fast the transition occurs               |
@@ -77,55 +77,70 @@ and allows the needle to cross the limit (burying the needle).
 
 ![Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-limits.png)
 
-Minimum Value
-Maximum Value
+| Option                     | Description |
+|----------------------------|-------------|
+| Minimum Value              | Minimum Value allowed on the face |
+| Maximum Value              | Maximum Value allowed on the face |
 
 #### Coloring
 
 ![Coloring](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-coloring.png)
 
-Outer Edge
-Inner (Face)
-Pivot
-Needle
-Units Label
-Tick Label
-Tick Major
-Tick Minor
+| Option        | Description |
+|---------------|-------------|
+|Outer Edge     | Color of the outer edge of the gauge |
+|Inner (Face)   | Color used on the face of the gauge (background of dial) |
+|Pivot          | Color of the pivot (center) |
+|Needle         | Color of the needle |
+|Units Label    | Color for label units when displayed |
+|Tick Label     | Color of values displayed near the tick major sections |
+|Tick Major     | Color of the major ticks (longer lines) |
+|Tick Minor     | Color of the minitor ticks (shorter lines) |
 
 #### Radial Customization
 
+Note that many of these settings are very sensitive to the visualization since they are percentages of the radius.
+Adjust in small increments to see how they affect the gauge.
+
 ![Radial Customization](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-radial-customization.png)
 
-Radius
-Tickness Gauge Basis
-Pivot Radius
-Value Y-Offset
-Padding
-Edge Width
-Tick Edge Gap
-Tick Length Major
-Tick Width Major
-Tick Length Minor
-Tick Width Minor
-Needle Tick Gap
-Needle Length Stem
+| Option               | Description |
+|----------------------|-------------|
+| Radius               | Specifies size of gauge by radius. Value 0 (zero) will auto-scale to fit panel |
+| Tickness Gauge Basis | Scaling for tick, a lower value will autoscale poorly |
+| Pivot Radius         | Size of the center pivot, as a percentage of radius |
+| Value Y-Offset       | Sets a vertical offset to better place the displayed metric |
+| Padding              | Adds space between the ticks and outer edge |
+| Edge Width           | Thickness of the circle around the edge of the gauge, as a percentage of the gauge radius |
+| Tick Edge Gap        | Spacing between ticks and the outer circle, as a percentage of the gauge radius |
+| Tick Length Major    | Length of the major ticks, as a percentage of the gauge radius |
+| Tick Width Major     | Width of the major ticks in pixels |
+| Tick Length Minor    | Length of the minor ticks, as a percentage of the gauge radius |
+| Tick Width Minor     | Width of the minor ticks in pixels |
+| Needle Tick Gap      | Spacing between ticks the needle end, as a percentage of the gauge radius |
+| Needle Length Stem   | Length of the needle section extending beyond the centre of the gauge, as a percentage of the gauge radius |
 
 #### Gauge Degrees
 
+This is the main section that is used to modify the displayed range on the gauge.
+
 ![Gauge Degrees](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-gauge-degrees.png)
 
-Zero Tick Angle
-Max Tick Angle
-Zero Needle Angle
-Max Needle Angle
+| Option            | Description |
+|-------------------|-------------|
+| Zero Tick Angle   | Angle where the tick value (0) starts (default 60) |
+| Max Tick Angle    | Angle where the tick value ends (default 300) |
+| Zero Needle Angle | Angle where needle is at minimum value (default 40) |
+| Max Needle Angle  | Angle where needle is at maximum value (default 320) |
 
 #### Gauge Readings
 
 ![Gauge Readings](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-gauge-readings.png)
 
-Tick Spacing Major
-Tick Spacing Minor
+| Option             | Description |
+|--------------------|-------------|
+| Tick Spacing Major | The numeric spacing of the minor increment ticks |
+| Tick Spacing Minor | The numeric spacing of the major increment ticks |
 
 #### Tick Maps
 
@@ -133,17 +148,51 @@ Tick Spacing Minor
 
 Use the `Add Tick Map` button to create a tick map.
 
+A tick map allows you to substitute text for a given value.
+Using this option a compass style gauge can be constructed.
+
+| Option | Description |
+|--------|-------------|
+| Label  | Sets the name of the Tick Map |
+| Value  | Tick value where the text will be placed |
+| Text   | Text to be displayed |
+
 ### Thresholds
+
+Thresholds operate in the same manner as other Grafana plugins.
+
+There are additional display options detailed below.
 
 ![Thresholds](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-thresholds.png)
 
+| Option                             | Description |
+|------------------------------------|-------------|
+| Show Threshold Band On Gauge       | Thresholds are displayed as a band on face of gauge along the needle arc |
+| Show Lower Range                   | Lower threshold is displayed on band |
+| Show Middle Range                  | Middle thresholds are displayed on band |
+| Show Upper Range                   | Upper threshold is displayed on band |
+| Show Threshold State on Background | Gauge face color changes to state of threshold |
+| Show Threshold State on Value      | Displayed value color changes to state of threshold |
+
+When the middle and upper threshold option are selected, the gauge will look similar to this:
+
 ![Thresholds Middle Upper](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-gauge-threshold-settings-middle-upper.png)
 
+The state of the threshold can be displayed as the background color of the gauge.
+
 ![Threshold on Face](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-gauge-threshold-on-face.png)
+
+The state of the threshold can be displayed on the value of the gauge.
 
 ![Threshold on Value](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-gauge-threshold-on-value.png)
 
 ### Value Mappings
+
+Value Mappings works the same as other Grafana plugins.  This allows displaying alternative text instead of the value based on ranges or regular expressions.
+
+Primarily this is used for `N/A` for `null` data, but can be used to indicate a state.
+
+Ex: For a temperature gauge, a value below 0 could be harmful, or a value above 100 could be harmful to a device. A value mapping could be used to display this as an urgent message, or simply indicate a "nominal" reading.
 
 ![Value Mappings](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-value-mappings.png)
 
