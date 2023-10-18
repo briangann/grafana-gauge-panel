@@ -220,7 +220,7 @@ Ex: For a temperature gauge, a value below 0 could be harmful, or a value above 
 ## Contributing
 
 All contributions are welcome!
-See the [CONTRIBUTING.md](https://github.com/briangann/grafana-gauge-panel/CONTRIBUTING.md) doc for more information.
+See the [CONTRIBUTING.md](https://github.com/briangann/grafana-gauge-panel/blob/main/CONTRIBUTING.md) doc for more information.
 
 ## Acknowledgements
 
