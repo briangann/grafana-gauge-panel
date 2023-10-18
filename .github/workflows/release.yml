@@ -89,10 +89,13 @@ jobs:
 
       - name: Check package version
         run: |
-          if [ "v$\{{ steps.metadata.outputs.plugin-version }}" != "$\{{ steps.metadata.outputs.github-tag }}" ]; then
+          printf "Checking package version versus github tag";
+          printf "metadata version: v${{ steps.metadata.outputs.plugin-version }}";
+          printf "github-tag version: v${{ steps.metadata.outputs.github-tag }}";
+          if [ "v${{ steps.metadata.outputs.plugin-version }}" != "${{ steps.metadata.outputs.github-tag }}" ]; then
             printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n";
-            printf "metadata version: v$\{{ steps.metadata.outputs.plugin-version }}";
-            printf "github-tag version: v$\{{ steps.metadata.outputs.github-tag }}";
+            printf "metadata version: v${{ steps.metadata.outputs.plugin-version }}";
+            printf "github-tag version: ${{ steps.metadata.outputs.github-tag }}";
             exit 1;
           fi
 
