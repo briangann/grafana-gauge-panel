@@ -88,7 +88,13 @@ jobs:
           echo "path=release_notes.md" >> $GITHUB_OUTPUT
 
       - name: Check package version
-        run: if [ "v$\{{ steps.metadata.outputs.plugin-version }}" != "$\{{ steps.metadata.outputs.github-tag }}" ]; then printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n"; exit 1; fi
+        run: |
+          if [ "v$\{{ steps.metadata.outputs.plugin-version }}" != "$\{{ steps.metadata.outputs.github-tag }}" ]; then
+            printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n";
+            printf "metadata version: v$\{{ steps.metadata.outputs.plugin-version }}";
+            printf "github-tag version: v$\{{ steps.metadata.outputs.github-tag }}";
+            exit 1;
+          fi
 
       - name: Package plugin
         id: package-plugin
