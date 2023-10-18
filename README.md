@@ -11,7 +11,7 @@
 
 [![All Contributors](https://img.shields.io/github/all-contributors/briangann/grafana-gauge-panel?color=ee8449&style=flat-square)](#contributors)
 
-This panel plugin provides a [D3-based](https://www.d3js.org) gauge panel
+This panel plugin provides a [D3-based](https://d3js.org) gauge panel
 for [Grafana](https://www.grafana.com) 8.4.10+/9.x/10.x
 
 ## Screenshots
@@ -220,7 +220,7 @@ Ex: For a temperature gauge, a value below 0 could be harmful, or a value above 
 ## Contributing
 
 All contributions are welcome!
-See the [CONTRIBUTING.md](CONTRIBUTING.md) doc for more information.
+See the [CONTRIBUTING.md](https://github.com/briangann/grafana-gauge-panel/CONTRIBUTING.md) doc for more information.
 
 ## Acknowledgements
 
