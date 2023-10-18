@@ -22,17 +22,17 @@
             "url": "https://github.com/briangann/grafana-gauge-panel/blob/main/LICENSE"
         }],
         "screenshots": [{
-            "name": "Showcase",
-            "path": "screenshots/default-gauge-w-threshold.png"
+            "name": "Gauge with thresholds",
+            "path": "screenshots/react-gauge-threshold-middle-upper.png"
         }, {
-            "name": "Options",
-            "path": "screenshots/options.png"
+            "name": "Gauge with threshold on value",
+            "path": "screenshots/react-gauge-threshold-on-value.png"
         }, {
-            "name": "Radial Metrics",
-            "path": "screenshots/radialmetrics.png"
+            "name": "Gauge with threshold on face",
+            "path": "screenshots/react-gauge-threshold-on-face.png"
         }, {
-            "name": "Thresholding",
-            "path": "screenshots/thresholding.png"
+            "name": "Radial Customization",
+            "path": "screenshots/react-radial-customization.png"
         }],
         "version": "%VERSION%",
         "updated": "%TODAY%"

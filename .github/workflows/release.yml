@@ -61,7 +61,7 @@ jobs:
 
       - name: Sign plugin
         run: yarn run sign
-        if: ${{ env.GRAFANA_ACCESS_POLICY_TOKEN == '' }}
+        if: ${{ env.GRAFANA_ACCESS_POLICY_TOKEN != '' }}
 
       - name: Get plugin metadata
         id: metadata
@@ -99,6 +99,7 @@ jobs:
             printf "github-tag version: ${{ steps.metadata.outputs.github-tag }}";
             exit 1;
           fi
+
       - name: Package plugin
         id: package-plugin
         run: |
