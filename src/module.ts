@@ -44,6 +44,17 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       })
 
       // Font Settings
+      // Value Font
+      .addSelect({
+        name: 'Value Font',
+        path: 'valueFont',
+        description: 'The font of the value text, at the bottom of the gauge',
+        category: ['Font Settings'],
+        defaultValue: FontFamilyOptions[3].value,
+        settings: {
+          options: FontFamilyOptions,
+        },
+      })
       // unitsLabelFontSize
       .addSelect({
         name: 'Value Font Size',
@@ -55,11 +66,11 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
           options: FontSizes,
         },
       })
-      // Value Font
+      // tickFont
       .addSelect({
-        name: 'Value Font',
-        path: 'valueFont',
-        description: 'The font of the value text, at the bottom of the gauge',
+        name: 'Tick Label Font',
+        path: 'tickFont',
+        description: 'The font of the tick labels',
         category: ['Font Settings'],
         defaultValue: FontFamilyOptions[3].value,
         settings: {
@@ -75,17 +86,6 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         defaultValue: FontSizes[14].value,
         settings: {
           options: FontSizes,
-        },
-      })
-      // tickFont
-      .addSelect({
-        name: 'Tick Label Font',
-        path: 'tickFont',
-        description: 'The font of the tick labels',
-        category: ['Font Settings'],
-        defaultValue: FontFamilyOptions[3].value,
-        settings: {
-          options: FontFamilyOptions,
         },
       })
 

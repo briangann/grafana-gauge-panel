@@ -3,7 +3,7 @@ version: '3.0'
 services:
   grafana:
     container_name: briangann-gauge-panel-catalog-review
-    image: grafana/grafana:${GRAFANA_VERSION:-10.1.2}
+    image: grafana/grafana:${GRAFANA_VERSION:-10.1.5}
     ports:
       - 3000:3000/tcp
     volumes:
