@@ -18,8 +18,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          check-latest: true
           cache: yarn
           cache-dependency-path: yarn.lock
+
       - name: Install dependencies
         run: yarn install --immutable
 
@@ -51,44 +53,49 @@ jobs:
 
       - name: Test backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: magefile/mage-action@v1
+        uses: magefile/mage-action@v2
         with:
           version: latest
           args: coverage
 
       - name: Build backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: magefile/mage-action@v1
+        uses: magefile/mage-action@v2
         with:
           version: latest
           args: buildAll
 
-      - name: E2E - Check for Frontend Tests
-        id: check-for-e2e-frontend-tests
+      - name: Check for E2E
+        id: check-for-e2e
         run: |
           if [ -d "cypress" ]
           then
-            echo "has-e2e-frontend-tests=true" >> $GITHUB_OUTPUT
+            echo "has-e2e=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: E2E - Start grafana docker
-        if: steps.check-for-e2e-frontend-tests.outputs.has-e2e-frontend-tests == 'true'
-        run: yarn server -d
+      - name: Start grafana docker
+        if: steps.check-for-e2e.outputs.has-e2e == 'true'
+        run: docker-compose up -d
 
-      - name: E2E - Run tests
-        if: steps.check-for-e2e-frontend-tests.outputs.has-e2e-frontend-tests == 'true'
+      - name: Run e2e tests
+        id: run-e2e-tests
+        if: steps.check-for-e2e.outputs.has-e2e == 'true'
         run: yarn e2e
 
-      - name: E2E - Archive Output
+      - name: Stop grafana docker
+        if: steps.check-for-e2e.outputs.has-e2e == 'true'
+        run: docker-compose down
+
+      - name: Archive E2E output
         uses: actions/upload-artifact@v3
-        if: steps.check-for-e2e-frontend-tests.outputs.has-e2e-frontend-tests == 'true'
+        if: steps.check-for-e2e.outputs.has-e2e == 'true' && steps.run-e2e-tests.outcome != 'success'
         with:
           name: cypress-videos
           path: cypress/videos
           retention-days: 5
 
       - name: E2E - Stop grafana docker
-        if: steps.check-for-e2e-frontend-tests.outputs.has-e2e-frontend-tests == 'true'
+        if: steps.check-for-e2e.outputs.has-e2e-frontend-tests == 'true'
         run: docker-compose down
 
       - name: Code Climate - Check environment
