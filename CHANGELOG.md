@@ -2,7 +2,7 @@
 
 All changes noted here.
 
-## v2.0.0 - 2023-09-23
+## v2.0.0 - 2023-10-19
 
 - Rewritten from Angular to React
 - NEW: Needle Width can now be specified
