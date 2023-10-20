@@ -9,16 +9,19 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
+      # usage of GRAFANA_API_KEY is deprecated
+      # GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
       GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
     steps:
       - uses: actions/checkout@v3
+      # pnpm action uses the packageManager field in package.json to
+      # understand which version to install.
+      - uses: pnpm/action-setup@v2
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: 18
-          cache: yarn
-          check-latest: true
-          cache-dependency-path: yarn.lock
+          node-version: '18'
+          cache: 'pnpm'
 
       - name: Setup Go environment
         uses: actions/setup-go@v3
@@ -26,10 +29,10 @@ jobs:
           go-version: '1.21'
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Build and test frontend
-        run: yarn build
+        run: pnpm run build
 
       - name: Check for backend
         id: check-for-backend
@@ -55,12 +58,12 @@ jobs:
 
       - name: Warn missing Grafana access policy token
         run: |
-          echo Please generate a Grafana API key: https://grafana.com/docs/grafana/latest/developers/plugins/sign-a-plugin/#generate-an-api-key
+          echo Please generate a Grafana access policy token: https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin#generate-an-access-policy-token
           echo Once done please follow the instructions found here: https://github.com/${{github.repository}}/blob/main/README.md#using-github-actions-release-workflow
         if: ${{ env.GRAFANA_ACCESS_POLICY_TOKEN == '' }}
 
       - name: Sign plugin
-        run: yarn run sign
+        run: pnpm run sign
         if: ${{ env.GRAFANA_ACCESS_POLICY_TOKEN != '' }}
 
       - name: Get plugin metadata
@@ -89,16 +92,7 @@ jobs:
           echo "path=release_notes.md" >> $GITHUB_OUTPUT
 
       - name: Check package version
-        run: |
-          printf "Checking package version versus github tag";
-          printf "metadata version: v${{ steps.metadata.outputs.plugin-version }}";
-          printf "github-tag version: ${{ steps.metadata.outputs.github-tag }}";
-          if [ "v${{ steps.metadata.outputs.plugin-version }}" != "${{ steps.metadata.outputs.github-tag }}" ]; then
-            printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n";
-            printf "metadata version: v${{ steps.metadata.outputs.plugin-version }}";
-            printf "github-tag version: ${{ steps.metadata.outputs.github-tag }}";
-            exit 1;
-          fi
+        run: if [ "v${{ steps.metadata.outputs.plugin-version }}" != "${{ steps.metadata.outputs.github-tag }}" ]; then printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n"; exit 1; fi
 
       - name: Package plugin
         id: package-plugin

@@ -18,24 +18,19 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          check-latest: true
-          cache: yarn
-          cache-dependency-path: yarn.lock
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Check types
-        run: yarn typecheck
-
+        run: pnpm run typecheck
       - name: Lint
-        run: NODE_OPTIONS=--max_old_space_size=4096 yarn lint
-
+        run: pnpm run lint
       - name: Unit tests
-        run: yarn test:ci
-
+        run: pnpm run test:ci
       - name: Build frontend
-        run: yarn build
+        run: pnpm run build
 
       - name: Check for backend
         id: check-for-backend

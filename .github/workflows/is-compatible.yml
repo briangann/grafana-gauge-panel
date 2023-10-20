@@ -10,12 +10,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          check-latest: true
-          cache: yarn
-          cache-dependency-path: yarn.lock
+          cache: pnpm
       - name: Install dependencies
-        run: yarn install --immutable
+        run: pnpm install --frozen-lockfile --prefer-offline
       - name: Build plugin
-        run: yarn run build
+        run: pnpm run build
       - name: Compatibility check
         run: npx @grafana/levitate@latest is-compatible --path src/module.ts --target @grafana/data,@grafana/ui,@grafana/runtime
