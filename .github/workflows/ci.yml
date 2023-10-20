@@ -91,10 +91,6 @@ jobs:
           path: cypress/videos
           retention-days: 5
 
-      - name: E2E - Stop grafana docker
-        if: steps.check-for-e2e.outputs.has-e2e-frontend-tests == 'true'
-        run: docker-compose down
-
       - name: Code Climate - Check environment
         id: check-for-codeclimate
         env:
