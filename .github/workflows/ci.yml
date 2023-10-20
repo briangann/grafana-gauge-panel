@@ -13,29 +13,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
+      # pnpm action uses the packageManager field in package.json to
+      # understand which version to install.
+      - uses: pnpm/action-setup@v2
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          check-latest: true
-          cache: yarn
-          cache-dependency-path: yarn.lock
-
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
       - name: Install dependencies
-        run: yarn install --immutable
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Check types
-        run: yarn typecheck
-
+        run: pnpm run typecheck
       - name: Lint
-        run: NODE_OPTIONS=--max_old_space_size=4096 yarn lint
-
+        run: pnpm run lint
       - name: Unit tests
-        run: yarn test:ci
-
+        run: pnpm run test:ci
       - name: Build frontend
-        run: yarn build
+        run: pnpm run build
 
       - name: Check for backend
         id: check-for-backend
@@ -80,7 +77,7 @@ jobs:
       - name: Run e2e tests
         id: run-e2e-tests
         if: steps.check-for-e2e.outputs.has-e2e == 'true'
-        run: yarn e2e
+        run: pnpm run e2e
 
       - name: Stop grafana docker
         if: steps.check-for-e2e.outputs.has-e2e == 'true'
@@ -93,10 +90,6 @@ jobs:
           name: cypress-videos
           path: cypress/videos
           retention-days: 5
-
-      - name: E2E - Stop grafana docker
-        if: steps.check-for-e2e.outputs.has-e2e-frontend-tests == 'true'
-        run: docker-compose down
 
       - name: Code Climate - Check environment
         id: check-for-codeclimate

@@ -2,17 +2,17 @@
 
 ## Building the plugin
 
-This plugin relies on YARN v3 and Node 18. The typical build sequence is:
+This plugin relies on `pnpm` and Node 18. The typical build sequence is:
 
 ```BASH
-yarn install
-yarn build
+pnpm install
+pnpm build
 ```
 
 For development, you can run:
 
 ```BASH
-yarn dev
+pnpm dev
 ```
 
 ## Docker Support
@@ -30,9 +30,9 @@ a datasource and sample dashboards.
 
 ## External Dependencies
 
-* Grafana 8.4.10+
+* Grafana 9.3.16+
 
 ## Build Dependencies
 
-* yarn v3
+* pnpm
 * node 18

@@ -9,16 +9,20 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
+      # usage of GRAFANA_API_KEY is deprecated
+      # GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
       GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
     steps:
       - uses: actions/checkout@v3
+      # pnpm action uses the packageManager field in package.json to
+      # understand which version to install.
+      - uses: pnpm/action-setup@v2
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: 18
-          cache: yarn
-          check-latest: true
-          cache-dependency-path: yarn.lock
+          node-version: '18'
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Setup Go environment
         uses: actions/setup-go@v3
@@ -26,10 +30,10 @@ jobs:
           go-version: '1.21'
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Build and test frontend
-        run: yarn build
+        run: pnpm run build
 
       - name: Check for backend
         id: check-for-backend
@@ -55,12 +59,12 @@ jobs:
 
       - name: Warn missing Grafana access policy token
         run: |
-          echo Please generate a Grafana API key: https://grafana.com/docs/grafana/latest/developers/plugins/sign-a-plugin/#generate-an-api-key
+          echo Please generate a Grafana access policy token: https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin#generate-an-access-policy-token
           echo Once done please follow the instructions found here: https://github.com/${{github.repository}}/blob/main/README.md#using-github-actions-release-workflow
         if: ${{ env.GRAFANA_ACCESS_POLICY_TOKEN == '' }}
 
       - name: Sign plugin
-        run: yarn run sign
+        run: pnpm run sign
         if: ${{ env.GRAFANA_ACCESS_POLICY_TOKEN != '' }}
 
       - name: Get plugin metadata
@@ -73,12 +77,14 @@ jobs:
           export GRAFANA_PLUGIN_TYPE=$(cat dist/plugin.json | jq -r .type)
           export GRAFANA_PLUGIN_ARTIFACT=${GRAFANA_PLUGIN_ID}-${GRAFANA_PLUGIN_VERSION}.zip
           export GRAFANA_PLUGIN_ARTIFACT_CHECKSUM=${GRAFANA_PLUGIN_ARTIFACT}.md5
+          export GRAFANA_PLUGIN_ARTIFACT_SHA1SUM=${GRAFANA_PLUGIN_ARTIFACT}.sha1
 
           echo "plugin-id=${GRAFANA_PLUGIN_ID}" >> $GITHUB_OUTPUT
           echo "plugin-version=${GRAFANA_PLUGIN_VERSION}" >> $GITHUB_OUTPUT
           echo "plugin-type=${GRAFANA_PLUGIN_TYPE}" >> $GITHUB_OUTPUT
           echo "archive=${GRAFANA_PLUGIN_ARTIFACT}" >> $GITHUB_OUTPUT
           echo "archive-checksum=${GRAFANA_PLUGIN_ARTIFACT_CHECKSUM}" >> $GITHUB_OUTPUT
+          echo "archive-sha1sum=${GRAFANA_PLUGIN_ARTIFACT_SHA1SUM}" >> $GITHUB_OUTPUT
 
           echo "github-tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
 
@@ -89,16 +95,7 @@ jobs:
           echo "path=release_notes.md" >> $GITHUB_OUTPUT
 
       - name: Check package version
-        run: |
-          printf "Checking package version versus github tag";
-          printf "metadata version: v${{ steps.metadata.outputs.plugin-version }}";
-          printf "github-tag version: ${{ steps.metadata.outputs.github-tag }}";
-          if [ "v${{ steps.metadata.outputs.plugin-version }}" != "${{ steps.metadata.outputs.github-tag }}" ]; then
-            printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n";
-            printf "metadata version: v${{ steps.metadata.outputs.plugin-version }}";
-            printf "github-tag version: ${{ steps.metadata.outputs.github-tag }}";
-            exit 1;
-          fi
+        run: if [ "v${{ steps.metadata.outputs.plugin-version }}" != "${{ steps.metadata.outputs.github-tag }}" ]; then printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n"; exit 1; fi
 
       - name: Package plugin
         id: package-plugin
@@ -106,6 +103,7 @@ jobs:
           mv dist ${{ steps.metadata.outputs.plugin-id }}
           zip ${{ steps.metadata.outputs.archive }} ${{ steps.metadata.outputs.plugin-id }} -r
           md5sum ${{ steps.metadata.outputs.archive }} > ${{ steps.metadata.outputs.archive-checksum }}
+          sha1sum ${{ steps.metadata.outputs.archive }} | cut -f1 -d' ' > ${{ steps.metadata.outputs.archive-sha1sum }}
           echo "checksum=$(cat ./${{ steps.metadata.outputs.archive-checksum }} | cut -d' ' -f1)" >> $GITHUB_OUTPUT
 
       - name: Validate plugin
@@ -124,6 +122,7 @@ jobs:
           files: |
             ./${{ steps.metadata.outputs.archive }}
             ./${{ steps.metadata.outputs.archive-checksum }}
+            ./${{ steps.metadata.outputs.archive-sha1sum }}
           body: |
             **This Github draft release has been created for your plugin.**
 
@@ -138,5 +137,6 @@ jobs:
             - Fill in the Plugin Submission form:
               - Paste this [.zip asset link](https://github.com/${{ github.repository }}/releases/download/v${{ steps.metadata.outputs.plugin-version }}/${{ steps.metadata.outputs.archive }}) in the Plugin URL field
               - Paste this [.zip.md5 link](https://github.com/${{ github.repository }}/releases/download/v${{ steps.metadata.outputs.plugin-version }}/${{ steps.metadata.outputs.archive-checksum }}) in the MD5 field
+              - Paste this [.zip.sha1 link](https://github.com/${{ github.repository }}/releases/download/v${{ steps.metadata.outputs.plugin-version }}/${{ steps.metadata.outputs.archive-sha1sum }}) in the SHA1 field
 
             Once done please remove these instructions and publish this release.

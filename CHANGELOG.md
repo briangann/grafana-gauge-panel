@@ -2,7 +2,7 @@
 
 All changes noted here.
 
-## v2.0.0 - 2023-10-19
+## v2.0.0 - 2023-10-20
 
 - Rewritten from Angular to React
 - NEW: Needle Width can now be specified
@@ -10,6 +10,7 @@ All changes noted here.
 - NEW: Needle can optionally exceed the tick mark (min and max) to show values
        that are outside of limits
 - NEW: Needle Center can use all marker types, with arrow-inverse added to options
+- Switched to `pnpm`
 
 ## v0.0.9 - 2021-04-21
 
