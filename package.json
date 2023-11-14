@@ -1,7 +1,7 @@
 {
   "name": "briangann-gauge-panel",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Grafana D3 Gauge Panel",
   "main": "module.js",
   "scripts": {
@@ -38,12 +38,12 @@
     "@swc/jest": "^0.2.26",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.4",
-    "@types/d3": "7.4.2",
-    "@types/d3-scale": "4.0.6",
+    "@types/d3": "7.4.3",
+    "@types/d3-scale": "4.0.8",
     "@types/glob": "^8.0.0",
     "@types/jest": "^29.5.0",
-    "@types/lodash": "^4.14.194",
-    "@types/node": "18.18.2",
+    "@types/lodash": "^4.14.201",
+    "@types/node": "20.9.0",
     "copy-webpack-plugin": "^11.0.0",
     "cspell": "7.3.8",
     "css-loader": "^6.7.3",
@@ -66,7 +66,8 @@
     "typescript": "4.8.4",
     "webpack": "^5.86.0",
     "webpack-cli": "^5.1.4",
-    "webpack-livereload-plugin": "^3.0.2"
+    "webpack-livereload-plugin": "^3.0.2",
+    "eslint-plugin-deprecation": "^2.0.0"
   },
   "dependencies": {
     "@emotion/css": "^11.1.3",

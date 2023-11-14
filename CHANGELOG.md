@@ -2,6 +2,11 @@
 
 All changes noted here.
 
+## v2.0.1 - 2023-11-13
+
+- Fix font sizing during migrations
+- Autoscales font according to gauge size
+
 ## v2.0.0 - 2023-10-20
 
 - Rewritten from Angular to React

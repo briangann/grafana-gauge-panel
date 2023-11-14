@@ -61,6 +61,7 @@ interface AngularOptions {
   unitsFont: string;
   // font sizes
   unitsLabelFontSize: number;
+  labelFontSize: number;
   // ticks
   tickWidthMaj: number;
   tickWidthMin: number;
@@ -433,6 +434,9 @@ export const migrateDefaults = (angular: AngularOptions) => {
   }
   if (angular.unitsLabelFontSize) {
     options.valueFontSize = angular.unitsLabelFontSize;
+  }
+  if (angular.labelFontSize) {
+    options.tickLabelFontSize = angular.labelFontSize;
   }
   if (angular.zeroNeedleAngle) {
     options.zeroNeedleAngle = angular.zeroNeedleAngle;
