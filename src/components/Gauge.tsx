@@ -35,7 +35,6 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const [tickAnglesMin, setTickAnglesMin] = useState<number[]>([]);
   const [margin, setMargin] = useState({ top: 0, right: 0, bottom: 0, left: 0 });
   const [tickMajorLabels, setTickMajorLabels] = useState<string[]>([]);
-  const [labelFontSize] = useState(options.valueFontSize);
   //
   const SVGSize = options.gaugeRadius * 2;
   // needle calc
@@ -128,7 +127,12 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     const tickStartMinor = options.gaugeRadius - options.padding -
       options.edgeWidth - options.tickEdgeGap - options.tickLengthMin;
     setTickStartMin(tickStartMinor);
-    setLabelStart(tickStartMajor - options.tickLabelFontSize);
+    const tmpTickLabelFontSize = scaleLabelFontSize(
+      options.tickLabelFontSize,
+      options.gaugeRadius,
+      options.ticknessGaugeBasis);
+
+    setLabelStart(tickStartMajor - tmpTickLabelFontSize);
 
     if (options.tickSpacingMajor === undefined) {
       options.tickSpacingMajor = 10;
@@ -164,6 +168,13 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
 
   }, [tickAnglesMaj, tickAnglesMin, options, tickMajorLabels, needleLengthNegCalc]);
 
+  const scaleLabelFontSize = (fontSize: number, radius: number, ticknessGaugeBasis: number) => {
+    let scaledFontSize = fontSize * (radius / ticknessGaugeBasis);
+    if (scaledFontSize < 4) {
+      scaledFontSize = 0;
+    }
+    return scaledFontSize;
+  };
 
   const createCircleGroup = () => {
     let gaugeFaceColor = options.innerColor;
@@ -191,6 +202,11 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         maxLabelLength = item.length;
       }
     }
+    const tmpTickLabelFontSize = scaleLabelFontSize(
+      options.tickLabelFontSize,
+      options.gaugeRadius,
+      options.ticknessGaugeBasis);
+
     return (
       <g id='majorTickLabels'>
         {tickAnglesMaj.length > 0 && tickAnglesMaj.map((item: number, index: number) => {
@@ -198,9 +214,9 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           return (
             <text
               key={`mtl_${index}`}
-              x={labelXCalc(item, maxLabelLength, labelText, labelFontSize, labelStart, originX) || 0}
-              y={labelYCalc(item, labelFontSize, labelStart, originY) || 0}
-              fontSize={options.tickLabelFontSize || 12}
+              x={labelXCalc(item, maxLabelLength, labelText, tmpTickLabelFontSize, labelStart, originX) || 0}
+              y={labelYCalc(item, tmpTickLabelFontSize, labelStart, originY) || 0}
+              fontSize={tmpTickLabelFontSize || 12}
               textAnchor='middle'
               fill={theme2.visualization.getColorByName(options.tickLabelColor) || '#000000'}
               fontWeight={'bold'}
@@ -309,15 +325,15 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     return paths;
   };
 
-
   const createValueLabel = (color: string) => {
     const position = 0;
+    const valueFontSize = scaleLabelFontSize(options.valueFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
     return (
       <g id='valueLabels'>
         <text
-          x={labelXCalc(position, 0, options.displayFormatted, labelFontSize, labelStart, originX)}
-          y={labelYCalc(position, labelFontSize, labelStart, originY) + options.valueYOffset}
-          fontSize={options.valueFontSize}
+          x={labelXCalc(position, 0, options.displayFormatted, valueFontSize, labelStart, originX)}
+          y={labelYCalc(position, valueFontSize, labelStart, originY) + options.valueYOffset}
+          fontSize={valueFontSize}
           textAnchor='middle'
           fill={theme2.visualization.getColorByName(color)}
           fontWeight={'bold'}
