@@ -49,7 +49,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   // center of gauge
   const originX = options.gaugeRadius;
   const originY = options.gaugeRadius;
-  let needleElement: JSX.Element | null = null;
+  let needleElement: React.JSX.Element | null = null;
 
   /*
   useEffect(() => {
@@ -449,7 +449,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
 
   useEffect(() => {
 
-    const updateGauge = (needleGroup: JSX.Element | null, newVal: number, newValFormatted: string) => {
+    const updateGauge = (needleGroup: React.JSX.Element | null, newVal: number, newValFormatted: string) => {
       // Animate the transition of the needle to its new value
       const oldVal = previousNeedleValue;
       // Set default values if necessary
