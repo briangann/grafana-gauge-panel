@@ -263,6 +263,9 @@ export const migrateDefaults = (angular: AngularOptions) => {
     valueYOffset: 0,
     valueFontSize: 22,
     valueFont: FontFamilies.INTER,
+    titleYOffset: 0,
+    titleFontSize: 22,
+    titleFont: FontFamilies.INTER,
     tickLabelFontSize: 18,
     tickFont: FontFamilies.INTER,
     animateNeedleValueTransition: true,
@@ -315,8 +318,11 @@ export const migrateDefaults = (angular: AngularOptions) => {
     showThresholdBandUpperRange: false,
     displayFormatted: '',
     displayValue: null,
+    displayTitle: '',
+    showTitle: false,
     thresholds: undefined,
     showThresholdStateOnValue: false,
+    showThresholdStateOnTitle: false,
     showThresholdStateOnBackground: false
   };
   // next migrate the angular settings

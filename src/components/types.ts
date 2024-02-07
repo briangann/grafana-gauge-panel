@@ -5,13 +5,18 @@ export interface GaugeOptions {
   // data: PanelData | undefined;
   displayFormatted: string;
   displayValue: number | null;
+  showTitle: boolean;
+  displayTitle: string;
   // General
   operatorName: string;
   valueYOffset: number;
+  titleYOffset: number;
 
   // Font Settings
   valueFont: string;
   valueFontSize: number;
+  titleFont: string;
+  titleFontSize: number;
   tickLabelFontSize: number;
   tickFont: string;
 
@@ -78,6 +83,7 @@ export interface GaugeOptions {
   showThresholdBandUpperRange: boolean;
   //
   showThresholdStateOnValue: boolean;
+  showThresholdStateOnTitle: boolean;
   showThresholdStateOnBackground: boolean;
   //
   thresholds: ThresholdsConfig | undefined;
