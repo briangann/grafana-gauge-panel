@@ -99,6 +99,11 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
     return NaN;
   };
 
+  const getDisplayTitle = (index: number) => {
+    const singleMetric = metrics[index];
+    return singleMetric.display.title || '';
+  };
+
   // get the formatted metrics
   const metrics = getValues();
   const thresholdResult = getThresholdForValue(fieldConfig.defaults, getDisplayValue(0), theme2);
@@ -117,6 +122,8 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
         <Gauge
           displayFormatted={getFormattedValue(0)}
           displayValue={getDisplayValue(0)}
+          displayTitle={getDisplayTitle(0)}
+          showTitle={options.showTitle}
           panelId={id}
           panelWidth={width}
           panelHeight={height}
@@ -124,6 +131,9 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
           valueYOffset={options.valueYOffset}
           valueFontSize={options.valueFontSize}
           valueFont={options.valueFont}
+          titleYOffset={options.titleYOffset}
+          titleFontSize={options.titleFontSize}
+          titleFont={options.titleFont}
           tickLabelFontSize={options.tickLabelFontSize}
           tickFont={options.tickFont}
           animateNeedleValueTransition={options.animateNeedleValueTransition}
@@ -168,6 +178,7 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
           showThresholdBandMiddleRange={options.showThresholdBandMiddleRange}
           showThresholdBandUpperRange={options.showThresholdBandUpperRange}
           showThresholdStateOnValue={options.showThresholdStateOnValue}
+          showThresholdStateOnTitle={options.showThresholdStateOnTitle}
           showThresholdStateOnBackground={options.showThresholdStateOnBackground}
           needleWidth={options.needleWidth}
           thresholds={fieldConfig.defaults.thresholds}

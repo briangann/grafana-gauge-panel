@@ -325,14 +325,46 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     return paths;
   };
 
+  const valueFontSize = scaleLabelFontSize(options.valueFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
+  const titleFontSize = scaleLabelFontSize(options.titleFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
+  const valueLabelY = labelYCalc(0, valueFontSize, labelStart, originY) + options.valueYOffset;
+  const titleLabelY = (
+      labelYCalc(0, titleFontSize, labelStart, originY)
+      + options.titleYOffset
+      - (valueFontSize / 2)
+      - (titleFontSize / 2)
+  );
+
+  const createTitleLabel = (color: string) => {
+    // Only show title if selected and non-empty title
+    if (!options.showTitle || options.displayTitle.length === 0) {
+        return false;
+    }
+
+    // Define title position relative to value label
+    return (
+      <g id='titleLabels'>
+        <text
+          x={labelXCalc(0, 0, options.displayTitle, titleFontSize, labelStart, originX)}
+          y={titleLabelY}
+          fontSize={titleFontSize}
+          textAnchor='middle'
+          fill={theme2.visualization.getColorByName(color)}
+          fontWeight={'bold'}
+          fontFamily={options.titleFont}
+        >
+          {options.displayTitle}
+        </text>
+      </g>
+    );
+  };
+
   const createValueLabel = (color: string) => {
-    const position = 0;
-    const valueFontSize = scaleLabelFontSize(options.valueFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
     return (
       <g id='valueLabels'>
         <text
-          x={labelXCalc(position, 0, options.displayFormatted, valueFontSize, labelStart, originX)}
-          y={labelYCalc(position, valueFontSize, labelStart, originY) + options.valueYOffset}
+          x={labelXCalc(0, 0, options.displayFormatted, valueFontSize, labelStart, originX)}
+          y={valueLabelY}
           fontSize={valueFontSize}
           textAnchor='middle'
           fill={theme2.visualization.getColorByName(color)}
@@ -551,6 +583,14 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     }
   }
 
+  let titleColor = options.unitsLabelColor;
+  if (options.showThresholdStateOnTitle) {
+    if (options.displayValue && options.thresholds) {
+      const aThreshold = getActiveThreshold(options.displayValue, options.thresholds.steps);
+      titleColor = aThreshold.color;
+    }
+  }
+
 
   return (
     <div className={divStyles}>
@@ -569,6 +609,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           {createMajorTickLabels()}
           {createNeedleMarkers(options.needleColor, theme2)}
           {needleElement}
+          {createTitleLabel(titleColor)}
           {createValueLabel(valueColor)}
         </g>
       </svg>
