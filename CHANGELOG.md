@@ -2,6 +2,12 @@
 
 All changes noted here.
 
+## v2.0.2 - 2024-01-25
+
+- Allow float value for Needle Length Stem
+- Update CI
+- Update packages
+
 ## v2.0.1 - 2023-11-13
 
 - Fix font sizing during migrations
