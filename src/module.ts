@@ -12,7 +12,6 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
   .useFieldConfig({
     disableStandardOptions: [
       FieldConfigProperty.Color,
-      FieldConfigProperty.DisplayName,
       FieldConfigProperty.Links,
       FieldConfigProperty.Max,
       FieldConfigProperty.Min,
@@ -42,6 +41,13 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
           options: OperatorOptions,
         },
       })
+      .addBooleanSwitch({
+        name: 'Show title',
+        path: 'showTitle',
+        defaultValue: false,
+        category: ['Standard options'],
+        description: 'Show the series title/name in the gauge',
+      })
 
       // Font Settings
       // Value Font
@@ -60,6 +66,29 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         name: 'Value Font Size',
         path: 'valueFontSize',
         description: 'Font Size of Value',
+        category: ['Font Settings'],
+        defaultValue: FontSizes[17].value,
+        settings: {
+          options: FontSizes,
+        },
+      })
+      // Font Settings
+      // Title Font
+      .addSelect({
+        name: 'Title Font',
+        path: 'titleFont',
+        description: 'The font of the value text, at the bottom of the gauge',
+        category: ['Font Settings'],
+        defaultValue: FontFamilyOptions[3].value,
+        settings: {
+          options: FontFamilyOptions,
+        },
+      })
+      // unitsLabelFontSize
+      .addSelect({
+        name: 'Title Font Size',
+        path: 'titleFontSize',
+        description: 'Font Size of Title',
         category: ['Font Settings'],
         defaultValue: FontSizes[17].value,
         settings: {
@@ -332,6 +361,17 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         },
         category: ['Radial Customization'],
       })
+      // titleYOffset
+      .addNumberInput({
+        name: 'Title Y-Offset',
+        path: 'titleYOffset',
+        description: 'Adjust the displayed title up or down the Y-Axis, use negative title to move up, positive for down',
+        defaultValue: 0,
+        settings: {
+          integer: true,
+        },
+        category: ['Radial Customization'],
+      })
       .addNumberInput({
         name: 'Padding',
         path: 'padding',
@@ -572,6 +612,13 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         defaultValue: false,
         category: ['Thresholds'],
         description: 'Displayed value color changes to state of threshold',
+      })
+      .addBooleanSwitch({
+        name: 'Show Threshold State on Title',
+        path: 'showThresholdStateOnTitle',
+        defaultValue: false,
+        category: ['Thresholds'],
+        description: 'Displayed title color changes to state of threshold',
       });
 
   })
