@@ -11,7 +11,8 @@
     "src/plugin.json",
     "package.json",
     "catalog-review/**",
-    "tests/__mocks__/**"
+    "tests/__mocks__/**",
+    ".github/**"
   ],
   "words": [
     "Abbrevation",

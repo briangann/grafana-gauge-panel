@@ -1,7 +1,6 @@
 import { FieldConfigProperty, PanelPlugin } from '@grafana/data';
 import { GaugePanel } from './components/GaugePanel';
 import { FontFamilyOptions, FontSizes, GaugeOptions, GaugePresetOptions, MarkerOptions, OperatorOptions } from 'components/types';
-import { DataSuggestionsSupplier } from './components/suggestions';
 import { PanelMigrationHandler } from './migrations';
 import { TickMapEditor } from 'components/TickMaps/TickMapEditor';
 import { TickMapItemType } from 'components/TickMaps/types';
@@ -621,5 +620,4 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         description: 'Displayed title color changes to state of threshold',
       });
 
-  })
-  .setSuggestionsSupplier(new DataSuggestionsSupplier());
+  });
