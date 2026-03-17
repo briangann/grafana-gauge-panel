@@ -2,6 +2,10 @@
 
 All changes noted here.
 
+## Unreleased
+
+- Removed suggestions supplier
+
 ## v2.0.1 - 2023-11-13
 
 - Fix font sizing during migrations
