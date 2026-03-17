@@ -74,6 +74,10 @@ Use the **Version bump, changelog** GitHub Actions workflow (`.github/workflows/
 - **version**: `patch`, `minor`, or `major`
 - **generate-changelog**: `true` (default) or `false`
 
+## Release Please
+
+Use the **release please** GitHub Actions workflow (`.github/workflows/release-please.yml`) to automate version bumping and changelog generation. Trigger it manually via `workflow_dispatch` — no inputs required.
+
 ## Grafana Compatibility Check
 
 Before releasing, verify the built plugin is compatible with a target Grafana version using `levitate`. Requires a production build first.
