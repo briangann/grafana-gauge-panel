@@ -61,6 +61,12 @@ pnpm exec jest --testNamePattern="Min Needle"
 - **Jest** uses SWC transformer, jsdom environment, and `jest-setup.js` which sets `TZ=UTC` for snapshot consistency.
 - CSS modules are mocked with `identity-obj-proxy` in tests.
 
+## Checking CI Status
+
+```bash
+gh pr checks <PR-number>
+```
+
 ## Version Bumping & Changelog
 
 Use the **Version bump, changelog** GitHub Actions workflow (`.github/workflows/version-bump-changelog.yml`) to bump the version and optionally generate a changelog. Trigger it manually via `workflow_dispatch` with:
