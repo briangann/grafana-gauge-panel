@@ -80,8 +80,8 @@ devDependencies:
     specifier: 7.4.3
     version: 7.4.3
   '@types/d3-scale':
-    specifier: 4.0.8
-    version: 4.0.8
+    specifier: 4.0.9
+    version: 4.0.9
   '@types/glob':
     specifier: ^8.0.0
     version: 8.1.0
@@ -1422,7 +1422,7 @@ packages:
       react-calendar: 6.0.0(@types/react@18.3.28)(react-dom@18.3.1)(react@18.3.1)
       react-colorful: 5.6.1(react-dom@18.3.1)(react@18.3.1)
       react-custom-scrollbars-2: 4.5.0(react-dom@18.3.1)(react@18.3.1)
-      react-data-grid: github.com/grafana/react-data-grid/a10c748f40edc538425b458af4e471a8262ec4ed(react-dom@18.3.1)(react@18.3.1)
+      react-data-grid: git@github.com+grafana/react-data-grid/a10c748f40edc538425b458af4e471a8262ec4ed(react-dom@18.3.1)(react@18.3.1)
       react-dom: 18.3.1(react@18.3.1)
       react-dropzone: 14.3.8(react@18.3.1)
       react-highlight-words: 0.21.0(react@18.3.1)
@@ -2877,10 +2877,10 @@ packages:
     resolution: {integrity: sha512-kpKNZMDT3OAX6b5ct5nS/mv6LULagnUy4DmS6yyNjclje1qVe7vbjPwY3q1TGz6+Wr2IUkgFatCzqYUl54fHag==}
     dev: true
 
-  /@types/d3-scale@4.0.8:
-    resolution: {integrity: sha512-gkK1VVTr5iNiYJ7vWDI+yUFFlszhNMtVeneJ6lUTKPjprsvLLI9/tgEGiXJOnlINJA8FyA88gfnQsHbybVZrYQ==}
+  /@types/d3-scale@4.0.9:
+    resolution: {integrity: sha512-dLmtwB8zkAeO/juAMfnV+sItKjlsw2lKdZVVy6LRr0cBmegxSABiLEpGVmSJJ8O08i4+sGR6qQtb6WtuwJdvVw==}
     dependencies:
-      '@types/d3-time': 3.0.3
+      '@types/d3-time': 3.0.4
     dev: true
 
   /@types/d3-selection@3.0.10:
@@ -2899,6 +2899,10 @@ packages:
 
   /@types/d3-time@3.0.3:
     resolution: {integrity: sha512-2p6olUZ4w3s+07q3Tm2dbiMZy5pCDfYwtLXXHUnVzXgQlZ/OyPtUz6OL382BkOuGlLXqfT+wqv8Fw2v8/0geBw==}
+    dev: true
+
+  /@types/d3-time@3.0.4:
+    resolution: {integrity: sha512-yuzZug1nkAAaBlBBikKZTgzCeA+k1uy4ZFwWANOfKw5z5LRhV0gNA7gNkKm7HoK+HRN0wX3EkxGk0fpbWhmB7g==}
     dev: true
 
   /@types/d3-timer@3.0.2:
@@ -2942,7 +2946,7 @@ packages:
       '@types/d3-polygon': 3.0.2
       '@types/d3-quadtree': 3.0.5
       '@types/d3-random': 3.0.3
-      '@types/d3-scale': 4.0.8
+      '@types/d3-scale': 4.0.9
       '@types/d3-scale-chromatic': 3.0.2
       '@types/d3-selection': 3.0.10
       '@types/d3-shape': 3.1.5
@@ -10290,9 +10294,9 @@ packages:
     resolution: {integrity: sha512-w2NTI8+3l3eeltKAdK8QpiLo/flRAr2p8AGeakfMZOXBxOg9HIu4LVDxBi81sYgVhFhdJjv1OrB5ssI8uFPoLg==}
     dev: false
 
-  github.com/grafana/react-data-grid/a10c748f40edc538425b458af4e471a8262ec4ed(react-dom@18.3.1)(react@18.3.1):
-    resolution: {tarball: https://codeload.github.com/grafana/react-data-grid/tar.gz/a10c748f40edc538425b458af4e471a8262ec4ed}
-    id: github.com/grafana/react-data-grid/a10c748f40edc538425b458af4e471a8262ec4ed
+  git@github.com+grafana/react-data-grid/a10c748f40edc538425b458af4e471a8262ec4ed(react-dom@18.3.1)(react@18.3.1):
+    resolution: {commit: a10c748f40edc538425b458af4e471a8262ec4ed, repo: git@github.com:grafana/react-data-grid.git, type: git}
+    id: git@github.com+grafana/react-data-grid/a10c748f40edc538425b458af4e471a8262ec4ed
     name: react-data-grid
     version: 7.0.0-beta.56
     peerDependencies:
