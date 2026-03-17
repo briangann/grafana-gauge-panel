@@ -2,7 +2,7 @@
 
 All changes noted here.
 
-## Unreleased
+## v2.0.2 - 2026-03-16
 
 - Removed suggestions supplier
 
