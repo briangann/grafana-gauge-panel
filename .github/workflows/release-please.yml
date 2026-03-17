@@ -1,0 +1,16 @@
+name: release please
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  run-release-please:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: release please version bump changelog
+        uses: grafana/plugin-ci-workflows/actions/plugins/release-please@plugins-release-please/v1.0.1
