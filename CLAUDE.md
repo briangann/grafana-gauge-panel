@@ -51,7 +51,6 @@ pnpm exec jest --testNamePattern="Min Needle"
 | File | Purpose |
 |------|---------|
 | `src/components/types.ts` | `GaugeOptions` interface and all other TypeScript types |
-| `src/components/suggestions.ts` | Grafana data suggestion supplier |
 | `src/components/TickMaps/` | Custom editor UI for tick value mappings |
 
 ### Build & Config
@@ -61,6 +60,25 @@ pnpm exec jest --testNamePattern="Min Needle"
 - **ESLint** enforces semicolons (`semi: 'error'`) in addition to Grafana's base rules.
 - **Jest** uses SWC transformer, jsdom environment, and `jest-setup.js` which sets `TZ=UTC` for snapshot consistency.
 - CSS modules are mocked with `identity-obj-proxy` in tests.
+
+## Grafana Compatibility Check
+
+Before releasing, verify the built plugin is compatible with a target Grafana version using `levitate`. Requires a production build first.
+
+```bash
+pnpm build
+npx @grafana/levitate@latest is-compatible \
+  --target @grafana/data@<version>,@grafana/ui@<version>,@grafana/runtime@<version> \
+  --path dist/module.js
+```
+
+To check against the latest Grafana version, first look up the current `@grafana/data` version on npm:
+
+```bash
+npm view @grafana/data version
+```
+
+Then substitute that version into the `--target` flag above.
 
 ### Docker Development
 
