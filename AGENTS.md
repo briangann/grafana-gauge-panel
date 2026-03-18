@@ -27,11 +27,13 @@ pnpm spellcheck       # cspell across all source files
 ```
 
 **Run a single test file:**
+
 ```bash
 pnpm exec jest --testPathPattern=needle_utils
 ```
 
 **Run tests matching a name pattern:**
+
 ```bash
 pnpm exec jest --testNamePattern="Min Needle"
 ```
@@ -52,10 +54,10 @@ pnpm exec jest --testNamePattern="Min Needle"
 
 ### Key Files
 
-| File | Purpose |
-|------|---------|
-| `src/components/types.ts` | `GaugeOptions` interface and all other TypeScript types |
-| `src/components/TickMaps/` | Custom editor UI for tick value mappings |
+| File                       | Purpose                                                 |
+| -------------------------- | ------------------------------------------------------- |
+| `src/components/types.ts`  | `GaugeOptions` interface and all other TypeScript types |
+| `src/components/TickMaps/` | Custom editor UI for tick value mappings                |
 
 ### Build & Config
 
@@ -100,6 +102,14 @@ npm view @grafana/data version
 ```
 
 Then substitute that version into the `--target` flag above.
+
+## Updating Plugin Scaffolding
+
+To update the `.config` directory (Webpack, tsconfig, Jest config, etc.) to the latest Grafana plugin scaffolding:
+
+```bash
+npx @grafana/create-plugin@latest update
+```
 
 ### Docker Development
 
