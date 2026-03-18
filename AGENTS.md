@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Always create a branch before making any changes. Never commit directly to `main`.
 
+When checking out a branch or `main`, always `git fetch` and `git pull` to ensure you have the latest changes.
+
 ## Project Overview
 
 A Grafana panel plugin providing a highly customizable D3-based gauge visualization. Built with React 18, TypeScript, and D3.js v7. Outputs an AMD module compatible with Grafana's plugin system.
@@ -27,11 +29,13 @@ pnpm spellcheck       # cspell across all source files
 ```
 
 **Run a single test file:**
+
 ```bash
 pnpm exec jest --testPathPattern=needle_utils
 ```
 
 **Run tests matching a name pattern:**
+
 ```bash
 pnpm exec jest --testNamePattern="Min Needle"
 ```
@@ -52,10 +56,10 @@ pnpm exec jest --testNamePattern="Min Needle"
 
 ### Key Files
 
-| File | Purpose |
-|------|---------|
-| `src/components/types.ts` | `GaugeOptions` interface and all other TypeScript types |
-| `src/components/TickMaps/` | Custom editor UI for tick value mappings |
+| File                       | Purpose                                                 |
+| -------------------------- | ------------------------------------------------------- |
+| `src/components/types.ts`  | `GaugeOptions` interface and all other TypeScript types |
+| `src/components/TickMaps/` | Custom editor UI for tick value mappings                |
 
 ### Build & Config
 
