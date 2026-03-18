@@ -5,6 +5,9 @@ All changes noted here.
 ## v2.0.2 - 2026-03-16
 
 - Removed suggestions supplier
+- Upgraded GitHub Actions to latest versions across all workflows
+- Renamed CLAUDE.md to AGENTS.md
+- Upgraded minor/patch dependencies (@emotion/css, tslib, d3, @testing-library/jest-dom, @types/d3-scale, @grafana packages)
 
 ## v2.0.1 - 2023-11-13
 
@@ -17,7 +20,7 @@ All changes noted here.
 - NEW: Needle Width can now be specified
 - NEW: Thresholds now use the standard Grafana threshold mechanics
 - NEW: Needle can optionally exceed the tick mark (min and max) to show values
-       that are outside of limits
+  that are outside of limits
 - NEW: Needle Center can use all marker types, with arrow-inverse added to options
 - Switched to `pnpm`
 
