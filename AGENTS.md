@@ -105,6 +105,14 @@ npm view @grafana/data version
 
 Then substitute that version into the `--target` flag above.
 
+## Updating Plugin Scaffolding
+
+To update the `.config` directory (Webpack, tsconfig, Jest config, etc.) to the latest Grafana plugin scaffolding:
+
+```bash
+npx @grafana/create-plugin@latest update
+```
+
 ### Docker Development
 
 `docker-compose.yaml` + `provisioning/` folder provides a local Grafana instance for manual testing. Run `pnpm server` to start it.
