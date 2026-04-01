@@ -9,7 +9,9 @@ All changes noted here.
 - Aligned release workflow Node version to 24
 - Changed release workflow Go version to use go.mod instead of hardcoded v1.21
 - Upgraded @grafana/data, i18n, runtime, schema, ui from 12.4.1 to 12.4.2
-- Upgraded minor/patch dependencies (@babel/core, @swc/core, @swc/helpers, @swc/jest, swc-loader, @types/lodash, @typescript-eslint/eslint-plugin, @typescript-eslint/parser, css-loader, eslint-config-prettier, eslint-webpack-plugin, glob, semver, terser-webpack-plugin, webpack)
+- Upgraded minor/patch dependencies (@babel/core, @swc/core, @swc/helpers, @swc/jest, swc-loader,
+  @types/lodash, @typescript-eslint/eslint-plugin, @typescript-eslint/parser, css-loader,
+  eslint-config-prettier, eslint-webpack-plugin, glob, semver, terser-webpack-plugin, webpack)
 - Upgraded sass from 1.63.2 to 1.98.0
 - Upgraded sass-loader from 13.3.1 to 13.3.3
 - Upgraded typescript from 5.5.4 to 5.9.3
