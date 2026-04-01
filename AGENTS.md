@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Always create a branch before making any changes. Never commit directly to `main`.
 
+When checking out a branch or `main`, always `git fetch` and `git pull` to ensure you have the latest changes.
+
 ## Project Overview
 
 A Grafana panel plugin providing a highly customizable D3-based gauge visualization. Built with React 18, TypeScript, and D3.js v7. Outputs an AMD module compatible with Grafana's plugin system.
