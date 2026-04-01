@@ -5,11 +5,11 @@
 [![License](https://img.shields.io/github/license/briangann/grafana-gauge-panel)](LICENSE)
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/jepetlefeu.svg?style=social)](https://twitter.com/jepetlefeu)
-![Release](https://github.com/briangann/grafana-gauge-panel/workflows/Release/badge.svg)
+![Release](https://github.com/briangann/grafana-gauge-panel/actions/workflows/release.yml/badge.svg)
 [![Maintainability](https://api.codeclimate.com/v1/badges/1c750faa58c1f7b3c7fa/maintainability)](https://codeclimate.com/github/briangann/grafana-gauge-panel/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1c750faa58c1f7b3c7fa/test_coverage)](https://codeclimate.com/github/briangann/grafana-gauge-panel/test_coverage)
 
-[![All Contributors](https://img.shields.io/github/all-contributors/briangann/grafana-gauge-panel?color=ee8449&style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
 
 This panel plugin provides a [D3-based](https://d3js.org) gauge panel
 for [Grafana](https://www.grafana.com) 8.4.10+/9.x/10.x
@@ -239,6 +239,17 @@ This panel is based on the "SingleStat" panel by Grafana, along with large
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/briangann"><img src="https://avatars.githubusercontent.com/u/7364245?v=4" width="100px;" alt="Brian Gann"/><br /><sub><b>Brian Gann</b></sub></a><br /><a href="https://github.com/briangann/grafana-gauge-panel/commits?author=briangann" title="Code">💻</a> <a href="https://github.com/briangann/grafana-gauge-panel/commits?author=briangann" title="Documentation">📖</a> <a href="#maintenance-briangann" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/judy-zz"><img src="https://avatars.githubusercontent.com/u/520406?v=4" width="100px;" alt="Clinton Judy"/><br /><sub><b>Clinton Judy</b></sub></a><br /><a href="https://github.com/briangann/grafana-gauge-panel/commits?author=judy-zz" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/DanCech"><img src="https://avatars.githubusercontent.com/u/553006?v=4" width="100px;" alt="Dan Cech"/><br /><sub><b>Dan Cech</b></sub></a><br /><a href="https://github.com/briangann/grafana-gauge-panel/commits?author=DanCech" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/hafkensite"><img src="https://avatars.githubusercontent.com/u/2974074?v=4" width="100px;" alt="Jasper Hafkenscheid"/><br /><sub><b>Jasper Hafkenscheid</b></sub></a><br /><a href="https://github.com/briangann/grafana-gauge-panel/commits?author=hafkensite" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/barskern"><img src="https://avatars.githubusercontent.com/u/15630608?v=4" width="100px;" alt="Ole Martin Ruud"/><br /><sub><b>Ole Martin Ruud</b></sub></a><br /><a href="https://github.com/briangann/grafana-gauge-panel/commits?author=barskern" title="Code">💻</a></td>
+    </tr>
+  </tbody>
+</table>
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
