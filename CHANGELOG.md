@@ -13,6 +13,7 @@ All changes noted here.
 - Upgraded sass from 1.63.2 to 1.98.0
 - Upgraded sass-loader from 13.3.1 to 13.3.3
 - Upgraded typescript from 5.5.4 to 5.9.3
+- Upgraded uuid from 9.x to 13.0.0, removed @types/uuid (types now bundled)
 
 ## v2.0.2 - 2026-03-16
 

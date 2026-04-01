@@ -23,9 +23,6 @@ dependencies:
   '@grafana/ui':
     specifier: 12.4.2
     version: 12.4.2(@types/react@18.3.28)(eslint@9.39.4)(react-dom@18.3.1)(react@18.3.1)(typescript@5.9.3)
-  '@types/uuid':
-    specifier: 8.3.4
-    version: 8.3.4
   d3-ease:
     specifier: 3.0.1
     version: 3.0.1
@@ -45,8 +42,8 @@ dependencies:
     specifier: 2.8.1
     version: 2.8.1
   uuid:
-    specifier: ^9.0.1
-    version: 9.0.1
+    specifier: ^13.0.0
+    version: 13.0.0
 
 devDependencies:
   '@babel/core':
@@ -3167,10 +3164,6 @@ packages:
 
   /@types/use-sync-external-store@0.0.6:
     resolution: {integrity: sha512-zFDAD+tlpf2r4asuHEj0XH6pY6i0g5NeAHPn+15wk3BV6JA69eERFXC1gyGThDkVa1zCyKr5jox1+2LbV/AMLg==}
-    dev: false
-
-  /@types/uuid@8.3.4:
-    resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
     dev: false
 
   /@types/yargs-parser@21.0.3:
@@ -9386,15 +9379,15 @@ packages:
     hasBin: true
     dev: false
 
+  /uuid@13.0.0:
+    resolution: {integrity: sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==}
+    hasBin: true
+    dev: false
+
   /uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
     dev: true
-
-  /uuid@9.0.1:
-    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
-    hasBin: true
-    dev: false
 
   /uwrap@0.1.2:
     resolution: {integrity: sha512-f3EJhcx+pB6sWtBZOKAcJ+RweICm/FmFiqCfMy3OLpsXNcf2P5tEYn8nu3BIBYTI/srzN+VrfRN1tCkJL6QuLg==}
