@@ -24,6 +24,7 @@ All changes noted here.
 - Renamed CLAUDE.md to AGENTS.md
 - Upgraded minor/patch dependencies (@emotion/css, tslib, d3, @testing-library/jest-dom, @types/d3-scale, @grafana packages)
 
+
 ## v2.0.1 - 2023-11-13
 
 - Fix font sizing during migrations

@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Always create a branch before making any changes. Never commit directly to `main`.
 
+Do not add a `Co-Authored-By` line to commit messages.
+
 When checking out a branch or `main`, always `git fetch` and `git pull` to ensure you have the latest changes.
 
 ## Project Overview
