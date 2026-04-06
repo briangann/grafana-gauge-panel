@@ -224,3 +224,6 @@ Fix any issues before committing. Configuration is in `.markdownlint.json`
   to ensure you have the latest changes.
 - **Always create pull requests as drafts**
   (`gh pr create --draft`).
+- **Never add a "Generated with Claude Code" line** to PR
+  summaries. Always organize the PR summary with categorized
+  change information (e.g., Dependencies, New Features, Cleanup).
