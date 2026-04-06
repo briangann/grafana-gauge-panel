@@ -43,7 +43,7 @@ jobs:
                 ['.gitignore', '.markdownlint.yaml', '.nvmrc', '.prettierrc.js',
                  'cspell.config.json', 'docker-compose.yaml', 'eslint.config.mjs',
                  'jest.config.js', 'jest-setup.js', 'mise.toml',
-                 'package.json', 'package-lock.json',
+                 'package.json', 'pnpm-lock.yaml',
                  'playwright.config.ts', 'tsconfig.json', 'webpack.config.ts',
                 ].includes(f)
               },

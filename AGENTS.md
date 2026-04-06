@@ -229,7 +229,7 @@ before pushing.
 npx markdownlint-cli2 AGENTS.md README.md CHANGELOG.md
 ```
 
-Fix any issues before committing. Configuration is in `.markdownlint.json`
+Fix any issues before committing. Configuration is in `.markdownlint.yaml`
 (120-character line length).
 
 ## Branching Policy

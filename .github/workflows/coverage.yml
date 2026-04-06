@@ -43,7 +43,7 @@ jobs:
           clean: false
 
       - name: Install dependencies (base)
-        run: pnpm install --frozen-lockfile --prefer-offline
+        run: pnpm install --prefer-offline
 
       - name: Run tests with coverage (base)
         run: pnpm exec jest --ci --coverage --coverageReporters=json-summary --coverageReporters=json --maxWorkers=4
