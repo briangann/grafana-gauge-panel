@@ -1,4 +1,4 @@
-# CLAUDE.md
+# AGENTS.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -72,11 +72,27 @@ pnpm exec jest --testNamePattern="Min Needle"
 - **Jest** uses SWC transformer, jsdom environment, and `jest-setup.js` which sets `TZ=UTC` for snapshot consistency.
 - CSS modules are mocked with `identity-obj-proxy` in tests.
 
-## Checking CI Status
+## CI/CD
+
+### Checking CI Status
 
 ```bash
 gh pr checks <PR-number>
 ```
+
+### Workflows
+
+| Workflow | File | Trigger |
+| -------- | ---- | ------- |
+| CI | `ci.yml` | Push to `main`, PRs to `main` |
+| Release | `release.yml` | `workflow_dispatch` |
+| Release Please | `release-please.yml` | `workflow_dispatch` |
+| Version Bump & Changelog | `version-bump-changelog.yml` | `workflow_dispatch` |
+| Compatibility Check | `is-compatible.yml` | `workflow_dispatch` |
+| Bundle Stats | `bundle-stats.yml` | PRs |
+| Coverage Report | `coverage.yml` | PRs |
+| PR File Changes | `pr-files.yml` | PRs |
+| Create Plugin Update | `cp-update.yml` | `workflow_dispatch` |
 
 ## Version Bumping & Changelog
 
@@ -122,7 +138,7 @@ to the latest Grafana plugin scaffolding:
 npx @grafana/create-plugin@latest update
 ```
 
-### Docker Development
+## Docker Development
 
 `docker-compose.yaml` + `provisioning/` folder provides a local Grafana instance
 for manual testing. Run `pnpm server` to start it.
