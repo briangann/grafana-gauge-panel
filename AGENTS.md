@@ -6,11 +6,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Always create a branch before making any changes. Never commit directly to `main`.
 
+Do not add a `Co-Authored-By` line to commit messages.
+
 When checking out a branch or `main`, always `git fetch` and `git pull` to ensure you have the latest changes.
 
 ## Project Overview
 
-A Grafana panel plugin providing a highly customizable D3-based gauge visualization. Built with React 18, TypeScript, and D3.js v7. Outputs an AMD module compatible with Grafana's plugin system.
+A Grafana panel plugin providing a highly customizable D3-based gauge visualization.
+Built with React 18, TypeScript, and D3.js v7.
+Outputs an AMD module compatible with Grafana's plugin system.
 
 ## Commands
 
@@ -44,13 +48,19 @@ pnpm exec jest --testNamePattern="Min Needle"
 
 ### Plugin Entry Chain
 
-1. **`src/module.ts`** — Plugin bootstrap. Exports the `PanelPlugin<GaugeOptions>` instance, registers `GaugePanel`, configures all panel options (organized into categories: Standard, Font, Needle, Limits, Coloring, Radial, Degrees, Readings, Tick Maps, Thresholds).
+1. **`src/module.ts`** — Plugin bootstrap. Exports the `PanelPlugin<GaugeOptions>` instance,
+   registers `GaugePanel`, configures all panel options (organized into categories: Standard,
+   Font, Needle, Limits, Coloring, Radial, Degrees, Readings, Tick Maps, Thresholds).
 
-2. **`src/components/GaugePanel.tsx`** — React wrapper (`FC<PanelProps<GaugeOptions>>`). Extracts data series, computes display values, auto-scales radius, processes thresholds, then renders `<Gauge>`.
+2. **`src/components/GaugePanel.tsx`** — React wrapper (`FC<PanelProps<GaugeOptions>>`).
+   Extracts data series, computes display values, auto-scales radius, processes thresholds,
+   then renders `<Gauge>`.
 
-3. **`src/components/Gauge.tsx`** — D3 SVG rendering core. Manages needle animation (d3-ease), tick generation, threshold bands, and all visual elements.
+3. **`src/components/Gauge.tsx`** — D3 SVG rendering core. Manages needle animation
+   (d3-ease), tick generation, threshold bands, and all visual elements.
 
-4. **`src/components/needle_utils.tsx`** — Needle angle math. Handles the "crossing limits" feature where the needle can exceed min/max bounds.
+4. **`src/components/needle_utils.tsx`** — Needle angle math. Handles the "crossing limits"
+   feature where the needle can exceed min/max bounds.
 
 5. **`src/migrations.ts`** — `PanelMigrationHandler()` migrates persisted panel configs across plugin versions.
 
@@ -63,7 +73,8 @@ pnpm exec jest --testNamePattern="Min Needle"
 
 ### Build & Config
 
-- **Webpack** config lives in `.config/webpack/webpack.config.ts` (Grafana-scaffolded). Outputs AMD format. SWC transpiles to ES2015. Grafana runtime libs are externals.
+- **Webpack** config lives in `.config/webpack/webpack.config.ts` (Grafana-scaffolded).
+  Outputs AMD format. SWC transpiles to ES2015. Grafana runtime libs are externals.
 - **tsconfig.json** extends `.config/tsconfig.json`, with `noUnusedLocals` disabled.
 - **ESLint** enforces semicolons (`semi: 'error'`) in addition to Grafana's base rules.
 - **Jest** uses SWC transformer, jsdom environment, and `jest-setup.js` which sets `TZ=UTC` for snapshot consistency.
@@ -77,18 +88,23 @@ gh pr checks <PR-number>
 
 ## Version Bumping & Changelog
 
-Use the **Version bump, changelog** GitHub Actions workflow (`.github/workflows/version-bump-changelog.yml`) to bump the version and optionally generate a changelog. Trigger it manually via `workflow_dispatch` with:
+Use the **Version bump, changelog** GitHub Actions workflow
+(`.github/workflows/version-bump-changelog.yml`) to bump the version and optionally
+generate a changelog. Trigger it manually via `workflow_dispatch` with:
 
 - **version**: `patch`, `minor`, or `major`
 - **generate-changelog**: `true` (default) or `false`
 
 ## Release Please
 
-Use the **release please** GitHub Actions workflow (`.github/workflows/release-please.yml`) to automate version bumping and changelog generation. Trigger it manually via `workflow_dispatch` — no inputs required.
+Use the **release please** GitHub Actions workflow (`.github/workflows/release-please.yml`)
+to automate version bumping and changelog generation.
+Trigger it manually via `workflow_dispatch` — no inputs required.
 
 ## Grafana Compatibility Check
 
-Before releasing, verify the built plugin is compatible with a target Grafana version using `levitate`. Requires a production build first.
+Before releasing, verify the built plugin is compatible with a target Grafana version
+using `levitate`. Requires a production build first.
 
 ```bash
 pnpm build
@@ -107,7 +123,8 @@ Then substitute that version into the `--target` flag above.
 
 ## Updating Plugin Scaffolding
 
-To update the `.config` directory (Webpack, tsconfig, Jest config, etc.) to the latest Grafana plugin scaffolding:
+To update the `.config` directory (Webpack, tsconfig, Jest config, etc.)
+to the latest Grafana plugin scaffolding:
 
 ```bash
 npx @grafana/create-plugin@latest update
@@ -115,4 +132,5 @@ npx @grafana/create-plugin@latest update
 
 ### Docker Development
 
-`docker-compose.yaml` + `provisioning/` folder provides a local Grafana instance for manual testing. Run `pnpm server` to start it.
+`docker-compose.yaml` + `provisioning/` folder provides a local Grafana instance
+for manual testing. Run `pnpm server` to start it.
