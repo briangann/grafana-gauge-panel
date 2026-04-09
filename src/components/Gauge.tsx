@@ -543,12 +543,26 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     const isFirstRender = lastNeedleAngleRef.current === null;
     let needleAngleOld = lastNeedleAngleRef.current ?? needleAngleNew;
 
-    // Clamp the old angle to valid range
+    // Clamp the old angle using the same cross-limit logic as the new angle
     if (needleAngleOld + options.zeroNeedleAngle > options.maxTickAngle) {
-      needleAngleOld = options.maxNeedleAngle - options.zeroNeedleAngle;
+      needleAngleOld = getNeedleAngleMaximum(
+        options.allowNeedleCrossLimits, needleAngleOld,
+        options.zeroTickAngle, options.zeroNeedleAngle,
+        options.maxTickAngle, options.needleCrossLimitDegrees
+      );
     }
     if (needleAngleOld + options.zeroNeedleAngle < options.zeroTickAngle) {
-      needleAngleOld = 0;
+      needleAngleOld = getNeedleAngleMinimum(
+        options.allowNeedleCrossLimits, needleAngleOld,
+        options.zeroTickAngle, options.zeroNeedleAngle,
+        options.needleCrossLimitDegrees
+      );
+    }
+
+    // Skip animation if the needle is already buried and the new value is still beyond limits
+    if (!isFirstRender && needleAngleOld === needleAngleNew) {
+      lastNeedleAngleRef.current = needleAngleNew;
+      return;
     }
 
     let transitionSpeed = 0;

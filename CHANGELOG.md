@@ -7,6 +7,7 @@ All changes noted here.
 - Fixed needle animation jumping instead of smoothly transitioning between values
 - Replaced two-effect state-based animation with single-effect ref-based pattern
 - Clamped values now animate to the limit instead of snapping instantly
+- Needle stays buried when consecutive values exceed limits, animates back when value returns in range
 
 ## v2.0.3 - 2026-04-01
 
