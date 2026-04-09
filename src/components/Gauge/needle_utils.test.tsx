@@ -90,5 +90,4 @@ describe('Needle Utils', () => {
       expect(aboveMax).toEqual(185);
     });
   });
-
 });

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { scaleLinear } from 'd3';
 
-import { TickMapItemType } from './TickMaps/types';
+import { TickMapItemType } from '../TickMaps/types';
 
 const generateTickAngles = (zeroTickAngle: number, maxTickAngle: number, majorDegree: number, minorDegree: number) => {
   const majorAngles: number[] = [];

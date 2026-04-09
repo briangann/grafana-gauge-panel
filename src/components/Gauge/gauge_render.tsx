@@ -3,7 +3,7 @@ import React from 'react';
 import { GrafanaTheme2, Threshold, getActiveThreshold, sortThresholds, ThresholdsConfig } from '@grafana/data';
 import { line } from 'd3';
 
-import { ExpandedThresholdBand, GaugeOptions, Markers } from './types';
+import { ExpandedThresholdBand, GaugeOptions, Markers } from '../types';
 import { dToR, drawBand, labelXCalc, labelYCalc, needleCalc } from './utils';
 
 export const scaleLabelFontSize = (fontSize: number, radius: number, ticknessGaugeBasis: number) => {

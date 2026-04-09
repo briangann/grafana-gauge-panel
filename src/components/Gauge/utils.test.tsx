@@ -37,7 +37,7 @@ import {
   drawBand,
   createNeedleMarkers,
 } from './utils';
-import { GaugeOptions } from './types';
+import { GaugeOptions } from '../types';
 
 // Minimal GrafanaTheme2 mock for functions that need it
 const mockTheme = {

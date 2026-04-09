@@ -3,7 +3,7 @@ import React, { useMemo, useRef } from 'react';
 import { useStyles2, useTheme2 } from '@grafana/ui';
 import { getActiveThreshold, GrafanaTheme2 } from '@grafana/data';
 
-import { GaugeOptions } from './types';
+import { GaugeOptions } from '../types';
 import { createNeedleMarkers, labelYCalc } from './utils';
 import {
   renderCircleGroup,
