@@ -35,7 +35,8 @@ export const TickMapItem: React.FC<TickMapItemProps> = (props) => {
   };
 
   return (
-    <Card heading='' key={`tickmap-card-${props.ID}`}>
+    <Card key={`tickmap-card-${props.ID}`}>
+      <Card.Heading />
       <Card.Meta>
         <FieldSet>
           <Field

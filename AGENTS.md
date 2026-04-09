@@ -45,18 +45,32 @@ pnpm exec jest --testNamePattern="Min Needle"
    Font, Needle, Limits, Coloring, Radial, Degrees, Readings, Tick Maps, Thresholds).
 
 2. **`src/components/GaugePanel.tsx`** — React wrapper (`FC<PanelProps<GaugeOptions>>`).
-   Extracts data series, computes display values, auto-scales radius, processes thresholds,
-   then renders `<Gauge>`.
+   Extracts data series, computes display values, auto-scales radius, spreads options
+   with computed overrides, then renders `<Gauge>`.
 
-3. **`src/components/Gauge.tsx`** — D3 SVG rendering core. Manages needle animation
-   (d3-ease), tick generation, threshold bands, and all visual elements.
+3. **`src/components/Gauge/Gauge.tsx`** — Component orchestration. Wires up custom hooks
+   and memoized render calls, produces the final SVG layout.
 
-4. **`src/components/needle_utils.tsx`** — Needle angle math. Handles the "crossing limits"
-   feature where the needle can exceed min/max bounds.
+4. **`src/migrations.ts`** — `PanelMigrationHandler()` migrates persisted panel configs
+   across plugin versions.
 
-5. **`src/migrations.ts`** — `PanelMigrationHandler()` migrates persisted panel configs across plugin versions.
+### Gauge Internals (`src/components/Gauge/`)
 
-### Key Files
+| File                       | Purpose                                                     |
+| -------------------------- | ----------------------------------------------------------- |
+| `gauge_render.tsx`         | Pure SVG render functions (circles, needle, ticks, labels,  |
+|                            | thresholds) and `scaleLabelFontSize`                        |
+| `useNeedleAnimation.ts`    | Custom hook: D3 needle animation with ref-based tracking,   |
+|                            | cross-limit clamping, and buried-needle skip logic          |
+| `useTickComputations.ts`   | Custom hook: tick spacing, angle, and label computation     |
+| `useGaugeDimensions.ts`    | Custom hook: SVG geometry, edge radii, tick/needle lengths  |
+| `needle_utils.tsx`         | Needle angle math for the "crossing limits" feature;        |
+|                            | uses `maxNeedleAngle` (not `maxTickAngle`) for clamping     |
+| `utils.tsx`                | D3 helpers: `drawBand`, `needleCalc`, `labelXCalc`, etc.    |
+| `gauge_styles.ts`          | Emotion CSS styles for the Gauge SVG wrapper                |
+| `index.ts`                 | Barrel export for the `Gauge` component                     |
+
+### Other Key Files
 
 | File                       | Purpose                                                 |
 | -------------------------- | ------------------------------------------------------- |
@@ -82,17 +96,17 @@ gh pr checks <PR-number>
 
 ### Workflows
 
-| Workflow | File | Trigger |
-| -------- | ---- | ------- |
-| CI | `ci.yml` | Push to `main`, PRs to `main` |
-| Release | `release.yml` | `workflow_dispatch` |
-| Release Please | `release-please.yml` | `workflow_dispatch` |
-| Version Bump & Changelog | `version-bump-changelog.yml` | `workflow_dispatch` |
-| Compatibility Check | `is-compatible.yml` | `workflow_dispatch` |
-| Bundle Stats | `bundle-stats.yml` | PRs |
-| Coverage Report | `coverage.yml` | PRs |
-| PR File Changes | `pr-files.yml` | PRs |
-| Create Plugin Update | `cp-update.yml` | `workflow_dispatch` |
+| Workflow                 | File                         | Trigger                       |
+| ------------------------ | ---------------------------- | ----------------------------- |
+| CI                       | `ci.yml`                     | Push to `main`, PRs to `main` |
+| Release                  | `release.yml`                | `workflow_dispatch`           |
+| Release Please           | `release-please.yml`         | `workflow_dispatch`           |
+| Version Bump & Changelog | `version-bump-changelog.yml` | `workflow_dispatch`           |
+| Compatibility Check      | `is-compatible.yml`          | `workflow_dispatch`           |
+| Bundle Stats             | `bundle-stats.yml`           | PRs                           |
+| Coverage Report          | `coverage.yml`               | PRs                           |
+| PR File Changes          | `pr-files.yml`               | PRs                           |
+| Create Plugin Update     | `cp-update.yml`              | `workflow_dispatch`           |
 
 ### Action Pinning
 
@@ -161,14 +175,16 @@ for manual testing. Run `pnpm server` to start it.
 
 ### Naming Conventions
 
-| Element             | Convention                              | Example                                      |
-| ------------------- | --------------------------------------- | -------------------------------------------- |
-| Component files     | `PascalCase.tsx`                        | `GaugePanel.tsx`                             |
-| Test files          | `ComponentName.test.tsx`                | `needle_utils.test.tsx`                      |
-| Utility files       | `snake_case.ts` or `camelCase.ts`       | `needle_utils.tsx`                           |
-| Constants           | `SCREAMING_SNAKE_CASE`                  | `DEFAULT_GAUGE_OPTIONS`                      |
-| Interfaces          | PascalCase                              | `GaugeOptions`, `TickMapItem`                |
-| Functions/variables | camelCase                               | `computeNeedleAngle`, `getDisplayValue`      |
+| Element             | Convention                          | Example                                 |
+| ------------------- | ----------------------------------- | --------------------------------------- |
+| Component files     | `PascalCase.tsx`                    | `GaugePanel.tsx`                        |
+| Test files          | `<source>.test.tsx` or `.test.ts`   | `needle_utils.test.tsx`                 |
+| Utility files       | `snake_case.ts` or `camelCase.ts`   | `needle_utils.tsx`                      |
+| Custom hooks        | `use<Name>.ts`                      | `useNeedleAnimation.ts`                 |
+| Style files         | `<scope>_styles.ts`                 | `gauge_styles.ts`                       |
+| Constants           | `SCREAMING_SNAKE_CASE`              | `DEFAULT_GAUGE_OPTIONS`                 |
+| Interfaces          | PascalCase                          | `GaugeOptions`, `TickMapItem`           |
+| Functions/variables | camelCase                           | `computeNeedleAngle`, `getDisplayValue` |
 
 ### TypeScript
 
@@ -182,13 +198,21 @@ for manual testing. Run `pnpm server` to start it.
 
 ### Testing Patterns (Jest + Testing Library)
 
-- Mock external modules at file top: `jest.mock('@grafana/runtime')`.
+- Mock `d3` and `d3-ease` at file top (ESM modules require `jest.mock`).
+- Mock Gauge component when testing GaugePanel to capture props.
+- Use `renderHook` from `@testing-library/react` for custom hook tests.
 - Use `describe`/`it` blocks.
 - Clean up in `beforeEach`/`afterAll` with `jest.clearAllMocks()` / `jest.resetAllMocks()`.
+- Compare theme-resolved colors relatively (not by name) since
+  `useTheme2` resolves names to hex values.
+- Use `Array<T>` syntax for non-simple array types (ESLint rule).
 
 ## Critical Rules
 
-- Do not add a `Co-Authored-By` line to commit messages.
+- **NEVER add a `Co-Authored-By` line to commit messages.**
+  This applies to all agents, subagents, and automated commits.
+  When dispatching subagents that will commit, explicitly
+  instruct them: "Do NOT add a Co-Authored-By line."
 - **Never modify anything inside `.config/`** —
   managed by Grafana plugin tooling.
 - **Never change `id` or `type`** in `src/plugin.json`.

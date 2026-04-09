@@ -1,10 +1,16 @@
 import { FieldConfigProperty, PanelPlugin } from '@grafana/data';
 import { GaugePanel } from './components/GaugePanel';
-import { FontFamilyOptions, FontSizes, GaugeOptions, GaugePresetOptions, MarkerOptions, OperatorOptions } from 'components/types';
+import {
+  FontFamilyOptions,
+  FontSizes,
+  GaugeOptions,
+  GaugePresetOptions,
+  MarkerOptions,
+  OperatorOptions,
+} from 'components/types';
 import { PanelMigrationHandler } from './migrations';
 import { TickMapEditor } from 'components/TickMaps/TickMapEditor';
 import { TickMapItemType } from 'components/TickMaps/types';
-
 
 export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
   .setMigrationHandler(PanelMigrationHandler)
@@ -18,10 +24,10 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
     ],
     standardOptions: {
       [FieldConfigProperty.Unit]: {
-        defaultValue: 'short'
+        defaultValue: 'short',
       },
       [FieldConfigProperty.Decimals]: {
-        defaultValue: 2
+        defaultValue: 2,
       },
       [FieldConfigProperty.Mappings]: {},
     },
@@ -340,7 +346,8 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addNumberInput({
         name: 'Pivot Radius',
         path: 'pivotRadius',
-        description: 'Size of the central \'pivot\' circle, on which the needle sits, as a percentage of the gauge radius',
+        description:
+          "Size of the central 'pivot' circle, on which the needle sits, as a percentage of the gauge radius",
         defaultValue: 0.1,
         settings: {
           placeHolder: '0.1',
@@ -353,7 +360,8 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addNumberInput({
         name: 'Value Y-Offset',
         path: 'valueYOffset',
-        description: 'Adjust the displayed value up or down the Y-Axis, use negative value to move up, positive for down',
+        description:
+          'Adjust the displayed value up or down the Y-Axis, use negative value to move up, positive for down',
         defaultValue: 0,
         settings: {
           integer: true,
@@ -364,7 +372,8 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addNumberInput({
         name: 'Title Y-Offset',
         path: 'titleYOffset',
-        description: 'Adjust the displayed title up or down the Y-Axis, use negative title to move up, positive for down',
+        description:
+          'Adjust the displayed title up or down the Y-Axis, use negative title to move up, positive for down',
         defaultValue: 0,
         settings: {
           integer: true,
@@ -374,7 +383,8 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addNumberInput({
         name: 'Padding',
         path: 'padding',
-        description: 'Padding between gauge radius and the outer circle of the gauge, as a percentage of the gauge radius',
+        description:
+          'Padding between gauge radius and the outer circle of the gauge, as a percentage of the gauge radius',
         defaultValue: 0.05,
         settings: {
           placeHolder: '0.05',
@@ -392,7 +402,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
           placeHolder: '0.05',
           min: 0,
           step: 0.05,
-          integer: false
+          integer: false,
         },
         category: ['Radial Customization'],
       })
@@ -471,7 +481,8 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       .addNumberInput({
         name: 'Needle Length Stem',
         path: 'needleLengthNeg',
-        description: 'Length of the needle section extending beyond the centre of the gauge, as a percentage of the gauge radius',
+        description:
+          'Length of the needle section extending beyond the centre of the gauge, as a percentage of the gauge radius',
         defaultValue: 0,
         settings: {
           placeHolder: '0',
@@ -619,5 +630,4 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         category: ['Thresholds'],
         description: 'Displayed title color changes to state of threshold',
       });
-
   });

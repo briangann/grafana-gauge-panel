@@ -1,0 +1,343 @@
+import React, { useMemo, useRef } from 'react';
+
+import { useStyles2, useTheme2 } from '@grafana/ui';
+import { getActiveThreshold, GrafanaTheme2 } from '@grafana/data';
+
+import { GaugeOptions } from '../types';
+import { createNeedleMarkers, labelYCalc } from './utils';
+import {
+  renderCircleGroup,
+  renderMajorTickLabels,
+  renderNeedle,
+  renderThresholdBands,
+  renderTicks,
+  renderTitleLabel,
+  renderValueLabel,
+  scaleLabelFontSize,
+} from './gauge_render';
+import { getWrapperStyles, getSVGStyles } from './gauge_styles';
+import { useGaugeDimensions } from './useGaugeDimensions';
+import { useTickComputations } from './useTickComputations';
+import { useNeedleAnimation } from './useNeedleAnimation';
+
+export const Gauge: React.FC<GaugeOptions> = (options) => {
+  const divStyles = useStyles2(getWrapperStyles);
+  const svgStyles = useStyles2(getSVGStyles);
+  const needleRef = useRef<SVGPathElement>(null);
+  const theme2 = useTheme2();
+
+  const {
+    SVGSize,
+    needleWidth,
+    tickWidthMajorCalc,
+    tickWidthMinorCalc,
+    outerEdgeRadius,
+    innerEdgeRadius,
+    originX,
+    originY,
+    needlePathLength,
+    needlePathStart,
+    tickStartMaj,
+    tickStartMin,
+    labelStart,
+  } = useGaugeDimensions({
+    gaugeRadius: options.gaugeRadius,
+    needleWidth: options.needleWidth,
+    ticknessGaugeBasis: options.ticknessGaugeBasis,
+    needleLengthNeg: options.needleLengthNeg,
+    tickWidthMajor: options.tickWidthMajor,
+    tickWidthMinor: options.tickWidthMinor,
+    padding: options.padding,
+    edgeWidth: options.edgeWidth,
+    tickEdgeGap: options.tickEdgeGap,
+    tickLengthMaj: options.tickLengthMaj,
+    tickLengthMin: options.tickLengthMin,
+    needleTickGap: options.needleTickGap,
+    tickLabelFontSize: options.tickLabelFontSize,
+  });
+
+  const { tickAnglesMaj, tickAnglesMin, tickMajorLabels } = useTickComputations({
+    minValue: options.minValue,
+    maxValue: options.maxValue,
+    zeroTickAngle: options.zeroTickAngle,
+    maxTickAngle: options.maxTickAngle,
+    tickSpacingMajor: options.tickSpacingMajor,
+    tickSpacingMinor: options.tickSpacingMinor,
+    tickMaps: options.tickMapConfig.tickMaps,
+  });
+
+  useNeedleAnimation(needleRef, {
+    displayValue: options.displayValue ?? NaN,
+    minValue: options.minValue,
+    maxValue: options.maxValue,
+    zeroTickAngle: options.zeroTickAngle,
+    maxTickAngle: options.maxTickAngle,
+    zeroNeedleAngle: options.zeroNeedleAngle,
+    maxNeedleAngle: options.maxNeedleAngle,
+    allowNeedleCrossLimits: options.allowNeedleCrossLimits,
+    needleCrossLimitDegrees: options.needleCrossLimitDegrees,
+    animateNeedleValueTransition: options.animateNeedleValueTransition,
+    animateNeedleValueTransitionSpeed: options.animateNeedleValueTransitionSpeed,
+    originX,
+    originY,
+  });
+
+  const needleElement = useMemo(
+    () =>
+      renderNeedle(
+        needleRef,
+        options.zeroNeedleAngle,
+        originX,
+        originY,
+        needlePathStart,
+        needlePathLength,
+        options.markerEndShape,
+        options.markerStartShape,
+        options.markerEndEnabled,
+        options.markerStartEnabled,
+        options.needleColor,
+        needleWidth,
+        theme2
+      ),
+    [
+      options.zeroNeedleAngle,
+      originX,
+      originY,
+      needlePathStart,
+      needlePathLength,
+      options.markerEndShape,
+      options.markerStartShape,
+      options.markerEndEnabled,
+      options.markerStartEnabled,
+      options.needleColor,
+      needleWidth,
+      theme2,
+    ]
+  );
+
+  const { valueFontSize, titleFontSize, valueLabelY, titleLabelY } = useMemo(() => {
+    const vfs = scaleLabelFontSize(options.valueFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
+    const tfs = scaleLabelFontSize(options.titleFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
+    const vly = labelYCalc(0, vfs, labelStart, originY) + options.valueYOffset;
+    const tly = labelYCalc(0, tfs, labelStart, originY) + options.titleYOffset - vfs / 2 - tfs / 2;
+    return { valueFontSize: vfs, titleFontSize: tfs, valueLabelY: vly, titleLabelY: tly };
+  }, [
+    options.valueFontSize,
+    options.titleFontSize,
+    options.gaugeRadius,
+    options.ticknessGaugeBasis,
+    options.valueYOffset,
+    options.titleYOffset,
+    labelStart,
+    originY,
+  ]);
+
+  const valueColor = useMemo(() => {
+    if (options.showThresholdStateOnValue && options.displayValue && options.thresholds) {
+      return getActiveThreshold(options.displayValue, options.thresholds.steps).color;
+    }
+    return options.unitsLabelColor;
+  }, [options.showThresholdStateOnValue, options.displayValue, options.thresholds, options.unitsLabelColor]);
+
+  const titleColor = useMemo(() => {
+    if (options.showThresholdStateOnTitle && options.displayValue && options.thresholds) {
+      return getActiveThreshold(options.displayValue, options.thresholds.steps).color;
+    }
+    return options.unitsLabelColor;
+  }, [options.showThresholdStateOnTitle, options.displayValue, options.thresholds, options.unitsLabelColor]);
+
+  const circleGroup = useMemo(
+    () =>
+      renderCircleGroup(
+        originX,
+        originY,
+        outerEdgeRadius,
+        innerEdgeRadius,
+        options.innerColor,
+        options.outerEdgeColor,
+        options.pivotColor,
+        options.pivotRadius,
+        options.showThresholdStateOnBackground,
+        options.displayValue ?? 0,
+        options.thresholds,
+        theme2
+      ),
+    [
+      options.innerColor,
+      options.outerEdgeColor,
+      options.pivotColor,
+      options.pivotRadius,
+      options.showThresholdStateOnBackground,
+      options.displayValue,
+      options.thresholds,
+      originX,
+      originY,
+      outerEdgeRadius,
+      innerEdgeRadius,
+      theme2,
+    ]
+  );
+
+  const thresholdBands = useMemo(
+    () =>
+      renderThresholdBands(
+        options.showThresholdBandOnGauge,
+        options.showThresholdBandLowerRange,
+        options.showThresholdBandMiddleRange,
+        options.showThresholdBandUpperRange,
+        options.thresholds,
+        options.minValue,
+        options.maxValue,
+        options.zeroTickAngle,
+        options.maxTickAngle,
+        options.gaugeRadius,
+        originX,
+        originY,
+        theme2
+      ),
+    [
+      options.showThresholdBandOnGauge,
+      options.showThresholdBandLowerRange,
+      options.showThresholdBandMiddleRange,
+      options.showThresholdBandUpperRange,
+      options.thresholds,
+      options.minValue,
+      options.maxValue,
+      options.zeroTickAngle,
+      options.maxTickAngle,
+      options.gaugeRadius,
+      originX,
+      originY,
+      theme2,
+    ]
+  );
+
+  const ticks = useMemo(
+    () =>
+      renderTicks(
+        tickAnglesMaj,
+        tickAnglesMin,
+        tickStartMaj,
+        tickStartMin,
+        options.tickLengthMaj,
+        options.tickLengthMin,
+        tickWidthMajorCalc,
+        tickWidthMinorCalc,
+        options.tickMajorColor,
+        options.tickMinorColor,
+        originX,
+        originY,
+        theme2
+      ),
+    [
+      tickAnglesMaj,
+      tickAnglesMin,
+      options.tickMinorColor,
+      options.tickMajorColor,
+      tickWidthMinorCalc,
+      tickWidthMajorCalc,
+      tickStartMin,
+      tickStartMaj,
+      options.tickLengthMin,
+      options.tickLengthMaj,
+      originX,
+      originY,
+      theme2,
+    ]
+  );
+
+  const majorTickLabelElements = useMemo(
+    () =>
+      renderMajorTickLabels(
+        tickAnglesMaj,
+        tickMajorLabels,
+        options.tickLabelFontSize,
+        options.gaugeRadius,
+        options.ticknessGaugeBasis,
+        options.tickLabelColor,
+        options.tickFont,
+        labelStart,
+        originX,
+        originY,
+        theme2
+      ),
+    [
+      tickAnglesMaj,
+      tickMajorLabels,
+      options.tickLabelColor,
+      options.tickLabelFontSize,
+      options.tickFont,
+      options.gaugeRadius,
+      options.ticknessGaugeBasis,
+      labelStart,
+      originX,
+      originY,
+      theme2,
+    ]
+  );
+
+  const titleLabel = useMemo(
+    () =>
+      renderTitleLabel(
+        options.showTitle,
+        options.displayTitle,
+        options.titleFont,
+        titleFontSize,
+        titleLabelY,
+        labelStart,
+        originX,
+        titleColor,
+        theme2
+      ),
+    [
+      titleColor,
+      options.showTitle,
+      options.displayTitle,
+      options.titleFont,
+      titleFontSize,
+      titleLabelY,
+      labelStart,
+      originX,
+      theme2,
+    ]
+  );
+
+  const valueLabel = useMemo(
+    () =>
+      renderValueLabel(
+        options.displayFormatted,
+        options.valueFont,
+        valueFontSize,
+        valueLabelY,
+        labelStart,
+        originX,
+        valueColor,
+        theme2
+      ),
+    [valueColor, options.displayFormatted, options.valueFont, valueFontSize, valueLabelY, labelStart, originX, theme2]
+  );
+
+  return (
+    <div className={divStyles}>
+      <svg
+        className={svgStyles}
+        width={options.panelWidth}
+        height={options.panelHeight}
+        xmlns="http://www.w3.org/2000/svg"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+        viewBox={`0,0,${SVGSize},${SVGSize}`}
+      >
+        <g>
+          {circleGroup}
+          {thresholdBands}
+          {ticks}
+          {majorTickLabelElements}
+          {createNeedleMarkers(options.needleColor, theme2)}
+          {needleElement}
+          {titleLabel}
+          {valueLabel}
+        </g>
+      </svg>
+    </div>
+  );
+};
