@@ -548,8 +548,8 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         defaultValue: 1,
         settings: {
           placeHolder: '1',
-          min: 1,
-          integer: true,
+          min: 0.001,
+          integer: false,
         },
         category: ['Gauge Readings'],
       })
@@ -560,8 +560,8 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         defaultValue: 10,
         settings: {
           placeHolder: '10',
-          min: 1,
-          integer: true,
+          min: 0.001,
+          integer: false,
         },
         category: ['Gauge Readings'],
       })
