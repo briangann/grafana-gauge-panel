@@ -80,8 +80,6 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     animateNeedleValueTransitionSpeed: options.animateNeedleValueTransitionSpeed,
     originX,
     originY,
-    needlePathStart,
-    needlePathLength,
   });
 
   const needleElement = useMemo(

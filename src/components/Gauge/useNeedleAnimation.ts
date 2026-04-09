@@ -19,8 +19,6 @@ interface NeedleAnimationOptions {
   animateNeedleValueTransitionSpeed: number;
   originX: number;
   originY: number;
-  needlePathStart: number;
-  needlePathLength: number;
 }
 
 export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, opts: NeedleAnimationOptions) => {
@@ -60,6 +58,7 @@ export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, o
         opts.zeroTickAngle,
         opts.zeroNeedleAngle,
         opts.maxTickAngle,
+        opts.maxNeedleAngle,
         opts.needleCrossLimitDegrees
       );
       newClampedAt = 'max';
@@ -88,6 +87,7 @@ export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, o
         opts.zeroTickAngle,
         opts.zeroNeedleAngle,
         opts.maxTickAngle,
+        opts.maxNeedleAngle,
         opts.needleCrossLimitDegrees
       );
       oldClampedAt = 'max';
@@ -148,12 +148,4 @@ export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, o
     needleRef,
   ]);
 
-  // When the needle path shape changes (e.g., dimensions settle on mount),
-  // immediately restore the transform to the last known angle
-  useEffect(() => {
-    if (needleRef.current && lastNeedleAngleRef.current !== null) {
-      const needleCentre = opts.originX + ',' + opts.originY;
-      needleRef.current.setAttribute('transform', 'rotate(' + lastNeedleAngleRef.current + ',' + needleCentre + ')');
-    }
-  }, [opts.needlePathStart, opts.needlePathLength, opts.originX, opts.originY, needleRef]);
 };

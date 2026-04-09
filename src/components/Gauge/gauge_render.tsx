@@ -285,10 +285,10 @@ export const renderThresholdBands = (
   if (!showThresholdBandOnGauge) {
     return;
   }
-  if (thresholds && thresholds.steps.length === 0) {
+  if (!thresholds || thresholds.steps.length === 0) {
     return;
   }
-  const sorted = sortThresholds(thresholds!.steps);
+  const sorted = sortThresholds(thresholds.steps);
 
   let lowerBand: ExpandedThresholdBand | undefined;
   if (sorted.length > 0) {

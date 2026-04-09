@@ -64,7 +64,8 @@ pnpm exec jest --testNamePattern="Min Needle"
 |                            | cross-limit clamping, and buried-needle skip logic          |
 | `useTickComputations.ts`   | Custom hook: tick spacing, angle, and label computation     |
 | `useGaugeDimensions.ts`    | Custom hook: SVG geometry, edge radii, tick/needle lengths  |
-| `needle_utils.tsx`         | Needle angle math for the "crossing limits" feature         |
+| `needle_utils.tsx`         | Needle angle math for the "crossing limits" feature;        |
+|                            | uses `maxNeedleAngle` (not `maxTickAngle`) for clamping     |
 | `utils.tsx`                | D3 helpers: `drawBand`, `needleCalc`, `labelXCalc`, etc.    |
 | `gauge_styles.ts`          | Emotion CSS styles for the Gauge SVG wrapper                |
 | `index.ts`                 | Barrel export for the `Gauge` component                     |

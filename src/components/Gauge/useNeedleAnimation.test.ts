@@ -51,8 +51,6 @@ const defaultOpts = {
   animateNeedleValueTransitionSpeed: 500,
   originX: 200,
   originY: 200,
-  needlePathStart: -20,
-  needlePathLength: 178,
 };
 
 describe('useNeedleAnimation', () => {
@@ -203,41 +201,4 @@ describe('useNeedleAnimation', () => {
     });
   });
 
-  describe('restore transform effect', () => {
-    it('sets transform attribute when needlePathStart changes', () => {
-      let opts = { ...defaultOpts };
-      const { rerender } = renderHook(() => useNeedleAnimation(needleRef, opts));
-
-      (mockElement.setAttribute as jest.Mock).mockClear();
-      opts = { ...defaultOpts, needlePathStart: -30 };
-      rerender();
-
-      expect(mockElement.setAttribute).toHaveBeenCalledWith(
-        'transform',
-        expect.stringContaining('rotate(')
-      );
-    });
-
-    it('sets transform attribute when needlePathLength changes', () => {
-      let opts = { ...defaultOpts };
-      const { rerender } = renderHook(() => useNeedleAnimation(needleRef, opts));
-
-      (mockElement.setAttribute as jest.Mock).mockClear();
-      opts = { ...defaultOpts, needlePathLength: 200 };
-      rerender();
-
-      expect(mockElement.setAttribute).toHaveBeenCalledWith(
-        'transform',
-        expect.stringContaining('rotate(')
-      );
-    });
-
-    it('does not set transform when needleRef is null', () => {
-      const nullRef = { current: null } as React.RefObject<SVGPathElement>;
-      renderHook(() => useNeedleAnimation(nullRef, defaultOpts));
-
-      // No setAttribute should be called on a null ref
-      expect(mockElement.setAttribute).not.toHaveBeenCalled();
-    });
-  });
 });

@@ -7,7 +7,7 @@ import {
   formattedValueToString,
 } from '@grafana/data';
 import { GaugeOptions } from './types';
-import { Gauge } from './Gauge/Gauge';
+import { Gauge } from './Gauge';
 import { css, cx } from '@emotion/css';
 import { useStyles2, useTheme2 } from '@grafana/ui';
 import { getComponentStyles } from './gauge_panel_styles';

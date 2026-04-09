@@ -11,6 +11,9 @@ All changes noted here.
 - Clamped values now animate to the limit instead of snapping instantly
 - Needle stays buried when consecutive values exceed limits, animates back when value returns in range
 - Removed deprecated `collapsible` and `heading` props from TickMaps editor
+- Fixed `getNeedleAngleMaximum` to use `maxNeedleAngle` instead of `maxTickAngle`
+  for non-buried needle clamping
+- Fixed `renderThresholdBands` crash when thresholds are undefined
 
 ### Performance
 
@@ -27,12 +30,13 @@ All changes noted here.
 - Simplify GaugePanel: remove dead code, use prop spread, extract styles
 - Organize Gauge files into dedicated `src/components/Gauge/` folder
 - Remove unused `margin` state variable
+- Consolidate `useGaugeDimensions` from useState+useEffect to single useMemo
 
 ### Tests
 
 - Added unit tests for `utils.tsx`, `gauge_render.tsx`, `useGaugeDimensions`,
   `useNeedleAnimation`, `useTickComputations`, `GaugePanel`, and `Gauge`
-- 151 tests across 10 suites
+- 148 tests across 10 suites
 
 ## v2.0.3 - 2026-04-01
 

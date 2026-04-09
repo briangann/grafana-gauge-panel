@@ -29,23 +29,23 @@ describe('Needle Utils', () => {
 
   describe('Check Max Needle Angle with cross limits disabled', () => {
     it('max angle should be bound by maxTickAngle', () => {
-      const atMax = getNeedleAngleMaximum(false, 270, 90, 90, 270, crossLimitDegree);
+      const atMax = getNeedleAngleMaximum(false, 270, 90, 90, 270, 270, crossLimitDegree);
       expect(atMax).toEqual(180);
-      const belowMax = getNeedleAngleMaximum(false, 30, 90, 90, 270, crossLimitDegree);
+      const belowMax = getNeedleAngleMaximum(false, 30, 90, 90, 270, 270, crossLimitDegree);
       expect(belowMax).toEqual(-60);
-      const aboveMax = getNeedleAngleMaximum(false, 300, 90, 90, 270, crossLimitDegree);
+      const aboveMax = getNeedleAngleMaximum(false, 300, 90, 90, 270, 270, crossLimitDegree);
       expect(aboveMax).toEqual(180);
     });
   });
   describe('Check Max Needle Angle with cross limits enabled', () => {
     it('max angle should be bound by max with limit cross of 5 degrees', () => {
-      const atMax = getNeedleAngleMaximum(true, 270, 90, 90, 270, crossLimitDegree);
+      const atMax = getNeedleAngleMaximum(true, 270, 90, 90, 270, 270, crossLimitDegree);
       expect(atMax).toEqual(185);
-      const belowMax = getNeedleAngleMaximum(true, 30, 90, 90, 270, crossLimitDegree);
+      const belowMax = getNeedleAngleMaximum(true, 30, 90, 90, 270, 270, crossLimitDegree);
       expect(belowMax).toEqual(-60);
-      const aboveMax = getNeedleAngleMaximum(true, 275, 90, 90, 270, crossLimitDegree);
+      const aboveMax = getNeedleAngleMaximum(true, 275, 90, 90, 270, 270, crossLimitDegree);
       expect(aboveMax).toEqual(185);
-      const aboveMax2 = getNeedleAngleMaximum(true, 320, 90, 90, 270, crossLimitDegree);
+      const aboveMax2 = getNeedleAngleMaximum(true, 320, 90, 90, 270, 270, crossLimitDegree);
       expect(aboveMax2).toEqual(185);
     });
   });
@@ -75,18 +75,18 @@ describe('Needle Utils', () => {
 
   describe('Inverted range: Check Max Needle Angle with cross limits disabled', () => {
     it('max angle should be bound by maxTickAngle', () => {
-      const atMax = getNeedleAngleMaximum(false, 270, 90, 90, 270, 5);
+      const atMax = getNeedleAngleMaximum(false, 270, 90, 90, 270, 270, 5);
       expect(atMax).toEqual(180);
-      const aboveMax = getNeedleAngleMaximum(false, 300, 90, 90, 270, 5);
+      const aboveMax = getNeedleAngleMaximum(false, 300, 90, 90, 270, 270, 5);
       expect(aboveMax).toEqual(180);
     });
   });
 
   describe('Inverted range: Check Max Needle Angle with cross limits enabled', () => {
     it('max angle should allow crossing by crossLimitDegrees', () => {
-      const atMax = getNeedleAngleMaximum(true, 270, 90, 90, 270, 5);
+      const atMax = getNeedleAngleMaximum(true, 270, 90, 90, 270, 270, 5);
       expect(atMax).toEqual(185);
-      const aboveMax = getNeedleAngleMaximum(true, 300, 90, 90, 270, 5);
+      const aboveMax = getNeedleAngleMaximum(true, 300, 90, 90, 270, 270, 5);
       expect(aboveMax).toEqual(185);
     });
   });
