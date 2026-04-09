@@ -161,6 +161,8 @@ Using this option a compass style gauge can be constructed.
 
 Thresholds operate in the same manner as other Grafana plugins.
 
+Dynamic thresholds are supported via Grafana's **Config from query results** transformation. When thresholds are set dynamically from query data, they take precedence over the static thresholds configured in the panel editor.
+
 There are additional display options detailed below.
 
 ![Thresholds](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-thresholds.png)
