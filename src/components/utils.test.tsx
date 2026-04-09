@@ -15,7 +15,7 @@ jest.mock('d3', () => {
     },
     line: () => {
       // Return a function that takes an array of [x,y] pairs and returns an SVG path
-      return (points: [number, number][]) => {
+      return (points: Array<[number, number]>) => {
         if (!points || points.length < 2) {
           return null;
         }
