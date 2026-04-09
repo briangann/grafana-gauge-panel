@@ -188,7 +188,10 @@ for manual testing. Run `pnpm server` to start it.
 
 ## Critical Rules
 
-- Do not add a `Co-Authored-By` line to commit messages.
+- **NEVER add a `Co-Authored-By` line to commit messages.**
+  This applies to all agents, subagents, and automated commits.
+  When dispatching subagents that will commit, explicitly
+  instruct them: "Do NOT add a Co-Authored-By line."
 - **Never modify anything inside `.config/`** —
   managed by Grafana plugin tooling.
 - **Never change `id` or `type`** in `src/plugin.json`.
