@@ -616,6 +616,55 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   }, [options.showThresholdStateOnTitle, options.displayValue,
       options.thresholds, options.unitsLabelColor]);
 
+  const circleGroup = useMemo(
+    () => createCircleGroup(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [options.innerColor, options.outerEdgeColor, options.pivotColor,
+     options.pivotRadius, options.showThresholdStateOnBackground,
+     options.displayValue, options.thresholds,
+     originX, originY, outerEdgeRadius, innerEdgeRadius]
+  );
+
+  const thresholdBands = useMemo(
+    () => createThresholdBands(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [options.showThresholdBandOnGauge, options.showThresholdBandLowerRange,
+     options.showThresholdBandMiddleRange, options.showThresholdBandUpperRange,
+     options.thresholds, options.minValue, options.maxValue,
+     options.zeroTickAngle, options.maxTickAngle,
+     options.gaugeRadius, originX, originY]
+  );
+
+  const ticks = useMemo(
+    () => createTicks(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [tickAnglesMaj, tickAnglesMin, options.tickMinorColor, options.tickMajorColor,
+     tickWidthMinorCalc, tickWidthMajorCalc, tickStartMin, tickStartMaj,
+     options.tickLengthMin, options.tickLengthMaj, originX, originY]
+  );
+
+  const majorTickLabels = useMemo(
+    () => createMajorTickLabels(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [tickAnglesMaj, tickMajorLabels, options.tickLabelColor,
+     options.tickLabelFontSize, options.tickFont,
+     options.gaugeRadius, options.ticknessGaugeBasis,
+     labelStart, originX, originY]
+  );
+
+  const titleLabel = useMemo(
+    () => createTitleLabel(titleColor),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [titleColor, options.showTitle, options.displayTitle,
+     options.titleFont, titleFontSize, titleLabelY, labelStart, originX]
+  );
+
+  const valueLabel = useMemo(
+    () => createValueLabel(valueColor),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [valueColor, options.displayFormatted, options.valueFont,
+     valueFontSize, valueLabelY, labelStart, originX]
+  );
 
   return (
     <div className={divStyles}>
@@ -628,14 +677,14 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         viewBox={`0,0,${SVGSize},${SVGSize}`}
       >
         <g>
-          {createCircleGroup()}
-          {createThresholdBands()}
-          {createTicks()}
-          {createMajorTickLabels()}
+          {circleGroup}
+          {thresholdBands}
+          {ticks}
+          {majorTickLabels}
           {createNeedleMarkers(options.needleColor, theme2)}
           {needleElement}
-          {createTitleLabel(titleColor)}
-          {createValueLabel(valueColor)}
+          {titleLabel}
+          {valueLabel}
         </g>
       </svg>
     </div>
