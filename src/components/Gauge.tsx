@@ -31,7 +31,6 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const [tickStartMaj, setTickStartMaj] = useState(0);
   const [tickStartMin, setTickStartMin] = useState(0);
   const [labelStart, setLabelStart] = useState(0);
-  const [margin, setMargin] = useState({ top: 0, right: 0, bottom: 0, left: 0 });
   //
   const { SVGSize, needleWidth, needleLengthNegCalc, tickWidthMajorCalc,
           tickWidthMinorCalc, outerEdgeRadius, innerEdgeRadius, originX, originY
@@ -523,13 +522,15 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       ? newScaleVal - options.zeroNeedleAngle
       : 0;
 
-    // Apply cross-limit angle clamping
+    // Apply cross-limit angle clamping, tracking which limit was hit
+    let newClampedAt: 'max' | 'min' | null = null;
     if (needleAngleNew + options.zeroNeedleAngle > options.maxTickAngle) {
       needleAngleNew = getNeedleAngleMaximum(
         options.allowNeedleCrossLimits, needleAngleNew,
         options.zeroTickAngle, options.zeroNeedleAngle,
         options.maxTickAngle, options.needleCrossLimitDegrees
       );
+      newClampedAt = 'max';
     }
     if (needleAngleNew + options.zeroNeedleAngle < options.zeroTickAngle) {
       needleAngleNew = getNeedleAngleMinimum(
@@ -537,6 +538,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         options.zeroTickAngle, options.zeroNeedleAngle,
         options.needleCrossLimitDegrees
       );
+      newClampedAt = 'min';
     }
 
     // On first render (ref is null), snap immediately with no animation
@@ -544,12 +546,14 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     let needleAngleOld = lastNeedleAngleRef.current ?? needleAngleNew;
 
     // Clamp the old angle using the same cross-limit logic as the new angle
+    let oldClampedAt: 'max' | 'min' | null = null;
     if (needleAngleOld + options.zeroNeedleAngle > options.maxTickAngle) {
       needleAngleOld = getNeedleAngleMaximum(
         options.allowNeedleCrossLimits, needleAngleOld,
         options.zeroTickAngle, options.zeroNeedleAngle,
         options.maxTickAngle, options.needleCrossLimitDegrees
       );
+      oldClampedAt = 'max';
     }
     if (needleAngleOld + options.zeroNeedleAngle < options.zeroTickAngle) {
       needleAngleOld = getNeedleAngleMinimum(
@@ -557,10 +561,11 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         options.zeroTickAngle, options.zeroNeedleAngle,
         options.needleCrossLimitDegrees
       );
+      oldClampedAt = 'min';
     }
 
-    // Skip animation if the needle is already buried and the new value is still beyond limits
-    if (!isFirstRender && needleAngleOld === needleAngleNew) {
+    // Skip animation if both old and new angles are clamped to the same limit
+    if (!isFirstRender && newClampedAt !== null && newClampedAt === oldClampedAt) {
       lastNeedleAngleRef.current = needleAngleNew;
       return;
     }
