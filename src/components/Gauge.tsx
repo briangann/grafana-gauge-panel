@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useStyles2, useTheme2 } from '@grafana/ui';
 import { css } from '@emotion/css';
 import { getActiveThreshold, GrafanaTheme2, Threshold, sortThresholds } from '@grafana/data';
 
 import { ExpandedThresholdBand, GaugeOptions, Markers } from './types';
+import { TickMapItemType } from './TickMaps/types';
 import { scaleLinear, line, interpolateString, select } from 'd3';
 import { easeQuadIn } from 'd3-ease';
 
@@ -31,10 +32,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const [tickStartMaj, setTickStartMaj] = useState(0);
   const [tickStartMin, setTickStartMin] = useState(0);
   const [labelStart, setLabelStart] = useState(0);
-  const [tickAnglesMaj, setTickAnglesMaj] = useState<number[]>([]);
-  const [tickAnglesMin, setTickAnglesMin] = useState<number[]>([]);
   const [margin, setMargin] = useState({ top: 0, right: 0, bottom: 0, left: 0 });
-  const [tickMajorLabels, setTickMajorLabels] = useState<string[]>([]);
   //
   const SVGSize = options.gaugeRadius * 2;
   // needle calc
@@ -58,64 +56,115 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   }, [options]);
   */
 
+  const generateTickMajorLabels = (
+    zeroTickAngle: number,
+    maxTickAngle: number,
+    minValue: number,
+    maxValue: number,
+    tickSpacingMajor: number,
+    majorDegree: number,
+    tickMaps: TickMapItemType[]
+  ) => {
+    let counter = 0;
+    const tickLabelText: string[] = [];
+    for (let k = zeroTickAngle; k <= maxTickAngle; k = k + majorDegree) {
+      const step = minValue <= maxValue ? tickSpacingMajor : -tickSpacingMajor;
+      const tickValue = minValue + step * counter;
+      const parts = tickSpacingMajor.toString().split('.');
+      let tickText = tickValue.toString();
+      if (parts.length > 1) {
+        tickText = Number(tickValue).toFixed(parts[1].length).toString();
+      }
+      const tickTextFloat = parseFloat(tickText);
+      for (const aTickMap of tickMaps) {
+        if (parseFloat(aTickMap.value) === tickTextFloat) {
+          tickText = aTickMap.text;
+          break;
+        }
+      }
+      tickLabelText.push(tickText);
+      counter++;
+    }
+    return tickLabelText;
+  };
+
+  const generateTickAngles = (
+    zeroTickAngle: number,
+    maxTickAngle: number,
+    majorDegree: number,
+    minorDegree: number
+  ) => {
+    const majorAngles: number[] = [];
+    let counter = 0;
+    for (let i = zeroTickAngle; i <= maxTickAngle; i = i + majorDegree) {
+      const tickAngle = zeroTickAngle + majorDegree * counter;
+      if (tickAngle - zeroTickAngle < 360) {
+        majorAngles.push(zeroTickAngle + majorDegree * counter);
+      }
+      counter++;
+    }
+    const minorAngles: number[] = [];
+    counter = 0;
+    for (let j = zeroTickAngle; j <= maxTickAngle; j = j + minorDegree) {
+      let exists = 0;
+      majorAngles.forEach((d: number) => {
+        if (zeroTickAngle + minorDegree * counter === d) {
+          exists = 1;
+        }
+      });
+      if (exists === 0) {
+        minorAngles.push(zeroTickAngle + minorDegree * counter);
+      }
+      counter++;
+    }
+    return { tickMaj: majorAngles, tickMin: minorAngles };
+  };
+
+  const tickSpacingMajDeg = useMemo(() => {
+    const tickSpacingMajor = options.tickSpacingMajor ?? 10;
+    const valueScale = scaleLinear()
+      .domain([options.minValue, options.maxValue])
+      .range([options.zeroTickAngle, options.maxTickAngle]);
+    const scaleZero = valueScale(0) ?? 0;
+    const majorA = valueScale(tickSpacingMajor) ?? 0;
+    return Math.abs(majorA - scaleZero);
+  }, [options.minValue, options.maxValue, options.zeroTickAngle,
+      options.maxTickAngle, options.tickSpacingMajor]);
+
+  const tickSpacingMinDeg = useMemo(() => {
+    const tickSpacingMinor = options.tickSpacingMinor ?? 1;
+    const valueScale = scaleLinear()
+      .domain([options.minValue, options.maxValue])
+      .range([options.zeroTickAngle, options.maxTickAngle]);
+    const scaleZero = valueScale(0) ?? 0;
+    const minorA = valueScale(tickSpacingMinor) ?? 0;
+    return Math.abs(minorA - scaleZero);
+  }, [options.minValue, options.maxValue, options.zeroTickAngle,
+      options.maxTickAngle, options.tickSpacingMinor]);
+
+  const { tickMaj: tickAnglesMaj, tickMin: tickAnglesMin } = useMemo(() =>
+    generateTickAngles(
+      options.zeroTickAngle, options.maxTickAngle,
+      tickSpacingMajDeg, tickSpacingMinDeg
+    ),
+    [options.zeroTickAngle, options.maxTickAngle,
+     tickSpacingMajDeg, tickSpacingMinDeg]
+  );
+
+  const tickMajorLabels = useMemo(() =>
+    generateTickMajorLabels(
+      options.zeroTickAngle, options.maxTickAngle,
+      options.minValue, options.maxValue,
+      options.tickSpacingMajor ?? 10, tickSpacingMajDeg,
+      options.tickMapConfig.tickMaps
+    ),
+    [options.zeroTickAngle, options.maxTickAngle,
+     options.minValue, options.maxValue,
+     options.tickSpacingMajor, tickSpacingMajDeg,
+     options.tickMapConfig.tickMaps]
+  );
+
   useEffect(() => {
-
-    const generateTickMajorLabels = (majorDegree: number) => {
-      //
-      // Calculate major tick mark label text
-      let counter = 0;
-      const tickLabelText: string[] = [];
-      for (let k = options.zeroTickAngle; k <= options.maxTickAngle; k = k + majorDegree) {
-        const step = options.minValue <= options.maxValue ? options.tickSpacingMajor : -options.tickSpacingMajor;
-        const tickValue = options.minValue + step * counter;
-        const parts = options.tickSpacingMajor.toString().split('.');
-        let tickText = tickValue.toString();
-        if (parts.length > 1) {
-          tickText = Number(tickValue).toFixed(parts[1].length).toString();
-        }
-        // check if there are tickMaps that apply
-        const tickTextFloat = parseFloat(tickText);
-        for (const aTickMap of options.tickMapConfig.tickMaps) {
-          if (parseFloat(aTickMap.value) === tickTextFloat) {
-            tickText = aTickMap.text;
-            break;
-          }
-        }
-        tickLabelText.push(tickText);
-        counter++;
-      }
-      return ({ genTickMajorLabels: tickLabelText });
-    };
-
-    const generateTickAngles = (majorDegree: number, minorDegree: number) => {
-      const majorAngles = [];
-      let counter = 0;
-      for (let i = options.zeroTickAngle; i <= options.maxTickAngle; i = i + majorDegree) {
-        const tickAngle = options.zeroTickAngle + majorDegree * counter;
-        // check if this is the "end" of a full circle, and skip the last tick marker
-        if (tickAngle - options.zeroTickAngle < 360) {
-          majorAngles.push(options.zeroTickAngle + majorDegree * counter);
-        }
-        counter++;
-      }
-      const minorAngles = [];
-      counter = 0;
-      for (let j = options.zeroTickAngle; j <= options.maxTickAngle; j = j + minorDegree) {
-        // Check for an existing major tick angle
-        let exists = 0;
-        majorAngles.forEach((d: any) => {
-          if (options.zeroTickAngle + minorDegree * counter === d) {
-            exists = 1;
-          }
-        });
-        if (exists === 0) {
-          minorAngles.push(options.zeroTickAngle + minorDegree * counter);
-        }
-        counter++;
-      }
-      return ({ tickMaj: majorAngles, tickMin: minorAngles });
-    };
-
     const needleLenPosCalc =
       options.gaugeRadius - options.padding -
       options.edgeWidth - options.tickEdgeGap -
@@ -132,42 +181,11 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       options.tickLabelFontSize,
       options.gaugeRadius,
       options.ticknessGaugeBasis);
-
     setLabelStart(tickStartMajor - tmpTickLabelFontSize);
-
-    if (options.tickSpacingMajor === undefined) {
-      options.tickSpacingMajor = 10;
-    }
-    if (options.tickSpacingMinor === undefined) {
-      options.tickSpacingMinor = 1;
-    }
-    const valueScale = scaleLinear()
-      .domain([options.minValue, options.maxValue])
-      .range([options.zeroTickAngle, options.maxTickAngle]);
-
-    const scaleZero = valueScale(0) ?? 0;
-    const majorA = valueScale(options.tickSpacingMajor) ?? 0;
-    const tickSpacingMajDeg = Math.abs(majorA - scaleZero);
-
-    const minorA = valueScale(options.tickSpacingMinor) ?? 0;
-    const tickSpacingMinDeg = Math.abs(minorA - scaleZero);
-
-    // tick angles
-    const { tickMaj, tickMin } = generateTickAngles(tickSpacingMajDeg, tickSpacingMinDeg);
-    if (JSON.stringify(tickAnglesMaj) !== JSON.stringify(tickMaj)) {
-      setTickAnglesMaj(tickMaj);
-    }
-    if (JSON.stringify(tickAnglesMin) !== JSON.stringify(tickMin)) {
-      setTickAnglesMin(tickMin);
-    }
-
-    // labels for major ticks
-    const { genTickMajorLabels } = generateTickMajorLabels(tickSpacingMajDeg);
-    if (JSON.stringify(tickMajorLabels) !== JSON.stringify(genTickMajorLabels)) {
-      setTickMajorLabels(genTickMajorLabels);
-    }
-
-  }, [tickAnglesMaj, tickAnglesMin, options, tickMajorLabels, needleLengthNegCalc]);
+  }, [options.gaugeRadius, options.padding, options.edgeWidth,
+      options.tickEdgeGap, options.tickLengthMaj, options.tickLengthMin,
+      options.needleTickGap, options.tickLabelFontSize,
+      options.ticknessGaugeBasis, needleLengthNegCalc]);
 
   const scaleLabelFontSize = (fontSize: number, radius: number, ticknessGaugeBasis: number) => {
     let scaledFontSize = fontSize * (radius / ticknessGaugeBasis);
@@ -568,7 +586,14 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     if (currentNeedleValue !== null && !isNaN(currentNeedleValue)) {
       updateGauge(needleElement, currentNeedleValue, options.displayFormatted);
     }
-  }, [options, tickAnglesMaj, tickAnglesMin, tickMajorLabels, needleLengthNegCalc, previousNeedleValue, currentNeedleValue, originX, originY, needleElement]);
+  }, [currentNeedleValue, previousNeedleValue, originX, originY,
+      options.minValue, options.maxValue,
+      options.zeroTickAngle, options.maxTickAngle,
+      options.zeroNeedleAngle, options.maxNeedleAngle,
+      options.animateNeedleValueTransition,
+      options.animateNeedleValueTransitionSpeed,
+      options.allowNeedleCrossLimits, options.needleCrossLimitDegrees,
+      options.displayFormatted, needleElement]);
 
   useEffect(() => {
     // this will trigger updating the gauge
