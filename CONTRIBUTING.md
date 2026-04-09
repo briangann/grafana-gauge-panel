@@ -30,9 +30,9 @@ a datasource and sample dashboards.
 
 ## External Dependencies
 
-* Grafana 9.3.16+
+- Grafana 9.3.16+
 
 ## Build Dependencies
 
-* pnpm
-* node 18
+- pnpm
+- node 18

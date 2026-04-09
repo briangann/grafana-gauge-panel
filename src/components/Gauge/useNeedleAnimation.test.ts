@@ -207,5 +207,4 @@ describe('useNeedleAnimation', () => {
       expect(mockDuration).toHaveBeenCalledWith(500);
     });
   });
-
 });

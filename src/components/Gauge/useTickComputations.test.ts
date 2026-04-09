@@ -87,9 +87,7 @@ describe('useTickComputations', () => {
     });
 
     it('generates fewer major ticks with larger tick spacing', () => {
-      const { result } = renderHook(() =>
-        useTickComputations({ ...defaultOpts, tickSpacingMajor: 50 })
-      );
+      const { result } = renderHook(() => useTickComputations({ ...defaultOpts, tickSpacingMajor: 50 }));
       // 0 to 100 by 50 = 3 labels (0, 50, 100)
       expect(result.current.tickAnglesMaj).toHaveLength(3);
     });
@@ -117,7 +115,13 @@ describe('useTickComputations', () => {
 
     it('handles decimal tick spacing', () => {
       const { result } = renderHook(() =>
-        useTickComputations({ ...defaultOpts, tickSpacingMajor: 0.5, minValue: 0, maxValue: 1, valueScale: makeScale(0, 1, 60, 300) })
+        useTickComputations({
+          ...defaultOpts,
+          tickSpacingMajor: 0.5,
+          minValue: 0,
+          maxValue: 1,
+          valueScale: makeScale(0, 1, 60, 300),
+        })
       );
       const labels = result.current.tickMajorLabels;
       expect(labels[0]).toBe('0.0');

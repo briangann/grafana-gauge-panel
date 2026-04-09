@@ -11,11 +11,17 @@ jest.mock('d3', () => ({
       const ratio = (val - domain[0]) / (domain[1] - domain[0]);
       return range[0] + ratio * (range[1] - range[0]);
     };
-    scale.domain = (d: number[]) => { domain = d; return scale; };
-    scale.range = (r: number[]) => { range = r; return scale; };
+    scale.domain = (d: number[]) => {
+      domain = d;
+      return scale;
+    };
+    scale.range = (r: number[]) => {
+      range = r;
+      return scale;
+    };
     return scale;
   },
-  interpolateString: (a: string, b: string) => (t: number) => (t === 0 ? a : b),
+  interpolateString: (a: string, b: string) => (t: number) => t === 0 ? a : b,
   select: () => ({
     transition: () => ({
       duration: () => ({

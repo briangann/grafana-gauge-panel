@@ -225,9 +225,7 @@ describe('GaugePanel', () => {
 
     it('passes animation options through', () => {
       render(
-        <GaugePanel
-          {...makeProps({ animateNeedleValueTransition: true, animateNeedleValueTransitionSpeed: 1000 })}
-        />
+        <GaugePanel {...makeProps({ animateNeedleValueTransition: true, animateNeedleValueTransitionSpeed: 1000 })} />
       );
       const props = mockGaugeProps[0];
       expect(props.animateNeedleValueTransition).toBe(true);

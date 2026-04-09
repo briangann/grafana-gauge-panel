@@ -1,9 +1,5 @@
 module.exports = {
-  removals: [
-  ],
-  changes: [
-    /PanelPlugin\.setMigrationHandler/
-  ],
-  additions: [
-  ],
+  removals: [],
+  changes: [/PanelPlugin\.setMigrationHandler/],
+  additions: [],
 };
