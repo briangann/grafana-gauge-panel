@@ -40,8 +40,9 @@ All changes noted here.
 ### Tests
 
 - Added unit tests for `utils.tsx`, `gauge_render.tsx`, `useGaugeDimensions`,
-  `useNeedleAnimation`, `useTickComputations`, `GaugePanel`, and `Gauge`
-- 148 tests across 10 suites
+  `useNeedleAnimation`, `useTickComputations`, `GaugePanel`, `Gauge`,
+  `TickMapItem`, and `TickMapEditor`
+- 170 tests across 12 suites
 
 ## v2.0.3 - 2026-04-01
 
