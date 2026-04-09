@@ -321,6 +321,11 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     [valueColor, options.displayFormatted, options.valueFont, valueFontSize, valueLabelY, labelStart, originX, theme2]
   );
 
+  const needleMarkers = useMemo(
+    () => createNeedleMarkers(options.needleColor, theme2),
+    [options.needleColor, theme2]
+  );
+
   return (
     <div className={divStyles}>
       <svg
@@ -336,7 +341,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           {thresholdBands}
           {ticks}
           {majorTickLabelElements}
-          {createNeedleMarkers(options.needleColor, theme2)}
+          {needleMarkers}
           {needleElement}
           {titleLabel}
           {valueLabel}

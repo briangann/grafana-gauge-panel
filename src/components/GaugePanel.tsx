@@ -27,13 +27,21 @@ export const GaugePanel: React.FC<Props> = ({
   const styles = useStyles2(getComponentStyles);
   const theme2 = useTheme2();
 
-  let gaugeRadiusCalc = options.gaugeRadius;
-  if (options.gaugeRadius === 0) {
-    gaugeRadiusCalc = height / 2;
-    if (width < height) {
-      gaugeRadiusCalc = width / 2;
+  const gaugeRadiusCalc = useMemo(() => {
+    if (options.gaugeRadius === 0) {
+      return width < height ? width / 2 : height / 2;
     }
-  }
+    return options.gaugeRadius;
+  }, [options.gaugeRadius, width, height]);
+
+  const dimensionStyle = useMemo(
+    () =>
+      css`
+        width: ${width}px;
+        height: ${height}px;
+      `,
+    [width, height]
+  );
 
   const getValues = (): FieldDisplay[] => {
     for (const frame of data.series) {
@@ -69,15 +77,7 @@ export const GaugePanel: React.FC<Props> = ({
   const metric = metrics[0];
 
   return (
-    <div
-      className={cx(
-        styles.wrapper,
-        css`
-          width: ${width}px;
-          height: ${height}px;
-        `
-      )}
-    >
+    <div className={cx(styles.wrapper, dimensionStyle)}>
       <div className={cx(styles.container)}>
         <Gauge
           {...options}

@@ -26,6 +26,8 @@ All changes noted here.
 - Memoize all SVG creation functions (circles, ticks, labels, needle, thresholds) in Gauge
 - Add stable React keys for tick mark elements
 - Narrow `useEffect` dependency arrays to prevent unnecessary re-renders
+- Memoize `createNeedleMarkers` in Gauge to avoid recreating SVG defs on every render
+- Memoize `gaugeRadiusCalc` and inline dimension styles in GaugePanel
 
 ### Refactoring
 
