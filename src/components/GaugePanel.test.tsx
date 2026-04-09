@@ -165,6 +165,47 @@ describe('GaugePanel', () => {
     });
   });
 
+  it('prefers per-field thresholds over static fieldConfig defaults (Config from query results)', () => {
+    const perFieldThresholds = {
+      mode: ThresholdsMode.Absolute,
+      steps: [
+        { value: -Infinity, color: 'blue' },
+        { value: 50, color: 'orange' },
+        { value: 90, color: 'red' },
+      ],
+    };
+    const props = makeProps({}, {
+      data: {
+        state: LoadingState.Done,
+        series: [
+          {
+            name: 'test',
+            fields: [
+              {
+                name: 'value',
+                type: FieldType.number,
+                values: [42],
+                config: {
+                  thresholds: perFieldThresholds,
+                },
+                state: {},
+              },
+            ],
+            length: 1,
+          },
+        ],
+        timeRange: {
+          from: new Date('2024-01-01'),
+          to: new Date('2024-01-02'),
+          raw: { from: 'now-1h', to: 'now' },
+        },
+      },
+    });
+    render(<GaugePanel {...props} />);
+    const gaugeProps = mockGaugeProps[0];
+    expect(gaugeProps.thresholds).toEqual(perFieldThresholds);
+  });
+
   describe('auto-sizing', () => {
     it('uses configured gaugeRadius when non-zero', () => {
       render(<GaugePanel {...makeProps({ gaugeRadius: 150 })} />);

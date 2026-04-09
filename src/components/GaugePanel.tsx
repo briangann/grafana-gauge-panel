@@ -94,7 +94,7 @@ export const GaugePanel: React.FC<Props> = ({
           tickEdgeGap={options.tickEdgeGap * gaugeRadiusCalc}
           tickLengthMaj={options.tickLengthMaj * gaugeRadiusCalc}
           tickLengthMin={options.tickLengthMin * gaugeRadiusCalc}
-          thresholds={fieldConfig.defaults.thresholds}
+          thresholds={metric.field.thresholds ?? fieldConfig.defaults.thresholds}
         />
       </div>
     </div>
