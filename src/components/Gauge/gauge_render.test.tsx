@@ -160,9 +160,9 @@ describe('gauge_render', () => {
   describe('renderTicks', () => {
     it('renders major and minor tick marks', () => {
       const result = renderTicks(
-        [60, 120, 180], [90, 150],
-        150, 160, 20, 10, 2, 1,
-        'black', 'gray', 200, 200, mockTheme
+        ['M0,0L1,1', 'M2,2L3,3', 'M4,4L5,5'],
+        ['M10,10L11,11', 'M12,12L13,13'],
+        2, 1, 'black', 'gray', mockTheme
       );
       const { container } = render(<svg>{result}</svg>);
       const majorPaths = container.querySelector('#majorTickMarks')?.querySelectorAll('path');
@@ -171,10 +171,8 @@ describe('gauge_render', () => {
       expect(minorPaths).toHaveLength(2);
     });
 
-    it('renders empty groups when no angles provided', () => {
-      const result = renderTicks(
-        [], [], 150, 160, 20, 10, 2, 1, 'black', 'gray', 200, 200, mockTheme
-      );
+    it('renders empty groups when no paths provided', () => {
+      const result = renderTicks([], [], 2, 1, 'black', 'gray', mockTheme);
       const { container } = render(<svg>{result}</svg>);
       const majorPaths = container.querySelector('#majorTickMarks')?.querySelectorAll('path');
       const minorPaths = container.querySelector('#minorTickMarks')?.querySelectorAll('path');
@@ -184,9 +182,8 @@ describe('gauge_render', () => {
 
     it('applies correct stroke colors', () => {
       const result = renderTicks(
-        [60], [90],
-        150, 160, 20, 10, 2, 1,
-        'blue', 'silver', 200, 200, mockTheme
+        ['M0,0L1,1'], ['M2,2L3,3'],
+        2, 1, 'blue', 'silver', mockTheme
       );
       const { container } = render(<svg>{result}</svg>);
       const majorPath = container.querySelector('#majorTickMarks path');
@@ -197,9 +194,8 @@ describe('gauge_render', () => {
 
     it('applies correct stroke widths', () => {
       const result = renderTicks(
-        [60], [90],
-        150, 160, 20, 10, 3, 1.5,
-        'black', 'gray', 200, 200, mockTheme
+        ['M0,0L1,1'], ['M2,2L3,3'],
+        3, 1.5, 'black', 'gray', mockTheme
       );
       const { container } = render(<svg>{result}</svg>);
       const majorPath = container.querySelector('#majorTickMarks path');

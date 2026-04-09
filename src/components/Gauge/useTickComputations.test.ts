@@ -18,6 +18,14 @@ jest.mock('d3', () => ({
     };
     return scale;
   },
+  line: () => {
+    return (points: Array<[number, number]>) => {
+      if (!points || points.length < 2) {
+        return null;
+      }
+      return `M${points[0][0]},${points[0][1]}L${points[1][0]},${points[1][1]}`;
+    };
+  },
 }));
 
 import { scaleLinear } from 'd3';
@@ -37,6 +45,12 @@ const defaultOpts = {
   tickSpacingMinor: 1,
   tickMaps: [],
   valueScale: makeScale(0, 100, 60, 300),
+  originX: 200,
+  originY: 200,
+  tickStartMaj: 168,
+  tickStartMin: 175,
+  tickLengthMaj: 15,
+  tickLengthMin: 8,
 };
 
 describe('useTickComputations', () => {
@@ -158,6 +172,30 @@ describe('useTickComputations', () => {
       const labels = result.current.tickMajorLabels;
       expect(labels[0]).toBe('0');
       expect(labels[labels.length - 1]).toBe('50');
+    });
+  });
+
+  describe('tick paths', () => {
+    it('returns pre-computed major tick paths', () => {
+      const { result } = renderHook(() => useTickComputations(defaultOpts));
+      expect(result.current.tickPathsMaj).toHaveLength(result.current.tickAnglesMaj.length);
+      expect(result.current.tickPathsMaj[0]).toMatch(/^M/);
+    });
+
+    it('returns pre-computed minor tick paths', () => {
+      const { result } = renderHook(() => useTickComputations(defaultOpts));
+      expect(result.current.tickPathsMin).toHaveLength(result.current.tickAnglesMin.length);
+      expect(result.current.tickPathsMin[0]).toMatch(/^M/);
+    });
+
+    it('recomputes paths when geometry changes', () => {
+      let opts = { ...defaultOpts };
+      const { result, rerender } = renderHook(() => useTickComputations(opts));
+      const initialPaths = result.current.tickPathsMaj;
+
+      opts = { ...defaultOpts, originX: 100 };
+      rerender();
+      expect(result.current.tickPathsMaj).not.toEqual(initialPaths);
     });
   });
 });

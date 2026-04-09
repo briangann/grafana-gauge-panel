@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { GrafanaTheme2, Threshold, getActiveThreshold, sortThresholds, ThresholdsConfig } from '@grafana/data';
-import { line } from 'd3';
 
 import { ExpandedThresholdBand, GaugeOptions, Markers } from '../types';
-import { dToR, drawBand, labelXCalc, labelYCalc, needleCalc } from './utils';
+import { drawBand, labelXCalc, labelYCalc, needleCalc } from './utils';
 
 export const scaleLabelFontSize = (fontSize: number, radius: number, ticknessGaugeBasis: number) => {
   let scaledFontSize = fontSize * (radius / ticknessGaugeBasis);
@@ -102,47 +101,19 @@ export const renderNeedle = (
 };
 
 export const renderTicks = (
-  tickAnglesMaj: number[],
-  tickAnglesMin: number[],
-  tickStartMaj: number,
-  tickStartMin: number,
-  tickLengthMaj: number,
-  tickLengthMin: number,
+  tickPathsMaj: string[],
+  tickPathsMin: string[],
   tickWidthMajorCalc: number,
   tickWidthMinorCalc: number,
   tickMajorColor: string,
   tickMinorColor: string,
-  originX: number,
-  originY: number,
   theme: GrafanaTheme2
 ) => {
-  const tickCalcPaths = (degrees: number[], tickStart: number, tickLength: number) => {
-    const paths: string[] = [];
-    const lineFn = line();
-    for (const degree of degrees) {
-      const tickAngle = degree + 90;
-      const tickAngleRad = dToR(tickAngle);
-      const y1 = originY + tickStart * Math.sin(tickAngleRad);
-      const y2 = originY + (tickStart + tickLength) * Math.sin(tickAngleRad);
-      const x1 = originX + tickStart * Math.cos(tickAngleRad);
-      const x2 = originX + (tickStart + tickLength) * Math.cos(tickAngleRad);
-      const lineSVG = lineFn([
-        [x1, y1],
-        [x2, y2],
-      ]);
-      if (lineSVG) {
-        paths.push(lineSVG);
-      }
-    }
-    return paths;
-  };
-  const pathTicksMajor = tickCalcPaths(tickAnglesMaj, tickStartMaj, tickLengthMaj);
-  const pathTicksMinor = tickCalcPaths(tickAnglesMin, tickStartMin, tickLengthMin);
   return (
     <g id="ticks">
       <g id="minorTickMarks">
-        {pathTicksMinor.length > 0 &&
-          pathTicksMinor.map((d: string, index: number) => (
+        {tickPathsMin.length > 0 &&
+          tickPathsMin.map((d: string, index: number) => (
             <path
               key={`tick-minor-${index}`}
               d={d}
@@ -152,8 +123,8 @@ export const renderTicks = (
           ))}
       </g>
       <g id="majorTickMarks">
-        {pathTicksMajor.length > 0 &&
-          pathTicksMajor.map((d: string, index: number) => (
+        {tickPathsMaj.length > 0 &&
+          tickPathsMaj.map((d: string, index: number) => (
             <path
               key={`tick-major-${index}`}
               d={d}

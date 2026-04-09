@@ -64,7 +64,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       .range([options.zeroTickAngle, options.maxTickAngle]);
   }, [options.minValue, options.maxValue, options.zeroTickAngle, options.maxTickAngle]);
 
-  const { tickAnglesMaj, tickAnglesMin, tickMajorLabels } = useTickComputations({
+  const { tickAnglesMaj, tickAnglesMin, tickMajorLabels, tickPathsMaj, tickPathsMin } = useTickComputations({
     minValue: options.minValue,
     maxValue: options.maxValue,
     zeroTickAngle: options.zeroTickAngle,
@@ -73,6 +73,12 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     tickSpacingMinor: options.tickSpacingMinor,
     tickMaps: options.tickMapConfig.tickMaps,
     valueScale,
+    originX,
+    originY,
+    tickStartMaj,
+    tickStartMin,
+    tickLengthMaj: options.tickLengthMaj,
+    tickLengthMin: options.tickLengthMin,
   });
 
   useNeedleAnimation(needleRef, {
@@ -225,33 +231,21 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const ticks = useMemo(
     () =>
       renderTicks(
-        tickAnglesMaj,
-        tickAnglesMin,
-        tickStartMaj,
-        tickStartMin,
-        options.tickLengthMaj,
-        options.tickLengthMin,
+        tickPathsMaj,
+        tickPathsMin,
         tickWidthMajorCalc,
         tickWidthMinorCalc,
         options.tickMajorColor,
         options.tickMinorColor,
-        originX,
-        originY,
         theme2
       ),
     [
-      tickAnglesMaj,
-      tickAnglesMin,
+      tickPathsMaj,
+      tickPathsMin,
       options.tickMinorColor,
       options.tickMajorColor,
       tickWidthMinorCalc,
       tickWidthMajorCalc,
-      tickStartMin,
-      tickStartMaj,
-      options.tickLengthMin,
-      options.tickLengthMaj,
-      originX,
-      originY,
       theme2,
     ]
   );
