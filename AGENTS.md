@@ -94,6 +94,11 @@ gh pr checks <PR-number>
 | PR File Changes | `pr-files.yml` | PRs |
 | Create Plugin Update | `cp-update.yml` | `workflow_dispatch` |
 
+### Action Pinning
+
+Pin all GitHub Actions to **version tags** (e.g., `@v6`, `@v4.0.0`), not commit SHAs.
+This keeps workflows readable and consistent.
+
 ## Version Bumping & Changelog
 
 Use the **Version bump, changelog** GitHub Actions workflow
