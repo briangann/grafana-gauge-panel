@@ -19,6 +19,9 @@ All changes noted here.
 
 - Share a single memoized `valueScale` (d3 `scaleLinear`) across hooks instead of
   creating three independent instances
+- Reuse d3 `line()` generator instead of recreating per tick
+- Pre-compute tick path strings in `useTickComputations` (skip recomputation on
+  value-only updates)
 - Memoize metrics computation, SVG dimensions, and font size calculations in GaugePanel
 - Memoize all SVG creation functions (circles, ticks, labels, needle, thresholds) in Gauge
 - Add stable React keys for tick mark elements
@@ -38,7 +41,7 @@ All changes noted here.
 
 - Added unit tests for `utils.tsx`, `gauge_render.tsx`, `useGaugeDimensions`,
   `useNeedleAnimation`, `useTickComputations`, `GaugePanel`, and `Gauge`
-- 148 tests across 10 suites
+- 151 tests across 10 suites
 
 ## v2.0.3 - 2026-04-01
 
