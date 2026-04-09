@@ -31,6 +31,11 @@ All changes noted here.
 - Organize Gauge files into dedicated `src/components/Gauge/` folder
 - Remove unused `margin` state variable
 - Consolidate `useGaugeDimensions` from useState+useEffect to single useMemo
+- Type all `TickMapItemProps` callbacks (remove `any` types) and remove unused `enabled`/`context` props
+- Rewrite `TickMapItem` as a controlled component (remove duplicate local state)
+- Consolidate `TickMapEditor` state: merge parallel `isOpen` array into `TickMapItemTracker`
+- Replace in-place `arrayMove` mutation with immutable `swapItems`/`reorder` helpers
+- Wrap all `TickMapEditor` callbacks in `useCallback`
 
 ### Tests
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import { TickMapItem } from './TickMapItem';
 import { TickMapItemType, TickMapItemTracker } from './types';
@@ -6,187 +6,135 @@ import { v4 as uuidv4 } from 'uuid';
 import { Button, Collapse } from '@grafana/ui';
 
 export interface TickMapEditorSettings {
-  tickMaps: TickMapItemType[];
+  tickMaps: Array<TickMapItemType>;
   enabled: boolean;
 }
 
-interface Props extends StandardEditorProps<string | string[] | null, TickMapEditorSettings> { }
+interface Props extends StandardEditorProps<string | Array<string> | null, TickMapEditorSettings> { }
+
+const reorder = (items: Array<TickMapItemTracker>): Array<TickMapItemTracker> =>
+  items.map((item, i) => ({
+    ...item,
+    order: i,
+    tickMap: { ...item.tickMap, order: i },
+  }));
+
+const swapItems = (items: Array<TickMapItemTracker>, fromIndex: number, toIndex: number): Array<TickMapItemTracker> => {
+  const result = [...items];
+  const [moved] = result.splice(fromIndex, 1);
+  result.splice(toIndex, 0, moved);
+  return reorder(result);
+};
 
 export const TickMapEditor: React.FC<Props> = ({ item, context, onChange }) => {
-  const [settings] = useState(context.options.tickMapConfig || { tickMaps: [] as TickMapItemType[] });
-  const [tracker, _setTracker] = useState((): TickMapItemTracker[] => {
+  const [settings] = useState(context.options.tickMapConfig || { tickMaps: [] as Array<TickMapItemType> });
+  const [tracker, _setTracker] = useState((): Array<TickMapItemTracker> => {
     if (!settings.tickMaps) {
-      const empty: TickMapItemTracker[] = [];
-      return empty;
+      return [];
     }
-    const items: TickMapItemTracker[] = [];
-    settings.tickMaps.forEach((value: TickMapItemType, index: number) => {
-      items[index] = {
-        tickMap: value,
-        order: index,
-        ID: uuidv4(),
-      };
-    });
-    return items;
+    return settings.tickMaps.map((value: TickMapItemType, index: number) => ({
+      tickMap: value,
+      order: index,
+      ID: uuidv4(),
+      isOpen: false,
+    }));
   });
 
-  const setTracker = (v: TickMapItemTracker[]) => {
+  const setTracker = useCallback((v: Array<TickMapItemTracker>) => {
     _setTracker(v);
-    const allTickMaps: TickMapItemType[] = [];
-    v.forEach((element) => {
-      allTickMaps.push(element.tickMap);
-    });
     const tickMapConfig = {
-      tickMaps: allTickMaps,
+      tickMaps: v.map((element) => element.tickMap),
       enabled: settings.enabled,
     };
     onChange(tickMapConfig as any);
-  };
+  }, [settings.enabled, onChange]);
 
-  const [isOpen, setIsOpen] = useState((): boolean[] => {
-    if (!tracker) {
-      const empty: boolean[] = [];
-      return empty;
-    }
-    let size = tracker.length;
-    const openStates: boolean[] = [];
-    while (size--) {
-      openStates[size] = false;
-    }
-    return openStates;
-  });
+  const updateTickMap = useCallback((index: number, value: TickMapItemType) => {
+    setTracker(tracker.map((item, i) => (i === index ? { ...item, tickMap: value } : item)));
+  }, [tracker, setTracker]);
 
-  const updateTickMap = (index: number, value: TickMapItemType) => {
-    tracker[index].tickMap = value;
-    setTracker([...tracker]);
-  };
-
-  const createDuplicate = (index: number) => {
+  const createDuplicate = useCallback((index: number) => {
     const original = tracker[index].tickMap;
-    const order = tracker.length;
     const aTickMap: TickMapItemType = {
       label: `${original.label} Copy`,
       enabled: original.enabled,
-      order,
+      order: tracker.length,
       value: original.value,
-      text: original.text
+      text: original.text,
     };
     const aTracker: TickMapItemTracker = {
       tickMap: aTickMap,
-      order,
+      order: tracker.length,
       ID: uuidv4(),
+      isOpen: true,
     };
     setTracker([...tracker, aTracker]);
-    setIsOpen([...isOpen, true]);
-  };
+  }, [tracker, setTracker]);
 
-  // generic move
-  const arrayMove = (arr: any, oldIndex: number, newIndex: number) => {
-    if (newIndex >= arr.length) {
-      let k = newIndex - arr.length + 1;
-      while (k--) {
-        arr.push(undefined);
-      }
+  const moveDown = useCallback((index: number) => {
+    if (index < tracker.length - 1) {
+      setTracker(swapItems(tracker, index, index + 1));
     }
-    arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
-  };
+  }, [tracker, setTracker]);
 
-  const moveDown = (index: number) => {
-    if (index !== tracker.length - 1) {
-      arrayMove(tracker, index, index + 1);
-      // reorder
-      for (let i = 0; i < tracker.length; i++) {
-        tracker[i].order = i;
-        tracker[i].tickMap.order = i;
-      }
-      setTracker([...tracker]);
-    }
-  };
-
-  const moveUp = (index: number) => {
+  const moveUp = useCallback((index: number) => {
     if (index > 0) {
-      arrayMove(tracker, index, index - 1);
-      // reorder
-      for (let i = 0; i < tracker.length; i++) {
-        tracker[i].order = i;
-        tracker[i].tickMap.order = i;
-      }
-      setTracker([...tracker]);
+      setTracker(swapItems(tracker, index, index - 1));
     }
-  };
+  }, [tracker, setTracker]);
 
-  const removeTickMap = (index: number) => {
-    const allTickMaps = [...tracker];
-    let removeIndex = 0;
-    for (let i = 0; i < allTickMaps.length; i++) {
-      if (allTickMaps[i].order === index) {
-        removeIndex = i;
-        break;
-      }
-    }
-    allTickMaps.splice(removeIndex, 1);
-    // reorder
-    for (let i = 0; i < allTickMaps.length; i++) {
-      allTickMaps[i].order = i;
-      allTickMaps[i].tickMap.order = i;
-    }
-    setTracker([...allTickMaps]);
-  };
+  const removeTickMap = useCallback((index: number) => {
+    setTracker(reorder(tracker.filter((_, i) => i !== index)));
+  }, [tracker, setTracker]);
 
-  const toggleOpener = (index: number) => {
-    const currentState = [...isOpen];
-    currentState[index] = !currentState[index];
-    setIsOpen([...currentState]);
-  };
+  const toggleOpener = useCallback((index: number) => {
+    setTracker(tracker.map((item, i) => (i === index ? { ...item, isOpen: !item.isOpen } : item)));
+  }, [tracker, setTracker]);
 
-  const addItem = () => {
+  const addItem = useCallback(() => {
     const order = tracker.length;
     const aTickMap: TickMapItemType = {
       label: `TickMap-${order}`,
       enabled: true,
       order,
       value: '',
-      text: ''
+      text: '',
     };
     const aTracker: TickMapItemTracker = {
       tickMap: aTickMap,
       order,
       ID: uuidv4(),
+      isOpen: true,
     };
     setTracker([...tracker, aTracker]);
-    // add an opener also
-    setIsOpen([...isOpen, true]);
-  };
+  }, [tracker, setTracker]);
 
   return (
     <>
       <Button fill='solid' variant='primary' icon='plus' onClick={addItem}>
         Add Tick Map
       </Button>
-      {tracker &&
-        tracker.map((trackerItem: TickMapItemTracker, index: number) => {
-          return (
-            <Collapse
-              key={`tickmap-collapse-item-index-${trackerItem.ID}`}
-              label={trackerItem.tickMap.label}
-              isOpen={isOpen[index]}
-              onToggle={() => toggleOpener(index)}
-            >
-              <TickMapItem
-                key={`tickmap-item-index-${trackerItem.ID}`}
-                ID={trackerItem.ID}
-                tickMap={trackerItem.tickMap}
-                enabled={trackerItem.tickMap.enabled}
-                setter={updateTickMap}
-                remover={removeTickMap}
-                moveDown={moveDown}
-                moveUp={moveUp}
-                createDuplicate={createDuplicate}
-                context={context}
-              />
-            </Collapse>
-          );
-        })}
+      {tracker.map((trackerItem: TickMapItemTracker, index: number) => {
+        return (
+          <Collapse
+            key={`tickmap-collapse-item-index-${trackerItem.ID}`}
+            label={trackerItem.tickMap.label}
+            isOpen={trackerItem.isOpen}
+            onToggle={() => toggleOpener(index)}
+          >
+            <TickMapItem
+              key={`tickmap-item-index-${trackerItem.ID}`}
+              ID={trackerItem.ID}
+              tickMap={trackerItem.tickMap}
+              setter={updateTickMap}
+              remover={removeTickMap}
+              moveDown={moveDown}
+              moveUp={moveUp}
+              createDuplicate={createDuplicate}
+            />
+          </Collapse>
+        );
+      })}
     </>
   );
 };
