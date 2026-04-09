@@ -34,6 +34,15 @@ export const GaugePanel: React.FC<Props> = ({
     return options.gaugeRadius;
   }, [options.gaugeRadius, width, height]);
 
+  const dimensionStyle = useMemo(
+    () =>
+      css`
+        width: ${width}px;
+        height: ${height}px;
+      `,
+    [width, height]
+  );
+
   const getValues = (): FieldDisplay[] => {
     for (const frame of data.series) {
       for (const field of frame.fields) {
@@ -68,15 +77,7 @@ export const GaugePanel: React.FC<Props> = ({
   const metric = metrics[0];
 
   return (
-    <div
-      className={cx(
-        styles.wrapper,
-        css`
-          width: ${width}px;
-          height: ${height}px;
-        `
-      )}
-    >
+    <div className={cx(styles.wrapper, dimensionStyle)}>
       <div className={cx(styles.container)}>
         <Gauge
           {...options}
