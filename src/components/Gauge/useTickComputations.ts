@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { scaleLinear } from 'd3';
+import type { ScaleLinear } from 'd3';
 
 import { TickMapItemType } from '../TickMaps/types';
 
@@ -71,28 +71,25 @@ interface TickComputationOptions {
   tickSpacingMajor: number;
   tickSpacingMinor: number;
   tickMaps: TickMapItemType[];
+  valueScale: ScaleLinear<number, number>;
 }
 
 export const useTickComputations = (opts: TickComputationOptions) => {
+  const { valueScale } = opts;
+
   const tickSpacingMajDeg = useMemo(() => {
     const tickSpacingMajor = opts.tickSpacingMajor ?? 10;
-    const valueScale = scaleLinear()
-      .domain([opts.minValue, opts.maxValue])
-      .range([opts.zeroTickAngle, opts.maxTickAngle]);
     const scaleZero = valueScale(0) ?? 0;
     const majorA = valueScale(tickSpacingMajor) ?? 0;
     return Math.abs(majorA - scaleZero);
-  }, [opts.minValue, opts.maxValue, opts.zeroTickAngle, opts.maxTickAngle, opts.tickSpacingMajor]);
+  }, [valueScale, opts.tickSpacingMajor]);
 
   const tickSpacingMinDeg = useMemo(() => {
     const tickSpacingMinor = opts.tickSpacingMinor ?? 1;
-    const valueScale = scaleLinear()
-      .domain([opts.minValue, opts.maxValue])
-      .range([opts.zeroTickAngle, opts.maxTickAngle]);
     const scaleZero = valueScale(0) ?? 0;
     const minorA = valueScale(tickSpacingMinor) ?? 0;
     return Math.abs(minorA - scaleZero);
-  }, [opts.minValue, opts.maxValue, opts.zeroTickAngle, opts.maxTickAngle, opts.tickSpacingMinor]);
+  }, [valueScale, opts.tickSpacingMinor]);
 
   const { tickMaj: tickAnglesMaj, tickMin: tickAnglesMin } = useMemo(
     () => generateTickAngles(opts.zeroTickAngle, opts.maxTickAngle, tickSpacingMajDeg, tickSpacingMinDeg),

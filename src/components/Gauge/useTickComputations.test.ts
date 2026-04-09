@@ -20,7 +20,13 @@ jest.mock('d3', () => ({
   },
 }));
 
+import { scaleLinear } from 'd3';
+
 import { useTickComputations } from './useTickComputations';
+
+const makeScale = (min: number, max: number, zeroAngle: number, maxAngle: number) => {
+  return scaleLinear().domain([min, max]).range([zeroAngle, maxAngle]);
+};
 
 const defaultOpts = {
   minValue: 0,
@@ -30,6 +36,7 @@ const defaultOpts = {
   tickSpacingMajor: 10,
   tickSpacingMinor: 1,
   tickMaps: [],
+  valueScale: makeScale(0, 100, 60, 300),
 };
 
 describe('useTickComputations', () => {
@@ -96,7 +103,7 @@ describe('useTickComputations', () => {
 
     it('handles decimal tick spacing', () => {
       const { result } = renderHook(() =>
-        useTickComputations({ ...defaultOpts, tickSpacingMajor: 0.5, minValue: 0, maxValue: 1 })
+        useTickComputations({ ...defaultOpts, tickSpacingMajor: 0.5, minValue: 0, maxValue: 1, valueScale: makeScale(0, 1, 60, 300) })
       );
       const labels = result.current.tickMajorLabels;
       expect(labels[0]).toBe('0.0');
@@ -119,7 +126,7 @@ describe('useTickComputations', () => {
 
     it('handles inverted range (minValue > maxValue)', () => {
       const { result } = renderHook(() =>
-        useTickComputations({ ...defaultOpts, minValue: 100, maxValue: 0 })
+        useTickComputations({ ...defaultOpts, minValue: 100, maxValue: 0, valueScale: makeScale(100, 0, 60, 300) })
       );
       const labels = result.current.tickMajorLabels;
       expect(labels[0]).toBe('100');
@@ -145,7 +152,7 @@ describe('useTickComputations', () => {
       let opts = { ...defaultOpts };
       const { result, rerender } = renderHook(() => useTickComputations(opts));
 
-      opts = { ...defaultOpts, minValue: 0, maxValue: 50 };
+      opts = { ...defaultOpts, minValue: 0, maxValue: 50, valueScale: makeScale(0, 50, 60, 300) };
       rerender();
 
       const labels = result.current.tickMajorLabels;

@@ -1,5 +1,7 @@
 import React, { useMemo, useRef } from 'react';
 
+import { scaleLinear } from 'd3';
+
 import { useStyles2, useTheme2 } from '@grafana/ui';
 import { getActiveThreshold, GrafanaTheme2 } from '@grafana/data';
 
@@ -56,6 +58,12 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     tickLabelFontSize: options.tickLabelFontSize,
   });
 
+  const valueScale = useMemo(() => {
+    return scaleLinear()
+      .domain([options.minValue, options.maxValue])
+      .range([options.zeroTickAngle, options.maxTickAngle]);
+  }, [options.minValue, options.maxValue, options.zeroTickAngle, options.maxTickAngle]);
+
   const { tickAnglesMaj, tickAnglesMin, tickMajorLabels } = useTickComputations({
     minValue: options.minValue,
     maxValue: options.maxValue,
@@ -64,6 +72,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     tickSpacingMajor: options.tickSpacingMajor,
     tickSpacingMinor: options.tickSpacingMinor,
     tickMaps: options.tickMapConfig.tickMaps,
+    valueScale,
   });
 
   useNeedleAnimation(needleRef, {
@@ -80,6 +89,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     animateNeedleValueTransitionSpeed: options.animateNeedleValueTransitionSpeed,
     originX,
     originY,
+    valueScale,
   });
 
   const needleElement = useMemo(
