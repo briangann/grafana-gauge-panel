@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import {
   IconName,
@@ -8,34 +8,16 @@ import {
   Card,
   IconButton,
 } from '@grafana/ui';
-import { TickMapItemProps, TickMapItemType } from './types';
+import { TickMapItemProps } from './types';
+
+const VISIBLE_ICON: IconName = 'eye';
+const HIDDEN_ICON: IconName = 'eye-slash';
 
 export const TickMapItem: React.FC<TickMapItemProps> = (props) => {
-  const [tickMap, _setTickMap] = useState(props.tickMap);
-
-  const setTickMap = (value: TickMapItemType) => {
-    _setTickMap(value);
-    props.setter(tickMap.order, value);
-  };
-  const [visibleIcon] = useState<IconName>('eye');
-  const [hiddenIcon] = useState<IconName>('eye-slash');
-
-  const removeItem = () => {
-    props.remover(tickMap.order);
-  };
-
-  const moveUp = () => {
-    props.moveUp(tickMap.order);
-  };
-  const moveDown = () => {
-    props.moveDown(tickMap.order);
-  };
-  const createDuplicate = () => {
-    props.createDuplicate(tickMap.order);
-  };
+  const { tickMap, ID, setter, remover, moveUp, moveDown, createDuplicate } = props;
 
   return (
-    <Card key={`tickmap-card-${props.ID}`}>
+    <Card key={`tickmap-card-${ID}`}>
       <Card.Heading />
       <Card.Meta>
         <FieldSet>
@@ -47,7 +29,7 @@ export const TickMapItem: React.FC<TickMapItemProps> = (props) => {
             <Input
               value={tickMap.label}
               placeholder=''
-              onChange={(e) => setTickMap({ ...tickMap, label: e.currentTarget.value })}
+              onChange={(e) => setter(tickMap.order, { ...tickMap, label: e.currentTarget.value })}
             />
           </Field>
           <Field
@@ -58,7 +40,7 @@ export const TickMapItem: React.FC<TickMapItemProps> = (props) => {
             <Input
               value={tickMap.value}
               placeholder=''
-              onChange={(e) => setTickMap({ ...tickMap, value: e.currentTarget.value })}
+              onChange={(e) => setter(tickMap.order, { ...tickMap, value: e.currentTarget.value })}
             />
           </Field>
           <Field
@@ -69,28 +51,28 @@ export const TickMapItem: React.FC<TickMapItemProps> = (props) => {
             <Input
               value={tickMap.text}
               placeholder=''
-              onChange={(e) => setTickMap({ ...tickMap, text: e.currentTarget.value })}
+              onChange={(e) => setter(tickMap.order, { ...tickMap, text: e.currentTarget.value })}
             />
           </Field>
         </FieldSet>
       </Card.Meta>
 
       <Card.Actions>
-        <IconButton key='moveUp' name='arrow-up' tooltip='Move Up' onClick={moveUp} />
-        <IconButton key='moveDown' name='arrow-down' tooltip='Move Down' onClick={moveDown} />
+        <IconButton key='moveUp' name='arrow-up' tooltip='Move Up' onClick={() => moveUp(tickMap.order)} />
+        <IconButton key='moveDown' name='arrow-down' tooltip='Move Down' onClick={() => moveDown(tickMap.order)} />
         <IconButton
           key='tickMapEnabled'
-          name={tickMap.enabled ? visibleIcon : hiddenIcon}
+          name={tickMap.enabled ? VISIBLE_ICON : HIDDEN_ICON}
           tooltip='Hide/Show Override'
-          onClick={() => setTickMap({ ...tickMap, enabled: !tickMap.enabled })}
+          onClick={() => setter(tickMap.order, { ...tickMap, enabled: !tickMap.enabled })}
         />
-        <IconButton key='copyOverride' name='copy' tooltip='Duplicate' onClick={createDuplicate} />
+        <IconButton key='copyOverride' name='copy' tooltip='Duplicate' onClick={() => createDuplicate(tickMap.order)} />
         <IconButton
           key='deleteTickMap'
           variant='destructive'
           name='trash-alt'
           tooltip='Delete Tick Map'
-          onClick={removeItem}
+          onClick={() => remover(tickMap.order)}
         />
       </Card.Actions>
     </Card>
