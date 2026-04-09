@@ -137,10 +137,12 @@ This is the main section that is used to modify the displayed range on the gauge
 
 ![Gauge Readings](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-gauge-readings.png)
 
-| Option             | Description                                      |
-| ------------------ | ------------------------------------------------ |
-| Tick Spacing Major | The numeric spacing of the minor increment ticks |
-| Tick Spacing Minor | The numeric spacing of the major increment ticks |
+| Option             | Description                                                        |
+| ------------------ | ------------------------------------------------------------------ |
+| Tick Spacing Major | The numeric spacing of the major increment ticks (minimum 0.001)   |
+| Tick Spacing Minor | The numeric spacing of the minor increment ticks (minimum 0.001)   |
+
+Fractional tick spacing is supported for both major and minor ticks. This is useful for gauges with narrow ranges where sub-integer precision is needed (e.g., a frequency gauge spanning 47-52 Hz with 0.1 Hz minor ticks). Minor ticks that overlap with major tick positions are automatically hidden.
 
 #### Tick Maps
 
