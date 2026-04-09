@@ -106,8 +106,8 @@ describe('useTickComputations', () => {
 
     it('applies tick maps to replace label text', () => {
       const tickMaps = [
-        { value: '0', text: 'OFF', label: 'OFF', enabled: true },
-        { value: '100', text: 'MAX', label: 'MAX', enabled: true },
+        { value: '0', text: 'OFF', label: 'OFF', enabled: true, order: 0 },
+        { value: '100', text: 'MAX', label: 'MAX', enabled: true, order: 1 },
       ];
       const { result } = renderHook(() => useTickComputations({ ...defaultOpts, tickMaps }));
       const labels = result.current.tickMajorLabels;
