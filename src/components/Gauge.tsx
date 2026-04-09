@@ -66,7 +66,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       let counter = 0;
       const tickLabelText: string[] = [];
       for (let k = options.zeroTickAngle; k <= options.maxTickAngle; k = k + majorDegree) {
-        const tickValue = options.minValue + options.tickSpacingMajor * counter;
+        const step = options.minValue <= options.maxValue ? options.tickSpacingMajor : -options.tickSpacingMajor;
+        const tickValue = options.minValue + step * counter;
         const parts = options.tickSpacingMajor.toString().split('.');
         let tickText = tickValue.toString();
         if (parts.length > 1) {
@@ -144,12 +145,12 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       .domain([options.minValue, options.maxValue])
       .range([options.zeroTickAngle, options.maxTickAngle]);
 
-    const scaleZero = valueScale(0) || 0;
-    const majorA = valueScale(options.tickSpacingMajor) || 10;
-    const tickSpacingMajDeg = majorA - scaleZero;
+    const scaleZero = valueScale(0) ?? 0;
+    const majorA = valueScale(options.tickSpacingMajor) ?? 0;
+    const tickSpacingMajDeg = Math.abs(majorA - scaleZero);
 
-    const minorA = valueScale(options.tickSpacingMinor) || 1;
-    const tickSpacingMinDeg = minorA - scaleZero;
+    const minorA = valueScale(options.tickSpacingMinor) ?? 0;
+    const tickSpacingMinDeg = Math.abs(minorA - scaleZero);
 
     // tick angles
     const { tickMaj, tickMin } = generateTickAngles(tickSpacingMajDeg, tickSpacingMinDeg);
@@ -500,12 +501,14 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       }
 
       if (!options.allowNeedleCrossLimits) {
-        if (newVal < options.minValue) {
-          newVal = options.minValue;
+        const lowerBound = Math.min(options.minValue, options.maxValue);
+        const upperBound = Math.max(options.minValue, options.maxValue);
+        if (newVal < lowerBound) {
+          newVal = lowerBound;
           transitionSpeed = 0;
         }
-        if (newVal > options.maxValue) {
-          newVal = options.maxValue;
+        if (newVal > upperBound) {
+          newVal = upperBound;
           transitionSpeed = 0;
         }
       }
