@@ -35,7 +35,13 @@ jest.mock('d3-ease', () => ({
   easeQuadIn: (t: number) => t * t,
 }));
 
+import { scaleLinear } from 'd3';
+
 import { useNeedleAnimation } from './useNeedleAnimation';
+
+const makeScale = (min: number, max: number, zeroAngle: number, maxAngle: number) => {
+  return scaleLinear().domain([min, max]).range([zeroAngle, maxAngle]);
+};
 
 const defaultOpts = {
   displayValue: 50,
@@ -51,6 +57,7 @@ const defaultOpts = {
   animateNeedleValueTransitionSpeed: 500,
   originX: 200,
   originY: 200,
+  valueScale: makeScale(0, 100, 60, 300),
 };
 
 describe('useNeedleAnimation', () => {

@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 
-import { scaleLinear } from 'd3';
+import { line, type ScaleLinear } from 'd3';
 
 import { TickMapItemType } from '../TickMaps/types';
+import { dToR } from './utils';
 
 const generateTickAngles = (zeroTickAngle: number, maxTickAngle: number, majorDegree: number, minorDegree: number) => {
   const majorAngles: number[] = [];
@@ -71,28 +72,31 @@ interface TickComputationOptions {
   tickSpacingMajor: number;
   tickSpacingMinor: number;
   tickMaps: TickMapItemType[];
+  valueScale: ScaleLinear<number, number>;
+  originX: number;
+  originY: number;
+  tickStartMaj: number;
+  tickStartMin: number;
+  tickLengthMaj: number;
+  tickLengthMin: number;
 }
 
 export const useTickComputations = (opts: TickComputationOptions) => {
+  const { valueScale } = opts;
+
   const tickSpacingMajDeg = useMemo(() => {
     const tickSpacingMajor = opts.tickSpacingMajor ?? 10;
-    const valueScale = scaleLinear()
-      .domain([opts.minValue, opts.maxValue])
-      .range([opts.zeroTickAngle, opts.maxTickAngle]);
     const scaleZero = valueScale(0) ?? 0;
     const majorA = valueScale(tickSpacingMajor) ?? 0;
     return Math.abs(majorA - scaleZero);
-  }, [opts.minValue, opts.maxValue, opts.zeroTickAngle, opts.maxTickAngle, opts.tickSpacingMajor]);
+  }, [valueScale, opts.tickSpacingMajor]);
 
   const tickSpacingMinDeg = useMemo(() => {
     const tickSpacingMinor = opts.tickSpacingMinor ?? 1;
-    const valueScale = scaleLinear()
-      .domain([opts.minValue, opts.maxValue])
-      .range([opts.zeroTickAngle, opts.maxTickAngle]);
     const scaleZero = valueScale(0) ?? 0;
     const minorA = valueScale(tickSpacingMinor) ?? 0;
     return Math.abs(minorA - scaleZero);
-  }, [opts.minValue, opts.maxValue, opts.zeroTickAngle, opts.maxTickAngle, opts.tickSpacingMinor]);
+  }, [valueScale, opts.tickSpacingMinor]);
 
   const { tickMaj: tickAnglesMaj, tickMin: tickAnglesMin } = useMemo(
     () => generateTickAngles(opts.zeroTickAngle, opts.maxTickAngle, tickSpacingMajDeg, tickSpacingMinDeg),
@@ -121,5 +125,41 @@ export const useTickComputations = (opts: TickComputationOptions) => {
     ]
   );
 
-  return { tickAnglesMaj, tickAnglesMin, tickMajorLabels };
+  const { tickPathsMaj, tickPathsMin } = useMemo(() => {
+    const computePaths = (degrees: number[], tickStart: number, tickLength: number) => {
+      const paths: string[] = [];
+      const lineFn = line();
+      for (const degree of degrees) {
+        const tickAngle = degree + 90;
+        const tickAngleRad = dToR(tickAngle);
+        const y1 = opts.originY + tickStart * Math.sin(tickAngleRad);
+        const y2 = opts.originY + (tickStart + tickLength) * Math.sin(tickAngleRad);
+        const x1 = opts.originX + tickStart * Math.cos(tickAngleRad);
+        const x2 = opts.originX + (tickStart + tickLength) * Math.cos(tickAngleRad);
+        const lineSVG = lineFn([
+          [x1, y1],
+          [x2, y2],
+        ]);
+        if (lineSVG) {
+          paths.push(lineSVG);
+        }
+      }
+      return paths;
+    };
+    return {
+      tickPathsMaj: computePaths(tickAnglesMaj, opts.tickStartMaj, opts.tickLengthMaj),
+      tickPathsMin: computePaths(tickAnglesMin, opts.tickStartMin, opts.tickLengthMin),
+    };
+  }, [
+    tickAnglesMaj,
+    tickAnglesMin,
+    opts.originX,
+    opts.originY,
+    opts.tickStartMaj,
+    opts.tickStartMin,
+    opts.tickLengthMaj,
+    opts.tickLengthMin,
+  ]);
+
+  return { tickAnglesMaj, tickAnglesMin, tickMajorLabels, tickPathsMaj, tickPathsMin };
 };
