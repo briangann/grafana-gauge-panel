@@ -47,7 +47,6 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   // center of gauge
   const originX = options.gaugeRadius;
   const originY = options.gaugeRadius;
-  let needleElement: React.JSX.Element | null = null;
 
   /*
   useEffect(() => {
@@ -273,6 +272,15 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     );
   };
 
+  const needleElement = useMemo(
+    () => createNeedle(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [options.zeroNeedleAngle, originX, originY, needlePathStart, needlePathLength,
+     options.markerEndShape, options.markerStartShape,
+     options.markerEndEnabled, options.markerStartEnabled,
+     options.needleColor, needleWidth]
+  );
+
 
   const createTicks = () => {
     const pathTicksMajor = tickCalcMaj(tickAnglesMaj);
@@ -280,22 +288,14 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     return (
       <g id='ticks'>
         <g id='minorTickMarks'>
-          {pathTicksMinor.length > 0 && pathTicksMinor.map((d: string) => {
-            return (
-              <>
-                <path d={d} stroke={theme2.visualization.getColorByName(options.tickMinorColor)} strokeWidth={tickWidthMinorCalc + 'px'} />
-              </>
-            );
-          })}
+          {pathTicksMinor.length > 0 && pathTicksMinor.map((d: string, index: number) => (
+            <path key={`tick-minor-${index}`} d={d} stroke={theme2.visualization.getColorByName(options.tickMinorColor)} strokeWidth={tickWidthMinorCalc + 'px'} />
+          ))}
         </g>
         <g id='majorTickMarks'>
-          {pathTicksMajor.length > 0 && pathTicksMajor.map((d: string) => {
-            return (
-              <>
-                <path d={d} stroke={theme2.visualization.getColorByName(options.tickMajorColor)} strokeWidth={tickWidthMajorCalc + 'px'} />
-              </>
-            );
-          })}
+          {pathTicksMajor.length > 0 && pathTicksMajor.map((d: string, index: number) => (
+            <path key={`tick-major-${index}`} d={d} stroke={theme2.visualization.getColorByName(options.tickMajorColor)} strokeWidth={tickWidthMajorCalc + 'px'} />
+          ))}
         </g>
       </g>
     );
@@ -494,9 +494,6 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     );
   };
 
-  if (needleElement === null) {
-    needleElement = createNeedle();
-  }
 
   useEffect(() => {
 
@@ -603,21 +600,21 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     }
   }, [currentNeedleValue, options.displayValue, previousNeedleValue]);
 
-  let valueColor = options.unitsLabelColor;
-  if (options.showThresholdStateOnValue) {
-    if (options.displayValue && options.thresholds) {
-      const aThreshold = getActiveThreshold(options.displayValue, options.thresholds.steps);
-      valueColor = aThreshold.color;
+  const valueColor = useMemo(() => {
+    if (options.showThresholdStateOnValue && options.displayValue && options.thresholds) {
+      return getActiveThreshold(options.displayValue, options.thresholds.steps).color;
     }
-  }
+    return options.unitsLabelColor;
+  }, [options.showThresholdStateOnValue, options.displayValue,
+      options.thresholds, options.unitsLabelColor]);
 
-  let titleColor = options.unitsLabelColor;
-  if (options.showThresholdStateOnTitle) {
-    if (options.displayValue && options.thresholds) {
-      const aThreshold = getActiveThreshold(options.displayValue, options.thresholds.steps);
-      titleColor = aThreshold.color;
+  const titleColor = useMemo(() => {
+    if (options.showThresholdStateOnTitle && options.displayValue && options.thresholds) {
+      return getActiveThreshold(options.displayValue, options.thresholds.steps).color;
     }
-  }
+    return options.unitsLabelColor;
+  }, [options.showThresholdStateOnTitle, options.displayValue,
+      options.thresholds, options.unitsLabelColor]);
 
 
   return (
