@@ -123,9 +123,9 @@ export const GaugePanel: React.FC<Props> = ({
   };
 
   // get the formatted metrics
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const metrics = useMemo(
     () => getValues(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [data.series, fieldConfig, options.operatorName, replaceVariables, theme2, timeZone]
   );
   const thresholdResult = getThresholdForValue(fieldConfig.defaults, getDisplayValue(0), theme2);
