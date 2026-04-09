@@ -12,7 +12,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
 
 This panel plugin provides a [D3-based](https://d3js.org) gauge panel
-for [Grafana](https://www.grafana.com) 9.3+/10.x
+for [Grafana](https://www.grafana.com) 9.3+/10.x/11.x/12.x
 
 ## Screenshots
 
@@ -50,8 +50,10 @@ The React port has separated the configuration options into multiple searchable 
 | -------------------- | ------------------------------------------- |
 | Value Font           | Font to be used on the value displayed      |
 | Value Font Size      | Font Size for the value displayed           |
+| Title Font           | Font to be used on the title displayed      |
+| Title Font Size      | Font Size for the title displayed           |
 | Tick Label Font      | Font to be used on the tick labels          |
-| Tick Label Font Size | Font size to be used on for the tick labels |
+| Tick Label Font Size | Font size to be used for the tick labels    |
 
 #### Needle Options
 
@@ -67,7 +69,7 @@ The React port has separated the configuration options into multiple searchable 
 | Show End Marker            | This will create a marker at the end of the needle of the specified shape   |
 | Show Start Marker          | This will create a marker at the start of the needle of the specified shape |
 
-When the options `Allow Crossing Limits` is enabled, the needle can exceed
+When the option `Allow Crossing Limits` is enabled, the needle can exceed
 the maximum or minimum limit by the specified degrees. The example below shows a gauge with a limit of 100,
 and allows the needle to cross the limit (burying the needle).
 
@@ -117,7 +119,7 @@ Adjust in small increments to see how they affect the gauge.
 | Tick Width Major     | Width of the major ticks in pixels                                          |
 | Tick Length Minor    | Length of the minor ticks, as a percentage of the gauge radius              |
 | Tick Width Minor     | Width of the minor ticks in pixels                                          |
-| Needle Tick Gap      | Spacing between ticks the needle end, as a percentage of gauge radius       |
+| Needle Tick Gap      | Spacing between ticks and the needle end, as a percentage of gauge radius   |
 | Needle Length Stem   | Length of the needle beyond the centre, as a percentage of gauge radius     |
 
 #### Gauge Degrees
@@ -142,7 +144,11 @@ This is the main section that is used to modify the displayed range on the gauge
 | Tick Spacing Major | The numeric spacing of the major increment ticks (minimum 0.001)   |
 | Tick Spacing Minor | The numeric spacing of the minor increment ticks (minimum 0.001)   |
 
-Fractional tick spacing is supported for both major and minor ticks. This is useful for gauges with narrow ranges where sub-integer precision is needed (e.g., a frequency gauge spanning 47-52 Hz with 0.1 Hz minor ticks). Minor ticks that overlap with major tick positions are automatically hidden.
+Fractional tick spacing is supported for both major and minor ticks.
+This is useful for gauges with narrow ranges where sub-integer precision
+is needed (e.g., a frequency gauge spanning 47-52 Hz with 0.1 Hz minor
+ticks). Minor ticks that overlap with major tick positions are
+automatically hidden.
 
 #### Tick Maps
 
@@ -163,7 +169,10 @@ Using this option a compass style gauge can be constructed.
 
 Thresholds operate in the same manner as other Grafana plugins.
 
-Dynamic thresholds are supported via Grafana's **Config from query results** transformation. When thresholds are set dynamically from query data, they take precedence over the static thresholds configured in the panel editor.
+Dynamic thresholds are supported via Grafana's **Config from query
+results** transformation. When thresholds are set dynamically from
+query data, they take precedence over the static thresholds configured
+in the panel editor.
 
 There are additional display options detailed below.
 
@@ -177,6 +186,7 @@ There are additional display options detailed below.
 | Show Upper Range                   | Upper threshold is displayed on band                                     |
 | Show Threshold State on Background | Gauge face color changes to state of threshold                           |
 | Show Threshold State on Value      | Displayed value color changes to state of threshold                      |
+| Show Threshold State on Title      | Displayed title color changes to state of threshold                      |
 
 When the middle and upper threshold option are selected, the gauge will look similar to this:
 
