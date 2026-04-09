@@ -7,7 +7,7 @@ jest.mock('d3', () => ({}));
 jest.mock('d3-ease', () => ({}));
 
 // Capture props passed to Gauge
-const mockGaugeProps: Record<string, unknown>[] = [];
+const mockGaugeProps: Array<Record<string, unknown>> = [];
 jest.mock('./Gauge/Gauge', () => ({
   Gauge: (props: Record<string, unknown>) => {
     mockGaugeProps.push(props);
