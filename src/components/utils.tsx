@@ -61,9 +61,6 @@ export const labelYCalc = (position: number, labelFontSize: number, labelStart: 
 };
 
 export const drawBand = (start: number, end: number, color: string, originX: number, originY: number, options: GaugeOptions, theme2: GrafanaTheme2) => {
-  if (0 >= end - start) {
-    return;
-  }
   const anArc = arc();
   const vToROptions: ValueToRadiansOptions = {
     minValue: options.minValue,
@@ -71,11 +68,16 @@ export const drawBand = (start: number, end: number, color: string, originX: num
     zeroTickAngle: options.zeroTickAngle,
     maxTickAngle: options.maxTickAngle
   };
+  const startAngle = valueToRadians(start, vToROptions);
+  const endAngle = valueToRadians(end, vToROptions);
+  if (endAngle <= startAngle) {
+    return;
+  }
   const xc = anArc({
     innerRadius: 0.7 * options.gaugeRadius,
     outerRadius: 0.85 * options.gaugeRadius,
-    startAngle: valueToRadians(start, vToROptions),
-    endAngle: valueToRadians(end, vToROptions),
+    startAngle: startAngle,
+    endAngle: endAngle,
   });
 
   return (

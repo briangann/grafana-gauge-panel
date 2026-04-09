@@ -50,4 +50,45 @@ describe('Needle Utils', () => {
     });
   });
 
+  describe('Inverted range: Check Min Needle Angle with cross limits disabled', () => {
+    // Inverted range: minValue=0, maxValue=-20
+    // Angles are the same (zeroTickAngle=90, maxTickAngle=270)
+    // d3 scale maps 0->90, -20->270, so angles stay in the same range
+    it('minimum angle should be at min (same as normal range)', () => {
+      const atZero = getNeedleAngleMinimum(false, 0, 90, 90, 5);
+      expect(atZero).toEqual(0);
+      const aboveZero = getNeedleAngleMinimum(false, 30, 90, 90, 5);
+      expect(aboveZero).toEqual(30);
+      const belowZero = getNeedleAngleMinimum(false, -10, 90, 90, 5);
+      expect(belowZero).toEqual(90);
+    });
+  });
+
+  describe('Inverted range: Check Min Needle Angle with cross limits enabled', () => {
+    it('minimum angle should allow crossing by crossLimitDegrees', () => {
+      const belowZero = getNeedleAngleMinimum(true, -10, 90, 90, 5);
+      expect(belowZero).toEqual(-5);
+      const atZero = getNeedleAngleMinimum(true, 0, 90, 90, 5);
+      expect(atZero).toEqual(0);
+    });
+  });
+
+  describe('Inverted range: Check Max Needle Angle with cross limits disabled', () => {
+    it('max angle should be bound by maxTickAngle', () => {
+      const atMax = getNeedleAngleMaximum(false, 270, 90, 90, 270, 5);
+      expect(atMax).toEqual(180);
+      const aboveMax = getNeedleAngleMaximum(false, 300, 90, 90, 270, 5);
+      expect(aboveMax).toEqual(180);
+    });
+  });
+
+  describe('Inverted range: Check Max Needle Angle with cross limits enabled', () => {
+    it('max angle should allow crossing by crossLimitDegrees', () => {
+      const atMax = getNeedleAngleMaximum(true, 270, 90, 90, 270, 5);
+      expect(atMax).toEqual(185);
+      const aboveMax = getNeedleAngleMaximum(true, 300, 90, 90, 270, 5);
+      expect(aboveMax).toEqual(185);
+    });
+  });
+
 });
