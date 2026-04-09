@@ -49,7 +49,10 @@ All changes noted here.
 - Added unit tests for `utils.tsx`, `gauge_render.tsx`, `useGaugeDimensions`,
   `useNeedleAnimation`, `useTickComputations`, `GaugePanel`, `Gauge`,
   `TickMapItem`, and `TickMapEditor`
-- 170 tests across 12 suites
+- Restructured `renderThresholdBands` tests with nested describes for early
+  returns, 2-step, 3+ step, and Infinity threshold scenarios
+- Added edge case tests for `needle_utils` cross-limit clamping branches
+- 181 tests across 12 suites
 
 ## v2.0.3 - 2026-04-01
 
