@@ -12,6 +12,9 @@ export interface TickMapEditorSettings {
 
 interface Props extends StandardEditorProps<string | string[] | null, TickMapEditorSettings> {}
 
+// Maintains invariant: tracker[i].order === tracker[i].tickMap.order === i
+// All handlers that change array structure must call reorder() so that
+// TickMapItem callbacks (which pass tickMap.order) match array positions.
 const reorder = (items: TickMapItemTracker[]): TickMapItemTracker[] =>
   items.map((item, i) => ({
     ...item,
@@ -144,7 +147,6 @@ export const TickMapEditor: React.FC<Props> = ({ context, onChange }) => {
             onToggle={() => toggleOpener(index)}
           >
             <TickMapItem
-              key={`tickmap-item-index-${trackerItem.ID}`}
               ID={trackerItem.ID}
               tickMap={trackerItem.tickMap}
               setter={updateTickMap}
