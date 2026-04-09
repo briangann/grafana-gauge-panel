@@ -58,35 +58,7 @@ jobs:
           cp /tmp/pr-coverage/coverage-summary.json coverage/coverage-summary.json
 
       - name: Coverage report
-        uses: davelosert/vitest-coverage-report-action@d63aa97db4c0319f304f1787689de1ca548365cf # v2
+        uses: davelosert/vitest-coverage-report-action@3c50566c523e04813df28de8f7c48dd97d663f1c # v2.11.2
         with:
           json-summary-compare-path: /tmp/base-coverage/coverage-summary.json
           file-coverage-mode: all
-
-  coverage-detail:
-    name: Jest Coverage Detail
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - uses: pnpm/action-setup@v5
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --prefer-offline
-
-      - name: Coverage report
-        uses: ArtiomTr/jest-coverage-report-action@7f750dd50f5585533321eb7ebc482b936b49a5d4 # v2
-        with:
-          test-script: pnpm exec jest --ci --coverage --maxWorkers=4
-          annotations: none
