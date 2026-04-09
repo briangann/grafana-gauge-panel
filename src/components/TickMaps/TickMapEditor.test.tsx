@@ -8,7 +8,7 @@ jest.mock('uuid', () => ({
 import { v4 as uuidv4 } from 'uuid';
 import { TickMapEditor } from './TickMapEditor';
 
-const mockedUuidv4 = uuidv4 as jest.MockedFunction<typeof uuidv4>;
+const mockedUuidv4 = uuidv4 as unknown as jest.Mock<string>;
 
 let uuidCounter = 0;
 beforeEach(() => {
