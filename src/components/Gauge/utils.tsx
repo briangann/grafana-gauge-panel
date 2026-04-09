@@ -119,7 +119,8 @@ export const needleCalc = (
   const y2 = originY + (needlePathStart + needlePathLength) * Math.sin(nAngleRad);
   const x1 = originX + needlePathStart * Math.cos(nAngleRad);
   const x2 = originX + (needlePathStart + needlePathLength) * Math.cos(nAngleRad);
-  const lineSVG = line()([
+  const lineFn = line();
+  const lineSVG = lineFn([
     [x1, y1],
     [x2, y2],
   ]);

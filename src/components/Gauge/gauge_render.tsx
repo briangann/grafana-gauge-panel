@@ -118,6 +118,7 @@ export const renderTicks = (
 ) => {
   const tickCalcPaths = (degrees: number[], tickStart: number, tickLength: number) => {
     const paths: string[] = [];
+    const lineFn = line();
     for (const degree of degrees) {
       const tickAngle = degree + 90;
       const tickAngleRad = dToR(tickAngle);
@@ -125,7 +126,7 @@ export const renderTicks = (
       const y2 = originY + (tickStart + tickLength) * Math.sin(tickAngleRad);
       const x1 = originX + tickStart * Math.cos(tickAngleRad);
       const x2 = originX + (tickStart + tickLength) * Math.cos(tickAngleRad);
-      const lineSVG = line()([
+      const lineSVG = lineFn([
         [x1, y1],
         [x2, y2],
       ]);
