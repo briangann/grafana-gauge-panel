@@ -174,14 +174,16 @@ for manual testing. Run `pnpm server` to start it.
 
 ### Naming Conventions
 
-| Element             | Convention                        | Example                                 |
-| ------------------- | --------------------------------- | --------------------------------------- |
-| Component files     | `PascalCase.tsx`                  | `GaugePanel.tsx`                        |
-| Test files          | `ComponentName.test.tsx`          | `needle_utils.test.tsx`                 |
-| Utility files       | `snake_case.ts` or `camelCase.ts` | `needle_utils.tsx`                      |
-| Constants           | `SCREAMING_SNAKE_CASE`            | `DEFAULT_GAUGE_OPTIONS`                 |
-| Interfaces          | PascalCase                        | `GaugeOptions`, `TickMapItem`           |
-| Functions/variables | camelCase                         | `computeNeedleAngle`, `getDisplayValue` |
+| Element             | Convention                          | Example                                 |
+| ------------------- | ----------------------------------- | --------------------------------------- |
+| Component files     | `PascalCase.tsx`                    | `GaugePanel.tsx`                        |
+| Test files          | `<source>.test.tsx` or `.test.ts`   | `needle_utils.test.tsx`                 |
+| Utility files       | `snake_case.ts` or `camelCase.ts`   | `needle_utils.tsx`                      |
+| Custom hooks        | `use<Name>.ts`                      | `useNeedleAnimation.ts`                 |
+| Style files         | `<scope>_styles.ts`                 | `gauge_styles.ts`                       |
+| Constants           | `SCREAMING_SNAKE_CASE`              | `DEFAULT_GAUGE_OPTIONS`                 |
+| Interfaces          | PascalCase                          | `GaugeOptions`, `TickMapItem`           |
+| Functions/variables | camelCase                           | `computeNeedleAngle`, `getDisplayValue` |
 
 ### TypeScript
 
