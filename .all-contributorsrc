@@ -1,4 +1,44 @@
 {
   "projectName": "grafana-gauge-panel",
-  "projectOwner": "briangann"
+  "projectOwner": "briangann",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "contributors": [
+    {
+      "login": "briangann",
+      "name": "Brian Gann",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7364245?v=4",
+      "profile": "https://github.com/briangann",
+      "contributions": ["code", "doc", "maintenance"]
+    },
+    {
+      "login": "judy-zz",
+      "name": "Clinton Judy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/520406?v=4",
+      "profile": "https://github.com/judy-zz",
+      "contributions": ["code"]
+    },
+    {
+      "login": "DanCech",
+      "name": "Dan Cech",
+      "avatar_url": "https://avatars.githubusercontent.com/u/553006?v=4",
+      "profile": "https://github.com/DanCech",
+      "contributions": ["code"]
+    },
+    {
+      "login": "hafkensite",
+      "name": "Jasper Hafkenscheid",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2974074?v=4",
+      "profile": "https://github.com/hafkensite",
+      "contributions": ["code"]
+    },
+    {
+      "login": "barskern",
+      "name": "Ole Martin Ruud",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15630608?v=4",
+      "profile": "https://github.com/barskern",
+      "contributions": ["code"]
+    }
+  ],
+  "contributorsPerLine": 7
 }
