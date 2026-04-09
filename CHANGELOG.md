@@ -51,7 +51,8 @@ All changes noted here.
   `TickMapItem`, and `TickMapEditor`
 - Restructured `renderThresholdBands` tests with nested describes for early
   returns, 2-step, 3+ step, and Infinity threshold scenarios
-- 179 tests across 12 suites
+- Added edge case tests for `needle_utils` cross-limit clamping branches
+- 181 tests across 12 suites
 
 ## v2.0.3 - 2026-04-01
 
