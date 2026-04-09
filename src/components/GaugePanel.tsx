@@ -27,13 +27,12 @@ export const GaugePanel: React.FC<Props> = ({
   const styles = useStyles2(getComponentStyles);
   const theme2 = useTheme2();
 
-  let gaugeRadiusCalc = options.gaugeRadius;
-  if (options.gaugeRadius === 0) {
-    gaugeRadiusCalc = height / 2;
-    if (width < height) {
-      gaugeRadiusCalc = width / 2;
+  const gaugeRadiusCalc = useMemo(() => {
+    if (options.gaugeRadius === 0) {
+      return width < height ? width / 2 : height / 2;
     }
-  }
+    return options.gaugeRadius;
+  }, [options.gaugeRadius, width, height]);
 
   const getValues = (): FieldDisplay[] => {
     for (const frame of data.series) {
