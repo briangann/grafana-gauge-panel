@@ -90,4 +90,30 @@ describe('Needle Utils', () => {
       expect(aboveMax).toEqual(185);
     });
   });
+
+  describe('Edge cases for cross-limit clamping', () => {
+    describe('getNeedleAngleMinimum — cross limits enabled, angle >= zeroTickAngle but sum < zeroTickAngle', () => {
+      it('returns zeroNeedleAngle when needleAngle >= zeroTickAngle', () => {
+        // needleAngle=91, zeroNeedleAngle=-5, zeroTickAngle=90
+        // 91 + (-5) = 86 < 90 → enters outer if
+        // allowNeedleCrossLimits = true → enters inner if
+        // 91 < 90 is false → hits else branch (line 35): returns zeroNeedleAngle
+        const result = getNeedleAngleMinimum(true, 91, 90, -5, 5);
+        expect(result).toEqual(-5);
+      });
+    });
+
+    describe('getNeedleAngleMaximum — cross limits enabled, maxTickAngle near 360', () => {
+      it('returns maxNeedleAngle - zeroNeedleAngle when maxTickAngle >= 360 - crossLimitDegree', () => {
+        // maxTickAngle=356, crossLimitDegree=5, 360-5=355, 356 >= 355 → true → line 64
+        // needleAngle=300, zeroTickAngle=60, maxTickAngle=356, zeroNeedleAngle=60, maxNeedleAngle=356
+        // 300 + 60 = 360 > 356 → enters outer if
+        // allowNeedleCrossLimits = true → enters inner if
+        // testMaxAngle = 360 > 356 → enters next if
+        // 356 < 355 is false → hits line 64: returns 356 - 60 = 296
+        const result = getNeedleAngleMaximum(true, 300, 60, 60, 356, 356, 5);
+        expect(result).toEqual(296);
+      });
+    });
+  });
 });
