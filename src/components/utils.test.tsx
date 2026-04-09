@@ -1,3 +1,4 @@
+import React from 'react';
 import { render } from '@testing-library/react';
 import { GrafanaTheme2 } from '@grafana/data';
 
