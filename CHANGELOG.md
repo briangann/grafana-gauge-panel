@@ -4,10 +4,24 @@ All changes noted here.
 
 ## v2.0.4 (unreleased)
 
+### Bug Fixes
+
 - Fixed needle animation jumping instead of smoothly transitioning between values
 - Replaced two-effect state-based animation with single-effect ref-based pattern
 - Clamped values now animate to the limit instead of snapping instantly
 - Needle stays buried when consecutive values exceed limits, animates back when value returns in range
+- Removed deprecated `collapsible` and `heading` props from TickMaps editor
+
+### Performance
+
+- Memoize metrics computation, SVG dimensions, and font size calculations in GaugePanel
+- Memoize all SVG creation functions (circles, ticks, labels, needle, thresholds) in Gauge
+- Add stable React keys for tick mark elements
+- Narrow `useEffect` dependency arrays to prevent unnecessary re-renders
+
+### Tests
+
+- Added unit tests for all `utils.tsx` functions
 
 ## v2.0.3 - 2026-04-01
 
