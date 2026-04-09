@@ -171,7 +171,6 @@ export const TickMapEditor: React.FC<Props> = ({ item, context, onChange }) => {
               label={trackerItem.tickMap.label}
               isOpen={isOpen[index]}
               onToggle={() => toggleOpener(index)}
-              collapsible
             >
               <TickMapItem
                 key={`tickmap-item-index-${trackerItem.ID}`}
