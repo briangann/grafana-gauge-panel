@@ -2,6 +2,42 @@
 
 All changes noted here.
 
+## v2.0.4 (unreleased)
+
+### Bug Fixes
+
+- Fixed needle animation jumping instead of smoothly transitioning between values
+- Replaced two-effect state-based animation with single-effect ref-based pattern
+- Clamped values now animate to the limit instead of snapping instantly
+- Needle stays buried when consecutive values exceed limits, animates back when value returns in range
+- Removed deprecated `collapsible` and `heading` props from TickMaps editor
+- Fixed `getNeedleAngleMaximum` to use `maxNeedleAngle` instead of `maxTickAngle`
+  for non-buried needle clamping
+- Fixed `renderThresholdBands` crash when thresholds are undefined
+
+### Performance
+
+- Memoize metrics computation, SVG dimensions, and font size calculations in GaugePanel
+- Memoize all SVG creation functions (circles, ticks, labels, needle, thresholds) in Gauge
+- Add stable React keys for tick mark elements
+- Narrow `useEffect` dependency arrays to prevent unnecessary re-renders
+
+### Refactoring
+
+- Extract render functions to `gauge_render.tsx`, styles to `gauge_styles.ts`
+- Extract custom hooks: `useNeedleAnimation`, `useTickComputations`, `useGaugeDimensions`
+- Remove all `eslint-disable react-hooks/exhaustive-deps` comments from Gauge component
+- Simplify GaugePanel: remove dead code, use prop spread, extract styles
+- Organize Gauge files into dedicated `src/components/Gauge/` folder
+- Remove unused `margin` state variable
+- Consolidate `useGaugeDimensions` from useState+useEffect to single useMemo
+
+### Tests
+
+- Added unit tests for `utils.tsx`, `gauge_render.tsx`, `useGaugeDimensions`,
+  `useNeedleAnimation`, `useTickComputations`, `GaugePanel`, and `Gauge`
+- 148 tests across 10 suites
+
 ## v2.0.3 - 2026-04-01
 
 - Updated pnpm/action-setup from v4 to v5

@@ -1,9 +1,7 @@
-
 import React from 'react';
 import { arc, line } from 'd3';
-import { GaugeOptions, MarkerType, Markers } from './types';
+import { GaugeOptions, MarkerType, Markers } from '../types';
 import { GrafanaTheme2 } from '@grafana/data';
-
 
 export const dToR = (angleDeg: any) => {
   // Turns an angle in degrees to radians
@@ -38,13 +36,20 @@ export const valueToRadians = (value: number, options: ValueToRadiansOptions) =>
     minValue: options.minValue,
     maxValue: options.maxValue,
     zeroTickAngle: options.zeroTickAngle,
-    maxTickAngle: options.maxTickAngle
+    maxTickAngle: options.maxTickAngle,
   };
   return (valueToDegrees(value, opts) * Math.PI) / 180;
 };
 
 // Define functions to calculate the positions of the labels for the tick marks
-export const labelXCalc = (position: number, maxLabelLength: number, labelText: string, labelFontSize: number, labelStart: number, originX: number) => {
+export const labelXCalc = (
+  position: number,
+  maxLabelLength: number,
+  labelText: string,
+  labelFontSize: number,
+  labelStart: number,
+  originX: number
+) => {
   const tickAngle = position + 90;
   const tickAngleRad = dToR(tickAngle);
   // the max length of digits needs to be used for proper alignment
@@ -60,13 +65,21 @@ export const labelYCalc = (position: number, labelFontSize: number, labelStart: 
   return y1;
 };
 
-export const drawBand = (start: number, end: number, color: string, originX: number, originY: number, options: GaugeOptions, theme2: GrafanaTheme2) => {
+export const drawBand = (
+  start: number,
+  end: number,
+  color: string,
+  originX: number,
+  originY: number,
+  options: GaugeOptions,
+  theme2: GrafanaTheme2
+) => {
   const anArc = arc();
   const vToROptions: ValueToRadiansOptions = {
     minValue: options.minValue,
     maxValue: options.maxValue,
     zeroTickAngle: options.zeroTickAngle,
-    maxTickAngle: options.maxTickAngle
+    maxTickAngle: options.maxTickAngle,
   };
   const startAngle = valueToRadians(start, vToROptions);
   const endAngle = valueToRadians(end, vToROptions);
@@ -82,18 +95,24 @@ export const drawBand = (start: number, end: number, color: string, originX: num
 
   return (
     <>
-      {xc &&
+      {xc && (
         <path
           fill={theme2.visualization.getColorByName(color)}
           d={xc || ''}
           transform={`translate(${originX},${originY}) rotate(${options.maxTickAngle})`}
         />
-      }
+      )}
     </>
   );
 };
 
-export const needleCalc = (degree: number, originX: number, originY: number, needlePathStart: number, needlePathLength: number) => {
+export const needleCalc = (
+  degree: number,
+  originX: number,
+  originY: number,
+  needlePathStart: number,
+  needlePathLength: number
+) => {
   let path = '';
   const nAngleRad = dToR(degree + 90);
   const y1 = originY + needlePathStart * Math.sin(nAngleRad);
@@ -124,7 +143,8 @@ export const createNeedleMarkers = (needleColor: string, theme2: GrafanaTheme2) 
             markerWidth={3}
             markerHeight={3}
             markerUnits={'strokeWidth'}
-            orient={'auto'} >
+            orient={'auto'}
+          >
             <path d={item.path} fill={theme2.visualization.getColorByName(needleColor)} />
           </marker>
         );
