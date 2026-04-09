@@ -197,9 +197,14 @@ for manual testing. Run `pnpm server` to start it.
 
 ### Testing Patterns (Jest + Testing Library)
 
-- Mock external modules at file top: `jest.mock('@grafana/runtime')`.
+- Mock `d3` and `d3-ease` at file top (ESM modules require `jest.mock`).
+- Mock Gauge component when testing GaugePanel to capture props.
+- Use `renderHook` from `@testing-library/react` for custom hook tests.
 - Use `describe`/`it` blocks.
 - Clean up in `beforeEach`/`afterAll` with `jest.clearAllMocks()` / `jest.resetAllMocks()`.
+- Compare theme-resolved colors relatively (not by name) since
+  `useTheme2` resolves names to hex values.
+- Use `Array<T>` syntax for non-simple array types (ESLint rule).
 
 ## Critical Rules
 
