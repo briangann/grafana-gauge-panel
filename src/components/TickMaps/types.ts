@@ -1,4 +1,3 @@
-
 export interface TickMapItemProps {
   tickMap: TickMapItemType;
   ID: string;

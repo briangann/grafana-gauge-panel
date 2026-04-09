@@ -1,4 +1,11 @@
-import { FieldConfigSource, PanelModel, ThresholdsConfig, ThresholdsMode, ValueMapping, convertOldAngularValueMappings } from '@grafana/data';
+import {
+  FieldConfigSource,
+  PanelModel,
+  ThresholdsConfig,
+  ThresholdsMode,
+  ValueMapping,
+  convertOldAngularValueMappings,
+} from '@grafana/data';
 import { config } from '@grafana/runtime';
 import { satisfies, coerce } from 'semver';
 
@@ -150,13 +157,13 @@ export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<
   // @ts-ignore
   options.markerEndEnabled = panel.markerEndEnabled;
   // @ts-ignore
-  options.markerEndShape = Markers.find(e => e.name === panel.markerEndShape) || Markers[0];
+  options.markerEndShape = Markers.find((e) => e.name === panel.markerEndShape) || Markers[0];
   // @ts-ignore
   delete panel.markerEndShapes;
   // @ts-ignore
   options.markerStartEnabled = panel.markerStartEnabled;
   // @ts-ignore
-  options.markerStartShape = Markers.find(e => e.name === panel.markerStartShape) || Markers[1];
+  options.markerStartShape = Markers.find((e) => e.name === panel.markerStartShape) || Markers[1];
   // @ts-ignore
   delete panel.markerStartShapes;
   // @ts-ignore
@@ -195,7 +202,7 @@ export const migrateTickMaps = (tickMaps: AngularTickMap[]) => {
   const newTickMaps: TickMapItemType[] = [];
   if (!tickMaps || tickMaps.length === 0) {
     return {
-      tickMaps: newTickMaps
+      tickMaps: newTickMaps,
     };
   }
   let count = 0;
@@ -205,13 +212,13 @@ export const migrateTickMaps = (tickMaps: AngularTickMap[]) => {
       value: item.value,
       text: item.text,
       enabled: true,
-      order: count
+      order: count,
     };
     newTickMaps.push(aTickMap);
     count++;
   }
   return {
-    tickMaps: newTickMaps
+    tickMaps: newTickMaps,
   };
 };
 
@@ -254,7 +261,6 @@ export const migrateValueAndRangeMaps = (panel: any) => {
   const uniques = [...new Map(newMappings.map((v) => [JSON.stringify(v), v])).values()];
   return uniques;
 };
-
 
 export const migrateDefaults = (angular: AngularOptions) => {
   // set default values first
@@ -323,7 +329,7 @@ export const migrateDefaults = (angular: AngularOptions) => {
     thresholds: undefined,
     showThresholdStateOnValue: false,
     showThresholdStateOnTitle: false,
-    showThresholdStateOnBackground: false
+    showThresholdStateOnBackground: false,
   };
   // next migrate the angular settings
 
@@ -455,20 +461,16 @@ export const migrateDefaults = (angular: AngularOptions) => {
 
 const migrateThresholds = (thresholds: string, thresholdColors: string[]) => {
   // default colors are used in case the array passed in is empty
-  const defaultColors = [
-    'rgba(50, 172, 45, 0.97)',
-    'rgba(237, 129, 40, 0.89)',
-    'rgba(245, 54, 54, 0.9)'
-  ];
+  const defaultColors = ['rgba(50, 172, 45, 0.97)', 'rgba(237, 129, 40, 0.89)', 'rgba(245, 54, 54, 0.9)'];
 
   const defaultThresholds: ThresholdsConfig = {
-      mode: ThresholdsMode.Absolute,
-      steps: [
-        {
-          color: 'green',
-          value: -Infinity,
-        }
-      ]
+    mode: ThresholdsMode.Absolute,
+    steps: [
+      {
+        color: 'green',
+        value: -Infinity,
+      },
+    ],
   };
   if (thresholds.length === 0) {
     return defaultThresholds;
@@ -476,8 +478,8 @@ const migrateThresholds = (thresholds: string, thresholdColors: string[]) => {
   // convert existing thresholds to new format, the only option is "absolute" in the old panel
   // there should be colors defined, but if there are none, use the defaults
   const migratedThresholds: ThresholdsConfig = {
-      mode: ThresholdsMode.Absolute,
-      steps: [],
+    mode: ThresholdsMode.Absolute,
+    steps: [],
   };
   const allThresholds = thresholds.split(',');
   let useColors = thresholdColors;

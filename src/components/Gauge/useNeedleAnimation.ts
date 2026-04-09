@@ -147,5 +147,4 @@ export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, o
     opts.needleCrossLimitDegrees,
     needleRef,
   ]);
-
 };

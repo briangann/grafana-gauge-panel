@@ -28,13 +28,9 @@ export const useGaugeDimensions = (opts: GaugeDimensionOptions) => {
       opts.tickEdgeGap -
       opts.tickLengthMaj -
       opts.needleTickGap * opts.gaugeRadius;
-    const tickStartMajor =
-      opts.gaugeRadius - opts.padding - opts.edgeWidth - opts.tickEdgeGap - opts.tickLengthMaj;
-    const tickStartMinor =
-      opts.gaugeRadius - opts.padding - opts.edgeWidth - opts.tickEdgeGap - opts.tickLengthMin;
-    const tmpTickLabelFontSize = scaleLabelFontSize(
-      opts.tickLabelFontSize, opts.gaugeRadius, opts.ticknessGaugeBasis
-    );
+    const tickStartMajor = opts.gaugeRadius - opts.padding - opts.edgeWidth - opts.tickEdgeGap - opts.tickLengthMaj;
+    const tickStartMinor = opts.gaugeRadius - opts.padding - opts.edgeWidth - opts.tickEdgeGap - opts.tickLengthMin;
+    const tmpTickLabelFontSize = scaleLabelFontSize(opts.tickLabelFontSize, opts.gaugeRadius, opts.ticknessGaugeBasis);
 
     return {
       SVGSize: opts.gaugeRadius * 2,

@@ -56,19 +56,19 @@ pnpm exec jest --testNamePattern="Min Needle"
 
 ### Gauge Internals (`src/components/Gauge/`)
 
-| File                       | Purpose                                                     |
-| -------------------------- | ----------------------------------------------------------- |
-| `gauge_render.tsx`         | Pure SVG render functions (circles, needle, ticks, labels,  |
-|                            | thresholds) and `scaleLabelFontSize`                        |
-| `useNeedleAnimation.ts`    | Custom hook: D3 needle animation with ref-based tracking,   |
-|                            | cross-limit clamping, and buried-needle skip logic          |
-| `useTickComputations.ts`   | Custom hook: tick spacing, angle, and label computation     |
-| `useGaugeDimensions.ts`    | Custom hook: SVG geometry, edge radii, tick/needle lengths  |
-| `needle_utils.tsx`         | Needle angle math for the "crossing limits" feature;        |
-|                            | uses `maxNeedleAngle` (not `maxTickAngle`) for clamping     |
-| `utils.tsx`                | D3 helpers: `drawBand`, `needleCalc`, `labelXCalc`, etc.    |
-| `gauge_styles.ts`          | Emotion CSS styles for the Gauge SVG wrapper                |
-| `index.ts`                 | Barrel export for the `Gauge` component                     |
+| File                     | Purpose                                                    |
+| ------------------------ | ---------------------------------------------------------- |
+| `gauge_render.tsx`       | Pure SVG render functions (circles, needle, ticks, labels, |
+|                          | thresholds) and `scaleLabelFontSize`                       |
+| `useNeedleAnimation.ts`  | Custom hook: D3 needle animation with ref-based tracking,  |
+|                          | cross-limit clamping, and buried-needle skip logic         |
+| `useTickComputations.ts` | Custom hook: tick spacing, angle, and label computation    |
+| `useGaugeDimensions.ts`  | Custom hook: SVG geometry, edge radii, tick/needle lengths |
+| `needle_utils.tsx`       | Needle angle math for the "crossing limits" feature;       |
+|                          | uses `maxNeedleAngle` (not `maxTickAngle`) for clamping    |
+| `utils.tsx`              | D3 helpers: `drawBand`, `needleCalc`, `labelXCalc`, etc.   |
+| `gauge_styles.ts`        | Emotion CSS styles for the Gauge SVG wrapper               |
+| `index.ts`               | Barrel export for the `Gauge` component                    |
 
 ### Other Key Files
 
@@ -175,16 +175,16 @@ for manual testing. Run `pnpm server` to start it.
 
 ### Naming Conventions
 
-| Element             | Convention                          | Example                                 |
-| ------------------- | ----------------------------------- | --------------------------------------- |
-| Component files     | `PascalCase.tsx`                    | `GaugePanel.tsx`                        |
-| Test files          | `<source>.test.tsx` or `.test.ts`   | `needle_utils.test.tsx`                 |
-| Utility files       | `snake_case.ts` or `camelCase.ts`   | `needle_utils.tsx`                      |
-| Custom hooks        | `use<Name>.ts`                      | `useNeedleAnimation.ts`                 |
-| Style files         | `<scope>_styles.ts`                 | `gauge_styles.ts`                       |
-| Constants           | `SCREAMING_SNAKE_CASE`              | `DEFAULT_GAUGE_OPTIONS`                 |
-| Interfaces          | PascalCase                          | `GaugeOptions`, `TickMapItem`           |
-| Functions/variables | camelCase                           | `computeNeedleAngle`, `getDisplayValue` |
+| Element             | Convention                        | Example                                 |
+| ------------------- | --------------------------------- | --------------------------------------- |
+| Component files     | `PascalCase.tsx`                  | `GaugePanel.tsx`                        |
+| Test files          | `<source>.test.tsx` or `.test.ts` | `needle_utils.test.tsx`                 |
+| Utility files       | `snake_case.ts` or `camelCase.ts` | `needle_utils.tsx`                      |
+| Custom hooks        | `use<Name>.ts`                    | `useNeedleAnimation.ts`                 |
+| Style files         | `<scope>_styles.ts`               | `gauge_styles.ts`                       |
+| Constants           | `SCREAMING_SNAKE_CASE`            | `DEFAULT_GAUGE_OPTIONS`                 |
+| Interfaces          | PascalCase                        | `GaugeOptions`, `TickMapItem`           |
+| Functions/variables | camelCase                         | `computeNeedleAngle`, `getDisplayValue` |
 
 ### TypeScript
 

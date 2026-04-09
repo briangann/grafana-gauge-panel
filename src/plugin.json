@@ -1,46 +1,54 @@
 {
-    "$schema": "https://github.com/grafana/grafana/raw/main/docs/sources/developers/plugins/plugin.schema.json",
-    "type": "panel",
-    "name": "D3 Gauge",
-    "id": "briangann-gauge-panel",
-    "info": {
-        "description": "D3-based Gauge panel for Grafana",
-        "author": {
-            "name": "Brian Gann (bkgann@gmail.com)",
-            "url": "https://github.com/briangann"
-        },
-        "keywords": ["gauge", "panel"],
-        "logos": {
-            "small": "img/Logo_D3.svg",
-            "large": "img/Logo_D3.svg"
-        },
-        "links": [{
-            "name": "Project site",
-            "url": "https://github.com/briangann/grafana-gauge-panel"
-        }, {
-            "name": "MIT License",
-            "url": "https://github.com/briangann/grafana-gauge-panel/blob/main/LICENSE"
-        }],
-        "screenshots": [{
-            "name": "Gauge with thresholds",
-            "path": "screenshots/react-gauge-threshold-middle-upper.png"
-        }, {
-            "name": "Gauge with threshold on value",
-            "path": "screenshots/react-gauge-threshold-on-value.png"
-        }, {
-            "name": "Gauge with threshold on face",
-            "path": "screenshots/react-gauge-threshold-on-face.png"
-        }, {
-            "name": "Radial Customization",
-            "path": "screenshots/react-radial-customization.png"
-        }],
-        "version": "%VERSION%",
-        "updated": "%TODAY%"
+  "$schema": "https://github.com/grafana/grafana/raw/main/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "panel",
+  "name": "D3 Gauge",
+  "id": "briangann-gauge-panel",
+  "info": {
+    "description": "D3-based Gauge panel for Grafana",
+    "author": {
+      "name": "Brian Gann (bkgann@gmail.com)",
+      "url": "https://github.com/briangann"
     },
+    "keywords": ["gauge", "panel"],
+    "logos": {
+      "small": "img/Logo_D3.svg",
+      "large": "img/Logo_D3.svg"
+    },
+    "links": [
+      {
+        "name": "Project site",
+        "url": "https://github.com/briangann/grafana-gauge-panel"
+      },
+      {
+        "name": "MIT License",
+        "url": "https://github.com/briangann/grafana-gauge-panel/blob/main/LICENSE"
+      }
+    ],
+    "screenshots": [
+      {
+        "name": "Gauge with thresholds",
+        "path": "screenshots/react-gauge-threshold-middle-upper.png"
+      },
+      {
+        "name": "Gauge with threshold on value",
+        "path": "screenshots/react-gauge-threshold-on-value.png"
+      },
+      {
+        "name": "Gauge with threshold on face",
+        "path": "screenshots/react-gauge-threshold-on-face.png"
+      },
+      {
+        "name": "Radial Customization",
+        "path": "screenshots/react-radial-customization.png"
+      }
+    ],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
 
-    "dependencies": {
-        "grafanaVersion": "9.3.x",
-        "grafanaDependency": ">=9.3.16",
-        "plugins": []
-    }
+  "dependencies": {
+    "grafanaVersion": "9.3.x",
+    "grafanaDependency": ">=9.3.16",
+    "plugins": []
+  }
 }

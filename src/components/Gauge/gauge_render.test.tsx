@@ -67,18 +67,14 @@ describe('gauge_render', () => {
     });
 
     it('uses outerEdgeColor for outer circle', () => {
-      const result = renderCircleGroup(
-        200, 200, 190, 180, '#fff', 'blue', '#333', 5, false, 50, undefined, mockTheme
-      );
+      const result = renderCircleGroup(200, 200, 190, 180, '#fff', 'blue', '#333', 5, false, 50, undefined, mockTheme);
       const { container } = render(<svg>{result}</svg>);
       const circles = container.querySelectorAll('circle');
       expect(circles[0].getAttribute('fill')).toBe('blue');
     });
 
     it('uses innerColor for face circle when threshold state disabled', () => {
-      const result = renderCircleGroup(
-        200, 200, 190, 180, 'white', '#000', '#333', 5, false, 50, undefined, mockTheme
-      );
+      const result = renderCircleGroup(200, 200, 190, 180, 'white', '#000', '#333', 5, false, 50, undefined, mockTheme);
       const { container } = render(<svg>{result}</svg>);
       const circles = container.querySelectorAll('circle');
       expect(circles[1].getAttribute('fill')).toBe('white');
@@ -92,18 +88,14 @@ describe('gauge_render', () => {
           { value: 80, color: 'red' },
         ],
       };
-      const result = renderCircleGroup(
-        200, 200, 190, 180, 'white', '#000', '#333', 5, true, 50, thresholds, mockTheme
-      );
+      const result = renderCircleGroup(200, 200, 190, 180, 'white', '#000', '#333', 5, true, 50, thresholds, mockTheme);
       const { container } = render(<svg>{result}</svg>);
       const circles = container.querySelectorAll('circle');
       expect(circles[1].getAttribute('fill')).toBe('green');
     });
 
     it('uses pivotColor for center circle', () => {
-      const result = renderCircleGroup(
-        200, 200, 190, 180, '#fff', '#000', 'red', 5, false, 50, undefined, mockTheme
-      );
+      const result = renderCircleGroup(200, 200, 190, 180, '#fff', '#000', 'red', 5, false, 50, undefined, mockTheme);
       const { container } = render(<svg>{result}</svg>);
       const circles = container.querySelectorAll('circle');
       expect(circles[2].getAttribute('fill')).toBe('red');
@@ -115,8 +107,19 @@ describe('gauge_render', () => {
 
     it('renders a needle path when path length is positive', () => {
       const result = renderNeedle(
-        needleRef, 60, 200, 200, -20, 150,
-        'arrow', 'circle', false, false, 'red', 2, mockTheme
+        needleRef,
+        60,
+        200,
+        200,
+        -20,
+        150,
+        'arrow',
+        'circle',
+        false,
+        false,
+        'red',
+        2,
+        mockTheme
       );
       const { container } = render(<svg>{result}</svg>);
       const path = container.querySelector('path');
@@ -126,10 +129,7 @@ describe('gauge_render', () => {
     });
 
     it('renders needle group even with zero-length path', () => {
-      const result = renderNeedle(
-        needleRef, 60, 200, 200, 0, 0,
-        'arrow', 'circle', false, false, 'red', 2, mockTheme
-      );
+      const result = renderNeedle(needleRef, 60, 200, 200, 0, 0, 'arrow', 'circle', false, false, 'red', 2, mockTheme);
       const { container } = render(<svg>{result}</svg>);
       const g = container.querySelector('#needle');
       expect(g).not.toBeNull();
@@ -137,8 +137,19 @@ describe('gauge_render', () => {
 
     it('sets markerEnd when enabled', () => {
       const result = renderNeedle(
-        needleRef, 60, 200, 200, -20, 150,
-        'arrow', 'circle', true, false, 'red', 2, mockTheme
+        needleRef,
+        60,
+        200,
+        200,
+        -20,
+        150,
+        'arrow',
+        'circle',
+        true,
+        false,
+        'red',
+        2,
+        mockTheme
       );
       const { container } = render(<svg>{result}</svg>);
       const path = container.querySelector('path');
@@ -148,8 +159,19 @@ describe('gauge_render', () => {
 
     it('sets markerStart when enabled', () => {
       const result = renderNeedle(
-        needleRef, 60, 200, 200, -20, 150,
-        'arrow', 'circle', false, true, 'red', 2, mockTheme
+        needleRef,
+        60,
+        200,
+        200,
+        -20,
+        150,
+        'arrow',
+        'circle',
+        false,
+        true,
+        'red',
+        2,
+        mockTheme
       );
       const { container } = render(<svg>{result}</svg>);
       const path = container.querySelector('path');
@@ -162,7 +184,11 @@ describe('gauge_render', () => {
       const result = renderTicks(
         ['M0,0L1,1', 'M2,2L3,3', 'M4,4L5,5'],
         ['M10,10L11,11', 'M12,12L13,13'],
-        2, 1, 'black', 'gray', mockTheme
+        2,
+        1,
+        'black',
+        'gray',
+        mockTheme
       );
       const { container } = render(<svg>{result}</svg>);
       const majorPaths = container.querySelector('#majorTickMarks')?.querySelectorAll('path');
@@ -181,10 +207,7 @@ describe('gauge_render', () => {
     });
 
     it('applies correct stroke colors', () => {
-      const result = renderTicks(
-        ['M0,0L1,1'], ['M2,2L3,3'],
-        2, 1, 'blue', 'silver', mockTheme
-      );
+      const result = renderTicks(['M0,0L1,1'], ['M2,2L3,3'], 2, 1, 'blue', 'silver', mockTheme);
       const { container } = render(<svg>{result}</svg>);
       const majorPath = container.querySelector('#majorTickMarks path');
       const minorPath = container.querySelector('#minorTickMarks path');
@@ -193,10 +216,7 @@ describe('gauge_render', () => {
     });
 
     it('applies correct stroke widths', () => {
-      const result = renderTicks(
-        ['M0,0L1,1'], ['M2,2L3,3'],
-        3, 1.5, 'black', 'gray', mockTheme
-      );
+      const result = renderTicks(['M0,0L1,1'], ['M2,2L3,3'], 3, 1.5, 'black', 'gray', mockTheme);
       const { container } = render(<svg>{result}</svg>);
       const majorPath = container.querySelector('#majorTickMarks path');
       const minorPath = container.querySelector('#minorTickMarks path');
@@ -208,8 +228,17 @@ describe('gauge_render', () => {
   describe('renderMajorTickLabels', () => {
     it('renders text elements for each tick angle', () => {
       const result = renderMajorTickLabels(
-        [60, 120, 180], ['0', '50', '100'],
-        12, 200, 200, 'black', 'Inter', 140, 200, 200, mockTheme
+        [60, 120, 180],
+        ['0', '50', '100'],
+        12,
+        200,
+        200,
+        'black',
+        'Inter',
+        140,
+        200,
+        200,
+        mockTheme
       );
       const { container } = render(<svg>{result}</svg>);
       const texts = container.querySelectorAll('text');
@@ -220,19 +249,14 @@ describe('gauge_render', () => {
     });
 
     it('renders empty group when no angles', () => {
-      const result = renderMajorTickLabels(
-        [], [], 12, 200, 200, 'black', 'Inter', 140, 200, 200, mockTheme
-      );
+      const result = renderMajorTickLabels([], [], 12, 200, 200, 'black', 'Inter', 140, 200, 200, mockTheme);
       const { container } = render(<svg>{result}</svg>);
       const texts = container.querySelectorAll('text');
       expect(texts).toHaveLength(0);
     });
 
     it('applies font properties', () => {
-      const result = renderMajorTickLabels(
-        [60], ['0'],
-        12, 200, 200, 'white', 'Courier', 140, 200, 200, mockTheme
-      );
+      const result = renderMajorTickLabels([60], ['0'], 12, 200, 200, 'white', 'Courier', 140, 200, 200, mockTheme);
       const { container } = render(<svg>{result}</svg>);
       const text = container.querySelector('text');
       expect(text?.getAttribute('fill')).toBe('white');
@@ -242,9 +266,7 @@ describe('gauge_render', () => {
 
   describe('renderTitleLabel', () => {
     it('renders title text when showTitle is true', () => {
-      const result = renderTitleLabel(
-        true, 'My Gauge', 'Inter', 16, 250, 140, 200, 'black', mockTheme
-      );
+      const result = renderTitleLabel(true, 'My Gauge', 'Inter', 16, 250, 140, 200, 'black', mockTheme);
       expect(result).not.toBe(false);
       const { container } = render(<svg>{result as React.ReactElement}</svg>);
       const text = container.querySelector('text');
@@ -252,23 +274,17 @@ describe('gauge_render', () => {
     });
 
     it('returns false when showTitle is false', () => {
-      const result = renderTitleLabel(
-        false, 'My Gauge', 'Inter', 16, 250, 140, 200, 'black', mockTheme
-      );
+      const result = renderTitleLabel(false, 'My Gauge', 'Inter', 16, 250, 140, 200, 'black', mockTheme);
       expect(result).toBe(false);
     });
 
     it('returns false when displayTitle is empty', () => {
-      const result = renderTitleLabel(
-        true, '', 'Inter', 16, 250, 140, 200, 'black', mockTheme
-      );
+      const result = renderTitleLabel(true, '', 'Inter', 16, 250, 140, 200, 'black', mockTheme);
       expect(result).toBe(false);
     });
 
     it('applies title color and font', () => {
-      const result = renderTitleLabel(
-        true, 'Test', 'Courier', 14, 250, 140, 200, 'green', mockTheme
-      );
+      const result = renderTitleLabel(true, 'Test', 'Courier', 14, 250, 140, 200, 'green', mockTheme);
       const { container } = render(<svg>{result as React.ReactElement}</svg>);
       const text = container.querySelector('text');
       expect(text?.getAttribute('fill')).toBe('green');
@@ -279,18 +295,14 @@ describe('gauge_render', () => {
 
   describe('renderValueLabel', () => {
     it('renders the formatted value', () => {
-      const result = renderValueLabel(
-        '42.5', 'Inter', 20, 260, 140, 200, 'black', mockTheme
-      );
+      const result = renderValueLabel('42.5', 'Inter', 20, 260, 140, 200, 'black', mockTheme);
       const { container } = render(<svg>{result}</svg>);
       const text = container.querySelector('text');
       expect(text?.textContent).toBe('42.5');
     });
 
     it('applies value color and font', () => {
-      const result = renderValueLabel(
-        '100', 'Courier', 18, 260, 140, 200, 'red', mockTheme
-      );
+      const result = renderValueLabel('100', 'Courier', 18, 260, 140, 200, 'red', mockTheme);
       const { container } = render(<svg>{result}</svg>);
       const text = container.querySelector('text');
       expect(text?.getAttribute('fill')).toBe('red');
@@ -302,8 +314,19 @@ describe('gauge_render', () => {
   describe('renderThresholdBands', () => {
     it('returns undefined when showThresholdBandOnGauge is false', () => {
       const result = renderThresholdBands(
-        false, true, true, true, undefined,
-        0, 100, 60, 300, 200, 200, 200, mockTheme
+        false,
+        true,
+        true,
+        true,
+        undefined,
+        0,
+        100,
+        60,
+        300,
+        200,
+        200,
+        200,
+        mockTheme
       );
       expect(result).toBeUndefined();
     });
@@ -311,8 +334,19 @@ describe('gauge_render', () => {
     it('returns undefined when thresholds have no steps', () => {
       const thresholds = { mode: ThresholdsMode.Absolute, steps: [] };
       const result = renderThresholdBands(
-        true, true, true, true, thresholds,
-        0, 100, 60, 300, 200, 200, 200, mockTheme
+        true,
+        true,
+        true,
+        true,
+        thresholds,
+        0,
+        100,
+        60,
+        300,
+        200,
+        200,
+        200,
+        mockTheme
       );
       expect(result).toBeUndefined();
     });
@@ -326,8 +360,19 @@ describe('gauge_render', () => {
         ],
       };
       const result = renderThresholdBands(
-        true, true, false, false, thresholds,
-        0, 100, 60, 300, 200, 200, 200, mockTheme
+        true,
+        true,
+        false,
+        false,
+        thresholds,
+        0,
+        100,
+        60,
+        300,
+        200,
+        200,
+        200,
+        mockTheme
       );
       expect(result).not.toBeUndefined();
     });
@@ -341,8 +386,19 @@ describe('gauge_render', () => {
         ],
       };
       const result = renderThresholdBands(
-        true, false, false, true, thresholds,
-        0, 100, 60, 300, 200, 200, 200, mockTheme
+        true,
+        false,
+        false,
+        true,
+        thresholds,
+        0,
+        100,
+        60,
+        300,
+        200,
+        200,
+        200,
+        mockTheme
       );
       expect(result).not.toBeUndefined();
     });

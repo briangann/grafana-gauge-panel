@@ -1,10 +1,7 @@
 import { PanelModel } from '@grafana/data';
 import { config } from '@grafana/runtime';
 
-import {
-  PanelMigrationHandler,
-  hasRobotoFont,
-} from './migrations';
+import { PanelMigrationHandler, hasRobotoFont } from './migrations';
 
 describe('D3Gauge -> D3GaugeV2 migrations', () => {
   it('migrates empty d3gauge', () => {

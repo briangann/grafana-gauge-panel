@@ -37,7 +37,7 @@ The React port has separated the configuration options into multiple searchable 
 ![Standard Options](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-standard-options.png)
 
 | Option   | Description                                                               |
-|----------|---------------------------------------------------------------------------|
+| -------- | ------------------------------------------------------------------------- |
 | Stat     | The statistic to be displayed on the gauge                                |
 | Unit     | A unit for the value displayed. This will be used to abbreviate as needed |
 | Decimals | Maximum number of decimals to display if any are required                 |
@@ -47,7 +47,7 @@ The React port has separated the configuration options into multiple searchable 
 ![Font Settings](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-font-settings.png)
 
 | Option               | Description                                 |
-|----------------------|---------------------------------------------|
+| -------------------- | ------------------------------------------- |
 | Value Font           | Font to be used on the value displayed      |
 | Value Font Size      | Font Size for the value displayed           |
 | Tick Label Font      | Font to be used on the tick labels          |
@@ -58,7 +58,7 @@ The React port has separated the configuration options into multiple searchable 
 ![Needle Options](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-needle-options.png)
 
 | Option                     | Description                                                                 |
-|----------------------------|-----------------------------------------------------------------------------|
+| -------------------------- | --------------------------------------------------------------------------- |
 | Animate Needle Transition  | Enables needle animation between values                                     |
 | Transition Speed (MS)      | When animation is enabled, set how fast the transition occurs               |
 | Allow Crossing Limits      | Enable this to allow the needle to go below and above the limit             |
@@ -78,7 +78,7 @@ and allows the needle to cross the limit (burying the needle).
 ![Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-limits.png)
 
 | Option        | Description                       |
-|---------------|-----------------------------------|
+| ------------- | --------------------------------- |
 | Minimum Value | Minimum Value allowed on the face |
 | Maximum Value | Maximum Value allowed on the face |
 
@@ -87,7 +87,7 @@ and allows the needle to cross the limit (burying the needle).
 ![Coloring](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-coloring.png)
 
 | Option       | Description                                              |
-|--------------|----------------------------------------------------------|
+| ------------ | -------------------------------------------------------- |
 | Outer Edge   | Color of the outer edge of the gauge                     |
 | Inner (Face) | Color used on the face of the gauge (background of dial) |
 | Pivot        | Color of the pivot (center)                              |
@@ -105,7 +105,7 @@ Adjust in small increments to see how they affect the gauge.
 ![Radial Customization](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-radial-customization.png)
 
 | Option               | Description                                                                 |
-|----------------------|-----------------------------------------------------------------------------|
+| -------------------- | --------------------------------------------------------------------------- |
 | Radius               | Specifies size of gauge by radius. Value 0 will auto-scale to fit panel     |
 | Tickness Gauge Basis | Scaling for tick, a lower value will autoscale poorly                       |
 | Pivot Radius         | Size of the center pivot, as a percentage of radius                         |
@@ -127,7 +127,7 @@ This is the main section that is used to modify the displayed range on the gauge
 ![Gauge Degrees](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-gauge-degrees.png)
 
 | Option            | Description                                          |
-|-------------------|------------------------------------------------------|
+| ----------------- | ---------------------------------------------------- |
 | Zero Tick Angle   | Angle where the tick value (0) starts (default 60)   |
 | Max Tick Angle    | Angle where the tick value ends (default 300)        |
 | Zero Needle Angle | Angle where needle is at minimum value (default 40)  |
@@ -138,7 +138,7 @@ This is the main section that is used to modify the displayed range on the gauge
 ![Gauge Readings](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-gauge-readings.png)
 
 | Option             | Description                                      |
-|--------------------|--------------------------------------------------|
+| ------------------ | ------------------------------------------------ |
 | Tick Spacing Major | The numeric spacing of the minor increment ticks |
 | Tick Spacing Minor | The numeric spacing of the major increment ticks |
 
@@ -152,7 +152,7 @@ A tick map allows you to substitute text for a given value.
 Using this option a compass style gauge can be constructed.
 
 | Option | Description                              |
-|--------|------------------------------------------|
+| ------ | ---------------------------------------- |
 | Label  | Sets the name of the Tick Map            |
 | Value  | Tick value where the text will be placed |
 | Text   | Text to be displayed                     |
@@ -166,7 +166,7 @@ There are additional display options detailed below.
 ![Thresholds](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-thresholds.png)
 
 | Option                             | Description                                                              |
-|------------------------------------|--------------------------------------------------------------------------|
+| ---------------------------------- | ------------------------------------------------------------------------ |
 | Show Threshold Band On Gauge       | Thresholds are displayed as a band on face of gauge along the needle arc |
 | Show Lower Range                   | Lower threshold is displayed on band                                     |
 | Show Middle Range                  | Middle thresholds are displayed on band                                  |
@@ -199,26 +199,26 @@ urgent message, or simply indicate a "nominal" reading.
 
 ![Value Mappings](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-value-mappings.png)
 
--------
+---
 
 ## Features
 
-* Data operator same as SingleStat panel (avg, sum, current, etc)
-* Unit formats same as SingleStat
+- Data operator same as SingleStat panel (avg, sum, current, etc)
+- Unit formats same as SingleStat
 
-* Customizable Font size and type for value displayed and ticks
-* Animated needle transition (elastic or quadin)
-* Adjustable Limits
-* All possible color options for gauge components
+- Customizable Font size and type for value displayed and ticks
+- Animated needle transition (elastic or quadin)
+- Adjustable Limits
+- All possible color options for gauge components
 
-* Customizable gauge component sizes (needle length, width, tick length, etc)
+- Customizable gauge component sizes (needle length, width, tick length, etc)
 
-* Threshold colors displayed on gauge
-* Threshold can modify displayed value and background
+- Threshold colors displayed on gauge
+- Threshold can modify displayed value and background
 
-* Needle animation speed is configurable
-* Arbitrary degree gauges now supported (default is from 60 to 320)
-* Value text on gauge can now be moved up/down as needed
+- Needle animation speed is configurable
+- Arbitrary degree gauges now supported (default is from 60 to 320)
+- Value text on gauge can now be moved up/down as needed
 
 ## Contributing
 
@@ -228,11 +228,11 @@ See the [CONTRIBUTING.md](https://github.com/briangann/grafana-gauge-panel/blob/
 ## Acknowledgements
 
 This panel is based on the "SingleStat" panel by Grafana, along with large
- portions of these excellent D3 examples:
+portions of these excellent D3 examples:
 
-* <https://oliverbinns.com/articles/D3js-gauge/>
-* <http://bl.ocks.org/tomerd/1499279>
-* <http://bl.ocks.org/dustinlarimer/5888271> Markers!
+- <https://oliverbinns.com/articles/D3js-gauge/>
+- <http://bl.ocks.org/tomerd/1499279>
+- <http://bl.ocks.org/dustinlarimer/5888271> Markers!
 
 ## Contributors
 

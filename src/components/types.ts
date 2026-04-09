@@ -92,8 +92,6 @@ export interface GaugeOptions {
 // tslint:disable-next-line
 export interface GaugeModel {}
 
-
-
 export enum FontFamilies {
   ARIAL = 'Arial',
   HELVETICA = 'Helvetica',
@@ -179,7 +177,6 @@ export const OperatorOptions: SelectableValue[] = [
   { value: 'range', label: 'Range' },
   { value: 'step', label: 'Step' },
 ];
-
 
 export interface MarkerType {
   id: number;
