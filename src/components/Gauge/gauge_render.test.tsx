@@ -312,95 +312,118 @@ describe('gauge_render', () => {
   });
 
   describe('renderThresholdBands', () => {
-    it('returns undefined when showThresholdBandOnGauge is false', () => {
-      const result = renderThresholdBands(
-        false,
-        true,
-        true,
-        true,
-        undefined,
-        0,
-        100,
-        60,
-        300,
-        200,
-        200,
-        200,
-        mockTheme
-      );
-      expect(result).toBeUndefined();
+    describe('early returns', () => {
+      it('returns undefined when showThresholdBandOnGauge is false', () => {
+        const result = renderThresholdBands(false, true, true, true, undefined, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        expect(result).toBeUndefined();
+      });
+
+      it('returns undefined when thresholds are undefined', () => {
+        const result = renderThresholdBands(true, true, true, true, undefined, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        expect(result).toBeUndefined();
+      });
+
+      it('returns undefined when thresholds have no steps', () => {
+        const thresholds = { mode: ThresholdsMode.Absolute, steps: [] };
+        const result = renderThresholdBands(true, true, true, true, thresholds, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        expect(result).toBeUndefined();
+      });
     });
 
-    it('returns undefined when thresholds have no steps', () => {
-      const thresholds = { mode: ThresholdsMode.Absolute, steps: [] };
-      const result = renderThresholdBands(
-        true,
-        true,
-        true,
-        true,
-        thresholds,
-        0,
-        100,
-        60,
-        300,
-        200,
-        200,
-        200,
-        mockTheme
-      );
-      expect(result).toBeUndefined();
-    });
-
-    it('renders lower band when enabled', () => {
-      const thresholds = {
+    describe('with 2 thresholds (lower + upper only)', () => {
+      const twoStepThresholds = {
         mode: ThresholdsMode.Absolute,
         steps: [
           { value: -Infinity, color: 'green' },
           { value: 80, color: 'red' },
         ],
       };
-      const result = renderThresholdBands(
-        true,
-        true,
-        false,
-        false,
-        thresholds,
-        0,
-        100,
-        60,
-        300,
-        200,
-        200,
-        200,
-        mockTheme
-      );
-      expect(result).not.toBeUndefined();
+
+      it('renders lower band when enabled', () => {
+        const result = renderThresholdBands(true, true, false, false, twoStepThresholds, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        expect(result).not.toBeUndefined();
+        const { container } = render(<svg>{result}</svg>);
+        const paths = container.querySelectorAll('path');
+        expect(paths.length).toBe(1);
+      });
+
+      it('renders upper band when enabled', () => {
+        const result = renderThresholdBands(true, false, false, true, twoStepThresholds, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        expect(result).not.toBeUndefined();
+        const { container } = render(<svg>{result}</svg>);
+        const paths = container.querySelectorAll('path');
+        expect(paths.length).toBe(1);
+      });
+
+      it('handles -Infinity as lower bound by replacing with minValue', () => {
+        const result = renderThresholdBands(true, true, false, false, twoStepThresholds, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        expect(result).not.toBeUndefined();
+      });
     });
 
-    it('renders upper band when enabled', () => {
-      const thresholds = {
+    describe('with 3+ thresholds (lower + middle + upper)', () => {
+      const threeStepThresholds = {
         mode: ThresholdsMode.Absolute,
         steps: [
           { value: -Infinity, color: 'green' },
+          { value: 50, color: 'yellow' },
           { value: 80, color: 'red' },
         ],
       };
-      const result = renderThresholdBands(
-        true,
-        false,
-        false,
-        true,
-        thresholds,
-        0,
-        100,
-        60,
-        300,
-        200,
-        200,
-        200,
-        mockTheme
-      );
-      expect(result).not.toBeUndefined();
+
+      const fourStepThresholds = {
+        mode: ThresholdsMode.Absolute,
+        steps: [
+          { value: -Infinity, color: 'green' },
+          { value: 30, color: 'blue' },
+          { value: 60, color: 'yellow' },
+          { value: 80, color: 'red' },
+        ],
+      };
+
+      it('renders all three band types when all enabled', () => {
+        const result = renderThresholdBands(true, true, true, true, threeStepThresholds, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        expect(result).not.toBeUndefined();
+        const { container } = render(<svg>{result}</svg>);
+        const paths = container.querySelectorAll('path');
+        // lower + 1 middle + upper = 3
+        expect(paths.length).toBe(3);
+      });
+
+      it('renders only middle bands when lower and upper disabled', () => {
+        const result = renderThresholdBands(true, false, true, false, threeStepThresholds, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        expect(result).not.toBeUndefined();
+        const { container } = render(<svg>{result}</svg>);
+        const paths = container.querySelectorAll('path');
+        // 1 middle band only
+        expect(paths.length).toBe(1);
+      });
+
+      it('renders correct count of middle bands for 4-step thresholds', () => {
+        const result = renderThresholdBands(true, false, true, false, fourStepThresholds, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        expect(result).not.toBeUndefined();
+        const { container } = render(<svg>{result}</svg>);
+        const paths = container.querySelectorAll('path');
+        // 4 steps: lower(0) + middle(1,2) + upper(3) -> 2 middle bands
+        expect(paths.length).toBe(2);
+      });
+    });
+
+    describe('with Infinity threshold value', () => {
+      it('replaces Infinity with maxValue for upper bound calculation', () => {
+        const thresholds = {
+          mode: ThresholdsMode.Absolute,
+          steps: [
+            { value: -Infinity, color: 'green' },
+            { value: Infinity, color: 'red' },
+          ],
+        };
+        const result = renderThresholdBands(true, true, false, false, thresholds, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        expect(result).not.toBeUndefined();
+        const { container } = render(<svg>{result}</svg>);
+        const paths = container.querySelectorAll('path');
+        expect(paths.length).toBe(1);
+      });
     });
   });
 });
