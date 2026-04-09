@@ -14,6 +14,9 @@ All changes noted here.
 - Fixed `getNeedleAngleMaximum` to use `maxNeedleAngle` instead of `maxTickAngle`
   for non-buried needle clamping
 - Fixed `renderThresholdBands` crash when thresholds are undefined
+- Fixed browser hard-lock when using fractional or zero tick spacing values (#114)
+- Added safety cap of 500 maximum ticks to prevent runaway computation
+- Fixed floating-point comparison for minor/major tick overlap detection
 
 ### Performance
 
@@ -28,6 +31,10 @@ All changes noted here.
 - Narrow `useEffect` dependency arrays to prevent unnecessary re-renders
 - Memoize `createNeedleMarkers` in Gauge to avoid recreating SVG defs on every render
 - Memoize `gaugeRadiusCalc` and inline dimension styles in GaugePanel
+
+### Features
+
+- Allow fractional tick spacing (e.g., 0.1 Hz) in panel editor for minor and major ticks (#114)
 
 ### Refactoring
 

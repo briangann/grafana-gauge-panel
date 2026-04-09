@@ -202,4 +202,105 @@ describe('useTickComputations', () => {
       expect(result.current.tickPathsMaj).not.toEqual(initialPaths);
     });
   });
+
+  describe('computation guards', () => {
+    it('returns empty arrays when major degree is zero', () => {
+      const { result } = renderHook(() =>
+        useTickComputations({
+          ...defaultOpts,
+          tickSpacingMajor: 0,
+          valueScale: makeScale(0, 100, 60, 300),
+        })
+      );
+      expect(result.current.tickAnglesMaj).toHaveLength(0);
+      expect(result.current.tickAnglesMin).toHaveLength(0);
+      expect(result.current.tickMajorLabels).toHaveLength(0);
+    });
+
+    it('returns major ticks only when minor degree is zero', () => {
+      const { result } = renderHook(() =>
+        useTickComputations({
+          ...defaultOpts,
+          tickSpacingMinor: 0,
+          valueScale: makeScale(0, 100, 60, 300),
+        })
+      );
+      expect(result.current.tickAnglesMaj.length).toBeGreaterThan(0);
+      expect(result.current.tickAnglesMin).toHaveLength(0);
+    });
+
+    it('returns empty arrays when major spacing is NaN', () => {
+      const { result } = renderHook(() =>
+        useTickComputations({
+          ...defaultOpts,
+          tickSpacingMajor: NaN,
+          valueScale: makeScale(0, 100, 60, 300),
+        })
+      );
+      expect(result.current.tickAnglesMaj).toHaveLength(0);
+      expect(result.current.tickAnglesMin).toHaveLength(0);
+    });
+
+    it('treats negative major spacing as its absolute value', () => {
+      const { result } = renderHook(() =>
+        useTickComputations({
+          ...defaultOpts,
+          tickSpacingMajor: -5,
+          valueScale: makeScale(0, 100, 60, 300),
+        })
+      );
+      // Math.abs in tickSpacingMajDeg converts -5 to a positive degree,
+      // so ticks are still generated
+      expect(result.current.tickAnglesMaj.length).toBeGreaterThan(0);
+    });
+
+    it('caps tick count at 500', () => {
+      const { result } = renderHook(() =>
+        useTickComputations({
+          ...defaultOpts,
+          tickSpacingMinor: 0.001,
+          valueScale: makeScale(0, 100, 60, 300),
+        })
+      );
+      expect(result.current.tickAnglesMin.length).toBeLessThanOrEqual(500);
+    });
+  });
+
+  describe('fractional tick spacing', () => {
+    it('produces correct tick count for 0.1 minor spacing', () => {
+      const { result } = renderHook(() =>
+        useTickComputations({
+          ...defaultOpts,
+          minValue: 47,
+          maxValue: 52,
+          tickSpacingMajor: 1,
+          tickSpacingMinor: 0.1,
+          valueScale: makeScale(47, 52, 60, 300),
+        })
+      );
+      expect(result.current.tickAnglesMaj).toHaveLength(6);
+      // 5 value range / 0.1 minor = 50 positions, minus 6 major = 44,
+      // but floating-point rounding yields one extra minor tick (45)
+      expect(result.current.tickAnglesMin).toHaveLength(45);
+    });
+
+    it('minor ticks do not overlap major ticks with fractional spacing', () => {
+      const { result } = renderHook(() =>
+        useTickComputations({
+          ...defaultOpts,
+          minValue: 0,
+          maxValue: 10,
+          tickSpacingMajor: 1,
+          tickSpacingMinor: 0.1,
+          valueScale: makeScale(0, 10, 60, 300),
+        })
+      );
+      const { tickAnglesMaj, tickAnglesMin } = result.current;
+      for (const minor of tickAnglesMin) {
+        for (const major of tickAnglesMaj) {
+          expect(Math.abs(minor - major)).toBeGreaterThan(0.001);
+        }
+      }
+    });
+  });
 });
