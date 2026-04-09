@@ -19,9 +19,19 @@ All changes noted here.
 - Add stable React keys for tick mark elements
 - Narrow `useEffect` dependency arrays to prevent unnecessary re-renders
 
+### Refactoring
+
+- Extract render functions to `gauge_render.tsx`, styles to `gauge_styles.ts`
+- Extract custom hooks: `useNeedleAnimation`, `useTickComputations`, `useGaugeDimensions`
+- Remove all `eslint-disable react-hooks/exhaustive-deps` comments from Gauge component
+- Simplify GaugePanel: remove dead code, use prop spread, extract styles
+- Organize Gauge files into dedicated `src/components/Gauge/` folder
+- Remove unused `margin` state variable
+
 ### Tests
 
-- Added unit tests for all `utils.tsx` functions
+- Added unit tests for `utils.tsx`, `gauge_render.tsx`, `useGaugeDimensions`,
+  `useNeedleAnimation`, and `useTickComputations`
 
 ## v2.0.3 - 2026-04-01
 
