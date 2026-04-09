@@ -2,6 +2,12 @@
 
 All changes noted here.
 
+## v2.0.4 (unreleased)
+
+- Fixed needle animation jumping instead of smoothly transitioning between values
+- Replaced two-effect state-based animation with single-effect ref-based pattern
+- Clamped values now animate to the limit instead of snapping instantly
+
 ## v2.0.3 - 2026-04-01
 
 - Updated pnpm/action-setup from v4 to v5

@@ -18,9 +18,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const svgStyles = useStyles2(getSVGStyles);
   // need a Ref to the needle to update it
   const needleRef = useRef<SVGPathElement>(null);
-  // keeps the previous value, initially it is the same, this is used for animation
-  const [previousNeedleValue, setPreviousNeedleValue] = useState(options.displayValue);
-  const [currentNeedleValue, setCurrentNeedleValue] = useState(options.displayValue);
+  // tracks the last target angle (in degrees) the needle was animated to
+  const lastNeedleAngleRef = useRef<number | null>(null);
   // pull in theme reference
   const theme2 = useTheme2();
 
@@ -497,110 +496,102 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   };
 
 
+  // Animate the needle to the current displayValue
   useEffect(() => {
-
-    const updateGauge = (needleGroup: React.JSX.Element | null, newVal: number, newValFormatted: string) => {
-      // Animate the transition of the needle to its new value
-      const oldVal = previousNeedleValue;
-      // Set default values if necessary
-      if (newVal === undefined) {
-        newVal = options.minValue;
-      }
-      // snap to new location by default
-      let transitionSpeed = 0;
-
-      if (options.animateNeedleValueTransition) {
-        transitionSpeed = options.animateNeedleValueTransitionSpeed;
-        // no transition when previous value is NaN
-        if (Number.isNaN(oldVal)) {
-          transitionSpeed = 0;
-        }
-      }
-
-      if (!options.allowNeedleCrossLimits) {
-        const lowerBound = Math.min(options.minValue, options.maxValue);
-        const upperBound = Math.max(options.minValue, options.maxValue);
-        if (newVal < lowerBound) {
-          newVal = lowerBound;
-          transitionSpeed = 0;
-        }
-        if (newVal > upperBound) {
-          newVal = upperBound;
-          transitionSpeed = 0;
-        }
-      }
-
-      const needlePath = select(needleRef.current);
-      const valueScale = scaleLinear()
-        .domain([options.minValue, options.maxValue])
-        .range([options.zeroTickAngle, options.maxTickAngle]);
-      let needleAngleOld = options.zeroNeedleAngle;
-
-      const newScaleVal = valueScale(newVal);
-
-      let needleAngleNew = options.zeroNeedleAngle;
-      if (newScaleVal !== undefined) {
-        needleAngleNew = newScaleVal - options.zeroNeedleAngle;
-      }
-
-      if (valueScale !== undefined && !isNaN(Number(oldVal)) && !isNaN(newVal)) {
-        const oldScaleVal = valueScale(Number(oldVal));
-        if (oldScaleVal !== undefined) {
-          needleAngleOld = oldScaleVal - options.zeroNeedleAngle;
-        }
-        if (newScaleVal !== undefined) {
-          needleAngleNew = newScaleVal - options.zeroNeedleAngle;
-        }
-      }
-
-      needlePath
-        .transition()
-        .duration(transitionSpeed)
-        .ease(easeQuadIn)
-        .attrTween('transform', () => {
-          //
-          // Allow burying the needle if there is space, otherwise lock to min/max
-          //
-          // Check for min/max ends of the needle
-          if (needleAngleOld + options.zeroNeedleAngle > options.maxTickAngle) {
-            needleAngleOld = options.maxNeedleAngle - options.zeroNeedleAngle;
-          }
-          if (needleAngleOld + options.zeroNeedleAngle < options.zeroTickAngle) {
-            needleAngleOld = 0;
-          }
-          if (needleAngleNew + options.zeroNeedleAngle > options.maxTickAngle) {
-            needleAngleNew = getNeedleAngleMaximum(options.allowNeedleCrossLimits, needleAngleNew, options.zeroTickAngle, options.zeroNeedleAngle, options.maxTickAngle, options.needleCrossLimitDegrees);
-          }
-          if (needleAngleNew + options.zeroNeedleAngle < options.zeroTickAngle) {
-            needleAngleNew = getNeedleAngleMinimum(options.allowNeedleCrossLimits, needleAngleNew, options.zeroTickAngle, options.zeroNeedleAngle, options.needleCrossLimitDegrees);
-          }
-          const needleCentre = originX + ',' + originY;
-          return interpolateString(
-            'rotate(' + needleAngleOld + ',' + needleCentre + ')',
-            'rotate(' + needleAngleNew + ',' + needleCentre + ')'
-          );
-        });
-    };
-
-    if (currentNeedleValue !== null && !isNaN(currentNeedleValue)) {
-      updateGauge(needleElement, currentNeedleValue, options.displayFormatted);
+    if (options.displayValue === null || isNaN(options.displayValue)) {
+      return;
     }
-  }, [currentNeedleValue, previousNeedleValue, originX, originY,
+    if (!needleRef.current) {
+      return;
+    }
+
+    let newVal = options.displayValue;
+
+    // Clamp value to bounds when cross-limits are disabled (still animate to clamped position)
+    if (!options.allowNeedleCrossLimits) {
+      const lowerBound = Math.min(options.minValue, options.maxValue);
+      const upperBound = Math.max(options.minValue, options.maxValue);
+      newVal = Math.max(lowerBound, Math.min(upperBound, newVal));
+    }
+
+    const valueScale = scaleLinear()
+      .domain([options.minValue, options.maxValue])
+      .range([options.zeroTickAngle, options.maxTickAngle]);
+
+    const newScaleVal = valueScale(newVal);
+    let needleAngleNew = newScaleVal !== undefined
+      ? newScaleVal - options.zeroNeedleAngle
+      : 0;
+
+    // Apply cross-limit angle clamping
+    if (needleAngleNew + options.zeroNeedleAngle > options.maxTickAngle) {
+      needleAngleNew = getNeedleAngleMaximum(
+        options.allowNeedleCrossLimits, needleAngleNew,
+        options.zeroTickAngle, options.zeroNeedleAngle,
+        options.maxTickAngle, options.needleCrossLimitDegrees
+      );
+    }
+    if (needleAngleNew + options.zeroNeedleAngle < options.zeroTickAngle) {
+      needleAngleNew = getNeedleAngleMinimum(
+        options.allowNeedleCrossLimits, needleAngleNew,
+        options.zeroTickAngle, options.zeroNeedleAngle,
+        options.needleCrossLimitDegrees
+      );
+    }
+
+    // On first render (ref is null), snap immediately with no animation
+    const isFirstRender = lastNeedleAngleRef.current === null;
+    let needleAngleOld = lastNeedleAngleRef.current ?? needleAngleNew;
+
+    // Clamp the old angle to valid range
+    if (needleAngleOld + options.zeroNeedleAngle > options.maxTickAngle) {
+      needleAngleOld = options.maxNeedleAngle - options.zeroNeedleAngle;
+    }
+    if (needleAngleOld + options.zeroNeedleAngle < options.zeroTickAngle) {
+      needleAngleOld = 0;
+    }
+
+    let transitionSpeed = 0;
+    if (!isFirstRender && options.animateNeedleValueTransition) {
+      transitionSpeed = options.animateNeedleValueTransitionSpeed;
+    }
+
+    // Update the ref before starting the transition so mid-transition
+    // interruptions use the correct target angle
+    lastNeedleAngleRef.current = needleAngleNew;
+
+    const needlePath = select(needleRef.current);
+    const needleCentre = originX + ',' + originY;
+
+    needlePath
+      .transition()
+      .duration(transitionSpeed)
+      .ease(easeQuadIn)
+      .attrTween('transform', () => {
+        return interpolateString(
+          'rotate(' + needleAngleOld + ',' + needleCentre + ')',
+          'rotate(' + needleAngleNew + ',' + needleCentre + ')'
+        );
+      });
+  }, [options.displayValue, originX, originY,
       options.minValue, options.maxValue,
       options.zeroTickAngle, options.maxTickAngle,
       options.zeroNeedleAngle, options.maxNeedleAngle,
       options.animateNeedleValueTransition,
       options.animateNeedleValueTransitionSpeed,
-      options.allowNeedleCrossLimits, options.needleCrossLimitDegrees,
-      options.displayFormatted, needleElement]);
+      options.allowNeedleCrossLimits, options.needleCrossLimitDegrees]);
 
+  // When the needle path shape changes (e.g., dimensions settle on mount),
+  // immediately restore the transform to the last known angle
   useEffect(() => {
-    // this will trigger updating the gauge
-    if (currentNeedleValue !== options.displayValue) {
-      setPreviousNeedleValue(currentNeedleValue);
-      setCurrentNeedleValue(options.displayValue);
+    if (needleRef.current && lastNeedleAngleRef.current !== null) {
+      const needleCentre = originX + ',' + originY;
+      needleRef.current.setAttribute(
+        'transform',
+        'rotate(' + lastNeedleAngleRef.current + ',' + needleCentre + ')'
+      );
     }
-  }, [currentNeedleValue, options.displayValue, previousNeedleValue]);
+  }, [needlePathStart, needlePathLength, originX, originY]);
 
   const valueColor = useMemo(() => {
     if (options.showThresholdStateOnValue && options.displayValue && options.thresholds) {
