@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import { scaleLinear, interpolateString, select } from 'd3';
+import { interpolateString, select, type ScaleLinear } from 'd3';
 import { easeQuadIn } from 'd3-ease';
 
 import { getNeedleAngleMaximum, getNeedleAngleMinimum } from './needle_utils';
@@ -19,6 +19,7 @@ interface NeedleAnimationOptions {
   animateNeedleValueTransitionSpeed: number;
   originX: number;
   originY: number;
+  valueScale: ScaleLinear<number, number>;
 }
 
 export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, opts: NeedleAnimationOptions) => {
@@ -42,9 +43,7 @@ export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, o
       newVal = Math.max(lowerBound, Math.min(upperBound, newVal));
     }
 
-    const valueScale = scaleLinear()
-      .domain([opts.minValue, opts.maxValue])
-      .range([opts.zeroTickAngle, opts.maxTickAngle]);
+    const valueScale = opts.valueScale;
 
     const newScaleVal = valueScale(newVal);
     let needleAngleNew = newScaleVal !== undefined ? newScaleVal - opts.zeroNeedleAngle : 0;
@@ -137,6 +136,7 @@ export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, o
     opts.originY,
     opts.minValue,
     opts.maxValue,
+    opts.valueScale,
     opts.zeroTickAngle,
     opts.maxTickAngle,
     opts.zeroNeedleAngle,
