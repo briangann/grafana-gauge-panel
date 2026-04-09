@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 /**
@@ -19,25 +18,37 @@ import React from 'react';
  * @param crossLimitDegree how far to cross limits
  * @returns angle to be used (absolute angle, no longer relative)
  */
-export const getNeedleAngleMinimum =
-  (allowNeedleCrossLimits: boolean, needleAngle: number, zeroTickAngle: number, zeroNeedleAngle: number, crossLimitDegree: number) => {
-    // check if the needleAngle is below the zeroTickAngle
-    if (needleAngle + zeroNeedleAngle < zeroTickAngle) {
-      // check if burying the needle is enabled
-      if (allowNeedleCrossLimits) {
-        if (needleAngle < zeroTickAngle) {
-          return (-crossLimitDegree);
-        } else {
-          return (zeroNeedleAngle);
-        }
+export const getNeedleAngleMinimum = (
+  allowNeedleCrossLimits: boolean,
+  needleAngle: number,
+  zeroTickAngle: number,
+  zeroNeedleAngle: number,
+  crossLimitDegree: number
+) => {
+  // check if the needleAngle is below the zeroTickAngle
+  if (needleAngle + zeroNeedleAngle < zeroTickAngle) {
+    // check if burying the needle is enabled
+    if (allowNeedleCrossLimits) {
+      if (needleAngle < zeroTickAngle) {
+        return -crossLimitDegree;
       } else {
-        return (zeroNeedleAngle);
+        return zeroNeedleAngle;
       }
+    } else {
+      return zeroNeedleAngle;
     }
-    return needleAngle;
-  };
+  }
+  return needleAngle;
+};
 
-export const getNeedleAngleMaximum = (allowNeedleCrossLimits: boolean, needleAngle: number, zeroTickAngle: number, zeroNeedleAngle: number, maxTickAngle: number, crossLimitDegree: number) => {
+export const getNeedleAngleMaximum = (
+  allowNeedleCrossLimits: boolean,
+  needleAngle: number,
+  zeroTickAngle: number,
+  zeroNeedleAngle: number,
+  maxTickAngle: number,
+  crossLimitDegree: number
+) => {
   // angle passed in is relative to zeroTickAngle
   if (needleAngle + zeroTickAngle > maxTickAngle) {
     if (allowNeedleCrossLimits) {
@@ -46,17 +57,17 @@ export const getNeedleAngleMaximum = (allowNeedleCrossLimits: boolean, needleAng
       // console.log(`testMaxAngle = ${testMaxAngle}`);
       if (testMaxAngle > maxTickAngle) {
         // make sure it is not above 360 minus cross limit
-        if (maxTickAngle < (360 - crossLimitDegree)) {
+        if (maxTickAngle < 360 - crossLimitDegree) {
           // allow it to be set to maxTickAngle plus 5 degrees, without going below zero
-          return (maxTickAngle + crossLimitDegree - zeroNeedleAngle);
+          return maxTickAngle + crossLimitDegree - zeroNeedleAngle;
         } else {
           // console.log(`needle cannot be buried beyond maxNeedleAngle ${testMaxAngle}`);
-          return (maxTickAngle - zeroNeedleAngle);
+          return maxTickAngle - zeroNeedleAngle;
         }
       }
     } else {
-      return (maxTickAngle - zeroNeedleAngle);
+      return maxTickAngle - zeroNeedleAngle;
     }
   }
-  return (needleAngle - zeroNeedleAngle);
+  return needleAngle - zeroNeedleAngle;
 };

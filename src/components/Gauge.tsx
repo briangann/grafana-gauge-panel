@@ -1,16 +1,26 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useStyles2, useTheme2 } from '@grafana/ui';
-import { css } from '@emotion/css';
-import { getActiveThreshold, GrafanaTheme2, Threshold, sortThresholds } from '@grafana/data';
+import { getActiveThreshold, GrafanaTheme2 } from '@grafana/data';
 
-import { ExpandedThresholdBand, GaugeOptions, Markers } from './types';
+import { GaugeOptions } from './types';
 import { TickMapItemType } from './TickMaps/types';
-import { scaleLinear, line, interpolateString, select } from 'd3';
+import { scaleLinear, interpolateString, select } from 'd3';
 import { easeQuadIn } from 'd3-ease';
 
-import { createNeedleMarkers, dToR, drawBand, labelXCalc, labelYCalc, needleCalc } from './utils';
+import { createNeedleMarkers, labelYCalc } from './utils';
 import { getNeedleAngleMaximum, getNeedleAngleMinimum } from './needle_utils';
+import {
+  renderCircleGroup,
+  renderMajorTickLabels,
+  renderNeedle,
+  renderThresholdBands,
+  renderTicks,
+  renderTitleLabel,
+  renderValueLabel,
+  scaleLabelFontSize,
+} from './gauge_render';
+import { getWrapperStyles, getSVGStyles } from './gauge_styles';
 
 export const Gauge: React.FC<GaugeOptions> = (options) => {
   // pull in styles
@@ -32,21 +42,39 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const [tickStartMin, setTickStartMin] = useState(0);
   const [labelStart, setLabelStart] = useState(0);
   //
-  const { SVGSize, needleWidth, needleLengthNegCalc, tickWidthMajorCalc,
-          tickWidthMinorCalc, outerEdgeRadius, innerEdgeRadius, originX, originY
-  } = useMemo(() => ({
-    SVGSize: options.gaugeRadius * 2,
-    needleWidth: options.needleWidth * (options.gaugeRadius / options.ticknessGaugeBasis),
-    needleLengthNegCalc: options.gaugeRadius * options.needleLengthNeg,
-    tickWidthMajorCalc: options.tickWidthMajor * (options.gaugeRadius / options.ticknessGaugeBasis),
-    tickWidthMinorCalc: options.tickWidthMinor * (options.gaugeRadius / options.ticknessGaugeBasis),
-    outerEdgeRadius: options.gaugeRadius - options.padding,
-    innerEdgeRadius: options.gaugeRadius - options.padding - options.edgeWidth,
-    originX: options.gaugeRadius,
-    originY: options.gaugeRadius,
-  }), [options.gaugeRadius, options.needleWidth, options.ticknessGaugeBasis,
-       options.needleLengthNeg, options.tickWidthMajor, options.tickWidthMinor,
-       options.padding, options.edgeWidth]);
+  const {
+    SVGSize,
+    needleWidth,
+    needleLengthNegCalc,
+    tickWidthMajorCalc,
+    tickWidthMinorCalc,
+    outerEdgeRadius,
+    innerEdgeRadius,
+    originX,
+    originY,
+  } = useMemo(
+    () => ({
+      SVGSize: options.gaugeRadius * 2,
+      needleWidth: options.needleWidth * (options.gaugeRadius / options.ticknessGaugeBasis),
+      needleLengthNegCalc: options.gaugeRadius * options.needleLengthNeg,
+      tickWidthMajorCalc: options.tickWidthMajor * (options.gaugeRadius / options.ticknessGaugeBasis),
+      tickWidthMinorCalc: options.tickWidthMinor * (options.gaugeRadius / options.ticknessGaugeBasis),
+      outerEdgeRadius: options.gaugeRadius - options.padding,
+      innerEdgeRadius: options.gaugeRadius - options.padding - options.edgeWidth,
+      originX: options.gaugeRadius,
+      originY: options.gaugeRadius,
+    }),
+    [
+      options.gaugeRadius,
+      options.needleWidth,
+      options.ticknessGaugeBasis,
+      options.needleLengthNeg,
+      options.tickWidthMajor,
+      options.tickWidthMinor,
+      options.padding,
+      options.edgeWidth,
+    ]
+  );
 
   /*
   useEffect(() => {
@@ -127,8 +155,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     const scaleZero = valueScale(0) ?? 0;
     const majorA = valueScale(tickSpacingMajor) ?? 0;
     return Math.abs(majorA - scaleZero);
-  }, [options.minValue, options.maxValue, options.zeroTickAngle,
-      options.maxTickAngle, options.tickSpacingMajor]);
+  }, [options.minValue, options.maxValue, options.zeroTickAngle, options.maxTickAngle, options.tickSpacingMajor]);
 
   const tickSpacingMinDeg = useMemo(() => {
     const tickSpacingMinor = options.tickSpacingMinor ?? 1;
@@ -138,92 +165,119 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     const scaleZero = valueScale(0) ?? 0;
     const minorA = valueScale(tickSpacingMinor) ?? 0;
     return Math.abs(minorA - scaleZero);
-  }, [options.minValue, options.maxValue, options.zeroTickAngle,
-      options.maxTickAngle, options.tickSpacingMinor]);
+  }, [options.minValue, options.maxValue, options.zeroTickAngle, options.maxTickAngle, options.tickSpacingMinor]);
 
-  const { tickMaj: tickAnglesMaj, tickMin: tickAnglesMin } = useMemo(() =>
-    generateTickAngles(
-      options.zeroTickAngle, options.maxTickAngle,
-      tickSpacingMajDeg, tickSpacingMinDeg
-    ),
-    [options.zeroTickAngle, options.maxTickAngle,
-     tickSpacingMajDeg, tickSpacingMinDeg]
+  const { tickMaj: tickAnglesMaj, tickMin: tickAnglesMin } = useMemo(
+    () => generateTickAngles(options.zeroTickAngle, options.maxTickAngle, tickSpacingMajDeg, tickSpacingMinDeg),
+    [options.zeroTickAngle, options.maxTickAngle, tickSpacingMajDeg, tickSpacingMinDeg]
   );
 
-  const tickMajorLabels = useMemo(() =>
-    generateTickMajorLabels(
-      options.zeroTickAngle, options.maxTickAngle,
-      options.minValue, options.maxValue,
-      options.tickSpacingMajor ?? 10, tickSpacingMajDeg,
-      options.tickMapConfig.tickMaps
-    ),
-    [options.zeroTickAngle, options.maxTickAngle,
-     options.minValue, options.maxValue,
-     options.tickSpacingMajor, tickSpacingMajDeg,
-     options.tickMapConfig.tickMaps]
+  const tickMajorLabels = useMemo(
+    () =>
+      generateTickMajorLabels(
+        options.zeroTickAngle,
+        options.maxTickAngle,
+        options.minValue,
+        options.maxValue,
+        options.tickSpacingMajor ?? 10,
+        tickSpacingMajDeg,
+        options.tickMapConfig.tickMaps
+      ),
+    [
+      options.zeroTickAngle,
+      options.maxTickAngle,
+      options.minValue,
+      options.maxValue,
+      options.tickSpacingMajor,
+      tickSpacingMajDeg,
+      options.tickMapConfig.tickMaps,
+    ]
   );
 
   useEffect(() => {
     const needleLenPosCalc =
-      options.gaugeRadius - options.padding -
-      options.edgeWidth - options.tickEdgeGap -
-      options.tickLengthMaj - (options.needleTickGap * options.gaugeRadius);
+      options.gaugeRadius -
+      options.padding -
+      options.edgeWidth -
+      options.tickEdgeGap -
+      options.tickLengthMaj -
+      options.needleTickGap * options.gaugeRadius;
     setNeedlePathLength(needleLengthNegCalc + needleLenPosCalc);
     setNeedlePathStart(needleLengthNegCalc * -1);
-    const tickStartMajor = options.gaugeRadius - options.padding -
-      options.edgeWidth - options.tickEdgeGap - options.tickLengthMaj;
+    const tickStartMajor =
+      options.gaugeRadius - options.padding - options.edgeWidth - options.tickEdgeGap - options.tickLengthMaj;
     setTickStartMaj(tickStartMajor);
-    const tickStartMinor = options.gaugeRadius - options.padding -
-      options.edgeWidth - options.tickEdgeGap - options.tickLengthMin;
+    const tickStartMinor =
+      options.gaugeRadius - options.padding - options.edgeWidth - options.tickEdgeGap - options.tickLengthMin;
     setTickStartMin(tickStartMinor);
     const tmpTickLabelFontSize = scaleLabelFontSize(
       options.tickLabelFontSize,
       options.gaugeRadius,
-      options.ticknessGaugeBasis);
-    setLabelStart(tickStartMajor - tmpTickLabelFontSize);
-  }, [options.gaugeRadius, options.padding, options.edgeWidth,
-      options.tickEdgeGap, options.tickLengthMaj, options.tickLengthMin,
-      options.needleTickGap, options.tickLabelFontSize,
-      options.ticknessGaugeBasis, needleLengthNegCalc]);
-
-  const needleElement = useMemo(() => {
-    const pathNeedle = needleCalc(options.zeroNeedleAngle, originX, originY, needlePathStart, needlePathLength);
-    const markerEndShape = Markers.find(e => e.name === options.markerEndShape) || Markers[0];
-    const markerStartShape = Markers.find(e => e.name === options.markerStartShape) || Markers[1];
-    return (
-      <g id='needle'>
-        {pathNeedle.length > 0 && (
-          <>
-            <path
-              ref={needleRef}
-              d={pathNeedle}
-              markerEnd={options.markerEndEnabled ? 'url(#marker_' + markerEndShape.name + ')' : undefined}
-              markerStart={options.markerStartEnabled ? 'url(#marker_' + markerStartShape.name + ')' : undefined}
-              markerHeight={6}
-              markerWidth={6}
-              strokeLinecap='round'
-              stroke={theme2.visualization.getColorByName(options.needleColor)}
-              strokeWidth={needleWidth + 'px'}
-            />
-          </>
-        )}
-      </g>
+      options.ticknessGaugeBasis
     );
-  }, [options.zeroNeedleAngle, originX, originY, needlePathStart, needlePathLength,
-      options.markerEndShape, options.markerStartShape,
-      options.markerEndEnabled, options.markerStartEnabled,
-      options.needleColor, needleWidth, theme2]);
+    setLabelStart(tickStartMajor - tmpTickLabelFontSize);
+  }, [
+    options.gaugeRadius,
+    options.padding,
+    options.edgeWidth,
+    options.tickEdgeGap,
+    options.tickLengthMaj,
+    options.tickLengthMin,
+    options.needleTickGap,
+    options.tickLabelFontSize,
+    options.ticknessGaugeBasis,
+    needleLengthNegCalc,
+  ]);
 
+  const needleElement = useMemo(
+    () =>
+      renderNeedle(
+        needleRef,
+        options.zeroNeedleAngle,
+        originX,
+        originY,
+        needlePathStart,
+        needlePathLength,
+        options.markerEndShape,
+        options.markerStartShape,
+        options.markerEndEnabled,
+        options.markerStartEnabled,
+        options.needleColor,
+        needleWidth,
+        theme2
+      ),
+    [
+      options.zeroNeedleAngle,
+      originX,
+      originY,
+      needlePathStart,
+      needlePathLength,
+      options.markerEndShape,
+      options.markerStartShape,
+      options.markerEndEnabled,
+      options.markerStartEnabled,
+      options.needleColor,
+      needleWidth,
+      theme2,
+    ]
+  );
 
   const { valueFontSize, titleFontSize, valueLabelY, titleLabelY } = useMemo(() => {
     const vfs = scaleLabelFontSize(options.valueFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
     const tfs = scaleLabelFontSize(options.titleFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
     const vly = labelYCalc(0, vfs, labelStart, originY) + options.valueYOffset;
-    const tly = labelYCalc(0, tfs, labelStart, originY) + options.titleYOffset - (vfs / 2) - (tfs / 2);
+    const tly = labelYCalc(0, tfs, labelStart, originY) + options.titleYOffset - vfs / 2 - tfs / 2;
     return { valueFontSize: vfs, titleFontSize: tfs, valueLabelY: vly, titleLabelY: tly };
-  }, [options.valueFontSize, options.titleFontSize, options.gaugeRadius,
-      options.ticknessGaugeBasis, options.valueYOffset, options.titleYOffset,
-      labelStart, originY]);
+  }, [
+    options.valueFontSize,
+    options.titleFontSize,
+    options.gaugeRadius,
+    options.ticknessGaugeBasis,
+    options.valueYOffset,
+    options.titleYOffset,
+    labelStart,
+    originY,
+  ]);
 
   // Animate the needle to the current displayValue
   useEffect(() => {
@@ -248,24 +302,27 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       .range([options.zeroTickAngle, options.maxTickAngle]);
 
     const newScaleVal = valueScale(newVal);
-    let needleAngleNew = newScaleVal !== undefined
-      ? newScaleVal - options.zeroNeedleAngle
-      : 0;
+    let needleAngleNew = newScaleVal !== undefined ? newScaleVal - options.zeroNeedleAngle : 0;
 
     // Apply cross-limit angle clamping, tracking which limit was hit
     let newClampedAt: 'max' | 'min' | null = null;
     if (needleAngleNew + options.zeroNeedleAngle > options.maxTickAngle) {
       needleAngleNew = getNeedleAngleMaximum(
-        options.allowNeedleCrossLimits, needleAngleNew,
-        options.zeroTickAngle, options.zeroNeedleAngle,
-        options.maxTickAngle, options.needleCrossLimitDegrees
+        options.allowNeedleCrossLimits,
+        needleAngleNew,
+        options.zeroTickAngle,
+        options.zeroNeedleAngle,
+        options.maxTickAngle,
+        options.needleCrossLimitDegrees
       );
       newClampedAt = 'max';
     }
     if (needleAngleNew + options.zeroNeedleAngle < options.zeroTickAngle) {
       needleAngleNew = getNeedleAngleMinimum(
-        options.allowNeedleCrossLimits, needleAngleNew,
-        options.zeroTickAngle, options.zeroNeedleAngle,
+        options.allowNeedleCrossLimits,
+        needleAngleNew,
+        options.zeroTickAngle,
+        options.zeroNeedleAngle,
         options.needleCrossLimitDegrees
       );
       newClampedAt = 'min';
@@ -279,16 +336,21 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     let oldClampedAt: 'max' | 'min' | null = null;
     if (needleAngleOld + options.zeroNeedleAngle > options.maxTickAngle) {
       needleAngleOld = getNeedleAngleMaximum(
-        options.allowNeedleCrossLimits, needleAngleOld,
-        options.zeroTickAngle, options.zeroNeedleAngle,
-        options.maxTickAngle, options.needleCrossLimitDegrees
+        options.allowNeedleCrossLimits,
+        needleAngleOld,
+        options.zeroTickAngle,
+        options.zeroNeedleAngle,
+        options.maxTickAngle,
+        options.needleCrossLimitDegrees
       );
       oldClampedAt = 'max';
     }
     if (needleAngleOld + options.zeroNeedleAngle < options.zeroTickAngle) {
       needleAngleOld = getNeedleAngleMinimum(
-        options.allowNeedleCrossLimits, needleAngleOld,
-        options.zeroTickAngle, options.zeroNeedleAngle,
+        options.allowNeedleCrossLimits,
+        needleAngleOld,
+        options.zeroTickAngle,
+        options.zeroNeedleAngle,
         options.needleCrossLimitDegrees
       );
       oldClampedAt = 'min';
@@ -322,23 +384,28 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           'rotate(' + needleAngleNew + ',' + needleCentre + ')'
         );
       });
-  }, [options.displayValue, originX, originY,
-      options.minValue, options.maxValue,
-      options.zeroTickAngle, options.maxTickAngle,
-      options.zeroNeedleAngle, options.maxNeedleAngle,
-      options.animateNeedleValueTransition,
-      options.animateNeedleValueTransitionSpeed,
-      options.allowNeedleCrossLimits, options.needleCrossLimitDegrees]);
+  }, [
+    options.displayValue,
+    originX,
+    originY,
+    options.minValue,
+    options.maxValue,
+    options.zeroTickAngle,
+    options.maxTickAngle,
+    options.zeroNeedleAngle,
+    options.maxNeedleAngle,
+    options.animateNeedleValueTransition,
+    options.animateNeedleValueTransitionSpeed,
+    options.allowNeedleCrossLimits,
+    options.needleCrossLimitDegrees,
+  ]);
 
   // When the needle path shape changes (e.g., dimensions settle on mount),
   // immediately restore the transform to the last known angle
   useEffect(() => {
     if (needleRef.current && lastNeedleAngleRef.current !== null) {
       const needleCentre = originX + ',' + originY;
-      needleRef.current.setAttribute(
-        'transform',
-        'rotate(' + lastNeedleAngleRef.current + ',' + needleCentre + ')'
-      );
+      needleRef.current.setAttribute('transform', 'rotate(' + lastNeedleAngleRef.current + ',' + needleCentre + ')');
     }
   }, [needlePathStart, needlePathLength, originX, originY]);
 
@@ -347,216 +414,185 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       return getActiveThreshold(options.displayValue, options.thresholds.steps).color;
     }
     return options.unitsLabelColor;
-  }, [options.showThresholdStateOnValue, options.displayValue,
-      options.thresholds, options.unitsLabelColor]);
+  }, [options.showThresholdStateOnValue, options.displayValue, options.thresholds, options.unitsLabelColor]);
 
   const titleColor = useMemo(() => {
     if (options.showThresholdStateOnTitle && options.displayValue && options.thresholds) {
       return getActiveThreshold(options.displayValue, options.thresholds.steps).color;
     }
     return options.unitsLabelColor;
-  }, [options.showThresholdStateOnTitle, options.displayValue,
-      options.thresholds, options.unitsLabelColor]);
+  }, [options.showThresholdStateOnTitle, options.displayValue, options.thresholds, options.unitsLabelColor]);
 
-  const circleGroup = useMemo(() => {
-    let gaugeFaceColor = options.innerColor;
-    if (options.showThresholdStateOnBackground) {
-      if (options.displayValue && options.thresholds) {
-        const aThreshold = getActiveThreshold(options.displayValue, options.thresholds.steps);
-        gaugeFaceColor = aThreshold.color;
-      }
-    }
-    return (
-      <g id='circles'>
-        <circle cx={originX} cy={originY} r={outerEdgeRadius} fill={theme2.visualization.getColorByName(options.outerEdgeColor)} stroke='none'></circle>
-        <circle cx={originX} cy={originY} r={innerEdgeRadius} fill={theme2.visualization.getColorByName(gaugeFaceColor)} stroke='none'></circle>
-        <circle cx={originX} cy={originY} r={options.pivotRadius} fill={theme2.visualization.getColorByName(options.pivotColor)} stroke='none'></circle>
-      </g>
-    );
-  }, [options.innerColor, options.outerEdgeColor, options.pivotColor,
-      options.pivotRadius, options.showThresholdStateOnBackground,
-      options.displayValue, options.thresholds,
-      originX, originY, outerEdgeRadius, innerEdgeRadius, theme2]);
+  const circleGroup = useMemo(
+    () =>
+      renderCircleGroup(
+        originX,
+        originY,
+        outerEdgeRadius,
+        innerEdgeRadius,
+        options.innerColor,
+        options.outerEdgeColor,
+        options.pivotColor,
+        options.pivotRadius,
+        options.showThresholdStateOnBackground,
+        options.displayValue ?? 0,
+        options.thresholds,
+        theme2
+      ),
+    [
+      options.innerColor,
+      options.outerEdgeColor,
+      options.pivotColor,
+      options.pivotRadius,
+      options.showThresholdStateOnBackground,
+      options.displayValue,
+      options.thresholds,
+      originX,
+      originY,
+      outerEdgeRadius,
+      innerEdgeRadius,
+      theme2,
+    ]
+  );
 
-  const thresholdBands = useMemo(() => {
-    if (!options.showThresholdBandOnGauge) {
-      return;
-    }
-    if (options.thresholds && options.thresholds.steps.length === 0) {
-      return;
-    }
-    const sorted = sortThresholds(options.thresholds!.steps);
+  const thresholdBands = useMemo(
+    () =>
+      renderThresholdBands(
+        options.showThresholdBandOnGauge,
+        options.showThresholdBandLowerRange,
+        options.showThresholdBandMiddleRange,
+        options.showThresholdBandUpperRange,
+        options.thresholds,
+        options.minValue,
+        options.maxValue,
+        options.zeroTickAngle,
+        options.maxTickAngle,
+        options.gaugeRadius,
+        originX,
+        originY,
+        theme2
+      ),
+    [
+      options.showThresholdBandOnGauge,
+      options.showThresholdBandLowerRange,
+      options.showThresholdBandMiddleRange,
+      options.showThresholdBandUpperRange,
+      options.thresholds,
+      options.minValue,
+      options.maxValue,
+      options.zeroTickAngle,
+      options.maxTickAngle,
+      options.gaugeRadius,
+      originX,
+      originY,
+      theme2,
+    ]
+  );
 
-    // lower band
-    let lowerBand: ExpandedThresholdBand | undefined;
-    if (sorted.length > 0) {
-      let nextThresholdValue = options.maxValue;
-      if (sorted.length > 1) {
-        nextThresholdValue = sorted[1].value;
-      }
-      if (nextThresholdValue === Infinity) {
-        nextThresholdValue = options.maxValue;
-      }
-      let min = sorted[0].value;
-      if (min === -Infinity) {
-        min = options.minValue;
-      }
-      lowerBand = { index: 0, min, max: nextThresholdValue, color: sorted[0].color };
-    }
+  const ticks = useMemo(
+    () =>
+      renderTicks(
+        tickAnglesMaj,
+        tickAnglesMin,
+        tickStartMaj,
+        tickStartMin,
+        options.tickLengthMaj,
+        options.tickLengthMin,
+        tickWidthMajorCalc,
+        tickWidthMinorCalc,
+        options.tickMajorColor,
+        options.tickMinorColor,
+        originX,
+        originY,
+        theme2
+      ),
+    [
+      tickAnglesMaj,
+      tickAnglesMin,
+      options.tickMinorColor,
+      options.tickMajorColor,
+      tickWidthMinorCalc,
+      tickWidthMajorCalc,
+      tickStartMin,
+      tickStartMaj,
+      options.tickLengthMin,
+      options.tickLengthMaj,
+      originX,
+      originY,
+      theme2,
+    ]
+  );
 
-    // upper band
-    let upperBand: ExpandedThresholdBand | undefined;
-    const upperIndex = sorted.length - 1;
-    if (upperIndex > 0) {
-      upperBand = { index: upperIndex, min: sorted[upperIndex].value, max: options.maxValue, color: sorted[upperIndex].color };
-    }
+  const majorTickLabelElements = useMemo(
+    () =>
+      renderMajorTickLabels(
+        tickAnglesMaj,
+        tickMajorLabels,
+        options.tickLabelFontSize,
+        options.gaugeRadius,
+        options.ticknessGaugeBasis,
+        options.tickLabelColor,
+        options.tickFont,
+        labelStart,
+        originX,
+        originY,
+        theme2
+      ),
+    [
+      tickAnglesMaj,
+      tickMajorLabels,
+      options.tickLabelColor,
+      options.tickLabelFontSize,
+      options.tickFont,
+      options.gaugeRadius,
+      options.ticknessGaugeBasis,
+      labelStart,
+      originX,
+      originY,
+      theme2,
+    ]
+  );
 
-    // inner bands
-    let innerBands: ExpandedThresholdBand[] | undefined;
-    if (lowerBand && upperBand) {
-      innerBands = [];
-      for (let i = lowerBand.index + 1; i < upperBand.index; i++) {
-        innerBands.push({ index: i, min: sorted[i].value, max: sorted[i + 1].value, color: sorted[i].color });
-      }
-    }
+  const titleLabel = useMemo(
+    () =>
+      renderTitleLabel(
+        options.showTitle,
+        options.displayTitle,
+        options.titleFont,
+        titleFontSize,
+        titleLabelY,
+        labelStart,
+        originX,
+        titleColor,
+        theme2
+      ),
+    [
+      titleColor,
+      options.showTitle,
+      options.displayTitle,
+      options.titleFont,
+      titleFontSize,
+      titleLabelY,
+      labelStart,
+      originX,
+      theme2,
+    ]
+  );
 
-    // Build a minimal options object for drawBand to avoid passing the full options ref
-    const bandOptions = {
-      minValue: options.minValue, maxValue: options.maxValue,
-      zeroTickAngle: options.zeroTickAngle, maxTickAngle: options.maxTickAngle,
-      gaugeRadius: options.gaugeRadius,
-    } as GaugeOptions;
-
-    return (
-      <>
-        {options.showThresholdBandLowerRange && lowerBand &&
-          drawBand(lowerBand.min, lowerBand.max, lowerBand.color, originX, originY, bandOptions, theme2)}
-        {options.showThresholdBandMiddleRange && innerBands &&
-          innerBands.map((aBand: ExpandedThresholdBand) => {
-            return drawBand(aBand.min, aBand.max, aBand.color, originX, originY, bandOptions, theme2);
-          })
-        }
-        {options.showThresholdBandUpperRange && upperBand &&
-          drawBand(upperBand.min, upperBand.max, upperBand.color, originX, originY, bandOptions, theme2)}
-      </>
-    );
-  }, [options.showThresholdBandOnGauge, options.showThresholdBandLowerRange,
-      options.showThresholdBandMiddleRange, options.showThresholdBandUpperRange,
-      options.thresholds, options.minValue, options.maxValue,
-      options.zeroTickAngle, options.maxTickAngle,
-      options.gaugeRadius, originX, originY, theme2]);
-
-  const ticks = useMemo(() => {
-    const tickCalcPaths = (degrees: number[], tickStart: number, tickLength: number) => {
-      const paths: string[] = [];
-      for (const degree of degrees) {
-        const tickAngle = degree + 90;
-        const tickAngleRad = dToR(tickAngle);
-        const y1 = originY + tickStart * Math.sin(tickAngleRad);
-        const y2 = originY + (tickStart + tickLength) * Math.sin(tickAngleRad);
-        const x1 = originX + tickStart * Math.cos(tickAngleRad);
-        const x2 = originX + (tickStart + tickLength) * Math.cos(tickAngleRad);
-        const lineSVG = line()([[x1, y1], [x2, y2]]);
-        if (lineSVG) {
-          paths.push(lineSVG);
-        }
-      }
-      return paths;
-    };
-    const pathTicksMajor = tickCalcPaths(tickAnglesMaj, tickStartMaj, options.tickLengthMaj);
-    const pathTicksMinor = tickCalcPaths(tickAnglesMin, tickStartMin, options.tickLengthMin);
-    return (
-      <g id='ticks'>
-        <g id='minorTickMarks'>
-          {pathTicksMinor.length > 0 && pathTicksMinor.map((d: string, index: number) => (
-            <path key={`tick-minor-${index}`} d={d} stroke={theme2.visualization.getColorByName(options.tickMinorColor)} strokeWidth={tickWidthMinorCalc + 'px'} />
-          ))}
-        </g>
-        <g id='majorTickMarks'>
-          {pathTicksMajor.length > 0 && pathTicksMajor.map((d: string, index: number) => (
-            <path key={`tick-major-${index}`} d={d} stroke={theme2.visualization.getColorByName(options.tickMajorColor)} strokeWidth={tickWidthMajorCalc + 'px'} />
-          ))}
-        </g>
-      </g>
-    );
-  }, [tickAnglesMaj, tickAnglesMin, options.tickMinorColor, options.tickMajorColor,
-      tickWidthMinorCalc, tickWidthMajorCalc, tickStartMin, tickStartMaj,
-      options.tickLengthMin, options.tickLengthMaj, originX, originY, theme2]);
-
-  const majorTickLabels = useMemo(() => {
-    let maxLabelLength = 0;
-    for (const item in tickMajorLabels) {
-      if (item.length > maxLabelLength) {
-        maxLabelLength = item.length;
-      }
-    }
-    const tmpTickLabelFontSize = scaleLabelFontSize(
-      options.tickLabelFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
-    return (
-      <g id='majorTickLabels'>
-        {tickAnglesMaj.length > 0 && tickAnglesMaj.map((item: number, index: number) => {
-          const labelText = tickMajorLabels[index];
-          return (
-            <text
-              key={`mtl_${index}`}
-              x={labelXCalc(item, maxLabelLength, labelText, tmpTickLabelFontSize, labelStart, originX) || 0}
-              y={labelYCalc(item, tmpTickLabelFontSize, labelStart, originY) || 0}
-              fontSize={tmpTickLabelFontSize || 12}
-              textAnchor='middle'
-              fill={theme2.visualization.getColorByName(options.tickLabelColor) || '#000000'}
-              fontWeight={'bold'}
-              fontFamily={options.tickFont || 'Inter'}>
-              {labelText}
-            </text>
-          );
-        })}
-      </g>
-    );
-  }, [tickAnglesMaj, tickMajorLabels, options.tickLabelColor,
-      options.tickLabelFontSize, options.tickFont,
-      options.gaugeRadius, options.ticknessGaugeBasis,
-      labelStart, originX, originY, theme2]);
-
-  const titleLabel = useMemo(() => {
-    if (!options.showTitle || options.displayTitle.length === 0) {
-      return false;
-    }
-    return (
-      <g id='titleLabels'>
-        <text
-          x={labelXCalc(0, 0, options.displayTitle, titleFontSize, labelStart, originX)}
-          y={titleLabelY}
-          fontSize={titleFontSize}
-          textAnchor='middle'
-          fill={theme2.visualization.getColorByName(titleColor)}
-          fontWeight={'bold'}
-          fontFamily={options.titleFont}
-        >
-          {options.displayTitle}
-        </text>
-      </g>
-    );
-  }, [titleColor, options.showTitle, options.displayTitle,
-      options.titleFont, titleFontSize, titleLabelY, labelStart, originX, theme2]);
-
-  const valueLabel = useMemo(() => {
-    return (
-      <g id='valueLabels'>
-        <text
-          x={labelXCalc(0, 0, options.displayFormatted, valueFontSize, labelStart, originX)}
-          y={valueLabelY}
-          fontSize={valueFontSize}
-          textAnchor='middle'
-          fill={theme2.visualization.getColorByName(valueColor)}
-          fontWeight={'bold'}
-          fontFamily={options.valueFont}
-        >
-          {options.displayFormatted}
-        </text>
-      </g>
-    );
-  }, [valueColor, options.displayFormatted, options.valueFont,
-      valueFontSize, valueLabelY, labelStart, originX, theme2]);
+  const valueLabel = useMemo(
+    () =>
+      renderValueLabel(
+        options.displayFormatted,
+        options.valueFont,
+        valueFontSize,
+        valueLabelY,
+        labelStart,
+        originX,
+        valueColor,
+        theme2
+      ),
+    [valueColor, options.displayFormatted, options.valueFont, valueFontSize, valueLabelY, labelStart, originX, theme2]
+  );
 
   return (
     <div className={divStyles}>
@@ -564,15 +600,15 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         className={svgStyles}
         width={options.panelWidth}
         height={options.panelHeight}
-        xmlns='http://www.w3.org/2000/svg'
-        xmlnsXlink='http://www.w3.org/1999/xlink'
+        xmlns="http://www.w3.org/2000/svg"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
         viewBox={`0,0,${SVGSize},${SVGSize}`}
       >
         <g>
           {circleGroup}
           {thresholdBands}
           {ticks}
-          {majorTickLabels}
+          {majorTickLabelElements}
           {createNeedleMarkers(options.needleColor, theme2)}
           {needleElement}
           {titleLabel}
@@ -582,26 +618,3 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     </div>
   );
 };
-
-const scaleLabelFontSize = (fontSize: number, radius: number, ticknessGaugeBasis: number) => {
-  let scaledFontSize = fontSize * (radius / ticknessGaugeBasis);
-  if (scaledFontSize < 4) {
-    scaledFontSize = 0;
-  }
-  return scaledFontSize;
-};
-
-const getWrapperStyles = (theme: GrafanaTheme2) => css`
-  fill: transparent;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  justify-content: center;
-`;
-
-const getSVGStyles = (theme: GrafanaTheme2) => css`
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  fill: transparent;
-`;

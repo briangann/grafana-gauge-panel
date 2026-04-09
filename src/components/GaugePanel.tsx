@@ -1,11 +1,25 @@
 import React, { useMemo } from 'react';
-import { PanelProps, GrafanaTheme2, FieldDisplay, getDisplayProcessor, getFieldDisplayValues, formattedValueToString, FieldColorModeId, ThresholdsConfig, ThresholdsMode, getActiveThreshold, Threshold, FieldConfig, DisplayValue } from '@grafana/data';
+import {
+  PanelProps,
+  GrafanaTheme2,
+  FieldDisplay,
+  getDisplayProcessor,
+  getFieldDisplayValues,
+  formattedValueToString,
+  FieldColorModeId,
+  ThresholdsConfig,
+  ThresholdsMode,
+  getActiveThreshold,
+  Threshold,
+  FieldConfig,
+  DisplayValue,
+} from '@grafana/data';
 import { GaugeOptions } from './types';
 import { Gauge } from './Gauge';
 import { css, cx } from '@emotion/css';
 import { useStyles2, useTheme2 } from '@grafana/ui';
 
-interface Props extends PanelProps<GaugeOptions> { }
+interface Props extends PanelProps<GaugeOptions> {}
 
 const getComponentStyles = (theme: GrafanaTheme2) => {
   return {
@@ -25,7 +39,16 @@ const getComponentStyles = (theme: GrafanaTheme2) => {
   };
 };
 
-export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, replaceVariables, fieldConfig, timeZone }) => {
+export const GaugePanel: React.FC<Props> = ({
+  options,
+  data,
+  id,
+  width,
+  height,
+  replaceVariables,
+  fieldConfig,
+  timeZone,
+}) => {
   const styles = useStyles2(getComponentStyles);
   const theme2 = useTheme2();
   let gaugeRadiusCalc = options.gaugeRadius;
@@ -40,7 +63,6 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
   //
   // code from https://github.com/grafana/grafana/blob/main/public/app/plugins/panel/gauge/GaugePanel.tsx
   const getValues = (): FieldDisplay[] => {
-
     for (const frame of data.series) {
       for (const field of frame.fields) {
         // Set the Min/Max value automatically for percent and percentunit
@@ -57,7 +79,7 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
       fieldConfig,
       reduceOptions: {
         calcs: [options.operatorName],
-        values: false
+        values: false,
       },
       replaceVariables,
       theme: theme2,
@@ -74,11 +96,7 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
     ],
   };
 
-  const getThresholdForValue = (
-    field: FieldConfig,
-    value: number,
-    theme: GrafanaTheme2) => {
-
+  const getThresholdForValue = (field: FieldConfig, value: number, theme: GrafanaTheme2) => {
     if (fieldConfig.defaults.thresholds) {
       const result = getActiveThreshold(value, field.thresholds?.steps);
       return result;
@@ -87,7 +105,7 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
   };
 
   const getFormattedValue = (index: number) => {
-    const singleMetric =  metrics[index];
+    const singleMetric = metrics[index];
     return formattedValueToString(singleMetric.display);
   };
 
@@ -106,7 +124,10 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
 
   // get the formatted metrics
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const metrics = useMemo(() => getValues(), [data.series, fieldConfig, options.operatorName, replaceVariables, theme2, timeZone]);
+  const metrics = useMemo(
+    () => getValues(),
+    [data.series, fieldConfig, options.operatorName, replaceVariables, theme2, timeZone]
+  );
   const thresholdResult = getThresholdForValue(fieldConfig.defaults, getDisplayValue(0), theme2);
 
   return (
