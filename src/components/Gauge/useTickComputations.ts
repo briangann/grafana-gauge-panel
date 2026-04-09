@@ -5,22 +5,39 @@ import { line, type ScaleLinear } from 'd3';
 import { TickMapItemType } from '../TickMaps/types';
 import { dToR } from './utils';
 
+const MAX_TICKS = 500;
+
 const generateTickAngles = (zeroTickAngle: number, maxTickAngle: number, majorDegree: number, minorDegree: number) => {
+  if (majorDegree <= 0 || !isFinite(majorDegree)) {
+    return { tickMaj: [], tickMin: [] };
+  }
+
   const majorAngles: number[] = [];
   let counter = 0;
   for (let i = zeroTickAngle; i <= maxTickAngle; i = i + majorDegree) {
+    if (majorAngles.length >= MAX_TICKS) {
+      break;
+    }
     const tickAngle = zeroTickAngle + majorDegree * counter;
     if (tickAngle - zeroTickAngle < 360) {
       majorAngles.push(zeroTickAngle + majorDegree * counter);
     }
     counter++;
   }
+
+  if (minorDegree <= 0 || !isFinite(minorDegree)) {
+    return { tickMaj: majorAngles, tickMin: [] };
+  }
+
   const minorAngles: number[] = [];
   counter = 0;
   for (let j = zeroTickAngle; j <= maxTickAngle; j = j + minorDegree) {
+    if (minorAngles.length >= MAX_TICKS) {
+      break;
+    }
     let exists = 0;
     majorAngles.forEach((d: number) => {
-      if (zeroTickAngle + minorDegree * counter === d) {
+      if (Math.abs(zeroTickAngle + minorDegree * counter - d) < 0.0001) {
         exists = 1;
       }
     });
@@ -41,9 +58,16 @@ const generateTickMajorLabels = (
   majorDegree: number,
   tickMaps: TickMapItemType[]
 ) => {
+  if (majorDegree <= 0 || !isFinite(majorDegree)) {
+    return [];
+  }
+
   let counter = 0;
   const tickLabelText: string[] = [];
   for (let k = zeroTickAngle; k <= maxTickAngle; k = k + majorDegree) {
+    if (tickLabelText.length >= MAX_TICKS) {
+      break;
+    }
     const step = minValue <= maxValue ? tickSpacingMajor : -tickSpacingMajor;
     const tickValue = minValue + step * counter;
     const parts = tickSpacingMajor.toString().split('.');
