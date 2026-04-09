@@ -34,19 +34,21 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const [labelStart, setLabelStart] = useState(0);
   const [margin, setMargin] = useState({ top: 0, right: 0, bottom: 0, left: 0 });
   //
-  const SVGSize = options.gaugeRadius * 2;
-  // needle calc
-  const needleWidth = options.needleWidth * (options.gaugeRadius / options.ticknessGaugeBasis);
-  const needleLengthNegCalc = options.gaugeRadius * options.needleLengthNeg;
-  // tick calc
-  const tickWidthMajorCalc = options.tickWidthMajor * (options.gaugeRadius / options.ticknessGaugeBasis);
-  const tickWidthMinorCalc = options.tickWidthMinor * (options.gaugeRadius / options.ticknessGaugeBasis);
-  // edge calc
-  const outerEdgeRadius = options.gaugeRadius - options.padding;
-  const innerEdgeRadius = options.gaugeRadius - options.padding - options.edgeWidth;
-  // center of gauge
-  const originX = options.gaugeRadius;
-  const originY = options.gaugeRadius;
+  const { SVGSize, needleWidth, needleLengthNegCalc, tickWidthMajorCalc,
+          tickWidthMinorCalc, outerEdgeRadius, innerEdgeRadius, originX, originY
+  } = useMemo(() => ({
+    SVGSize: options.gaugeRadius * 2,
+    needleWidth: options.needleWidth * (options.gaugeRadius / options.ticknessGaugeBasis),
+    needleLengthNegCalc: options.gaugeRadius * options.needleLengthNeg,
+    tickWidthMajorCalc: options.tickWidthMajor * (options.gaugeRadius / options.ticknessGaugeBasis),
+    tickWidthMinorCalc: options.tickWidthMinor * (options.gaugeRadius / options.ticknessGaugeBasis),
+    outerEdgeRadius: options.gaugeRadius - options.padding,
+    innerEdgeRadius: options.gaugeRadius - options.padding - options.edgeWidth,
+    originX: options.gaugeRadius,
+    originY: options.gaugeRadius,
+  }), [options.gaugeRadius, options.needleWidth, options.ticknessGaugeBasis,
+       options.needleLengthNeg, options.tickWidthMajor, options.tickWidthMinor,
+       options.padding, options.edgeWidth]);
 
   /*
   useEffect(() => {
@@ -344,15 +346,15 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     return paths;
   };
 
-  const valueFontSize = scaleLabelFontSize(options.valueFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
-  const titleFontSize = scaleLabelFontSize(options.titleFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
-  const valueLabelY = labelYCalc(0, valueFontSize, labelStart, originY) + options.valueYOffset;
-  const titleLabelY = (
-      labelYCalc(0, titleFontSize, labelStart, originY)
-      + options.titleYOffset
-      - (valueFontSize / 2)
-      - (titleFontSize / 2)
-  );
+  const { valueFontSize, titleFontSize, valueLabelY, titleLabelY } = useMemo(() => {
+    const vfs = scaleLabelFontSize(options.valueFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
+    const tfs = scaleLabelFontSize(options.titleFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
+    const vly = labelYCalc(0, vfs, labelStart, originY) + options.valueYOffset;
+    const tly = labelYCalc(0, tfs, labelStart, originY) + options.titleYOffset - (vfs / 2) - (tfs / 2);
+    return { valueFontSize: vfs, titleFontSize: tfs, valueLabelY: vly, titleLabelY: tly };
+  }, [options.valueFontSize, options.titleFontSize, options.gaugeRadius,
+      options.ticknessGaugeBasis, options.valueYOffset, options.titleYOffset,
+      labelStart, originY]);
 
   const createTitleLabel = (color: string) => {
     // Only show title if selected and non-empty title

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { PanelProps, GrafanaTheme2, FieldDisplay, getDisplayProcessor, getFieldDisplayValues, formattedValueToString, FieldColorModeId, ThresholdsConfig, ThresholdsMode, getActiveThreshold, Threshold, FieldConfig, DisplayValue } from '@grafana/data';
 import { GaugeOptions } from './types';
 import { Gauge } from './Gauge';
@@ -105,7 +105,8 @@ export const GaugePanel: React.FC<Props> = ({ options, data, id, width, height, 
   };
 
   // get the formatted metrics
-  const metrics = getValues();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const metrics = useMemo(() => getValues(), [data.series, fieldConfig, options.operatorName, replaceVariables, theme2, timeZone]);
   const thresholdResult = getThresholdForValue(fieldConfig.defaults, getDisplayValue(0), theme2);
 
   return (
