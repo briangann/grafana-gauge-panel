@@ -11,6 +11,7 @@ All changes noted here.
   for font scaling
 - Fix falsy-zero bug where `displayValue` of `0` skipped threshold
   coloring in `renderCircleGroup`, `valueColor`, and `titleColor`
+  (use strict `!== null` check matching the `number | null` type)
 - Add React `key` props to threshold band elements to fix missing key
   warnings and prevent incorrect reconciliation
 - Fix `migrateTickMaps` missing `enabled` field in return value
