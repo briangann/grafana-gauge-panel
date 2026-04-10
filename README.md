@@ -159,6 +159,13 @@ This is the main section that is used to modify the displayed range on the gauge
 | Tick Spacing Minor           | The numeric spacing of the minor increment ticks (minimum 0.001) |
 | Format Tick Labels with Unit | Format tick labels using the configured unit and decimals        |
 
+When **Format Tick Labels with Unit** is enabled, tick labels are
+formatted using the unit configured in Standard options (e.g.,
+"bytes/sec"). The unit suffix is shown on a second line below the
+value on the first tick, last tick, and any tick where the unit
+prefix changes (e.g., "KB/s" to "MB/s"). Middle ticks show only
+the number for clean alignment.
+
 Fractional tick spacing is supported for both major and minor ticks.
 This is useful for gauges with narrow ranges where sub-integer precision
 is needed (e.g., a frequency gauge spanning 47-52 Hz with 0.1 Hz minor
