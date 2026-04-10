@@ -144,7 +144,8 @@ export interface TickLabel {
 
 export const renderMajorTickLabels = (
   tickAnglesMaj: number[],
-  tickMajorLabels: TickLabel[],
+  formattedLabels: TickLabel[] | null,
+  plainLabels: string[],
   tickLabelFontSize: number,
   gaugeRadius: number,
   ticknessGaugeBasis: number,
@@ -156,7 +157,8 @@ export const renderMajorTickLabels = (
   theme: GrafanaTheme2
 ) => {
   let maxLabelLength = 0;
-  for (const item of tickMajorLabels) {
+  const labels: TickLabel[] = formattedLabels ?? plainLabels.map((text) => ({ text }));
+  for (const item of labels) {
     if (item.text.length > maxLabelLength) {
       maxLabelLength = item.text.length;
     }
@@ -167,11 +169,12 @@ export const renderMajorTickLabels = (
     <g id="majorTickLabels">
       {tickAnglesMaj.length > 0 &&
         tickAnglesMaj.map((item: number, index: number) => {
-          const label = tickMajorLabels[index];
+          const label = labels[index];
+          const xPos = labelXCalc(item, maxLabelLength, label.text, tmpTickLabelFontSize, labelStart, originX) || 0;
           return (
             <text
               key={`mtl_${index}`}
-              x={labelXCalc(item, maxLabelLength, label.text, tmpTickLabelFontSize, labelStart, originX) || 0}
+              x={xPos}
               y={labelYCalc(item, tmpTickLabelFontSize, labelStart, originY) || 0}
               fontSize={tmpTickLabelFontSize || 12}
               textAnchor="middle"
@@ -182,7 +185,7 @@ export const renderMajorTickLabels = (
               {label.text}
               {label.unitLine && (
                 <tspan
-                  x={labelXCalc(item, maxLabelLength, label.unitLine, tmpTickLabelFontSize, labelStart, originX) || 0}
+                  x={xPos}
                   dy={tmpTickLabelFontSize * 0.9}
                   fontSize={tmpTickLabelFontSize * 0.7}
                   fontWeight={'normal'}
