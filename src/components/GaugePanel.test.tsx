@@ -371,4 +371,18 @@ describe('GaugePanel', () => {
       expect(mockGaugeProps[0].displayTitle).toBe('value');
     });
   });
+
+  describe('getValues - operator passthrough', () => {
+    it('uses mean operator', () => {
+      const props = makeProps({ operatorName: 'mean' }, makeFieldData([10, 20, 30], {}));
+      render(<GaugePanel {...props} />);
+      expect(mockGaugeProps[0].displayValue).toBe(20);
+    });
+
+    it('uses max operator', () => {
+      const props = makeProps({ operatorName: 'max' }, makeFieldData([10, 20, 30], {}));
+      render(<GaugePanel {...props} />);
+      expect(mockGaugeProps[0].displayValue).toBe(30);
+    });
+  });
 });
