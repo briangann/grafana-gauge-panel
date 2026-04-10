@@ -101,6 +101,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const needleElement = useMemo(
     () =>
       renderNeedle(
+        // eslint-disable-next-line react-hooks/refs -- ref is attached to SVG element, not read during render
         needleRef,
         options.zeroNeedleAngle,
         originX,
