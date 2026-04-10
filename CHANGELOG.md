@@ -90,6 +90,18 @@ All changes noted here.
 - Sync `RangeEditor` local state when external value prop changes
   (undo/reset)
 
+### Panel Editor UX
+
+- Rename "Show title" to "Show Display Name on Gauge" and move above
+  Stat in Standard options
+- Rename "Title Font/Size" to "Display Name Font/Size"
+- Rename "Title Y-Offset" to "Display Name Y-Offset (Vertical)"
+- Rename "Value Y-Offset" to "Value Y-Offset (Vertical)"
+- Reorder font settings: Display Name, Value, Tick Label
+- Add inline description to Tick Maps editor section
+- Fix `needleCrossLimitDegrees` default (10 → 5) to match description
+- Increase vertical spacing between display name and value labels
+
 ### Testing Infrastructure
 
 - Suppress jsdom SVG tag warnings (`<path>`, `<marker>`, `<defs>`) in
