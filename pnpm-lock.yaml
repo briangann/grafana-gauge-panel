@@ -52,6 +52,9 @@ devDependencies:
   '@grafana/eslint-config':
     specifier: ^8.2.0
     version: 8.2.0(@stylistic/eslint-plugin-ts@2.13.0)(@typescript-eslint/eslint-plugin@8.58.1)(@typescript-eslint/parser@8.58.1)(eslint-config-prettier@8.10.2)(eslint-plugin-jsdoc@51.4.1)(eslint-plugin-react-hooks@5.2.0)(eslint-plugin-react@7.37.5)(eslint@9.39.4)(typescript@5.9.3)
+  '@grafana/plugin-e2e':
+    specifier: ^3.4.12
+    version: 3.4.12(@playwright/test@1.59.1)
   '@grafana/tsconfig':
     specifier: ^2.0.1
     version: 2.0.1
@@ -1157,6 +1160,14 @@ packages:
       typescript: 5.9.2
     dev: false
 
+  /@grafana/e2e-selectors@13.0.0-23624974663:
+    resolution: {integrity: sha512-Bk9EQ63t5MJZL2BPe+WJ8PAUvb1x7/DD2DIQxm+i7ZTVlAYuP5SlnvBkWzUoKgiVerCbrYY6C3OCIUjUAgQoKA==}
+    dependencies:
+      semver: 7.7.4
+      tslib: 2.8.1
+      typescript: 5.9.2
+    dev: true
+
   /@grafana/eslint-config@8.2.0(@stylistic/eslint-plugin-ts@2.13.0)(@typescript-eslint/eslint-plugin@8.58.1)(@typescript-eslint/parser@8.58.1)(eslint-config-prettier@8.10.2)(eslint-plugin-jsdoc@51.4.1)(eslint-plugin-react-hooks@5.2.0)(eslint-plugin-react@7.37.5)(eslint@9.39.4)(typescript@5.9.3):
     resolution: {integrity: sha512-siCxTY3uuCg2ekztQwS8i7DBPHH8xDGiWlZAf+d/TVZVB0TluIsM2jHEhNyC2XzTZdgDLbmDJwUt5SCnHC7iAg==}
     peerDependencies:
@@ -1217,6 +1228,23 @@ packages:
       - supports-color
       - typescript
     dev: false
+
+  /@grafana/plugin-e2e@3.4.12(@playwright/test@1.59.1):
+    resolution: {integrity: sha512-Cewa6lhJL4ayRllwnHU7F35Wia3VweBHVtW/3RKxBSg0Ml/11xv3PrProsD73V75WHVCa9sO73mtH66WS+IihQ==}
+    engines: {node: '>=20 <=24'}
+    peerDependencies:
+      '@axe-core/playwright': ^4.11.1
+      '@playwright/test': ^1.52.0
+    peerDependenciesMeta:
+      '@axe-core/playwright':
+        optional: true
+    dependencies:
+      '@grafana/e2e-selectors': 13.0.0-23624974663
+      '@playwright/test': 1.59.1
+      semver: 7.7.4
+      uuid: 13.0.0
+      yaml: 2.8.3
+    dev: true
 
   /@grafana/runtime@12.4.2(@openfeature/web-sdk@1.7.3)(@types/react@18.3.28)(eslint@9.39.4)(react-dom@18.3.1)(react@18.3.1)(typescript@5.9.3):
     resolution: {integrity: sha512-EKXEBwQ+sCQUyxt4phYRICCQCzRNPLcM5WvkiKMfpm9DQxgHLUQ9hX8HPptdN/BTzlWolOcQnwMYmcbWTMmCoA==}
@@ -9407,7 +9435,6 @@ packages:
     resolution: {integrity: sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==}
     engines: {node: '>=14.17'}
     hasBin: true
-    dev: false
 
   /typescript@5.9.3:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
@@ -9509,7 +9536,6 @@ packages:
   /uuid@13.0.0:
     resolution: {integrity: sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==}
     hasBin: true
-    dev: false
 
   /uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
@@ -9921,6 +9947,12 @@ packages:
   /yaml@1.10.3:
     resolution: {integrity: sha512-vIYeF1u3CjlhAFekPPAk2h/Kv4T3mAkMox5OymRiJQB0spDP10LHvt+K7G9Ny6NuuMAb25/6n1qyUjAcGNf/AA==}
     engines: {node: '>= 6'}
+
+  /yaml@2.8.3:
+    resolution: {integrity: sha512-AvbaCLOO2Otw/lW5bmh9d/WEdcDFdQp2Z2ZUH3pX9U2ihyUY0nvLv7J6TrWowklRGPYbB/IuIMfYgxaCPg5Bpg==}
+    engines: {node: '>= 14.6'}
+    hasBin: true
+    dev: true
 
   /yargs-parser@21.1.1:
     resolution: {integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==}
