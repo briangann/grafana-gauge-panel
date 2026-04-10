@@ -26,9 +26,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       [FieldConfigProperty.Unit]: {
         defaultValue: 'short',
       },
-      [FieldConfigProperty.Decimals]: {
-        defaultValue: 2,
-      },
+      [FieldConfigProperty.Decimals]: {},
       [FieldConfigProperty.Mappings]: {},
     },
   })
@@ -246,6 +244,13 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         defaultValue: 100,
         editor: RangeEditor,
         category: ['Limits'],
+      })
+      .addBooleanSwitch({
+        name: 'Wrap Values to Range',
+        path: 'wrapValues',
+        defaultValue: false,
+        category: ['Limits'],
+        description: 'Wrap out-of-range values using modulo arithmetic (e.g., -90 becomes 270 for a 0-360 compass)',
       })
 
       // Coloring

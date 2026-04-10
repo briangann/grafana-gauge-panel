@@ -74,6 +74,7 @@ const defaultOptions: GaugeOptions = {
   markerStartShape: 'circle',
   minValue: 0,
   maxValue: 100,
+  wrapValues: false,
   outerEdgeColor: '#000',
   innerColor: '#fff',
   pivotColor: '#333',

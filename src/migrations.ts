@@ -285,6 +285,7 @@ export const migrateDefaults = (angular: AngularOptions) => {
     // limits
     minValue: 0,
     maxValue: 100,
+    wrapValues: false,
     //
     outerEdgeColor: '#0099cc',
     innerColor: '#ffffff',
