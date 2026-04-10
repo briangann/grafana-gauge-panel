@@ -45,6 +45,16 @@ All changes noted here.
   custom/default colors, format migration, angular property cleanup)
 - Migration tests: 4 → 38, total suite: 200 → 234
 
+### Build & Config
+
+- Update `.config/` scaffolding from latest `@grafana/create-plugin`
+- Move shared bundler utilities (`constants.ts`, `utils.ts`) to `.config/bundler/`
+- Centralize webpack copy patterns into `.config/bundler/copyFiles.ts`
+- Add `react/jsx-runtime` and `react/jsx-dev-runtime` to externals for React 19 compatibility
+- Add `eslint.config.mjs` scaffolding header and update README with flat config example
+- Add `mise.toml` for Node.js version pinning (24.14.1)
+- Add AGENTS instructions, e2e testing guide, and build/validate skills
+
 ### CI
 
 - Replace reusable `grafana/plugin-ci-workflows@v7` with inline workflow
