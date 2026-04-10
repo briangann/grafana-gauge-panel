@@ -30,14 +30,12 @@ describe('RangeEditor', () => {
     expect(input?.value).toBe('100');
   });
 
-  it('updates option via onOptionsChange on blur', () => {
+  it('calls onChange with the new value on blur', () => {
     const { container } = render(<RangeEditor {...defaultProps} />);
     const input = container.querySelector('input')!;
     fireEvent.change(input, { target: { value: '200' } });
     fireEvent.blur(input);
-    expect(defaultProps.context.onOptionsChange).toHaveBeenCalledWith(
-      expect.objectContaining({ maxValue: 200 })
-    );
+    expect(defaultProps.onChange).toHaveBeenCalledWith(200);
   });
 
   it('auto-fills tick spacing when ticks would exceed limit', () => {
@@ -72,16 +70,11 @@ describe('RangeEditor', () => {
     const { container } = render(<RangeEditor {...props} />);
     const input = container.querySelector('input')!;
     // Change max from 100 to 200. major=10 -> 200/10=20, minor=5 -> 200/5=40
-    // Both within 100, so spacing preserved
+    // Both within 100, so spacing preserved — only onChange called
     fireEvent.change(input, { target: { value: '200' } });
     fireEvent.blur(input);
-    expect(props.context.onOptionsChange).toHaveBeenCalledWith(
-      expect.objectContaining({
-        maxValue: 200,
-        tickSpacingMajor: 10,
-        tickSpacingMinor: 5,
-      })
-    );
+    expect(props.onChange).toHaveBeenCalledWith(200);
+    expect(props.context.onOptionsChange).not.toHaveBeenCalled();
   });
 
   it('auto-fills tick spacing when minValue changes and ticks exceed limit', () => {
