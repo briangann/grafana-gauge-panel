@@ -93,7 +93,7 @@ export const GaugePanel: React.FC<Props> = ({
   return (
     <div className={cx(styles.wrapper, dimensionStyle)}>
       {ticksClamped && suggestedSpacing && (
-        <div className={styles.warningIcon}>
+        <div className={styles.warningIcon} data-testid="tick-clamp-warning">
           <Tooltip
             content={`Tick count exceeds maximum (100). Adjust tick spacing for your value range. Suggested major spacing: ${suggestedSpacing.majorSpacing}`}
           >

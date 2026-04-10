@@ -12,6 +12,7 @@ export const getComponentStyles = (theme: GrafanaTheme2) => {
       right: 4px;
       z-index: 1;
       color: ${theme.colors.warning.text};
+      opacity: 0.7;
       cursor: help;
     `,
     container: css`
