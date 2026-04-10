@@ -76,9 +76,15 @@ All changes noted here.
 
 - Add `computeTickSpacing` utility that calculates human-friendly
   ("nice number") tick intervals for any value range
-- Auto-fill tick spacing when min/max values change in the panel editor
+- Auto-fill tick spacing when min/max values change in the panel editor,
+  only when the new range would exceed the 100-tick limit (preserves
+  user-configured spacing otherwise)
 - Show warning icon with tooltip when tick count is clamped, including
   suggested spacing values
+- Use `@grafana/ui` `Input` component in `RangeEditor` for theme
+  consistency
+- Sync `RangeEditor` local state when external value prop changes
+  (undo/reset)
 
 ### E2E Testing
 

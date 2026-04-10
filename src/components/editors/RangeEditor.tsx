@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import { Input } from '@grafana/ui';
 import { computeTickSpacing } from '../Gauge/tick_spacing';
@@ -26,17 +26,23 @@ const MAX_TICKS = 100;
 interface Props extends StandardEditorProps<number> {}
 
 export const RangeEditor: React.FC<Props> = ({ value, item, context }) => {
-  const [localValue, setLocalValue] = useState<string>(String(value ?? ''));
+  const [editValue, setEditValue] = useState<string | null>(null);
 
   const editorItem = item as unknown as EditorItem;
   const editorContext = context as unknown as EditorContext;
 
-  useEffect(() => {
-    setLocalValue(String(value ?? ''));
+  const handleFocus = useCallback(() => {
+    setEditValue(String(value ?? ''));
   }, [value]);
 
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditValue(e.currentTarget.value);
+  }, []);
+
   const handleBlur = useCallback(() => {
-    const numericValue = parseFloat(localValue);
+    const raw = editValue ?? '';
+    setEditValue(null);
+    const numericValue = parseFloat(raw);
     if (isNaN(numericValue)) {
       return;
     }
@@ -66,13 +72,14 @@ export const RangeEditor: React.FC<Props> = ({ value, item, context }) => {
         [editorItem.path]: numericValue,
       });
     }
-  }, [localValue, editorItem, editorContext]);
+  }, [editValue, editorItem, editorContext]);
 
   return (
     <Input
       type="number"
-      value={localValue}
-      onChange={(e) => setLocalValue(e.currentTarget.value)}
+      value={editValue ?? String(value ?? '')}
+      onFocus={handleFocus}
+      onChange={handleChange}
       onBlur={handleBlur}
     />
   );

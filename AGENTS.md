@@ -64,7 +64,10 @@ pnpm exec jest --testNamePattern="Min Needle"
 |                          | thresholds) and `scaleLabelFontSize`                       |
 | `useNeedleAnimation.ts`  | Custom hook: D3 needle animation with ref-based tracking,  |
 |                          | cross-limit clamping, and buried-needle skip logic         |
-| `useTickComputations.ts` | Custom hook: tick spacing, angle, and label computation    |
+| `useTickComputations.ts` | Custom hook: tick spacing, angle, label computation, and   |
+|                          | `ticksClamped` flag (MAX_TICKS = 100 with iteration guard) |
+| `tick_spacing.ts`        | `computeTickSpacing` utility: nice-number tick intervals   |
+|                          | using 1-2-5 series for any value range                     |
 | `useGaugeDimensions.ts`  | Custom hook: SVG geometry, edge radii, tick/needle lengths |
 | `needle_utils.tsx`       | Needle angle math for the "crossing limits" feature;       |
 |                          | uses `maxNeedleAngle` (not `maxTickAngle`) for clamping    |
@@ -74,10 +77,12 @@ pnpm exec jest --testNamePattern="Min Needle"
 
 ### Other Key Files
 
-| File                       | Purpose                                                 |
-| -------------------------- | ------------------------------------------------------- |
-| `src/components/types.ts`  | `GaugeOptions` interface and all other TypeScript types |
-| `src/components/TickMaps/` | Custom editor UI for tick value mappings                |
+| File                           | Purpose                                                     |
+| ------------------------------ | ----------------------------------------------------------- |
+| `src/components/types.ts`      | `GaugeOptions` interface and all other TypeScript types     |
+| `src/components/TickMaps/`     | Custom editor UI for tick value mappings                    |
+| `src/components/editors/`      | Custom panel option editors (`RangeEditor` for min/max with |
+|                                | auto tick spacing when ticks would exceed limit)            |
 
 ### Build & Config
 
