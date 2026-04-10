@@ -24,7 +24,9 @@ All changes noted here.
 - Fix threshold band angular misalignment with gauge ticks when using
   non-default `zeroTickAngle`/`maxTickAngle` values; the `drawBand`
   rotation is now computed as `2 * zeroTickAngle + 180` instead of
-  being hardcoded to `maxTickAngle`
+  being hardcoded to `maxTickAngle` (fixes #109)
+- Fix Needle Length Stem ignoring decimal values by changing
+  `integer: true` to `integer: false` (fixes #110)
 
 ### Type Safety
 
