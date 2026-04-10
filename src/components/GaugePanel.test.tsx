@@ -135,6 +135,37 @@ const makeProps = (overrides: Partial<GaugeOptions> = {}, panelOverrides: Record
   } as any;
 };
 
+const makeFieldData = (
+  values: Array<number | string>,
+  config: Record<string, unknown>,
+  fieldType: FieldType = FieldType.number,
+  includeState = true
+) => ({
+  data: {
+    state: LoadingState.Done,
+    series: [
+      {
+        name: 'test',
+        fields: [
+          {
+            name: 'value',
+            type: fieldType,
+            values,
+            config,
+            ...(includeState ? { state: {} } : {}),
+          },
+        ],
+        length: values.length,
+      },
+    ],
+    timeRange: {
+      from: new Date('2024-01-01'),
+      to: new Date('2024-01-02'),
+      raw: { from: 'now-1h', to: 'now' },
+    },
+  },
+});
+
 describe('GaugePanel', () => {
   beforeEach(() => {
     mockGaugeProps.length = 0;
@@ -280,5 +311,78 @@ describe('GaugePanel', () => {
     expect(wrapper.tagName).toBe('DIV');
     const inner = wrapper.firstChild as HTMLElement;
     expect(inner.tagName).toBe('DIV');
+  });
+
+  describe('getValues - percent unit handling', () => {
+    it('handles percent unit with default range', () => {
+      render(<GaugePanel {...makeProps({}, makeFieldData([50], { unit: 'percent' }))} />);
+      expect(mockGaugeProps[0].displayValue).toBe(50);
+    });
+
+    it('handles percentunit unit with default range', () => {
+      render(<GaugePanel {...makeProps({}, makeFieldData([0.5], { unit: 'percentunit' }))} />);
+      expect(mockGaugeProps[0].displayValue).toBe(0.5);
+    });
+
+    it('respects custom min/max on percent fields', () => {
+      render(<GaugePanel {...makeProps({}, makeFieldData([30], { unit: 'percent', min: 10, max: 50 }))} />);
+      expect(mockGaugeProps[0].displayValue).toBe(30);
+    });
+
+    it('does not modify non-percent fields', () => {
+      render(<GaugePanel {...makeProps({}, makeFieldData([1024], { unit: 'bytes' }))} />);
+      expect(mockGaugeProps[0].displayValue).toBe(1024);
+    });
+
+    it('handles percent field with no prior state', () => {
+      render(<GaugePanel {...makeProps({}, makeFieldData([75], { unit: 'percent' }, FieldType.number, false))} />);
+      expect(mockGaugeProps[0].displayValue).toBe(75);
+    });
+  });
+
+  describe('getValues - display value extraction', () => {
+    it('passes numeric value to Gauge', () => {
+      render(<GaugePanel {...makeProps()} />);
+      expect(mockGaugeProps[0].displayValue).toBe(42);
+    });
+
+    it('passes 0 when value is a non-numeric string', () => {
+      const props = makeProps({}, makeFieldData(['not a number'], {}, FieldType.string));
+      render(<GaugePanel {...props} />);
+      expect(mockGaugeProps[0].displayValue).toBe(0);
+    });
+
+    it('formats display string for percent unit', () => {
+      const props = makeProps({}, makeFieldData([42], { unit: 'percent' }));
+      render(<GaugePanel {...props} />);
+      const formatted = mockGaugeProps[0].displayFormatted as string;
+      expect(formatted).toContain('42');
+      expect(formatted).toContain('%');
+    });
+
+    it('passes title when displayName is set', () => {
+      const props = makeProps({}, makeFieldData([42], { displayName: 'Temperature' }));
+      render(<GaugePanel {...props} />);
+      expect(mockGaugeProps[0].displayTitle).toBe('Temperature');
+    });
+
+    it('falls back to field name when displayName is absent', () => {
+      render(<GaugePanel {...makeProps()} />);
+      expect(mockGaugeProps[0].displayTitle).toBe('value');
+    });
+  });
+
+  describe('getValues - operator passthrough', () => {
+    it('uses mean operator', () => {
+      const props = makeProps({ operatorName: 'mean' }, makeFieldData([10, 20, 30], {}));
+      render(<GaugePanel {...props} />);
+      expect(mockGaugeProps[0].displayValue).toBe(20);
+    });
+
+    it('uses max operator', () => {
+      const props = makeProps({ operatorName: 'max' }, makeFieldData([10, 20, 30], {}));
+      render(<GaugePanel {...props} />);
+      expect(mockGaugeProps[0].displayValue).toBe(30);
+    });
   });
 });
