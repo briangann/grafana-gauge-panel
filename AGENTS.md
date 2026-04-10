@@ -53,7 +53,8 @@ pnpm exec jest --testNamePattern="Min Needle"
    and memoized render calls, produces the final SVG layout.
 
 4. **`src/migrations.ts`** — `PanelMigrationHandler()` migrates persisted panel configs
-   across plugin versions.
+   across plugin versions. Defines typed Angular migration interfaces
+   (`AngularPanel`, `AngularPanelProperties`, `AngularFieldConfig`, `AngularOptions`).
 
 ### Gauge Internals (`src/components/Gauge/`)
 
@@ -215,7 +216,7 @@ pnpm exec playwright test --ui    # Interactive UI mode
 | Custom hooks        | `use<Name>.ts`                    | `useNeedleAnimation.ts`                 |
 | Style files         | `<scope>_styles.ts`               | `gauge_styles.ts`                       |
 | Constants           | `SCREAMING_SNAKE_CASE`            | `DEFAULT_GAUGE_OPTIONS`                 |
-| Interfaces          | PascalCase                        | `GaugeOptions`, `TickMapItem`           |
+| Interfaces          | PascalCase                        | `GaugeOptions`, `TickMapItemType`       |
 | Functions/variables | camelCase                         | `computeNeedleAngle`, `getDisplayValue` |
 
 ### TypeScript

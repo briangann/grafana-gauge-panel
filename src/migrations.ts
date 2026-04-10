@@ -9,7 +9,7 @@ import {
 import { config } from '@grafana/runtime';
 import { satisfies, coerce } from 'semver';
 
-import { FontFamilies, GaugeOptions, GaugePresetOptions, Markers } from './components/types';
+import { FontFamilies, GaugeOptions, Markers } from './components/types';
 import { TickMapItemType } from 'components/TickMaps/types';
 
 interface AngularTickMap {
@@ -81,104 +81,108 @@ interface AngularOptions {
   operatorName: string;
 }
 
+/** Panel-level properties present during Angular-to-React migration. */
+interface AngularPanelProperties {
+  gauge?: AngularOptions;
+  format?: string;
+  decimals?: number;
+  thresholds?: string;
+  colors?: string[];
+  tickMaps?: AngularTickMap[];
+  operatorName?: string;
+  operatorNameOptions?: unknown;
+  fontSizes?: unknown;
+  fontTypes?: unknown;
+  gaugeDivId?: unknown;
+  markerEndEnabled?: boolean;
+  markerEndShape?: string;
+  markerStartEnabled?: boolean;
+  markerStartShape?: string;
+  markerEndShapes?: unknown;
+  markerStartShapes?: unknown;
+  svgContainer?: unknown;
+  unitFormats?: unknown;
+  mappingType?: number;
+  valueMaps?: unknown[];
+  rangeMaps?: unknown[];
+  mappingTypes?: unknown;
+  [key: string]: unknown;
+}
+
+type AngularPanel = PanelModel<GaugeOptions> & AngularPanelProperties;
+
+/** FieldConfig with extra top-level properties from angular migration. */
+interface AngularFieldConfig extends FieldConfigSource {
+  decimals?: number;
+  unit?: string;
+}
+
 /**
  * This is called when the panel is imported or reloaded
  */
 export const PanelMigrationHandler = (panel: PanelModel<GaugeOptions>): Partial<GaugeOptions> => {
-  // @ts-ignore
-  if (!panel.gauge) {
+  const ap = panel as AngularPanel;
+  if (!ap.gauge) {
     // not angular, just return the options if currently set
     if (!panel.options) {
       // This happens on the first load or when migrating from angular
-      return {} as any;
+      return {};
     }
     // have settings, return them unchanged
     return panel.options;
   }
-  // @ts-ignore
-  const newDefaults = migrateDefaults(panel.gauge);
+  const newDefaults = migrateDefaults(ap.gauge);
   const options = newDefaults;
   // using fieldConfig
-  // @ts-ignore
-  panel.fieldConfig = migrateFieldConfig(panel, panel.fieldConfig);
-  // @ts-ignore
-  if (panel.format) {
-    // @ts-ignore
-    options.unitFormat = panel.format;
-    // @ts-ignore
-    delete panel.format;
+  ap.fieldConfig = migrateFieldConfig(ap, ap.fieldConfig as AngularFieldConfig);
+  if (ap.format) {
+    (options as unknown as Record<string, unknown>).unitFormat = ap.format;
+    delete ap.format;
   }
-  // @ts-ignore
-  if (panel.decimals) {
-    // @ts-ignore
-    options.decimals = panel.decimals;
-    // @ts-ignore
-    delete panel.decimals;
+  if (ap.decimals) {
+    (options as unknown as Record<string, unknown>).decimals = ap.decimals;
+    delete ap.decimals;
   }
-  // @ts-ignore
-  if (panel.thresholds) {
-    // @ts-ignore
-    const migratedThresholds = migrateThresholds(panel.thresholds, panel.colors);
-    panel.fieldConfig.defaults.thresholds = migratedThresholds;
+  if (ap.thresholds) {
+    const migratedThresholds = migrateThresholds(ap.thresholds, ap.colors || []);
+    ap.fieldConfig.defaults.thresholds = migratedThresholds;
   }
-  // @ts-ignore
-  delete panel.colors;
-  // @ts-ignore
-  delete panel.thresholds;
-  // @ts-ignore
-  options.tickMapConfig = migrateTickMaps(panel.tickMaps) || [];
-  // @ts-ignore
-  delete panel.tickMaps;
+  delete ap.colors;
+  delete ap.thresholds;
+  options.tickMapConfig = migrateTickMaps(ap.tickMaps || []);
+  delete ap.tickMaps;
   // migrate mappingTypes/Value/RangeMaps
-  const newMaps = migrateValueAndRangeMaps(panel);
-  panel.fieldConfig.defaults.mappings = newMaps;
-  // @ts-ignore
-  delete panel.mappingType;
-  // @ts-ignore
-  delete panel.mappingTypes;
-  // @ts-ignore
-  delete panel.rangeMaps;
-  // @ts-ignore
-  delete panel.valueMaps;
+  const newMaps = migrateValueAndRangeMaps(ap);
+  ap.fieldConfig.defaults.mappings = newMaps;
+  delete ap.mappingType;
+  delete ap.mappingTypes;
+  delete ap.rangeMaps;
+  delete ap.valueMaps;
   // operator conversion
-  // @ts-ignore
-  options.operatorName = convertOperators(panel.operatorName);
-  // @ts-ignore
-  delete panel.operatorName;
-  // @ts-ignore
-  delete panel.operatorNameOptions;
+  options.operatorName = convertOperators(ap.operatorName || '');
+  delete ap.operatorName;
+  delete ap.operatorNameOptions;
   // general clean up
-  // @ts-ignore
-  delete panel.fontSizes;
-  // @ts-ignore
-  delete panel.fontTypes;
-  // @ts-ignore
-  delete panel.gaugeDivId;
-  // @ts-ignore
-  options.markerEndEnabled = panel.markerEndEnabled;
-  // @ts-ignore
-  options.markerEndShape = Markers.find((e) => e.name === panel.markerEndShape) || Markers[0];
-  // @ts-ignore
-  delete panel.markerEndShapes;
-  // @ts-ignore
-  options.markerStartEnabled = panel.markerStartEnabled;
-  // @ts-ignore
-  options.markerStartShape = Markers.find((e) => e.name === panel.markerStartShape) || Markers[1];
-  // @ts-ignore
-  delete panel.markerStartShapes;
-  // @ts-ignore
-  delete panel.operatorNameOptions;
-  // @ts-ignore
-  delete panel.svgContainer;
-  // @ts-ignore
-  delete panel.unitFormats;
-  // @ts-ignore
-  delete panel.gauge;
+  delete ap.fontSizes;
+  delete ap.fontTypes;
+  delete ap.gaugeDivId;
+  options.markerEndEnabled = ap.markerEndEnabled ?? false;
+  options.markerEndShape = (Markers.find((e) => e.name === ap.markerEndShape) || Markers[0]).name;
+  delete ap.markerEndShapes;
+  options.markerStartEnabled = ap.markerStartEnabled ?? false;
+  options.markerStartShape = (Markers.find((e) => e.name === ap.markerStartShape) || Markers[1]).name;
+  delete ap.markerStartShapes;
+  delete ap.operatorNameOptions;
+  delete ap.svgContainer;
+  delete ap.unitFormats;
+  delete ap.gauge;
   // clean up undefined
-  // @ts-ignore
-  Object.keys(panel).forEach((key) => (panel[key] === undefined ? delete panel[key] : {}));
-  // @ts-ignore
-  Object.keys(options).forEach((key) => (options[key] === undefined ? delete options[key] : {}));
+  Object.keys(ap).forEach((key) => (ap[key] === undefined ? delete ap[key] : {}));
+  Object.keys(options).forEach((key) => {
+    if ((options as unknown as Record<string, unknown>)[key] === undefined) {
+      delete (options as unknown as Record<string, unknown>)[key];
+    }
+  });
 
   return options;
 };
@@ -203,6 +207,7 @@ export const migrateTickMaps = (tickMaps: AngularTickMap[]) => {
   if (!tickMaps || tickMaps.length === 0) {
     return {
       tickMaps: newTickMaps,
+      enabled: true,
     };
   }
   let count = 0;
@@ -219,30 +224,25 @@ export const migrateTickMaps = (tickMaps: AngularTickMap[]) => {
   }
   return {
     tickMaps: newTickMaps,
+    enabled: true,
   };
 };
 
-export const migrateFieldConfig = (panel: PanelModel<GaugeOptions, any>, fieldConfig: FieldConfigSource<any>) => {
-  // @ts-ignore
+export const migrateFieldConfig = (panel: AngularPanel, fieldConfig: AngularFieldConfig) => {
   if (panel.decimals) {
-    // @ts-ignore
     fieldConfig.decimals = panel.decimals;
-    // @ts-ignore
     delete panel.decimals;
   }
   // units
-  // @ts-ignore
   if (panel.gauge) {
-    // @ts-ignore
     if (panel.gauge.gaugeUnits) {
-      // @ts-ignore
       fieldConfig.unit = panel.gauge.gaugeUnits;
     }
   }
   return fieldConfig;
 };
 
-export const migrateValueAndRangeMaps = (panel: any) => {
+export const migrateValueAndRangeMaps = (panel: AngularPanel) => {
   // value maps first
   panel.mappingType = 1;
   let newValueMappings: ValueMapping[] = [];
@@ -505,24 +505,6 @@ const migrateThresholds = (thresholds: string, thresholdColors: string[]) => {
   return migratedThresholds;
 };
 
-/**
- * This is called when the panel changes from another panel
- *
- * not currently used
- */
-export const PanelChangedHandler = (
-  panel: PanelModel<Partial<GaugeOptions>> | any,
-  prevPluginId: string,
-  prevOptions: any
-) => {
-  // Changing from angular d3gauge panel
-  if (prevPluginId === 'd3gauge' && prevOptions.angular) {
-    // console.log('detected old panel');
-    const oldOpts = prevOptions.angular;
-    // console.log(JSON.stringify(oldOpts));
-  }
-  return {};
-};
 
 // Roboto font was removed Dec 1, 2022, and releases after that date should not attempt to use it
 export const hasRobotoFont = () => {

@@ -35,7 +35,6 @@ export const useGaugeDimensions = (opts: GaugeDimensionOptions) => {
     return {
       SVGSize: opts.gaugeRadius * 2,
       needleWidth: opts.needleWidth * (opts.gaugeRadius / opts.ticknessGaugeBasis),
-      needleLengthNegCalc,
       tickWidthMajorCalc: opts.tickWidthMajor * (opts.gaugeRadius / opts.ticknessGaugeBasis),
       tickWidthMinorCalc: opts.tickWidthMinor * (opts.gaugeRadius / opts.ticknessGaugeBasis),
       outerEdgeRadius: opts.gaugeRadius - opts.padding,
