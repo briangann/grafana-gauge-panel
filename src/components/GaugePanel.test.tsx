@@ -339,4 +339,36 @@ describe('GaugePanel', () => {
       expect(mockGaugeProps[0].displayValue).toBe(75);
     });
   });
+
+  describe('getValues - display value extraction', () => {
+    it('passes numeric value to Gauge', () => {
+      render(<GaugePanel {...makeProps()} />);
+      expect(mockGaugeProps[0].displayValue).toBe(42);
+    });
+
+    it('passes 0 when value is a non-numeric string', () => {
+      const props = makeProps({}, makeFieldData(['not a number'], {}, FieldType.string));
+      render(<GaugePanel {...props} />);
+      expect(mockGaugeProps[0].displayValue).toBe(0);
+    });
+
+    it('formats display string for percent unit', () => {
+      const props = makeProps({}, makeFieldData([42], { unit: 'percent' }));
+      render(<GaugePanel {...props} />);
+      const formatted = mockGaugeProps[0].displayFormatted as string;
+      expect(formatted).toContain('42');
+      expect(formatted).toContain('%');
+    });
+
+    it('passes title when displayName is set', () => {
+      const props = makeProps({}, makeFieldData([42], { displayName: 'Temperature' }));
+      render(<GaugePanel {...props} />);
+      expect(mockGaugeProps[0].displayTitle).toBe('Temperature');
+    });
+
+    it('falls back to field name when displayName is absent', () => {
+      render(<GaugePanel {...makeProps()} />);
+      expect(mockGaugeProps[0].displayTitle).toBe('value');
+    });
+  });
 });
