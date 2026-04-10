@@ -99,8 +99,8 @@ describe('useGaugeDimensions', () => {
       const { result } = renderHook(() => useGaugeDimensions(defaultOpts));
       // tickStartMaj = 168
       // scaleLabelFontSize(12, 200, 200) = 12
-      // labelStart = 168 - 12 = 156
-      expect(result.current.labelStart).toBe(156);
+      // labelStart = 168 - 12 * 1.3 = 152.4
+      expect(result.current.labelStart).toBeCloseTo(152.4);
     });
   });
 

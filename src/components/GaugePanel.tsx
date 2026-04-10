@@ -107,7 +107,7 @@ export const GaugePanel: React.FC<Props> = ({
       return undefined;
     }
     const displayProcessor = getDisplayProcessor({ field: { config: metric.field }, theme: theme2 });
-    return (value: number) => formattedValueToString(displayProcessor(value));
+    return (value: number) => displayProcessor(value);
   }, [options.formatTickLabelsWithUnit, metric.field, theme2]);
 
   return (

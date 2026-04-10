@@ -241,7 +241,7 @@ describe('gauge_render', () => {
     it('renders text elements for each tick angle', () => {
       const result = renderMajorTickLabels(
         [60, 120, 180],
-        ['0', '50', '100'],
+        [{ text: '0' }, { text: '50' }, { text: '100' }],
         12,
         200,
         200,
@@ -268,7 +268,7 @@ describe('gauge_render', () => {
     });
 
     it('applies font properties', () => {
-      const result = renderMajorTickLabels([60], ['0'], 12, 200, 200, 'white', 'Courier', 140, 200, 200, mockTheme);
+      const result = renderMajorTickLabels([60], [{ text: '0' }], 12, 200, 200, 'white', 'Courier', 140, 200, 200, mockTheme);
       const { container } = render(<svg>{result}</svg>);
       const text = container.querySelector('text');
       expect(text?.getAttribute('fill')).toBe('white');
