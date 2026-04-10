@@ -36,6 +36,14 @@ All changes noted here.
 - Remove unused `React` import in `needle_utils.tsx`
 - Remove unexposed `needleLengthNegCalc` from `useGaugeDimensions` return
 
+### Testing
+
+- Add 34 migration tests covering `convertOperators`, `migrateTickMaps`,
+  `migrateFieldConfig`, `migrateValueAndRangeMaps`, `migrateDefaults`,
+  and full `PanelMigrationHandler` integration (threshold migration with
+  custom/default colors, format migration, angular property cleanup)
+- Migration tests: 4 → 38, total suite: 200 → 234
+
 ### CI
 
 - Replace reusable `grafana/plugin-ci-workflows@v7` with inline workflow
