@@ -77,8 +77,8 @@ devDependencies:
     specifier: 6.9.1
     version: 6.9.1
   '@testing-library/react':
-    specifier: 14.0.0
-    version: 14.0.0(@types/react@18.3.28)(react-dom@18.3.1)(react@18.3.1)
+    specifier: 15.0.7
+    version: 15.0.7(@types/react@18.3.28)(react-dom@18.3.1)(react@18.3.1)
   '@types/d3':
     specifier: 7.4.3
     version: 7.4.3
@@ -2768,17 +2768,17 @@ packages:
     resolution: {integrity: sha512-zSz2Z2HNyLjCplANTDyl3BcdQJc2k1+yyFoKhNRmCr7V7dY8o8q5m8uFTI1/Pg1kL+Hgrz6u3Xo6eFUB7l66cg==}
     dev: false
 
-  /@testing-library/dom@9.3.4:
-    resolution: {integrity: sha512-FlS4ZWlp97iiNWig0Muq8p+3rVDjRiYE+YKGbAqXOu9nwJFFOdL00kFpz42M+4huzYi86vAK1sOOfyOG45muIQ==}
-    engines: {node: '>=14'}
+  /@testing-library/dom@10.4.1:
+    resolution: {integrity: sha512-o4PXJQidqJl82ckFaXUeoAW+XysPLauYI43Abki5hABd853iMhitooc6znOnczgbTYmEP6U6/y1ZyKAIsvMKGg==}
+    engines: {node: '>=18'}
     dependencies:
       '@babel/code-frame': 7.29.0
       '@babel/runtime': 7.29.2
       '@types/aria-query': 5.0.4
-      aria-query: 5.1.3
-      chalk: 4.1.2
+      aria-query: 5.3.0
       dom-accessibility-api: 0.5.16
       lz-string: 1.5.0
+      picocolors: 1.1.1
       pretty-format: 27.5.1
     dev: true
 
@@ -2794,20 +2794,23 @@ packages:
       redent: 3.0.0
     dev: true
 
-  /@testing-library/react@14.0.0(@types/react@18.3.28)(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-S04gSNJbYE30TlIMLTzv6QCTzt9AqIF5y6s6SzVFILNcNvbV/jU96GeiTPillGQo+Ny64M/5PV7klNYYgv5Dfg==}
-    engines: {node: '>=14'}
+  /@testing-library/react@15.0.7(@types/react@18.3.28)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-cg0RvEdD1TIhhkm1IeYMQxrzy0MtUNfa3minv4MjbgcYzJAZ7yD0i0lwoPOTPr+INtiXFezt2o8xMSnyHhEn2Q==}
+    engines: {node: '>=18'}
     peerDependencies:
+      '@types/react': ^18.0.0
       react: ^18.0.0
       react-dom: ^18.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
     dependencies:
       '@babel/runtime': 7.29.2
-      '@testing-library/dom': 9.3.4
+      '@testing-library/dom': 10.4.1
+      '@types/react': 18.3.28
       '@types/react-dom': 18.3.7(@types/react@18.3.28)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-    transitivePeerDependencies:
-      - '@types/react'
     dev: true
 
   /@tootallnate/once@2.0.0:
@@ -3748,10 +3751,10 @@ packages:
   /argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
 
-  /aria-query@5.1.3:
-    resolution: {integrity: sha512-R5iJ5lkuHybztUfuOAznmboyjWq8O6sqNqtK7CLOqdydi54VNbORp49mb14KbWgG1QD3JFO9hJdZ+y4KutfdOQ==}
+  /aria-query@5.3.0:
+    resolution: {integrity: sha512-b0P0sZPKtyu8HkeRAfCq0IfURZK+SuwMjY1UXGBU27wpAiTwQAIlq56IbIO+ytk/JjS1fMR14ee5WBBfKi5J6A==}
     dependencies:
-      deep-equal: 2.2.3
+      dequal: 2.0.3
     dev: true
 
   /aria-query@5.3.2:
@@ -4816,30 +4819,6 @@ packages:
         optional: true
     dev: true
 
-  /deep-equal@2.2.3:
-    resolution: {integrity: sha512-ZIwpnevOurS8bpT4192sqAowWM76JDKSHYzMLty3BZGSswgq6pBaH3DhCSW5xVAZICZyKdOBPjwww5wfgT/6PA==}
-    engines: {node: '>= 0.4'}
-    dependencies:
-      array-buffer-byte-length: 1.0.2
-      call-bind: 1.0.8
-      es-get-iterator: 1.1.3
-      get-intrinsic: 1.3.0
-      is-arguments: 1.2.0
-      is-array-buffer: 3.0.5
-      is-date-object: 1.1.0
-      is-regex: 1.2.1
-      is-shared-array-buffer: 1.0.4
-      isarray: 2.0.5
-      object-is: 1.1.6
-      object-keys: 1.1.1
-      object.assign: 4.1.7
-      regexp.prototype.flags: 1.5.4
-      side-channel: 1.1.0
-      which-boxed-primitive: 1.1.1
-      which-collection: 1.0.2
-      which-typed-array: 1.1.20
-    dev: true
-
   /deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
 
@@ -4874,6 +4853,11 @@ packages:
   /delayed-stream@1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
+    dev: true
+
+  /dequal@2.0.3:
+    resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
+    engines: {node: '>=6'}
     dev: true
 
   /detect-libc@2.1.2:
@@ -5112,20 +5096,6 @@ packages:
   /es-errors@1.3.0:
     resolution: {integrity: sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw==}
     engines: {node: '>= 0.4'}
-    dev: true
-
-  /es-get-iterator@1.1.3:
-    resolution: {integrity: sha512-sPZmqHBe6JIiTfN5q2pEi//TwxmAFHwj/XEuYjTuse78i8KxaqMTTzxPoFKuzRpDpTJ+0NAbpfenkmH2rePtuw==}
-    dependencies:
-      call-bind: 1.0.8
-      get-intrinsic: 1.3.0
-      has-symbols: 1.1.0
-      is-arguments: 1.2.0
-      is-map: 2.0.3
-      is-set: 2.0.3
-      is-string: 1.1.1
-      isarray: 2.0.5
-      stop-iteration-iterator: 1.1.0
     dev: true
 
   /es-iterator-helpers@1.3.1:
@@ -6179,14 +6149,6 @@ packages:
     dependencies:
       loose-envify: 1.4.0
     dev: false
-
-  /is-arguments@1.2.0:
-    resolution: {integrity: sha512-7bVbi0huj/wrIAOzb8U1aszg9kdi3KN/CyU19CTI7tAoZYEZoL9yCDXpbXN+uPsuWnP02cyug1gleqq+TU+YCA==}
-    engines: {node: '>= 0.4'}
-    dependencies:
-      call-bound: 1.0.4
-      has-tostringtag: 1.0.2
-    dev: true
 
   /is-array-buffer@3.0.5:
     resolution: {integrity: sha512-DDfANUiiG2wC1qawP66qlTugJeL5HyzMpfr8lLK+jMQirGzNod0B12cFB/9q838Ru27sBwfw78/rdoU7RERz6A==}
@@ -7461,14 +7423,6 @@ packages:
   /object-inspect@1.13.4:
     resolution: {integrity: sha512-W67iLl4J2EXEGTbfeHCffrjDfitvLANg0UlX3wFUUSTx92KXRFegMHUVgSqE+wvhAbi4WqjGg9czysTV2Epbew==}
     engines: {node: '>= 0.4'}
-    dev: true
-
-  /object-is@1.1.6:
-    resolution: {integrity: sha512-F8cZ+KfGlSGi09lJT7/Nd6KJZ9ygtvYC0/UYYLI9nmQKLMnydpB9yvbv9K1uSkEu7FU9vYPmVwLg328tX+ot3Q==}
-    engines: {node: '>= 0.4'}
-    dependencies:
-      call-bind: 1.0.8
-      define-properties: 1.2.1
     dev: true
 
   /object-keys@1.1.1:
