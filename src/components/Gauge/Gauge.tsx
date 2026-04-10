@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo } from 'react';
 
 import { scaleLinear } from 'd3';
 
@@ -25,7 +25,6 @@ import { useNeedleAnimation } from './useNeedleAnimation';
 export const Gauge: React.FC<GaugeOptions> = (options) => {
   const divStyles = useStyles2(getWrapperStyles);
   const svgStyles = useStyles2(getSVGStyles);
-  const needleRef = useRef<SVGPathElement>(null);
   const theme2 = useTheme2();
 
   const {
@@ -81,7 +80,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     tickLengthMin: options.tickLengthMin,
   });
 
-  useNeedleAnimation(needleRef, {
+  useNeedleAnimation({
     displayValue: options.displayValue ?? NaN,
     minValue: options.minValue,
     maxValue: options.maxValue,
@@ -101,8 +100,6 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const needleElement = useMemo(
     () =>
       renderNeedle(
-        // eslint-disable-next-line react-hooks/refs -- ref is attached to SVG element, not read during render
-        needleRef,
         options.zeroNeedleAngle,
         originX,
         originY,

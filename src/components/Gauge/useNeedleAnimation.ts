@@ -4,6 +4,7 @@ import { interpolateString, select, type ScaleLinear } from 'd3';
 import { easeQuadIn } from 'd3-ease';
 
 import { getNeedleAngleMaximum, getNeedleAngleMinimum } from './needle_utils';
+import { NEEDLE_PATH_ID } from './gauge_render';
 
 interface NeedleAnimationOptions {
   displayValue: number;
@@ -22,7 +23,7 @@ interface NeedleAnimationOptions {
   valueScale: ScaleLinear<number, number>;
 }
 
-export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, opts: NeedleAnimationOptions) => {
+export const useNeedleAnimation = (opts: NeedleAnimationOptions) => {
   const lastNeedleAngleRef = useRef<number | null>(null);
 
   // Animate the needle to the current displayValue
@@ -30,7 +31,8 @@ export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, o
     if (opts.displayValue === null || isNaN(opts.displayValue)) {
       return;
     }
-    if (!needleRef.current) {
+    const needleEl = document.getElementById(NEEDLE_PATH_ID);
+    if (!needleEl) {
       return;
     }
 
@@ -117,7 +119,7 @@ export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, o
     // interruptions use the correct target angle
     lastNeedleAngleRef.current = needleAngleNew;
 
-    const needlePath = select(needleRef.current);
+    const needlePath = select(needleEl);
     const needleCentre = opts.originX + ',' + opts.originY;
 
     needlePath
@@ -145,6 +147,5 @@ export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, o
     opts.animateNeedleValueTransitionSpeed,
     opts.allowNeedleCrossLimits,
     opts.needleCrossLimitDegrees,
-    needleRef,
   ]);
 };

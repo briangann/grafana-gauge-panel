@@ -61,8 +61,9 @@ export const renderCircleGroup = (
   );
 };
 
+export const NEEDLE_PATH_ID = 'gauge-needle-path';
+
 export const renderNeedle = (
-  needleRef: React.RefObject<SVGPathElement>,
   zeroNeedleAngle: number,
   originX: number,
   originY: number,
@@ -84,7 +85,7 @@ export const renderNeedle = (
       {pathNeedle.length > 0 && (
         <>
           <path
-            ref={needleRef}
+            id={NEEDLE_PATH_ID}
             d={pathNeedle}
             markerEnd={markerEndEnabled ? 'url(#marker_' + endShape.name + ')' : undefined}
             markerStart={markerStartEnabled ? 'url(#marker_' + startShape.name + ')' : undefined}
