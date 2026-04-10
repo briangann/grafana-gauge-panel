@@ -86,6 +86,12 @@ All changes noted here.
 - Sync `RangeEditor` local state when external value prop changes
   (undo/reset)
 
+### Testing Infrastructure
+
+- Suppress jsdom SVG tag warnings (`<path>`, `<marker>`, `<defs>`) in
+  test output via `jest-setup.js` console filter
+- Suppress i18next promotional banner in test output
+
 ### E2E Testing
 
 - Add Playwright config with `@grafana/plugin-e2e` auth and Chromium project

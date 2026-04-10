@@ -84,6 +84,13 @@ and allows the needle to cross the limit (burying the needle).
 | Minimum Value | Minimum Value allowed on the face |
 | Maximum Value | Maximum Value allowed on the face |
 
+When you change the Minimum or Maximum Value, tick spacing is
+automatically recalculated if the new range would produce more than
+100 ticks. If the current tick spacing is still within the limit,
+your settings are preserved. A warning icon appears on the gauge
+when the tick count is clamped, with a tooltip showing suggested
+spacing values.
+
 #### Coloring
 
 ![Coloring](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-coloring.png)

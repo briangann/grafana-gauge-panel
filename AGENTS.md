@@ -90,7 +90,8 @@ pnpm exec jest --testNamePattern="Min Needle"
   Outputs AMD format. SWC transpiles to ES2015. Grafana runtime libs are externals.
 - **tsconfig.json** extends `.config/tsconfig.json`, with `noUnusedLocals` disabled.
 - **ESLint** extends Grafana's base rules (see Code Style for details).
-- **Jest** uses SWC transformer, jsdom environment, and `jest-setup.js` which sets `TZ=UTC` for snapshot consistency.
+- **Jest** uses SWC transformer, jsdom environment, and `jest-setup.js` which
+  filters jsdom SVG tag warnings and i18next promotional banners from test output.
 - CSS modules are mocked with `identity-obj-proxy` in tests.
 
 ## CI/CD
