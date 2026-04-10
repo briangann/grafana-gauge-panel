@@ -254,7 +254,7 @@ describe('useTickComputations', () => {
       expect(result.current.tickAnglesMaj.length).toBeGreaterThan(0);
     });
 
-    it('caps tick count at 500', () => {
+    it('caps tick count at 100', () => {
       const { result } = renderHook(() =>
         useTickComputations({
           ...defaultOpts,
@@ -262,7 +262,51 @@ describe('useTickComputations', () => {
           valueScale: makeScale(0, 100, 60, 300),
         })
       );
-      expect(result.current.tickAnglesMin.length).toBeLessThanOrEqual(500);
+      expect(result.current.tickAnglesMin.length).toBeLessThanOrEqual(100);
+    });
+  });
+
+  describe('ticksClamped flag', () => {
+    it('returns ticksClamped false for normal configs', () => {
+      const { result } = renderHook(() => useTickComputations(defaultOpts));
+      expect(result.current.ticksClamped).toBe(false);
+    });
+
+    it('returns ticksClamped true when major ticks exceed limit', () => {
+      const { result } = renderHook(() =>
+        useTickComputations({
+          ...defaultOpts,
+          tickSpacingMajor: 0.001,
+          valueScale: makeScale(0, 100, 60, 300),
+        })
+      );
+      expect(result.current.ticksClamped).toBe(true);
+    });
+
+    it('returns ticksClamped true when minor ticks exceed limit', () => {
+      const { result } = renderHook(() =>
+        useTickComputations({
+          ...defaultOpts,
+          tickSpacingMinor: 0.001,
+          valueScale: makeScale(0, 100, 60, 300),
+        })
+      );
+      expect(result.current.ticksClamped).toBe(true);
+    });
+
+    it('iteration guard prevents runaway loops with extreme range', () => {
+      const { result } = renderHook(() =>
+        useTickComputations({
+          ...defaultOpts,
+          minValue: 0,
+          maxValue: 6_000_000_000,
+          tickSpacingMajor: 10,
+          tickSpacingMinor: 1,
+          valueScale: makeScale(0, 6_000_000_000, 60, 300),
+        })
+      );
+      expect(result.current.tickAnglesMaj.length).toBeLessThanOrEqual(100);
+      expect(result.current.ticksClamped).toBe(true);
     });
   });
 
