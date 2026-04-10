@@ -137,9 +137,15 @@ export const renderTicks = (
   );
 };
 
+export interface TickLabel {
+  text: string;
+  unitLine?: string;
+}
+
 export const renderMajorTickLabels = (
   tickAnglesMaj: number[],
-  tickMajorLabels: string[],
+  formattedLabels: TickLabel[] | null,
+  plainLabels: string[],
   tickLabelFontSize: number,
   gaugeRadius: number,
   ticknessGaugeBasis: number,
@@ -151,29 +157,42 @@ export const renderMajorTickLabels = (
   theme: GrafanaTheme2
 ) => {
   let maxLabelLength = 0;
-  for (const item of tickMajorLabels) {
-    if (item.length > maxLabelLength) {
-      maxLabelLength = item.length;
+  const labels: TickLabel[] = formattedLabels ?? plainLabels.map((text) => ({ text }));
+  for (const item of labels) {
+    if (item.text.length > maxLabelLength) {
+      maxLabelLength = item.text.length;
     }
   }
   const tmpTickLabelFontSize = scaleLabelFontSize(tickLabelFontSize, gaugeRadius, ticknessGaugeBasis);
+  const fillColor = theme.visualization.getColorByName(tickLabelColor) || '#000000';
   return (
     <g id="majorTickLabels">
       {tickAnglesMaj.length > 0 &&
         tickAnglesMaj.map((item: number, index: number) => {
-          const labelText = tickMajorLabels[index];
+          const label = labels[index];
+          const xPos = labelXCalc(item, maxLabelLength, label.text, tmpTickLabelFontSize, labelStart, originX) || 0;
           return (
             <text
               key={`mtl_${index}`}
-              x={labelXCalc(item, maxLabelLength, labelText, tmpTickLabelFontSize, labelStart, originX) || 0}
+              x={xPos}
               y={labelYCalc(item, tmpTickLabelFontSize, labelStart, originY) || 0}
               fontSize={tmpTickLabelFontSize || 12}
               textAnchor="middle"
-              fill={theme.visualization.getColorByName(tickLabelColor) || '#000000'}
+              fill={fillColor}
               fontWeight={'bold'}
               fontFamily={tickFont || 'Inter'}
             >
-              {labelText}
+              {label.text}
+              {label.unitLine && (
+                <tspan
+                  x={xPos}
+                  dy={tmpTickLabelFontSize * 0.9}
+                  fontSize={tmpTickLabelFontSize * 0.7}
+                  fontWeight={'normal'}
+                >
+                  {label.unitLine}
+                </tspan>
+              )}
             </text>
           );
         })}

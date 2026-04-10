@@ -558,6 +558,13 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         },
         category: ['Gauge Readings'],
       })
+      .addBooleanSwitch({
+        name: 'Format Tick Labels with Unit',
+        path: 'formatTickLabelsWithUnit',
+        defaultValue: false,
+        category: ['Gauge Readings'],
+        description: 'Format tick labels using the configured unit (e.g., 100000000 displays as 100 MB/s)',
+      })
       // tick maps (value to text mapping)
       .addCustomEditor({
         name: 'Tick Maps',

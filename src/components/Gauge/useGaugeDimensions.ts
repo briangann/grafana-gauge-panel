@@ -45,7 +45,7 @@ export const useGaugeDimensions = (opts: GaugeDimensionOptions) => {
       needlePathStart: needleLengthNegCalc * -1,
       tickStartMaj: tickStartMajor,
       tickStartMin: tickStartMinor,
-      labelStart: tickStartMajor - tmpTickLabelFontSize,
+      labelStart: tickStartMajor - tmpTickLabelFontSize * 1.3,
     };
   }, [
     opts.gaugeRadius,

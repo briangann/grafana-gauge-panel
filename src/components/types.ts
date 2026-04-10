@@ -1,4 +1,4 @@
-import { SelectableValue, ThresholdsConfig } from '@grafana/data';
+import { FormattedValue, SelectableValue, ThresholdsConfig } from '@grafana/data';
 import { TickMapItemType } from './TickMaps/types';
 
 export interface GaugeOptions {
@@ -91,6 +91,8 @@ export interface GaugeOptions {
   //
   thresholds: ThresholdsConfig | undefined;
   onTicksClamped?: (clamped: boolean) => void;
+  formatTickLabelsWithUnit: boolean;
+  tickLabelFormatter?: (value: number) => FormattedValue;
 }
 
 export enum FontFamilies {

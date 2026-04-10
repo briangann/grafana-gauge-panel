@@ -44,7 +44,7 @@ export const GaugePanel: React.FC<Props> = ({
     [width, height]
   );
 
-  const getValues = (): FieldDisplay[] => {
+  const metrics = useMemo(() => {
     for (const frame of data.series) {
       for (const field of frame.fields) {
         if (field.config.unit === 'percent' || field.config.unit === 'percentunit') {
@@ -67,13 +67,7 @@ export const GaugePanel: React.FC<Props> = ({
       data: data.series,
       timeZone,
     });
-  };
-
-  const metrics = useMemo(
-    () => getValues(),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data.series, fieldConfig, options.operatorName, replaceVariables, theme2, timeZone]
-  );
+  }, [data.series, fieldConfig, options.operatorName, replaceVariables, theme2, timeZone]);
 
   const metric = metrics[0];
 
@@ -101,6 +95,16 @@ export const GaugePanel: React.FC<Props> = ({
     }
     return computeTickSpacing(options.minValue, options.maxValue);
   }, [ticksClamped, options.minValue, options.maxValue]);
+
+  const fieldUnit = metric.field.unit;
+  const fieldDecimals = metric.field.decimals;
+  const tickLabelFormatter = useMemo(() => {
+    if (!options.formatTickLabelsWithUnit) {
+      return undefined;
+    }
+    const displayProcessor = getDisplayProcessor({ field: { config: { unit: fieldUnit, decimals: fieldDecimals } }, theme: theme2 });
+    return (value: number) => displayProcessor(value);
+  }, [options.formatTickLabelsWithUnit, fieldUnit, fieldDecimals, theme2]);
 
   return (
     <div className={cx(styles.wrapper, dimensionStyle)}>
@@ -135,6 +139,7 @@ export const GaugePanel: React.FC<Props> = ({
           tickLengthMin={options.tickLengthMin * gaugeRadiusCalc}
           thresholds={metric.field.thresholds ?? fieldConfig.defaults.thresholds}
           onTicksClamped={onTicksClamped}
+          tickLabelFormatter={tickLabelFormatter}
         />
       </div>
     </div>

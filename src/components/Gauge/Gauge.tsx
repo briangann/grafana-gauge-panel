@@ -266,10 +266,32 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     ]
   );
 
+  const formattedTickLabels = useMemo(() => {
+    if (!options.tickLabelFormatter) {
+      return null;
+    }
+    const formatted = tickMajorLabels.map((label) => {
+      const num = parseFloat(label);
+      if (isNaN(num)) {
+        return { text: label, suffix: '' };
+      }
+      const fv = options.tickLabelFormatter!(num);
+      return { text: fv.text, suffix: ((fv.prefix ?? '') + (fv.suffix ?? '')).trim() };
+    });
+    const lastIndex = formatted.length - 1;
+    return formatted.map((item, i) => {
+      const showUnit =
+        (i === 0 || i === lastIndex || (i > 0 && item.suffix !== formatted[i - 1].suffix)) &&
+        item.suffix !== '';
+      return { text: item.text, unitLine: showUnit ? item.suffix : undefined };
+    });
+  }, [tickMajorLabels, options.tickLabelFormatter]);
+
   const majorTickLabelElements = useMemo(
     () =>
       renderMajorTickLabels(
         tickAnglesMaj,
+        formattedTickLabels,
         tickMajorLabels,
         options.tickLabelFontSize,
         options.gaugeRadius,
@@ -283,6 +305,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       ),
     [
       tickAnglesMaj,
+      formattedTickLabels,
       tickMajorLabels,
       options.tickLabelColor,
       options.tickLabelFontSize,

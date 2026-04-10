@@ -2,7 +2,7 @@
 
 All changes noted here.
 
-## v2.0.5 (unreleased)
+## v2.1.0 (unreleased)
 
 ### Bug Fixes (Rendering and Migration)
 
@@ -37,6 +37,13 @@ All changes noted here.
 - Add `AngularFieldConfig` interface for angular fieldConfig migration
 - Type `migrateValueAndRangeMaps` parameter (was `any`)
 - Replace `return {} as any` with `return {}` in `PanelMigrationHandler`
+
+### Code Quality
+
+- Remove all `eslint-disable` comments from `src/` by inlining
+  `getValues` into `useMemo` and narrowing dependency arrays
+- Increase tick label gap from 1.0x to 1.3x font size for better
+  spacing with unit-formatted labels
 
 ### Cleanup
 
@@ -101,6 +108,9 @@ All changes noted here.
   (e.g., -90 becomes 270 for a 0-360 range) (related to #13)
 - Remove hardcoded decimals default of 2; now uses Grafana's auto
 - Add provisioned compass dashboard for testing
+- Add "Format Tick Labels with Unit" option under Gauge Readings;
+  formats tick labels using the configured unit and decimals
+  (e.g., 100000000 displays as "100 MB/s") (related to #57)
 
 ### Panel Editor UX
 

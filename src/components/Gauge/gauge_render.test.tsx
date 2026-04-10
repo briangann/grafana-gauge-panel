@@ -241,6 +241,7 @@ describe('gauge_render', () => {
     it('renders text elements for each tick angle', () => {
       const result = renderMajorTickLabels(
         [60, 120, 180],
+        null,
         ['0', '50', '100'],
         12,
         200,
@@ -261,14 +262,14 @@ describe('gauge_render', () => {
     });
 
     it('renders empty group when no angles', () => {
-      const result = renderMajorTickLabels([], [], 12, 200, 200, 'black', 'Inter', 140, 200, 200, mockTheme);
+      const result = renderMajorTickLabels([], null, [], 12, 200, 200, 'black', 'Inter', 140, 200, 200, mockTheme);
       const { container } = render(<svg>{result}</svg>);
       const texts = container.querySelectorAll('text');
       expect(texts).toHaveLength(0);
     });
 
     it('applies font properties', () => {
-      const result = renderMajorTickLabels([60], ['0'], 12, 200, 200, 'white', 'Courier', 140, 200, 200, mockTheme);
+      const result = renderMajorTickLabels([60], null, ['0'], 12, 200, 200, 'white', 'Courier', 140, 200, 200, mockTheme);
       const { container } = render(<svg>{result}</svg>);
       const text = container.querySelector('text');
       expect(text?.getAttribute('fill')).toBe('white');
