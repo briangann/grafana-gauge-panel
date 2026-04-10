@@ -12,7 +12,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
 
 This panel plugin provides a [D3-based](https://d3js.org) gauge panel
-for [Grafana](https://www.grafana.com) 10.x/11.x/12.x
+for [Grafana](https://www.grafana.com) 10.0+
 
 ## Screenshots
 
