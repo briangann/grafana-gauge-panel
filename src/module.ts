@@ -10,6 +10,7 @@ import {
 import { PanelMigrationHandler } from './migrations';
 import { TickMapEditor } from 'components/TickMaps/TickMapEditor';
 import { TickMapItemType } from 'components/TickMaps/types';
+import { RangeEditor } from 'components/editors/RangeEditor';
 
 export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
   .setMigrationHandler(PanelMigrationHandler)
@@ -219,26 +220,22 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         showIf: (c) => c.markerStartEnabled === true,
       })
       // Limits
-      .addNumberInput({
+      .addCustomEditor({
         name: 'Minimum Value',
+        id: 'minValue',
         path: 'minValue',
-        description: 'Minimum value displayed by the gauge (left side)',
+        description: 'Minimum value displayed by the gauge (left side). Changing this auto-adjusts tick spacing.',
         defaultValue: 0,
-        settings: {
-          placeHolder: '0',
-          integer: false,
-        },
+        editor: RangeEditor,
         category: ['Limits'],
       })
-      .addNumberInput({
+      .addCustomEditor({
         name: 'Maximum Value',
+        id: 'maxValue',
         path: 'maxValue',
-        description: 'Maximum value displayed by the gauge (right side)',
+        description: 'Maximum value displayed by the gauge (right side). Changing this auto-adjusts tick spacing.',
         defaultValue: 100,
-        settings: {
-          placeHolder: '100',
-          integer: false,
-        },
+        editor: RangeEditor,
         category: ['Limits'],
       })
 
