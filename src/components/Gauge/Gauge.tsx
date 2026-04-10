@@ -150,14 +150,14 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   ]);
 
   const valueColor = useMemo(() => {
-    if (options.showThresholdStateOnValue && options.displayValue && options.thresholds) {
+    if (options.showThresholdStateOnValue && options.displayValue !== null && options.thresholds) {
       return getActiveThreshold(options.displayValue, options.thresholds.steps).color;
     }
     return options.unitsLabelColor;
   }, [options.showThresholdStateOnValue, options.displayValue, options.thresholds, options.unitsLabelColor]);
 
   const titleColor = useMemo(() => {
-    if (options.showThresholdStateOnTitle && options.displayValue && options.thresholds) {
+    if (options.showThresholdStateOnTitle && options.displayValue !== null && options.thresholds) {
       return getActiveThreshold(options.displayValue, options.thresholds.steps).color;
     }
     return options.unitsLabelColor;

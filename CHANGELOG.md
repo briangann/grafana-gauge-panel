@@ -4,6 +4,47 @@ All changes noted here.
 
 ## v2.0.5 (unreleased)
 
+### Bug Fixes (Rendering and Migration)
+
+- Fix `for...in` iterating array indices instead of values in
+  `renderMajorTickLabels`, causing incorrect `maxLabelLength` calculation
+  for font scaling
+- Fix falsy-zero bug where `displayValue` of `0` skipped threshold
+  coloring in `renderCircleGroup`, `valueColor`, and `titleColor`
+  (use strict `!== null` check matching the `number | null` type)
+- Add React `key` props to threshold band elements to fix missing key
+  warnings and prevent incorrect reconciliation
+- Fix `migrateTickMaps` missing `enabled` field in return value
+- Fix marker shape migration assigning `MarkerType` object to `string`
+  field (now correctly extracts `.name`)
+
+### Type Safety
+
+- Replace `any` type on `dToR` parameter with `number`
+- Replace `any` types on `panelHeight`/`panelWidth` with `number`
+- Add `AngularPanelProperties` interface and `AngularPanel` type for
+  migration code, eliminating all 38 `@ts-ignore` suppressions
+- Add `AngularFieldConfig` interface for angular fieldConfig migration
+- Type `migrateValueAndRangeMaps` parameter (was `any`)
+- Replace `return {} as any` with `return {}` in `PanelMigrationHandler`
+
+### Cleanup
+
+- Remove unused `GaugeModel` interface
+- Remove commented-out `MarkerStartShapes`/`MarkerEndShapes` arrays
+- Remove unused `GaugePresetOptions` imports and commented-out preset block
+- Remove unused `PanelChangedHandler` export
+- Remove unused `React` import in `needle_utils.tsx`
+- Remove unexposed `needleLengthNegCalc` from `useGaugeDimensions` return
+
+### Testing
+
+- Add 34 migration tests covering `convertOperators`, `migrateTickMaps`,
+  `migrateFieldConfig`, `migrateValueAndRangeMaps`, `migrateDefaults`,
+  and full `PanelMigrationHandler` integration (threshold migration with
+  custom/default colors, format migration, angular property cleanup)
+- Migration tests: 4 → 38, total suite: 200 → 234
+
 ### Build & Config
 
 - Update `.config/` scaffolding from latest `@grafana/create-plugin`

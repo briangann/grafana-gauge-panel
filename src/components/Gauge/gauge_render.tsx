@@ -29,7 +29,7 @@ export const renderCircleGroup = (
 ) => {
   let gaugeFaceColor = innerColor;
   if (showThresholdStateOnBackground) {
-    if (displayValue && thresholds) {
+    if (displayValue !== null && thresholds) {
       const aThreshold = getActiveThreshold(displayValue, thresholds.steps);
       gaugeFaceColor = aThreshold.color;
     }
@@ -151,7 +151,7 @@ export const renderMajorTickLabels = (
   theme: GrafanaTheme2
 ) => {
   let maxLabelLength = 0;
-  for (const item in tickMajorLabels) {
+  for (const item of tickMajorLabels) {
     if (item.length > maxLabelLength) {
       maxLabelLength = item.length;
     }
@@ -304,15 +304,24 @@ export const renderThresholdBands = (
     <>
       {showThresholdBandLowerRange &&
         lowerBand &&
-        drawBand(lowerBand.min, lowerBand.max, lowerBand.color, originX, originY, bandOptions, theme)}
+        drawBand(lowerBand.min, lowerBand.max, lowerBand.color, originX, originY, bandOptions, theme, 'band-lower')}
       {showThresholdBandMiddleRange &&
         innerBands &&
         innerBands.map((aBand: ExpandedThresholdBand) => {
-          return drawBand(aBand.min, aBand.max, aBand.color, originX, originY, bandOptions, theme);
+          return drawBand(
+            aBand.min,
+            aBand.max,
+            aBand.color,
+            originX,
+            originY,
+            bandOptions,
+            theme,
+            `band-middle-${aBand.index}`
+          );
         })}
       {showThresholdBandUpperRange &&
         upperBand &&
-        drawBand(upperBand.min, upperBand.max, upperBand.color, originX, originY, bandOptions, theme)}
+        drawBand(upperBand.min, upperBand.max, upperBand.color, originX, originY, bandOptions, theme, 'band-upper')}
     </>
   );
 };

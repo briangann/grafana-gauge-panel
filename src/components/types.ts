@@ -66,8 +66,8 @@ export interface GaugeOptions {
   tickSpacingMajor: number;
   tickSpacingMinor: number;
   // passed in by grafana
-  panelHeight?: any;
-  panelWidth?: any;
+  panelHeight?: number;
+  panelWidth?: number;
   panelId?: number;
 
   // tickmaps
@@ -88,9 +88,6 @@ export interface GaugeOptions {
   //
   thresholds: ThresholdsConfig | undefined;
 }
-
-// tslint:disable-next-line
-export interface GaugeModel {}
 
 export enum FontFamilies {
   ARIAL = 'Arial',
@@ -192,18 +189,6 @@ export const Markers: MarkerType[] = [
   { id: 4, name: 'arrow-inverse', path: 'M 0,0 m 5,5 L -5,0 L 5,-5 Z', viewBox: '-5 -5 10 10' },
 ];
 
-/*
-export const MarkerStartShapes = [
-  { id: 0, name: 'circle' },
-  { id: 1, name: 'square' },
-  { id: 2, name: 'stub' },
-];
-
-export const MarkerEndShapes = [
-  { id: 0, name: 'arrow' }
-];
-*/
-
 export const MarkerOptions: SelectableValue[] = [
   { value: 'arrow', label: 'arrow' },
   { value: 'circle', label: 'circle' },
@@ -218,15 +203,3 @@ export interface ExpandedThresholdBand {
   max: number;
   color: string;
 }
-
-export interface GaugePresetType {
-  id: number;
-  name: string;
-  faceColor: string;
-}
-
-export const GaugePresetOptions: GaugePresetType[] = [
-  { id: 0, name: 'Default', faceColor: '#FFFFFF' },
-  { id: 1, name: 'Red', faceColor: '#FF0000' },
-  { id: 2, name: 'Compass', faceColor: '#00F0FF' },
-];
