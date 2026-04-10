@@ -38,6 +38,13 @@ All changes noted here.
 - Type `migrateValueAndRangeMaps` parameter (was `any`)
 - Replace `return {} as any` with `return {}` in `PanelMigrationHandler`
 
+### Code Quality
+
+- Remove all `eslint-disable` comments from `src/` by inlining
+  `getValues` into `useMemo` and narrowing dependency arrays
+- Increase tick label gap from 1.0x to 1.3x font size for better
+  spacing with unit-formatted labels
+
 ### Cleanup
 
 - Remove unused `GaugeModel` interface
