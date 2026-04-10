@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useId, useMemo } from 'react';
 
 import { scaleLinear } from 'd3';
 
@@ -25,6 +25,7 @@ import { useNeedleAnimation } from './useNeedleAnimation';
 export const Gauge: React.FC<GaugeOptions> = (options) => {
   const divStyles = useStyles2(getWrapperStyles);
   const svgStyles = useStyles2(getSVGStyles);
+  const needleId = useId();
   const theme2 = useTheme2();
 
   const {
@@ -80,7 +81,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     tickLengthMin: options.tickLengthMin,
   });
 
-  useNeedleAnimation({
+  useNeedleAnimation(needleId, {
     displayValue: options.displayValue ?? NaN,
     minValue: options.minValue,
     maxValue: options.maxValue,
@@ -100,6 +101,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const needleElement = useMemo(
     () =>
       renderNeedle(
+        needleId,
         options.zeroNeedleAngle,
         originX,
         originY,
@@ -114,6 +116,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         theme2
       ),
     [
+      needleId,
       options.zeroNeedleAngle,
       originX,
       originY,

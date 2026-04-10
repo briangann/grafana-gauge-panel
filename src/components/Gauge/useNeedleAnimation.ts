@@ -4,7 +4,6 @@ import { interpolateString, select, type ScaleLinear } from 'd3';
 import { easeQuadIn } from 'd3-ease';
 
 import { getNeedleAngleMaximum, getNeedleAngleMinimum } from './needle_utils';
-import { NEEDLE_PATH_ID } from './gauge_render';
 
 interface NeedleAnimationOptions {
   displayValue: number;
@@ -23,7 +22,7 @@ interface NeedleAnimationOptions {
   valueScale: ScaleLinear<number, number>;
 }
 
-export const useNeedleAnimation = (opts: NeedleAnimationOptions) => {
+export const useNeedleAnimation = (needleId: string, opts: NeedleAnimationOptions) => {
   const lastNeedleAngleRef = useRef<number | null>(null);
 
   // Animate the needle to the current displayValue
@@ -31,7 +30,7 @@ export const useNeedleAnimation = (opts: NeedleAnimationOptions) => {
     if (opts.displayValue === null || isNaN(opts.displayValue)) {
       return;
     }
-    const needleEl = document.getElementById(NEEDLE_PATH_ID);
+    const needleEl = document.getElementById(needleId);
     if (!needleEl) {
       return;
     }
@@ -133,6 +132,7 @@ export const useNeedleAnimation = (opts: NeedleAnimationOptions) => {
         );
       });
   }, [
+    needleId,
     opts.displayValue,
     opts.originX,
     opts.originY,

@@ -104,7 +104,7 @@ describe('gauge_render', () => {
 
   describe('renderNeedle', () => {
     it('renders a needle path when path length is positive', () => {
-      const result = renderNeedle(
+      const result = renderNeedle('test-needle',
         60,
         200,
         200,
@@ -126,14 +126,14 @@ describe('gauge_render', () => {
     });
 
     it('renders needle group even with zero-length path', () => {
-      const result = renderNeedle(60, 200, 200, 0, 0, 'arrow', 'circle', false, false, 'red', 2, mockTheme);
+      const result = renderNeedle('test-needle',60, 200, 200, 0, 0, 'arrow', 'circle', false, false, 'red', 2, mockTheme);
       const { container } = render(<svg>{result}</svg>);
       const g = container.querySelector('#needle');
       expect(g).not.toBeNull();
     });
 
     it('sets markerEnd when enabled', () => {
-      const result = renderNeedle(
+      const result = renderNeedle('test-needle',
         60,
         200,
         200,
@@ -154,7 +154,7 @@ describe('gauge_render', () => {
     });
 
     it('sets markerStart when enabled', () => {
-      const result = renderNeedle(
+      const result = renderNeedle('test-needle',
         60,
         200,
         200,

@@ -12,10 +12,10 @@ permissions: read-all
 jobs:
   release:
     runs-on: ubuntu-latest
-    permissions: # new line
-      id-token: write # new line
-      contents: write # new line
-      attestations: write # new line
+    permissions:
+      id-token: write
+      contents: write
+      attestations: write
     steps:
       - uses: actions/checkout@v6
         with:
