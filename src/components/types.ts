@@ -6,6 +6,8 @@ export interface GaugeOptions {
   displayFormatted: string;
   displayValue: number | null;
   showTitle: boolean;
+  showValue: boolean;
+  showTickLabels: boolean;
   displayTitle: string;
   // General
   operatorName: string;

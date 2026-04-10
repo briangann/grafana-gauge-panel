@@ -353,11 +353,11 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
           {circleGroup}
           {thresholdBands}
           {ticks}
-          {majorTickLabelElements}
+          {options.showTickLabels !== false && majorTickLabelElements}
           {needleMarkers}
           {needleElement}
           {titleLabel}
-          {valueLabel}
+          {options.showValue !== false && valueLabel}
         </g>
       </svg>
     </div>

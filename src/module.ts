@@ -42,6 +42,20 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         category: ['Standard options'],
         description: 'Show the field or series name above the value on the gauge',
       })
+      .addBooleanSwitch({
+        name: 'Show Value on Gauge',
+        path: 'showValue',
+        defaultValue: true,
+        category: ['Standard options'],
+        description: 'Show the numeric value on the gauge',
+      })
+      .addBooleanSwitch({
+        name: 'Show Tick Labels',
+        path: 'showTickLabels',
+        defaultValue: true,
+        category: ['Standard options'],
+        description: 'Show numeric labels next to the major ticks',
+      })
       // stat (operator)
       .addSelect({
         name: 'Stat',
