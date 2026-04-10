@@ -157,9 +157,9 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         name: 'Needle Cross Limit Degrees',
         path: 'needleCrossLimitDegrees',
         description: 'How many degrees to cross below and above minimum and maximum limit, default is 5 degrees',
-        defaultValue: 10,
+        defaultValue: 5,
         settings: {
-          placeHolder: '10',
+          placeHolder: '5',
           min: 0,
           integer: true,
         },
