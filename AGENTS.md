@@ -20,6 +20,7 @@ pnpm test:ci          # Jest CI mode (max 4 workers)
 pnpm lint             # ESLint
 pnpm lint:fix         # ESLint + Prettier fix
 pnpm typecheck        # tsc --noEmit
+pnpm e2e              # Playwright e2e tests
 pnpm server           # Start Grafana via Docker Compose
 pnpm spellcheck       # cspell across all source files
 ```
@@ -108,6 +109,17 @@ gh pr checks <PR-number>
 | PR File Changes          | `pr-files.yml`               | PRs                           |
 | Create Plugin Update     | `cp-update.yml`              | `workflow_dispatch`           |
 
+### CI Pipeline
+
+The CI workflow (`ci.yml`) is an inline workflow (not a reusable workflow call) with three jobs:
+
+1. **build** — pnpm install, typecheck, lint, unit tests, production build, plugin signing,
+   packaging, and validation. Conditionally builds/tests Go backend if `Magefile.go` exists.
+2. **resolve-versions** — uses `grafana/plugin-actions/e2e-version` to resolve the Grafana
+   image matrix (skips `grafana-dev`, includes React 19 preview).
+3. **playwright-tests** — runs Playwright e2e tests against each resolved Grafana version
+   in a Docker Compose environment. Uploads test reports as artifacts.
+
 ### Action Pinning
 
 Pin all GitHub Actions to **version tags** (e.g., `@v6`, `@v4.0.0`), not commit SHAs.
@@ -159,8 +171,28 @@ npx @grafana/create-plugin@latest update
 
 ## Docker Development
 
-`docker-compose.yaml` + `provisioning/` folder provides a local Grafana instance
-for manual testing. Run `pnpm server` to start it.
+`docker-compose.yaml` extends `.config/docker-compose-base.yaml` and adds:
+
+- Port mapping (3000:3000)
+- Healthcheck (wget against `/api/health`)
+- Volume mounts for `dist/` (plugin) and `provisioning/` (dashboards, datasources)
+- `GF_DEFAULT_APP_MODE=development`
+
+The `provisioning/` folder contains pre-configured dashboards and a TestData datasource.
+Run `pnpm server` to start it.
+
+## E2E Testing (Playwright)
+
+Uses `@grafana/plugin-e2e` with Playwright. Config is in `playwright.config.ts`.
+
+- Auth project logs in as admin and stores session state
+- Chromium project runs tests from `tests/` directory with stored auth
+- Base URL defaults to `http://localhost:3000` (override with `GRAFANA_URL` env var)
+
+```bash
+pnpm e2e                          # Run all e2e tests
+pnpm exec playwright test --ui    # Interactive UI mode
+```
 
 ## Code Style Guidelines
 

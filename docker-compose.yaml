@@ -1,10 +1,34 @@
-version: '3.0'
-
 services:
   grafana:
-    build:
-      args:
-        grafana_version: ${GRAFANA_VERSION:-10.1.5}
     extends:
       file: .config/docker-compose-base.yaml
       service: grafana
+    ports:
+      - 3000:3000/tcp
+    environment:
+      GF_DEFAULT_APP_MODE: development
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /etc/grafana/provisioning/dashboards/panels.json
+    volumes:
+      - ./dist:/var/lib/grafana/plugins/briangann-gauge-panel
+      - ./provisioning:/etc/grafana/provisioning
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+#  playwright:
+#    build:
+#      context: .
+#      dockerfile: test/Dockerfile
+#    environment:
+#      - GRAFANA_URL=http://grafana:3000
+#    volumes:
+#      - ./test:/app/test
+#      - ./playwright-report:/app/playwright-report
+#    depends_on:
+#      grafana:
+#        condition: service_healthy
+#    profiles:
+#      - playwright

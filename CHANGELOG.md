@@ -2,6 +2,57 @@
 
 All changes noted here.
 
+## v2.0.5 (unreleased)
+
+### CI
+
+- Replace reusable `grafana/plugin-ci-workflows@v7` with inline workflow
+  (build, lint, typecheck, unit tests, Playwright e2e with Grafana version matrix)
+- Enable Playwright report artifact uploading
+- Bump `grafana/plugin-actions/build-plugin` v1.0.2 → v1.2.0
+- Bump `grafana/plugin-actions/e2e-version` v1.1.2 → v1.2.1
+- Bump `magefile/mage-action` v3.1.0 → v4.0.0
+- Bump `actions/upload-artifact` v6 → v7, `actions/download-artifact` v7 → v8
+- Bump `actions/github-script` v8.0.0 → v9.0.0
+- Remove `master` branch references, pin actions to version tags
+- Clean up scaffolding comments in release.yml
+
+### E2E Testing
+
+- Add Playwright config with `@grafana/plugin-e2e` auth and Chromium project
+- Add `tests/grafana-version.spec.ts` smoke test
+- Replace Cypress e2e scripts with `playwright test`
+- Add `@playwright/test` and `@grafana/plugin-e2e` dev dependencies
+
+### Docker & Provisioning
+
+- Rewrite `docker-compose.yaml` with healthcheck, port mapping, volume mounts
+- Add provisioning dashboards, datasource, and provider configs
+
+### Plugin Compatibility
+
+- Bump `grafanaDependency` from `>=9.3.16` to `>=10 <=13.0`
+- Remove deprecated `grafanaVersion` field
+
+### Dependencies
+
+- `@testing-library/react` 14.0.0 → 15.0.7 (fixes `ReactDOMTestUtils.act` warnings)
+- `@grafana/eslint-config` 8.2.0 → 9.0.0
+- `@stylistic/eslint-plugin-ts` 2.13.0 → 4.4.1
+- `@types/node` 20.19.37 → 25.5.2
+- `cspell` 7.3.8 → 10.0.0
+- `eslint-config-prettier` 8.10.2 → 10.1.8
+- `eslint-plugin-jsdoc` 51.4.1 → 62.9.0
+- `eslint-plugin-react-hooks` 5.2.0 → 7.0.1
+- `glob` 10.5.0 → 13.0.6
+- Remove deprecated `@types/glob` (glob 13 ships own types)
+
+### Refactor
+
+- Replace needle `useRef` with `useId()` + DOM id lookup
+  (fixes `react-hooks/refs` lint error from `eslint-plugin-react-hooks@7`,
+  gives each gauge instance a unique needle id for multi-panel dashboards)
+
 ## v2.0.4 (unreleased)
 
 ### Bug Fixes

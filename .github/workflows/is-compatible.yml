@@ -4,6 +4,8 @@ on: [pull_request]
 jobs:
   compatibilitycheck:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v6
       # pnpm action uses the packageManager field in package.json to
@@ -12,7 +14,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: 'pnpm'
           cache-dependency-path: pnpm-lock.yaml
       - name: Install dependencies
@@ -26,6 +28,7 @@ jobs:
           "module.tsx" \))"
 
           echo "modulets=${MODULETS}" >> $GITHUB_OUTPUT
+
       - name: Compatibility check
         uses: grafana/plugin-actions/is-compatible@is-compatible/v1.0.3
         with:

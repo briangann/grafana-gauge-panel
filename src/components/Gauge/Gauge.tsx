@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useId, useMemo } from 'react';
 
 import { scaleLinear } from 'd3';
 
@@ -25,7 +25,7 @@ import { useNeedleAnimation } from './useNeedleAnimation';
 export const Gauge: React.FC<GaugeOptions> = (options) => {
   const divStyles = useStyles2(getWrapperStyles);
   const svgStyles = useStyles2(getSVGStyles);
-  const needleRef = useRef<SVGPathElement>(null);
+  const needleId = useId();
   const theme2 = useTheme2();
 
   const {
@@ -81,7 +81,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     tickLengthMin: options.tickLengthMin,
   });
 
-  useNeedleAnimation(needleRef, {
+  useNeedleAnimation(needleId, {
     displayValue: options.displayValue ?? NaN,
     minValue: options.minValue,
     maxValue: options.maxValue,
@@ -101,7 +101,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   const needleElement = useMemo(
     () =>
       renderNeedle(
-        needleRef,
+        needleId,
         options.zeroNeedleAngle,
         originX,
         originY,
@@ -116,6 +116,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
         theme2
       ),
     [
+      needleId,
       options.zeroNeedleAngle,
       originX,
       originY,
@@ -321,10 +322,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     [valueColor, options.displayFormatted, options.valueFont, valueFontSize, valueLabelY, labelStart, originX, theme2]
   );
 
-  const needleMarkers = useMemo(
-    () => createNeedleMarkers(options.needleColor, theme2),
-    [options.needleColor, theme2]
-  );
+  const needleMarkers = useMemo(() => createNeedleMarkers(options.needleColor, theme2), [options.needleColor, theme2]);
 
   return (
     <div className={divStyles}>

@@ -22,7 +22,7 @@ interface NeedleAnimationOptions {
   valueScale: ScaleLinear<number, number>;
 }
 
-export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, opts: NeedleAnimationOptions) => {
+export const useNeedleAnimation = (needleId: string, opts: NeedleAnimationOptions) => {
   const lastNeedleAngleRef = useRef<number | null>(null);
 
   // Animate the needle to the current displayValue
@@ -30,7 +30,8 @@ export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, o
     if (opts.displayValue === null || isNaN(opts.displayValue)) {
       return;
     }
-    if (!needleRef.current) {
+    const needleEl = document.getElementById(needleId);
+    if (!needleEl) {
       return;
     }
 
@@ -117,7 +118,7 @@ export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, o
     // interruptions use the correct target angle
     lastNeedleAngleRef.current = needleAngleNew;
 
-    const needlePath = select(needleRef.current);
+    const needlePath = select(needleEl);
     const needleCentre = opts.originX + ',' + opts.originY;
 
     needlePath
@@ -131,6 +132,7 @@ export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, o
         );
       });
   }, [
+    needleId,
     opts.displayValue,
     opts.originX,
     opts.originY,
@@ -145,6 +147,5 @@ export const useNeedleAnimation = (needleRef: React.RefObject<SVGPathElement>, o
     opts.animateNeedleValueTransitionSpeed,
     opts.allowNeedleCrossLimits,
     opts.needleCrossLimitDegrees,
-    needleRef,
   ]);
 };

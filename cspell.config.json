@@ -12,7 +12,9 @@
     "package.json",
     "catalog-review/**",
     "tests/__mocks__/**",
-    ".github/**"
+    ".github/**",
+    "pnpm-lock.yaml",
+    "*.json"
   ],
   "words": [
     "Abbrevation",
@@ -35,11 +37,13 @@
     "drilldown",
     "esversion",
     "grafana",
+    "healthcheck",
     "hexbin",
     "jank",
     "iasc",
     "idesc",
     "logmin",
+    "Magefile",
     "moveto",
     "magn",
     "Neue",

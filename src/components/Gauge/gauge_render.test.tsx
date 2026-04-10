@@ -103,11 +103,9 @@ describe('gauge_render', () => {
   });
 
   describe('renderNeedle', () => {
-    const needleRef = { current: null } as React.RefObject<SVGPathElement>;
-
     it('renders a needle path when path length is positive', () => {
       const result = renderNeedle(
-        needleRef,
+        'test-needle',
         60,
         200,
         200,
@@ -129,7 +127,21 @@ describe('gauge_render', () => {
     });
 
     it('renders needle group even with zero-length path', () => {
-      const result = renderNeedle(needleRef, 60, 200, 200, 0, 0, 'arrow', 'circle', false, false, 'red', 2, mockTheme);
+      const result = renderNeedle(
+        'test-needle',
+        60,
+        200,
+        200,
+        0,
+        0,
+        'arrow',
+        'circle',
+        false,
+        false,
+        'red',
+        2,
+        mockTheme
+      );
       const { container } = render(<svg>{result}</svg>);
       const g = container.querySelector('#needle');
       expect(g).not.toBeNull();
@@ -137,7 +149,7 @@ describe('gauge_render', () => {
 
     it('sets markerEnd when enabled', () => {
       const result = renderNeedle(
-        needleRef,
+        'test-needle',
         60,
         200,
         200,
@@ -159,7 +171,7 @@ describe('gauge_render', () => {
 
     it('sets markerStart when enabled', () => {
       const result = renderNeedle(
-        needleRef,
+        'test-needle',
         60,
         200,
         200,
@@ -314,18 +326,60 @@ describe('gauge_render', () => {
   describe('renderThresholdBands', () => {
     describe('early returns', () => {
       it('returns undefined when showThresholdBandOnGauge is false', () => {
-        const result = renderThresholdBands(false, true, true, true, undefined, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        const result = renderThresholdBands(
+          false,
+          true,
+          true,
+          true,
+          undefined,
+          0,
+          100,
+          60,
+          300,
+          200,
+          200,
+          200,
+          mockTheme
+        );
         expect(result).toBeUndefined();
       });
 
       it('returns undefined when thresholds are undefined', () => {
-        const result = renderThresholdBands(true, true, true, true, undefined, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        const result = renderThresholdBands(
+          true,
+          true,
+          true,
+          true,
+          undefined,
+          0,
+          100,
+          60,
+          300,
+          200,
+          200,
+          200,
+          mockTheme
+        );
         expect(result).toBeUndefined();
       });
 
       it('returns undefined when thresholds have no steps', () => {
         const thresholds = { mode: ThresholdsMode.Absolute, steps: [] };
-        const result = renderThresholdBands(true, true, true, true, thresholds, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        const result = renderThresholdBands(
+          true,
+          true,
+          true,
+          true,
+          thresholds,
+          0,
+          100,
+          60,
+          300,
+          200,
+          200,
+          200,
+          mockTheme
+        );
         expect(result).toBeUndefined();
       });
     });
@@ -340,7 +394,21 @@ describe('gauge_render', () => {
       };
 
       it('renders lower band when enabled', () => {
-        const result = renderThresholdBands(true, true, false, false, twoStepThresholds, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        const result = renderThresholdBands(
+          true,
+          true,
+          false,
+          false,
+          twoStepThresholds,
+          0,
+          100,
+          60,
+          300,
+          200,
+          200,
+          200,
+          mockTheme
+        );
         expect(result).not.toBeUndefined();
         const { container } = render(<svg>{result}</svg>);
         const paths = container.querySelectorAll('path');
@@ -348,7 +416,21 @@ describe('gauge_render', () => {
       });
 
       it('renders upper band when enabled', () => {
-        const result = renderThresholdBands(true, false, false, true, twoStepThresholds, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        const result = renderThresholdBands(
+          true,
+          false,
+          false,
+          true,
+          twoStepThresholds,
+          0,
+          100,
+          60,
+          300,
+          200,
+          200,
+          200,
+          mockTheme
+        );
         expect(result).not.toBeUndefined();
         const { container } = render(<svg>{result}</svg>);
         const paths = container.querySelectorAll('path');
@@ -356,7 +438,21 @@ describe('gauge_render', () => {
       });
 
       it('handles -Infinity as lower bound by replacing with minValue', () => {
-        const result = renderThresholdBands(true, true, false, false, twoStepThresholds, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        const result = renderThresholdBands(
+          true,
+          true,
+          false,
+          false,
+          twoStepThresholds,
+          0,
+          100,
+          60,
+          300,
+          200,
+          200,
+          200,
+          mockTheme
+        );
         expect(result).not.toBeUndefined();
       });
     });
@@ -382,7 +478,21 @@ describe('gauge_render', () => {
       };
 
       it('renders all three band types when all enabled', () => {
-        const result = renderThresholdBands(true, true, true, true, threeStepThresholds, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        const result = renderThresholdBands(
+          true,
+          true,
+          true,
+          true,
+          threeStepThresholds,
+          0,
+          100,
+          60,
+          300,
+          200,
+          200,
+          200,
+          mockTheme
+        );
         expect(result).not.toBeUndefined();
         const { container } = render(<svg>{result}</svg>);
         const paths = container.querySelectorAll('path');
@@ -391,7 +501,21 @@ describe('gauge_render', () => {
       });
 
       it('renders only middle bands when lower and upper disabled', () => {
-        const result = renderThresholdBands(true, false, true, false, threeStepThresholds, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        const result = renderThresholdBands(
+          true,
+          false,
+          true,
+          false,
+          threeStepThresholds,
+          0,
+          100,
+          60,
+          300,
+          200,
+          200,
+          200,
+          mockTheme
+        );
         expect(result).not.toBeUndefined();
         const { container } = render(<svg>{result}</svg>);
         const paths = container.querySelectorAll('path');
@@ -400,7 +524,21 @@ describe('gauge_render', () => {
       });
 
       it('renders correct count of middle bands for 4-step thresholds', () => {
-        const result = renderThresholdBands(true, false, true, false, fourStepThresholds, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        const result = renderThresholdBands(
+          true,
+          false,
+          true,
+          false,
+          fourStepThresholds,
+          0,
+          100,
+          60,
+          300,
+          200,
+          200,
+          200,
+          mockTheme
+        );
         expect(result).not.toBeUndefined();
         const { container } = render(<svg>{result}</svg>);
         const paths = container.querySelectorAll('path');
@@ -418,7 +556,21 @@ describe('gauge_render', () => {
             { value: Infinity, color: 'red' },
           ],
         };
-        const result = renderThresholdBands(true, true, false, false, thresholds, 0, 100, 60, 300, 200, 200, 200, mockTheme);
+        const result = renderThresholdBands(
+          true,
+          true,
+          false,
+          false,
+          thresholds,
+          0,
+          100,
+          60,
+          300,
+          200,
+          200,
+          200,
+          mockTheme
+        );
         expect(result).not.toBeUndefined();
         const { container } = render(<svg>{result}</svg>);
         const paths = container.querySelectorAll('path');

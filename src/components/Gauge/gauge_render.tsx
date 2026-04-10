@@ -62,7 +62,7 @@ export const renderCircleGroup = (
 };
 
 export const renderNeedle = (
-  needleRef: React.RefObject<SVGPathElement>,
+  needleId: string,
   zeroNeedleAngle: number,
   originX: number,
   originY: number,
@@ -84,7 +84,7 @@ export const renderNeedle = (
       {pathNeedle.length > 0 && (
         <>
           <path
-            ref={needleRef}
+            id={needleId}
             d={pathNeedle}
             markerEnd={markerEndEnabled ? 'url(#marker_' + endShape.name + ')' : undefined}
             markerStart={markerStartEnabled ? 'url(#marker_' + startShape.name + ')' : undefined}
