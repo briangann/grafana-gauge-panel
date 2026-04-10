@@ -1,4 +1,4 @@
-import React, { useId, useMemo } from 'react';
+import React, { useEffect, useId, useMemo } from 'react';
 
 import { scaleLinear } from 'd3';
 
@@ -64,7 +64,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       .range([options.zeroTickAngle, options.maxTickAngle]);
   }, [options.minValue, options.maxValue, options.zeroTickAngle, options.maxTickAngle]);
 
-  const { tickAnglesMaj, tickAnglesMin, tickMajorLabels, tickPathsMaj, tickPathsMin } = useTickComputations({
+  const { tickAnglesMaj, tickAnglesMin, tickMajorLabels, tickPathsMaj, tickPathsMin, ticksClamped } = useTickComputations({
     minValue: options.minValue,
     maxValue: options.maxValue,
     zeroTickAngle: options.zeroTickAngle,
@@ -80,6 +80,10 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     tickLengthMaj: options.tickLengthMaj,
     tickLengthMin: options.tickLengthMin,
   });
+
+  useEffect(() => {
+    options.onTicksClamped?.(ticksClamped);
+  }, [ticksClamped, options.onTicksClamped]);
 
   useNeedleAnimation(needleId, {
     displayValue: options.displayValue ?? NaN,
