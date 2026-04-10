@@ -28,6 +28,8 @@ for [Grafana](https://www.grafana.com) 9.3+/10.x/11.x/12.x
 
 ![Custom Gauge With Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/alt-gauge-limits.png)
 
+![Compass Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/compass-example.png)
+
 ### Configuration Options
 
 The React port has separated the configuration options into multiple searchable sections and added new features.
