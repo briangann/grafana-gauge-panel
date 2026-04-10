@@ -91,6 +91,10 @@ All changes noted here.
   consistency
 - Sync `RangeEditor` local state when external value prop changes
   (undo/reset)
+- Add "Show Value on Gauge" toggle to hide/show the numeric value
+  display (fixes #101)
+- Add "Show Tick Labels" toggle to hide/show the tick mark labels
+  (fixes #101)
 
 ### Panel Editor UX
 

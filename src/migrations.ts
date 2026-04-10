@@ -326,6 +326,8 @@ export const migrateDefaults = (angular: AngularOptions) => {
     displayValue: null,
     displayTitle: '',
     showTitle: false,
+    showValue: true,
+    showTickLabels: true,
     thresholds: undefined,
     showThresholdStateOnValue: false,
     showThresholdStateOnTitle: false,

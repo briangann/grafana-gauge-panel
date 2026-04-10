@@ -39,6 +39,8 @@ The React port has separated the configuration options into multiple searchable 
 | Option                       | Description                                                               |
 | ---------------------------- | ------------------------------------------------------------------------- |
 | Show Display Name on Gauge   | Show the field or series name above the value on the gauge                |
+| Show Value on Gauge          | Show the numeric value on the gauge                                       |
+| Show Tick Labels             | Show numeric labels next to the major ticks                               |
 | Stat                         | The statistic to be displayed on the gauge                                |
 | Unit                         | A unit for the value displayed. This will be used to abbreviate as needed |
 | Decimals                     | Maximum number of decimals to display if any are required                 |

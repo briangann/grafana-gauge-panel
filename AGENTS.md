@@ -267,6 +267,9 @@ pnpm exec playwright test --ui    # Interactive UI mode
   to `cspell.config.json` if they are legitimate.
 - **Always run `pnpm typecheck`** when `src/` files
   are changed and fix any type errors before committing.
+- **NEVER comment on GitHub issues or PRs** unless the
+  user explicitly asks. Draft the response and show it
+  to the user first. Only post when told to do so.
 - **NEVER commit unless the user explicitly asks.**
   Do not commit as part of completing a task.
 - **NEVER push unless the user explicitly asks.**

@@ -29,6 +29,8 @@ const defaultOptions: GaugeOptions = {
   displayFormatted: '',
   displayValue: null,
   showTitle: false,
+  showValue: true,
+  showTickLabels: true,
   displayTitle: '',
   operatorName: 'lastNotNull',
   valueYOffset: 0,

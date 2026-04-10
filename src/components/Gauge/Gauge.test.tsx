@@ -52,6 +52,8 @@ const defaultOptions: GaugeOptions = {
   displayFormatted: '50.0',
   displayValue: 50,
   showTitle: true,
+  showValue: true,
+  showTickLabels: true,
   displayTitle: 'Test Gauge',
   operatorName: 'lastNotNull',
   valueYOffset: 0,
