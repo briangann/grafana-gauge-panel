@@ -18,14 +18,14 @@ interface EditorItem {
  */
 interface EditorContext {
   options: Record<string, unknown>;
-  onOptionsChange: (options: Record<string, unknown>) => void;
+  onOptionsChange?: (options: Record<string, unknown>) => void;
 }
 
 const MAX_TICKS = 100;
 
 interface Props extends StandardEditorProps<number> {}
 
-export const RangeEditor: React.FC<Props> = ({ value, item, context }) => {
+export const RangeEditor: React.FC<Props> = ({ value, onChange, item, context }) => {
   const [editValue, setEditValue] = useState<string | null>(null);
 
   const editorItem = item as unknown as EditorItem;
@@ -47,6 +47,8 @@ export const RangeEditor: React.FC<Props> = ({ value, item, context }) => {
       return;
     }
 
+    onChange(numericValue);
+
     const options = editorContext.options;
     const min = editorItem.path === 'minValue' ? numericValue : (options.minValue as number);
     const max = editorItem.path === 'maxValue' ? numericValue : (options.maxValue as number);
@@ -58,7 +60,7 @@ export const RangeEditor: React.FC<Props> = ({ value, item, context }) => {
       (currentMajor > 0 && range / currentMajor > MAX_TICKS) ||
       (currentMinor > 0 && range / currentMinor > MAX_TICKS);
 
-    if (wouldExceedLimit) {
+    if (wouldExceedLimit && editorContext.onOptionsChange) {
       const { majorSpacing, minorSpacing } = computeTickSpacing(min, max);
       editorContext.onOptionsChange({
         ...options,
@@ -66,13 +68,8 @@ export const RangeEditor: React.FC<Props> = ({ value, item, context }) => {
         tickSpacingMajor: majorSpacing,
         tickSpacingMinor: minorSpacing,
       });
-    } else {
-      editorContext.onOptionsChange({
-        ...options,
-        [editorItem.path]: numericValue,
-      });
     }
-  }, [editValue, editorItem, editorContext]);
+  }, [editValue, onChange, editorItem, editorContext]);
 
   return (
     <Input
