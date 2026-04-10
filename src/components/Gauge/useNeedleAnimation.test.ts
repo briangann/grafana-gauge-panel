@@ -77,7 +77,7 @@ describe('useNeedleAnimation', () => {
 
   describe('first render', () => {
     it('snaps to position with duration 0 on first render', () => {
-      renderHook(() => useNeedleAnimation('test-needle',defaultOpts));
+      renderHook(() => useNeedleAnimation('test-needle', defaultOpts));
 
       expect(mockSelect).toHaveBeenCalledWith(mockElement);
       expect(mockTransition).toHaveBeenCalled();
@@ -85,7 +85,7 @@ describe('useNeedleAnimation', () => {
     });
 
     it('calls attrTween with transform rotation', () => {
-      renderHook(() => useNeedleAnimation('test-needle',defaultOpts));
+      renderHook(() => useNeedleAnimation('test-needle', defaultOpts));
 
       expect(mockAttrTween).toHaveBeenCalledWith('transform', expect.any(Function));
     });
@@ -94,7 +94,7 @@ describe('useNeedleAnimation', () => {
   describe('value transitions', () => {
     it('uses configured transition speed on subsequent renders', () => {
       let opts = { ...defaultOpts, displayValue: 50 };
-      const { rerender } = renderHook(() => useNeedleAnimation('test-needle',opts));
+      const { rerender } = renderHook(() => useNeedleAnimation('test-needle', opts));
 
       jest.clearAllMocks();
       opts = { ...defaultOpts, displayValue: 75 };
@@ -105,7 +105,7 @@ describe('useNeedleAnimation', () => {
 
     it('uses 0 duration when animation is disabled', () => {
       let opts = { ...defaultOpts, displayValue: 50 };
-      const { rerender } = renderHook(() => useNeedleAnimation('test-needle',opts));
+      const { rerender } = renderHook(() => useNeedleAnimation('test-needle', opts));
 
       jest.clearAllMocks();
       opts = { ...defaultOpts, displayValue: 75, animateNeedleValueTransition: false };
@@ -116,7 +116,7 @@ describe('useNeedleAnimation', () => {
 
     it('uses custom transition speed', () => {
       let opts = { ...defaultOpts, displayValue: 50 };
-      const { rerender } = renderHook(() => useNeedleAnimation('test-needle',opts));
+      const { rerender } = renderHook(() => useNeedleAnimation('test-needle', opts));
 
       jest.clearAllMocks();
       opts = { ...defaultOpts, displayValue: 75, animateNeedleValueTransitionSpeed: 1000 };
@@ -128,14 +128,14 @@ describe('useNeedleAnimation', () => {
 
   describe('guard conditions', () => {
     it('skips animation when displayValue is NaN', () => {
-      renderHook(() => useNeedleAnimation('test-needle',{ ...defaultOpts, displayValue: NaN }));
+      renderHook(() => useNeedleAnimation('test-needle', { ...defaultOpts, displayValue: NaN }));
 
       expect(mockSelect).not.toHaveBeenCalled();
     });
 
     it('skips animation when needle element is not in DOM', () => {
       jest.spyOn(document, 'getElementById').mockReturnValue(null);
-      renderHook(() => useNeedleAnimation('test-needle',defaultOpts));
+      renderHook(() => useNeedleAnimation('test-needle', defaultOpts));
 
       expect(mockSelect).not.toHaveBeenCalled();
     });
@@ -144,7 +144,7 @@ describe('useNeedleAnimation', () => {
   describe('value clamping', () => {
     it('clamps value above maxValue when cross-limits disabled', () => {
       renderHook(() =>
-        useNeedleAnimation('test-needle',{ ...defaultOpts, displayValue: 150, allowNeedleCrossLimits: false })
+        useNeedleAnimation('test-needle', { ...defaultOpts, displayValue: 150, allowNeedleCrossLimits: false })
       );
 
       // Should still call the transition (animates to clamped position)
@@ -154,7 +154,7 @@ describe('useNeedleAnimation', () => {
 
     it('clamps value below minValue when cross-limits disabled', () => {
       renderHook(() =>
-        useNeedleAnimation('test-needle',{ ...defaultOpts, displayValue: -50, allowNeedleCrossLimits: false })
+        useNeedleAnimation('test-needle', { ...defaultOpts, displayValue: -50, allowNeedleCrossLimits: false })
       );
 
       expect(mockSelect).toHaveBeenCalled();
@@ -165,7 +165,7 @@ describe('useNeedleAnimation', () => {
   describe('buried needle behavior', () => {
     it('skips animation when needle stays buried at max', () => {
       let opts = { ...defaultOpts, displayValue: 150, allowNeedleCrossLimits: true };
-      const { rerender } = renderHook(() => useNeedleAnimation('test-needle',opts));
+      const { rerender } = renderHook(() => useNeedleAnimation('test-needle', opts));
 
       jest.clearAllMocks();
       opts = { ...defaultOpts, displayValue: 200, allowNeedleCrossLimits: true };
@@ -177,7 +177,7 @@ describe('useNeedleAnimation', () => {
 
     it('skips animation when needle stays buried at min', () => {
       let opts = { ...defaultOpts, displayValue: -50, allowNeedleCrossLimits: true };
-      const { rerender } = renderHook(() => useNeedleAnimation('test-needle',opts));
+      const { rerender } = renderHook(() => useNeedleAnimation('test-needle', opts));
 
       jest.clearAllMocks();
       opts = { ...defaultOpts, displayValue: -100, allowNeedleCrossLimits: true };
@@ -188,7 +188,7 @@ describe('useNeedleAnimation', () => {
 
     it('animates when value returns from buried max to in-range', () => {
       let opts = { ...defaultOpts, displayValue: 150, allowNeedleCrossLimits: true };
-      const { rerender } = renderHook(() => useNeedleAnimation('test-needle',opts));
+      const { rerender } = renderHook(() => useNeedleAnimation('test-needle', opts));
 
       jest.clearAllMocks();
       opts = { ...defaultOpts, displayValue: 50, allowNeedleCrossLimits: true };
@@ -200,7 +200,7 @@ describe('useNeedleAnimation', () => {
 
     it('animates when value returns from buried min to in-range', () => {
       let opts = { ...defaultOpts, displayValue: -50, allowNeedleCrossLimits: true };
-      const { rerender } = renderHook(() => useNeedleAnimation('test-needle',opts));
+      const { rerender } = renderHook(() => useNeedleAnimation('test-needle', opts));
 
       jest.clearAllMocks();
       opts = { ...defaultOpts, displayValue: 50, allowNeedleCrossLimits: true };
