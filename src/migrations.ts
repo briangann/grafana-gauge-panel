@@ -103,8 +103,8 @@ interface AngularPanelProperties {
   svgContainer?: unknown;
   unitFormats?: unknown;
   mappingType?: number;
-  valueMaps?: Array<unknown>;
-  rangeMaps?: Array<unknown>;
+  valueMaps?: unknown[];
+  rangeMaps?: unknown[];
   mappingTypes?: unknown;
   [key: string]: unknown;
 }
