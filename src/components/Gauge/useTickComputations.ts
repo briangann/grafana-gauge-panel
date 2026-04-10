@@ -5,17 +5,20 @@ import { line, type ScaleLinear } from 'd3';
 import { TickMapItemType } from '../TickMaps/types';
 import { dToR } from './utils';
 
-const MAX_TICKS = 500;
+const MAX_TICKS = 100;
 
 const generateTickAngles = (zeroTickAngle: number, maxTickAngle: number, majorDegree: number, minorDegree: number) => {
   if (majorDegree <= 0 || !isFinite(majorDegree)) {
-    return { tickMaj: [], tickMin: [] };
+    return { tickMaj: [], tickMin: [], clamped: false };
   }
 
+  let clamped = false;
   const majorAngles: number[] = [];
   let counter = 0;
+  let iterations = 0;
   for (let i = zeroTickAngle; i <= maxTickAngle; i = i + majorDegree) {
-    if (majorAngles.length >= MAX_TICKS) {
+    if (majorAngles.length >= MAX_TICKS || iterations++ > MAX_TICKS) {
+      clamped = true;
       break;
     }
     const tickAngle = zeroTickAngle + majorDegree * counter;
@@ -26,13 +29,15 @@ const generateTickAngles = (zeroTickAngle: number, maxTickAngle: number, majorDe
   }
 
   if (minorDegree <= 0 || !isFinite(minorDegree)) {
-    return { tickMaj: majorAngles, tickMin: [] };
+    return { tickMaj: majorAngles, tickMin: [], clamped };
   }
 
   const minorAngles: number[] = [];
   counter = 0;
+  iterations = 0;
   for (let j = zeroTickAngle; j <= maxTickAngle; j = j + minorDegree) {
-    if (minorAngles.length >= MAX_TICKS) {
+    if (minorAngles.length >= MAX_TICKS || iterations++ > MAX_TICKS) {
+      clamped = true;
       break;
     }
     let exists = 0;
@@ -46,7 +51,7 @@ const generateTickAngles = (zeroTickAngle: number, maxTickAngle: number, majorDe
     }
     counter++;
   }
-  return { tickMaj: majorAngles, tickMin: minorAngles };
+  return { tickMaj: majorAngles, tickMin: minorAngles, clamped };
 };
 
 const generateTickMajorLabels = (
@@ -59,13 +64,16 @@ const generateTickMajorLabels = (
   tickMaps: TickMapItemType[]
 ) => {
   if (majorDegree <= 0 || !isFinite(majorDegree)) {
-    return [];
+    return { labels: [], clamped: false };
   }
 
+  let clamped = false;
   let counter = 0;
+  let iterations = 0;
   const tickLabelText: string[] = [];
   for (let k = zeroTickAngle; k <= maxTickAngle; k = k + majorDegree) {
-    if (tickLabelText.length >= MAX_TICKS) {
+    if (tickLabelText.length >= MAX_TICKS || iterations++ > MAX_TICKS) {
+      clamped = true;
       break;
     }
     const step = minValue <= maxValue ? tickSpacingMajor : -tickSpacingMajor;
@@ -85,7 +93,7 @@ const generateTickMajorLabels = (
     tickLabelText.push(tickText);
     counter++;
   }
-  return tickLabelText;
+  return { labels: tickLabelText, clamped };
 };
 
 interface TickComputationOptions {
@@ -122,12 +130,12 @@ export const useTickComputations = (opts: TickComputationOptions) => {
     return Math.abs(minorA - scaleZero);
   }, [valueScale, opts.tickSpacingMinor]);
 
-  const { tickMaj: tickAnglesMaj, tickMin: tickAnglesMin } = useMemo(
+  const { tickMaj: tickAnglesMaj, tickMin: tickAnglesMin, clamped: anglesClamped } = useMemo(
     () => generateTickAngles(opts.zeroTickAngle, opts.maxTickAngle, tickSpacingMajDeg, tickSpacingMinDeg),
     [opts.zeroTickAngle, opts.maxTickAngle, tickSpacingMajDeg, tickSpacingMinDeg]
   );
 
-  const tickMajorLabels = useMemo(
+  const { labels: tickMajorLabels, clamped: labelsClamped } = useMemo(
     () =>
       generateTickMajorLabels(
         opts.zeroTickAngle,
@@ -185,5 +193,6 @@ export const useTickComputations = (opts: TickComputationOptions) => {
     opts.tickLengthMin,
   ]);
 
-  return { tickAnglesMaj, tickAnglesMin, tickMajorLabels, tickPathsMaj, tickPathsMin };
+  const ticksClamped = anglesClamped || labelsClamped;
+  return { tickAnglesMaj, tickAnglesMin, tickMajorLabels, tickPathsMaj, tickPathsMin, ticksClamped };
 };
