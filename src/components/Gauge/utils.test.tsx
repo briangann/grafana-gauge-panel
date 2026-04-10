@@ -236,6 +236,27 @@ describe('Utils', () => {
       expect(path?.getAttribute('fill')).toBe('green');
     });
 
+    it('uses correct rotation for default angles (60/300)', () => {
+      const result = drawBand(0, 100, 'green', 200, 200, mockGaugeOptions, mockTheme);
+      const { container } = render(result as React.ReactElement);
+      const path = container.querySelector('path');
+      // 2 * zeroTickAngle + 180 = 2 * 60 + 180 = 300
+      expect(path?.getAttribute('transform')).toContain('rotate(300)');
+    });
+
+    it('uses correct rotation for non-default angles', () => {
+      const customAngles = {
+        ...mockGaugeOptions,
+        zeroTickAngle: 45,
+        maxTickAngle: 315,
+      } as GaugeOptions;
+      const result = drawBand(0, 100, 'green', 200, 200, customAngles, mockTheme);
+      const { container } = render(result as React.ReactElement);
+      const path = container.querySelector('path');
+      // 2 * 45 + 180 = 270, NOT 315 (maxTickAngle)
+      expect(path?.getAttribute('transform')).toContain('rotate(270)');
+    });
+
     it('works with inverted range options', () => {
       const invertedOptions = {
         ...mockGaugeOptions,

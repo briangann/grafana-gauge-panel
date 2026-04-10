@@ -21,6 +21,10 @@ All changes noted here.
   by lowering tick cap from 500 to 100, adding an iteration guard to
   prevent runaway loops, and auto-calculating tick spacing when the
   user changes min/max values (fixes #63)
+- Fix threshold band angular misalignment with gauge ticks when using
+  non-default `zeroTickAngle`/`maxTickAngle` values; the `drawBand`
+  rotation is now computed as `2 * zeroTickAngle + 180` instead of
+  being hardcoded to `maxTickAngle`
 
 ### Type Safety
 

@@ -102,7 +102,7 @@ export const drawBand = (
       key={bandKey}
       fill={theme2.visualization.getColorByName(color)}
       d={xc}
-      transform={`translate(${originX},${originY}) rotate(${options.maxTickAngle})`}
+      transform={`translate(${originX},${originY}) rotate(${2 * options.zeroTickAngle + 180})`}
     />
   );
 };
