@@ -10,6 +10,7 @@ import {
 import { PanelMigrationHandler } from './migrations';
 import { TickMapEditor } from 'components/TickMaps/TickMapEditor';
 import { TickMapItemType } from 'components/TickMaps/types';
+import { RangeEditor } from 'components/editors/RangeEditor';
 
 export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
   .setMigrationHandler(PanelMigrationHandler)
@@ -34,6 +35,13 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
   .setPanelOptions((builder) => {
     builder
       // General Settings
+      .addBooleanSwitch({
+        name: 'Show Display Name on Gauge',
+        path: 'showTitle',
+        defaultValue: false,
+        category: ['Standard options'],
+        description: 'Show the field or series name above the value on the gauge',
+      })
       // stat (operator)
       .addSelect({
         name: 'Stat',
@@ -45,16 +53,28 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
           options: OperatorOptions,
         },
       })
-      .addBooleanSwitch({
-        name: 'Show title',
-        path: 'showTitle',
-        defaultValue: false,
-        category: ['Standard options'],
-        description: 'Show the series title/name in the gauge',
-      })
 
       // Font Settings
-      // Value Font
+      .addSelect({
+        name: 'Display Name Font',
+        path: 'titleFont',
+        description: 'Font used for the display name shown above the value',
+        category: ['Font Settings'],
+        defaultValue: FontFamilyOptions[3].value,
+        settings: {
+          options: FontFamilyOptions,
+        },
+      })
+      .addSelect({
+        name: 'Display Name Font Size',
+        path: 'titleFontSize',
+        description: 'Font size of the display name',
+        category: ['Font Settings'],
+        defaultValue: FontSizes[17].value,
+        settings: {
+          options: FontSizes,
+        },
+      })
       .addSelect({
         name: 'Value Font',
         path: 'valueFont',
@@ -65,34 +85,10 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
           options: FontFamilyOptions,
         },
       })
-      // unitsLabelFontSize
       .addSelect({
         name: 'Value Font Size',
         path: 'valueFontSize',
         description: 'Font Size of Value',
-        category: ['Font Settings'],
-        defaultValue: FontSizes[17].value,
-        settings: {
-          options: FontSizes,
-        },
-      })
-      // Font Settings
-      // Title Font
-      .addSelect({
-        name: 'Title Font',
-        path: 'titleFont',
-        description: 'The font of the value text, at the bottom of the gauge',
-        category: ['Font Settings'],
-        defaultValue: FontFamilyOptions[3].value,
-        settings: {
-          options: FontFamilyOptions,
-        },
-      })
-      // unitsLabelFontSize
-      .addSelect({
-        name: 'Title Font Size',
-        path: 'titleFontSize',
-        description: 'Font Size of Title',
         category: ['Font Settings'],
         defaultValue: FontSizes[17].value,
         settings: {
@@ -156,9 +152,9 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         name: 'Needle Cross Limit Degrees',
         path: 'needleCrossLimitDegrees',
         description: 'How many degrees to cross below and above minimum and maximum limit, default is 5 degrees',
-        defaultValue: 10,
+        defaultValue: 5,
         settings: {
-          placeHolder: '10',
+          placeHolder: '5',
           min: 0,
           integer: true,
         },
@@ -219,26 +215,22 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         showIf: (c) => c.markerStartEnabled === true,
       })
       // Limits
-      .addNumberInput({
+      .addCustomEditor({
         name: 'Minimum Value',
+        id: 'minValue',
         path: 'minValue',
-        description: 'Minimum value displayed by the gauge (left side)',
+        description: 'Minimum value displayed by the gauge (left side). Changing this auto-adjusts tick spacing.',
         defaultValue: 0,
-        settings: {
-          placeHolder: '0',
-          integer: false,
-        },
+        editor: RangeEditor,
         category: ['Limits'],
       })
-      .addNumberInput({
+      .addCustomEditor({
         name: 'Maximum Value',
+        id: 'maxValue',
         path: 'maxValue',
-        description: 'Maximum value displayed by the gauge (right side)',
+        description: 'Maximum value displayed by the gauge (right side). Changing this auto-adjusts tick spacing.',
         defaultValue: 100,
-        settings: {
-          placeHolder: '100',
-          integer: false,
-        },
+        editor: RangeEditor,
         category: ['Limits'],
       })
 
@@ -340,7 +332,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       })
       // valueYOffset
       .addNumberInput({
-        name: 'Value Y-Offset',
+        name: 'Value Y-Offset (Vertical)',
         path: 'valueYOffset',
         description:
           'Adjust the displayed value up or down the Y-Axis, use negative value to move up, positive for down',
@@ -352,10 +344,10 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       })
       // titleYOffset
       .addNumberInput({
-        name: 'Title Y-Offset',
+        name: 'Display Name Y-Offset (Vertical)',
         path: 'titleYOffset',
         description:
-          'Adjust the displayed title up or down the Y-Axis, use negative title to move up, positive for down',
+          'Adjust the display name up or down the Y-Axis, use negative value to move up, positive for down',
         defaultValue: 0,
         settings: {
           integer: true,
@@ -552,7 +544,6 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         name: 'Tick Maps',
         id: 'tickMapConfig',
         path: 'tickMapConfig',
-        description: 'Tick Maps',
         editor: TickMapEditor,
         defaultValue: {
           tickMaps: [] as TickMapItemType[],

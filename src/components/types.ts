@@ -87,6 +87,7 @@ export interface GaugeOptions {
   showThresholdStateOnBackground: boolean;
   //
   thresholds: ThresholdsConfig | undefined;
+  onTicksClamped?: (clamped: boolean) => void;
 }
 
 export enum FontFamilies {

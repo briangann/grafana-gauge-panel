@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   PanelProps,
   FieldDisplay,
@@ -9,8 +9,9 @@ import {
 import { GaugeOptions } from './types';
 import { Gauge } from './Gauge';
 import { css, cx } from '@emotion/css';
-import { useStyles2, useTheme2 } from '@grafana/ui';
+import { Icon, Tooltip, useStyles2, useTheme2 } from '@grafana/ui';
 import { getComponentStyles } from './gauge_panel_styles';
+import { computeTickSpacing } from './Gauge/tick_spacing';
 
 interface Props extends PanelProps<GaugeOptions> {}
 
@@ -76,8 +77,30 @@ export const GaugePanel: React.FC<Props> = ({
 
   const metric = metrics[0];
 
+  const [ticksClamped, setTicksClamped] = useState(false);
+
+  const onTicksClamped = useCallback((clamped: boolean) => {
+    setTicksClamped(clamped);
+  }, []);
+
+  const suggestedSpacing = useMemo(() => {
+    if (!ticksClamped) {
+      return null;
+    }
+    return computeTickSpacing(options.minValue, options.maxValue);
+  }, [ticksClamped, options.minValue, options.maxValue]);
+
   return (
     <div className={cx(styles.wrapper, dimensionStyle)}>
+      {ticksClamped && suggestedSpacing && (
+        <div className={styles.warningIcon} data-testid="tick-clamp-warning">
+          <Tooltip
+            content={`Tick count exceeds maximum (100). Adjust tick spacing for your value range. Suggested major spacing: ${suggestedSpacing.majorSpacing}`}
+          >
+            <Icon name="exclamation-triangle" size="sm" />
+          </Tooltip>
+        </div>
+      )}
       <div className={cx(styles.container)}>
         <Gauge
           {...options}
@@ -95,6 +118,7 @@ export const GaugePanel: React.FC<Props> = ({
           tickLengthMaj={options.tickLengthMaj * gaugeRadiusCalc}
           tickLengthMin={options.tickLengthMin * gaugeRadiusCalc}
           thresholds={metric.field.thresholds ?? fieldConfig.defaults.thresholds}
+          onTicksClamped={onTicksClamped}
         />
       </div>
     </div>

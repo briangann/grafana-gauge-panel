@@ -17,6 +17,14 @@ All changes noted here.
 - Fix `migrateTickMaps` missing `enabled` field in return value
 - Fix marker shape migration assigning `MarkerType` object to `string`
   field (now correctly extracts `.name`)
+- Fix browser hang when gauge max value is very large (e.g., 6 billion)
+  by lowering tick cap from 500 to 100, adding an iteration guard to
+  prevent runaway loops, and auto-calculating tick spacing when the
+  user changes min/max values (fixes #63)
+- Fix threshold band angular misalignment with gauge ticks when using
+  non-default `zeroTickAngle`/`maxTickAngle` values; the `drawBand`
+  rotation is now computed as `2 * zeroTickAngle + 180` instead of
+  being hardcoded to `maxTickAngle`
 
 ### Type Safety
 
@@ -67,6 +75,38 @@ All changes noted here.
 - Bump `actions/github-script` v8.0.0 → v9.0.0
 - Remove `master` branch references, pin actions to version tags
 - Clean up scaffolding comments in release.yml
+
+### New Features
+
+- Add `computeTickSpacing` utility that calculates human-friendly
+  ("nice number") tick intervals for any value range
+- Auto-fill tick spacing when min/max values change in the panel editor,
+  only when the new range would exceed the 100-tick limit (preserves
+  user-configured spacing otherwise)
+- Show warning icon with tooltip when tick count is clamped, including
+  suggested spacing values
+- Use `@grafana/ui` `Input` component in `RangeEditor` for theme
+  consistency
+- Sync `RangeEditor` local state when external value prop changes
+  (undo/reset)
+
+### Panel Editor UX
+
+- Rename "Show title" to "Show Display Name on Gauge" and move above
+  Stat in Standard options
+- Rename "Title Font/Size" to "Display Name Font/Size"
+- Rename "Title Y-Offset" to "Display Name Y-Offset (Vertical)"
+- Rename "Value Y-Offset" to "Value Y-Offset (Vertical)"
+- Reorder font settings: Display Name, Value, Tick Label
+- Add inline description to Tick Maps editor section
+- Fix `needleCrossLimitDegrees` default (10 → 5) to match description
+- Increase vertical spacing between display name and value labels
+
+### Testing Infrastructure
+
+- Suppress jsdom SVG tag warnings (`<path>`, `<marker>`, `<defs>`) in
+  test output via `jest-setup.js` console filter
+- Suppress i18next promotional banner in test output
 
 ### E2E Testing
 

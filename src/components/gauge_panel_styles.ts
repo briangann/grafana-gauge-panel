@@ -6,6 +6,15 @@ export const getComponentStyles = (theme: GrafanaTheme2) => {
     wrapper: css`
       position: relative;
     `,
+    warningIcon: css`
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      z-index: 1;
+      color: ${theme.colors.warning.text};
+      opacity: 0.7;
+      cursor: help;
+    `,
     container: css`
       align-items: center;
       justify-content: center;

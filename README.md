@@ -36,24 +36,25 @@ The React port has separated the configuration options into multiple searchable 
 
 ![Standard Options](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-standard-options.png)
 
-| Option   | Description                                                               |
-| -------- | ------------------------------------------------------------------------- |
-| Stat     | The statistic to be displayed on the gauge                                |
-| Unit     | A unit for the value displayed. This will be used to abbreviate as needed |
-| Decimals | Maximum number of decimals to display if any are required                 |
+| Option                       | Description                                                               |
+| ---------------------------- | ------------------------------------------------------------------------- |
+| Show Display Name on Gauge   | Show the field or series name above the value on the gauge                |
+| Stat                         | The statistic to be displayed on the gauge                                |
+| Unit                         | A unit for the value displayed. This will be used to abbreviate as needed |
+| Decimals                     | Maximum number of decimals to display if any are required                 |
 
 #### Font Settings
 
 ![Font Settings](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-font-settings.png)
 
-| Option               | Description                                 |
-| -------------------- | ------------------------------------------- |
-| Value Font           | Font to be used on the value displayed      |
-| Value Font Size      | Font Size for the value displayed           |
-| Title Font           | Font to be used on the title displayed      |
-| Title Font Size      | Font Size for the title displayed           |
-| Tick Label Font      | Font to be used on the tick labels          |
-| Tick Label Font Size | Font size to be used for the tick labels    |
+| Option                  | Description                                          |
+| ----------------------- | ---------------------------------------------------- |
+| Display Name Font       | Font used for the display name shown above the value |
+| Display Name Font Size  | Font size of the display name                        |
+| Value Font              | Font to be used on the value displayed               |
+| Value Font Size         | Font size for the value displayed                    |
+| Tick Label Font         | Font to be used on the tick labels                   |
+| Tick Label Font Size    | Font size to be used for the tick labels             |
 
 #### Needle Options
 
@@ -84,6 +85,13 @@ and allows the needle to cross the limit (burying the needle).
 | Minimum Value | Minimum Value allowed on the face |
 | Maximum Value | Maximum Value allowed on the face |
 
+When you change the Minimum or Maximum Value, tick spacing is
+automatically recalculated if the new range would produce more than
+100 ticks. If the current tick spacing is still within the limit,
+your settings are preserved. A warning icon appears on the gauge
+when the tick count is clamped, with a tooltip showing suggested
+spacing values.
+
 #### Coloring
 
 ![Coloring](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-coloring.png)
@@ -106,21 +114,22 @@ Adjust in small increments to see how they affect the gauge.
 
 ![Radial Customization](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-radial-customization.png)
 
-| Option               | Description                                                                 |
-| -------------------- | --------------------------------------------------------------------------- |
-| Radius               | Specifies size of gauge by radius. Value 0 will auto-scale to fit panel     |
-| Tickness Gauge Basis | Scaling for tick, a lower value will autoscale poorly                       |
-| Pivot Radius         | Size of the center pivot, as a percentage of radius                         |
-| Value Y-Offset       | Sets a vertical offset to better place the displayed metric                 |
-| Padding              | Adds space between the ticks and outer edge                                 |
-| Edge Width           | Thickness of the circle around the edge, as a percentage of gauge radius    |
-| Tick Edge Gap        | Spacing between ticks and the outer circle, as a percentage of gauge radius |
-| Tick Length Major    | Length of the major ticks, as a percentage of the gauge radius              |
-| Tick Width Major     | Width of the major ticks in pixels                                          |
-| Tick Length Minor    | Length of the minor ticks, as a percentage of the gauge radius              |
-| Tick Width Minor     | Width of the minor ticks in pixels                                          |
-| Needle Tick Gap      | Spacing between ticks and the needle end, as a percentage of gauge radius   |
-| Needle Length Stem   | Length of the needle beyond the centre, as a percentage of gauge radius     |
+| Option                            | Description                                                             |
+| --------------------------------- | ----------------------------------------------------------------------- |
+| Radius                            | Specifies size of gauge by radius. Value 0 will auto-scale to fit panel |
+| Tickness Gauge Basis              | Scaling for tick, a lower value will autoscale poorly                   |
+| Pivot Radius                      | Size of the center pivot, as a percentage of radius                     |
+| Value Y-Offset (Vertical)         | Sets a vertical offset to better place the displayed metric             |
+| Display Name Y-Offset (Vertical)  | Sets a vertical offset to better place the display name                 |
+| Padding                           | Adds space between the ticks and outer edge                             |
+| Edge Width                        | Thickness of the circle around the edge, as a percentage of radius      |
+| Tick Edge Gap                     | Spacing between ticks and the outer circle, as a percentage of radius   |
+| Tick Length Major                 | Length of the major ticks, as a percentage of the gauge radius          |
+| Tick Width Major                  | Width of the major ticks in pixels                                      |
+| Tick Length Minor                 | Length of the minor ticks, as a percentage of the gauge radius          |
+| Tick Width Minor                  | Width of the minor ticks in pixels                                      |
+| Needle Tick Gap                   | Spacing between ticks and needle end, as a percentage of gauge radius   |
+| Needle Length Stem                | Length of the needle beyond the centre, as a percentage of gauge radius |
 
 #### Gauge Degrees
 

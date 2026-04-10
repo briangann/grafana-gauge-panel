@@ -291,4 +291,24 @@ describe('Gauge', () => {
       expect(svg?.getAttribute('viewBox')).toBe('0,0,200,200');
     });
   });
+
+  describe('tick clamp warning', () => {
+    it('does not render warning icon for normal tick configs', () => {
+      const onTicksClamped = jest.fn();
+      render(<Gauge {...defaultOptions} onTicksClamped={onTicksClamped} />);
+      expect(onTicksClamped).toHaveBeenCalledWith(false);
+    });
+
+    it('reports ticksClamped true when ticks exceed limit', () => {
+      const onTicksClamped = jest.fn();
+      render(
+        <Gauge
+          {...defaultOptions}
+          tickSpacingMajor={0.001}
+          onTicksClamped={onTicksClamped}
+        />
+      );
+      expect(onTicksClamped).toHaveBeenCalledWith(true);
+    });
+  });
 });

@@ -1,4 +1,4 @@
-import React, { useId, useMemo } from 'react';
+import React, { useEffect, useId, useMemo } from 'react';
 
 import { scaleLinear } from 'd3';
 
@@ -23,6 +23,7 @@ import { useTickComputations } from './useTickComputations';
 import { useNeedleAnimation } from './useNeedleAnimation';
 
 export const Gauge: React.FC<GaugeOptions> = (options) => {
+  const { onTicksClamped } = options;
   const divStyles = useStyles2(getWrapperStyles);
   const svgStyles = useStyles2(getSVGStyles);
   const needleId = useId();
@@ -64,7 +65,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       .range([options.zeroTickAngle, options.maxTickAngle]);
   }, [options.minValue, options.maxValue, options.zeroTickAngle, options.maxTickAngle]);
 
-  const { tickAnglesMaj, tickAnglesMin, tickMajorLabels, tickPathsMaj, tickPathsMin } = useTickComputations({
+  const { tickAnglesMaj, tickAnglesMin, tickMajorLabels, tickPathsMaj, tickPathsMin, ticksClamped } = useTickComputations({
     minValue: options.minValue,
     maxValue: options.maxValue,
     zeroTickAngle: options.zeroTickAngle,
@@ -80,6 +81,10 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     tickLengthMaj: options.tickLengthMaj,
     tickLengthMin: options.tickLengthMin,
   });
+
+  useEffect(() => {
+    onTicksClamped?.(ticksClamped);
+  }, [ticksClamped, onTicksClamped]);
 
   useNeedleAnimation(needleId, {
     displayValue: options.displayValue ?? NaN,
@@ -133,11 +138,21 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   );
 
   const { valueFontSize, titleFontSize, valueLabelY, titleLabelY } = useMemo(() => {
-    const vfs = scaleLabelFontSize(options.valueFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
-    const tfs = scaleLabelFontSize(options.titleFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
-    const vly = labelYCalc(0, vfs, labelStart, originY) + options.valueYOffset;
-    const tly = labelYCalc(0, tfs, labelStart, originY) + options.titleYOffset - vfs / 2 - tfs / 2;
-    return { valueFontSize: vfs, titleFontSize: tfs, valueLabelY: vly, titleLabelY: tly };
+    const scaledValueFontSize = scaleLabelFontSize(options.valueFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
+    const scaledTitleFontSize = scaleLabelFontSize(options.titleFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
+    const valueLabelYPos = labelYCalc(0, scaledValueFontSize, labelStart, originY) + options.valueYOffset;
+    const titleLabelYPos =
+      labelYCalc(0, scaledTitleFontSize, labelStart, originY) +
+      options.titleYOffset -
+      scaledValueFontSize / 2 -
+      scaledTitleFontSize / 2 -
+      scaledTitleFontSize * 0.3;
+    return {
+      valueFontSize: scaledValueFontSize,
+      titleFontSize: scaledTitleFontSize,
+      valueLabelY: valueLabelYPos,
+      titleLabelY: titleLabelYPos,
+    };
   }, [
     options.valueFontSize,
     options.titleFontSize,
