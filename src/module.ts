@@ -36,7 +36,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
     builder
       // General Settings
       .addBooleanSwitch({
-        name: 'Show Display Name',
+        name: 'Show Display Name on Gauge',
         path: 'showTitle',
         defaultValue: false,
         category: ['Standard options'],
@@ -55,7 +55,26 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       })
 
       // Font Settings
-      // Value Font
+      .addSelect({
+        name: 'Display Name Font',
+        path: 'titleFont',
+        description: 'Font used for the display name shown above the value',
+        category: ['Font Settings'],
+        defaultValue: FontFamilyOptions[3].value,
+        settings: {
+          options: FontFamilyOptions,
+        },
+      })
+      .addSelect({
+        name: 'Display Name Font Size',
+        path: 'titleFontSize',
+        description: 'Font size of the display name',
+        category: ['Font Settings'],
+        defaultValue: FontSizes[17].value,
+        settings: {
+          options: FontSizes,
+        },
+      })
       .addSelect({
         name: 'Value Font',
         path: 'valueFont',
@@ -66,34 +85,10 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
           options: FontFamilyOptions,
         },
       })
-      // unitsLabelFontSize
       .addSelect({
         name: 'Value Font Size',
         path: 'valueFontSize',
         description: 'Font Size of Value',
-        category: ['Font Settings'],
-        defaultValue: FontSizes[17].value,
-        settings: {
-          options: FontSizes,
-        },
-      })
-      // Font Settings
-      // Title Font
-      .addSelect({
-        name: 'Title Font',
-        path: 'titleFont',
-        description: 'The font of the value text, at the bottom of the gauge',
-        category: ['Font Settings'],
-        defaultValue: FontFamilyOptions[3].value,
-        settings: {
-          options: FontFamilyOptions,
-        },
-      })
-      // unitsLabelFontSize
-      .addSelect({
-        name: 'Title Font Size',
-        path: 'titleFontSize',
-        description: 'Font Size of Title',
         category: ['Font Settings'],
         defaultValue: FontSizes[17].value,
         settings: {
@@ -337,7 +332,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       })
       // valueYOffset
       .addNumberInput({
-        name: 'Value Y-Offset',
+        name: 'Value Y-Offset (Vertical)',
         path: 'valueYOffset',
         description:
           'Adjust the displayed value up or down the Y-Axis, use negative value to move up, positive for down',
@@ -349,10 +344,10 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
       })
       // titleYOffset
       .addNumberInput({
-        name: 'Title Y-Offset',
+        name: 'Display Name Y-Offset (Vertical)',
         path: 'titleYOffset',
         description:
-          'Adjust the displayed title up or down the Y-Axis, use negative title to move up, positive for down',
+          'Adjust the display name up or down the Y-Axis, use negative value to move up, positive for down',
         defaultValue: 0,
         settings: {
           integer: true,
@@ -549,7 +544,6 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         name: 'Tick Maps',
         id: 'tickMapConfig',
         path: 'tickMapConfig',
-        description: 'Tick Maps',
         editor: TickMapEditor,
         defaultValue: {
           tickMaps: [] as TickMapItemType[],
