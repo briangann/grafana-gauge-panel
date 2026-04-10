@@ -461,7 +461,7 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         settings: {
           placeHolder: '0',
           min: 0,
-          integer: true,
+          integer: false,
         },
         category: ['Radial Customization'],
       })
