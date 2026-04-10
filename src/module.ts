@@ -4,7 +4,6 @@ import {
   FontFamilyOptions,
   FontSizes,
   GaugeOptions,
-  GaugePresetOptions,
   MarkerOptions,
   OperatorOptions,
 } from 'components/types';
@@ -123,23 +122,6 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         },
       })
 
-      // Presets
-      /*
-      .addSelect({
-        name: 'Preset',
-        path: 'presetIndex',
-        description: 'Modify current gauge with preset values',
-        settings: {
-          options: [
-            { value: GaugePresetOptions[0].id, label: GaugePresetOptions[0].name },
-            { value: GaugePresetOptions[1].id, label: GaugePresetOptions[1].name },
-            { value: GaugePresetOptions[2].id, label: GaugePresetOptions[2].name },
-          ],
-        },
-        defaultValue: GaugePresetOptions[0].id,
-        category: ['Presets'],
-      })
-      */
       // animateNeedleValueTransition
       .addBooleanSwitch({
         name: 'Animate Needle Transition',

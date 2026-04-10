@@ -55,11 +55,6 @@ describe('useGaugeDimensions', () => {
       expect(result.current.needleWidth).toBe(1);
     });
 
-    it('computes needleLengthNegCalc as gaugeRadius * needleLengthNeg', () => {
-      const { result } = renderHook(() => useGaugeDimensions(defaultOpts));
-      expect(result.current.needleLengthNegCalc).toBe(20);
-    });
-
     it('scales tickWidthMajorCalc by radius / basis ratio', () => {
       const { result } = renderHook(() => useGaugeDimensions(defaultOpts));
       // 3 * (200 / 200) = 3

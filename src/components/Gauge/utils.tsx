@@ -72,7 +72,8 @@ export const drawBand = (
   originX: number,
   originY: number,
   options: GaugeOptions,
-  theme2: GrafanaTheme2
+  theme2: GrafanaTheme2,
+  bandKey?: string
 ) => {
   const anArc = arc();
   const vToROptions: ValueToRadiansOptions = {
@@ -93,16 +94,16 @@ export const drawBand = (
     endAngle: endAngle,
   });
 
+  if (!xc) {
+    return null;
+  }
   return (
-    <>
-      {xc && (
-        <path
-          fill={theme2.visualization.getColorByName(color)}
-          d={xc || ''}
-          transform={`translate(${originX},${originY}) rotate(${options.maxTickAngle})`}
-        />
-      )}
-    </>
+    <path
+      key={bandKey}
+      fill={theme2.visualization.getColorByName(color)}
+      d={xc}
+      transform={`translate(${originX},${originY}) rotate(${options.maxTickAngle})`}
+    />
   );
 };
 

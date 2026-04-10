@@ -9,7 +9,7 @@ import {
 import { config } from '@grafana/runtime';
 import { satisfies, coerce } from 'semver';
 
-import { FontFamilies, GaugeOptions, GaugePresetOptions, Markers } from './components/types';
+import { FontFamilies, GaugeOptions, Markers } from './components/types';
 import { TickMapItemType } from 'components/TickMaps/types';
 
 interface AngularTickMap {
@@ -505,24 +505,6 @@ const migrateThresholds = (thresholds: string, thresholdColors: string[]) => {
   return migratedThresholds;
 };
 
-/**
- * This is called when the panel changes from another panel
- *
- * not currently used
- */
-export const PanelChangedHandler = (
-  panel: PanelModel<Partial<GaugeOptions>> | any,
-  prevPluginId: string,
-  prevOptions: any
-) => {
-  // Changing from angular d3gauge panel
-  if (prevPluginId === 'd3gauge' && prevOptions.angular) {
-    // console.log('detected old panel');
-    const oldOpts = prevOptions.angular;
-    // console.log(JSON.stringify(oldOpts));
-  }
-  return {};
-};
 
 // Roboto font was removed Dec 1, 2022, and releases after that date should not attempt to use it
 export const hasRobotoFont = () => {

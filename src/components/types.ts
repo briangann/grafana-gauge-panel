@@ -89,9 +89,6 @@ export interface GaugeOptions {
   thresholds: ThresholdsConfig | undefined;
 }
 
-// tslint:disable-next-line
-export interface GaugeModel {}
-
 export enum FontFamilies {
   ARIAL = 'Arial',
   HELVETICA = 'Helvetica',
@@ -191,18 +188,6 @@ export const Markers: MarkerType[] = [
   { id: 3, name: 'stub', path: 'M 0,0 m -1,-5 L 1,-5 L 1,5 L -1,5 Z', viewBox: '-1 -5 2 10' },
   { id: 4, name: 'arrow-inverse', path: 'M 0,0 m 5,5 L -5,0 L 5,-5 Z', viewBox: '-5 -5 10 10' },
 ];
-
-/*
-export const MarkerStartShapes = [
-  { id: 0, name: 'circle' },
-  { id: 1, name: 'square' },
-  { id: 2, name: 'stub' },
-];
-
-export const MarkerEndShapes = [
-  { id: 0, name: 'arrow' }
-];
-*/
 
 export const MarkerOptions: SelectableValue[] = [
   { value: 'arrow', label: 'arrow' },
