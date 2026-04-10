@@ -35,6 +35,13 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
   .setPanelOptions((builder) => {
     builder
       // General Settings
+      .addBooleanSwitch({
+        name: 'Show Display Name',
+        path: 'showTitle',
+        defaultValue: false,
+        category: ['Standard options'],
+        description: 'Show the field or series name above the value on the gauge',
+      })
       // stat (operator)
       .addSelect({
         name: 'Stat',
@@ -45,13 +52,6 @@ export const plugin = new PanelPlugin<GaugeOptions>(GaugePanel)
         settings: {
           options: OperatorOptions,
         },
-      })
-      .addBooleanSwitch({
-        name: 'Show title',
-        path: 'showTitle',
-        defaultValue: false,
-        category: ['Standard options'],
-        description: 'Show the series title/name in the gauge',
       })
 
       // Font Settings

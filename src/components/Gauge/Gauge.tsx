@@ -138,11 +138,21 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   );
 
   const { valueFontSize, titleFontSize, valueLabelY, titleLabelY } = useMemo(() => {
-    const vfs = scaleLabelFontSize(options.valueFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
-    const tfs = scaleLabelFontSize(options.titleFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
-    const vly = labelYCalc(0, vfs, labelStart, originY) + options.valueYOffset;
-    const tly = labelYCalc(0, tfs, labelStart, originY) + options.titleYOffset - vfs / 2 - tfs / 2;
-    return { valueFontSize: vfs, titleFontSize: tfs, valueLabelY: vly, titleLabelY: tly };
+    const scaledValueFontSize = scaleLabelFontSize(options.valueFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
+    const scaledTitleFontSize = scaleLabelFontSize(options.titleFontSize, options.gaugeRadius, options.ticknessGaugeBasis);
+    const valueLabelYPos = labelYCalc(0, scaledValueFontSize, labelStart, originY) + options.valueYOffset;
+    const titleLabelYPos =
+      labelYCalc(0, scaledTitleFontSize, labelStart, originY) +
+      options.titleYOffset -
+      scaledValueFontSize / 2 -
+      scaledTitleFontSize / 2 -
+      scaledTitleFontSize * 0.3;
+    return {
+      valueFontSize: scaledValueFontSize,
+      titleFontSize: scaledTitleFontSize,
+      valueLabelY: valueLabelYPos,
+      titleLabelY: titleLabelYPos,
+    };
   }, [
     options.valueFontSize,
     options.titleFontSize,
