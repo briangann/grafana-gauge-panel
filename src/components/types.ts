@@ -66,8 +66,8 @@ export interface GaugeOptions {
   tickSpacingMajor: number;
   tickSpacingMinor: number;
   // passed in by grafana
-  panelHeight?: any;
-  panelWidth?: any;
+  panelHeight?: number;
+  panelWidth?: number;
   panelId?: number;
 
   // tickmaps

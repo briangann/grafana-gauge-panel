@@ -3,7 +3,7 @@ import { arc, line } from 'd3';
 import { GaugeOptions, MarkerType, Markers } from '../types';
 import { GrafanaTheme2 } from '@grafana/data';
 
-export const dToR = (angleDeg: any) => {
+export const dToR = (angleDeg: number) => {
   // Turns an angle in degrees to radians
   const angleRad = angleDeg * (Math.PI / 180);
   return angleRad;
