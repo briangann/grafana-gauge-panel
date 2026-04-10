@@ -29,7 +29,7 @@ export const renderCircleGroup = (
 ) => {
   let gaugeFaceColor = innerColor;
   if (showThresholdStateOnBackground) {
-    if (displayValue != null && thresholds) {
+    if (displayValue !== null && thresholds) {
       const aThreshold = getActiveThreshold(displayValue, thresholds.steps);
       gaugeFaceColor = aThreshold.color;
     }
