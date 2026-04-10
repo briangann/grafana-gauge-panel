@@ -102,6 +102,14 @@ export const GaugePanel: React.FC<Props> = ({
     return computeTickSpacing(options.minValue, options.maxValue);
   }, [ticksClamped, options.minValue, options.maxValue]);
 
+  const tickLabelFormatter = useMemo(() => {
+    if (!options.formatTickLabelsWithUnit) {
+      return undefined;
+    }
+    const displayProcessor = getDisplayProcessor({ field: { config: metric.field }, theme: theme2 });
+    return (value: number) => formattedValueToString(displayProcessor(value));
+  }, [options.formatTickLabelsWithUnit, metric.field, theme2]);
+
   return (
     <div className={cx(styles.wrapper, dimensionStyle)}>
       {ticksClamped && suggestedSpacing && (
@@ -135,6 +143,7 @@ export const GaugePanel: React.FC<Props> = ({
           tickLengthMin={options.tickLengthMin * gaugeRadiusCalc}
           thresholds={metric.field.thresholds ?? fieldConfig.defaults.thresholds}
           onTicksClamped={onTicksClamped}
+          tickLabelFormatter={tickLabelFormatter}
         />
       </div>
     </div>

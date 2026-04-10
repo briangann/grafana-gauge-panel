@@ -91,6 +91,8 @@ export interface GaugeOptions {
   //
   thresholds: ThresholdsConfig | undefined;
   onTicksClamped?: (clamped: boolean) => void;
+  formatTickLabelsWithUnit: boolean;
+  tickLabelFormatter?: (value: number) => string;
 }
 
 export enum FontFamilies {

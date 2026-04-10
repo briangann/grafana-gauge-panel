@@ -266,11 +266,21 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
     ]
   );
 
+  const formattedTickLabels = useMemo(() => {
+    if (!options.tickLabelFormatter) {
+      return tickMajorLabels;
+    }
+    return tickMajorLabels.map((label) => {
+      const num = parseFloat(label);
+      return isNaN(num) ? label : options.tickLabelFormatter!(num);
+    });
+  }, [tickMajorLabels, options.tickLabelFormatter]);
+
   const majorTickLabelElements = useMemo(
     () =>
       renderMajorTickLabels(
         tickAnglesMaj,
-        tickMajorLabels,
+        formattedTickLabels,
         options.tickLabelFontSize,
         options.gaugeRadius,
         options.ticknessGaugeBasis,
@@ -283,7 +293,7 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
       ),
     [
       tickAnglesMaj,
-      tickMajorLabels,
+      formattedTickLabels,
       options.tickLabelColor,
       options.tickLabelFontSize,
       options.tickFont,

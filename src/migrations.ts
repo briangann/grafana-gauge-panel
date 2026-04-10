@@ -329,6 +329,7 @@ export const migrateDefaults = (angular: AngularOptions) => {
     showTitle: false,
     showValue: true,
     showTickLabels: true,
+    formatTickLabelsWithUnit: false,
     thresholds: undefined,
     showThresholdStateOnValue: false,
     showThresholdStateOnTitle: false,
