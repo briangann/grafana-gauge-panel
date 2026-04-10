@@ -82,10 +82,11 @@ and allows the needle to cross the limit (burying the needle).
 
 ![Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-limits.png)
 
-| Option        | Description                       |
-| ------------- | --------------------------------- |
-| Minimum Value | Minimum Value allowed on the face |
-| Maximum Value | Maximum Value allowed on the face |
+| Option               | Description                                                        |
+| -------------------- | ------------------------------------------------------------------ |
+| Minimum Value        | Minimum Value allowed on the face                                  |
+| Maximum Value        | Maximum Value allowed on the face                                  |
+| Wrap Values to Range | Wrap out-of-range values using modulo arithmetic (for compass)     |
 
 When you change the Minimum or Maximum Value, tick spacing is
 automatically recalculated if the new range would produce more than

@@ -95,6 +95,11 @@ All changes noted here.
   display (fixes #101)
 - Add "Show Tick Labels" toggle to hide/show the tick mark labels
   (fixes #101)
+- Add "Wrap Values to Range" option under Limits for compass-style
+  gauges; normalizes out-of-range values using modulo arithmetic
+  (e.g., -90 becomes 270 for a 0-360 range)
+- Remove hardcoded decimals default of 2; now uses Grafana's auto
+- Add provisioned compass dashboard for testing
 
 ### Panel Editor UX
 
