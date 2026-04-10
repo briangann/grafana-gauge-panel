@@ -17,6 +17,10 @@ All changes noted here.
 - Fix `migrateTickMaps` missing `enabled` field in return value
 - Fix marker shape migration assigning `MarkerType` object to `string`
   field (now correctly extracts `.name`)
+- Fix browser hang when gauge max value is very large (e.g., 6 billion)
+  by lowering tick cap from 500 to 100, adding an iteration guard to
+  prevent runaway loops, and auto-calculating tick spacing when the
+  user changes min/max values (fixes #63)
 
 ### Type Safety
 
@@ -67,6 +71,14 @@ All changes noted here.
 - Bump `actions/github-script` v8.0.0 → v9.0.0
 - Remove `master` branch references, pin actions to version tags
 - Clean up scaffolding comments in release.yml
+
+### New Features
+
+- Add `computeTickSpacing` utility that calculates human-friendly
+  ("nice number") tick intervals for any value range
+- Auto-fill tick spacing when min/max values change in the panel editor
+- Show warning icon with tooltip when tick count is clamped, including
+  suggested spacing values
 
 ### E2E Testing
 

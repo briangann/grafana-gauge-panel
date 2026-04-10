@@ -23,6 +23,7 @@ import { useTickComputations } from './useTickComputations';
 import { useNeedleAnimation } from './useNeedleAnimation';
 
 export const Gauge: React.FC<GaugeOptions> = (options) => {
+  const { onTicksClamped } = options;
   const divStyles = useStyles2(getWrapperStyles);
   const svgStyles = useStyles2(getSVGStyles);
   const needleId = useId();
@@ -82,8 +83,8 @@ export const Gauge: React.FC<GaugeOptions> = (options) => {
   });
 
   useEffect(() => {
-    options.onTicksClamped?.(ticksClamped);
-  }, [ticksClamped, options.onTicksClamped]);
+    onTicksClamped?.(ticksClamped);
+  }, [ticksClamped, onTicksClamped]);
 
   useNeedleAnimation(needleId, {
     displayValue: options.displayValue ?? NaN,
