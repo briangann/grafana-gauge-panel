@@ -1,0 +1,205 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "testdata",
+        "uid": "P53465F745837BCFD"
+      },
+      "fieldConfig": {
+        "defaults": {
+                    "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "degree"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "allowNeedleCrossLimits": false,
+        "animateNeedleValueTransition": true,
+        "animateNeedleValueTransitionSpeed": 100,
+        "edgeWidth": 0.05,
+        "gaugeRadius": 0,
+        "innerColor": "#ffffff",
+        "markerEndEnabled": true,
+        "markerEndShape": 0,
+        "markerStartEnabled": true,
+        "markerStartShape": "square",
+        "maxNeedleAngle": 540,
+        "maxTickAngle": 540,
+        "maxValue": 360,
+        "wrapValues": true,
+        "minValue": 0,
+        "needleColor": "#0099cc",
+        "needleCrossLimitDegrees": 5,
+        "needleLengthNeg": 0.2,
+        "needleTickGap": 0.05,
+        "needleWidth": 5,
+        "operatorName": "last",
+        "outerEdgeColor": "#0099cc",
+        "padding": 0.05,
+        "pivotColor": "#999999",
+        "pivotRadius": 0.1,
+        "showThresholdBandLowerRange": false,
+        "showThresholdBandMiddleRange": false,
+        "showThresholdBandOnGauge": false,
+        "showThresholdBandUpperRange": false,
+        "showThresholdStateOnBackground": false,
+        "showThresholdStateOnTitle": false,
+        "showThresholdStateOnValue": false,
+        "showTitle": false,
+        "showValue": true,
+        "showTickLabels": true,
+        "tickEdgeGap": 0.05,
+        "tickFont": "Inter",
+        "tickLabelColor": "#000000",
+        "tickLabelFontSize": 18,
+        "tickLengthMaj": 0.15,
+        "tickLengthMin": 0.05,
+        "tickMajorColor": "#0099CC",
+        "tickMapConfig": {
+          "tickMaps": [
+            {
+              "label": "North",
+              "enabled": true,
+              "order": 0,
+              "value": "0",
+              "text": "North"
+            },
+            {
+              "label": "NorthEast",
+              "enabled": true,
+              "order": 1,
+              "value": "45",
+              "text": "NE"
+            },
+            {
+              "label": "East",
+              "enabled": true,
+              "order": 2,
+              "value": "90",
+              "text": "East"
+            },
+            {
+              "label": "SouthEast",
+              "enabled": true,
+              "order": 3,
+              "value": "135",
+              "text": "SE"
+            },
+            {
+              "label": "South",
+              "enabled": true,
+              "order": 4,
+              "value": "180",
+              "text": "South"
+            },
+            {
+              "label": "SouthWest",
+              "enabled": true,
+              "order": 5,
+              "value": "225",
+              "text": "SW"
+            },
+            {
+              "label": "West",
+              "enabled": true,
+              "order": 6,
+              "value": "270",
+              "text": "West"
+            },
+            {
+              "label": "NorthWest",
+              "enabled": true,
+              "order": 7,
+              "value": "315",
+              "text": "NW"
+            }
+          ],
+          "enabled": true
+        },
+        "tickMinorColor": "#000000",
+        "tickSpacingMajor": 45,
+        "tickSpacingMinor": 15,
+        "tickWidthMajor": 5,
+        "tickWidthMinor": 1,
+        "ticknessGaugeBasis": 200,
+        "titleFont": "Inter",
+        "titleFontSize": 22,
+        "titleYOffset": 0,
+        "unitsLabelColor": "#000000",
+        "valueFont": "Inter",
+        "valueFontSize": 22,
+        "valueYOffset": -85,
+        "zeroNeedleAngle": 180,
+        "zeroTickAngle": 180
+      },
+      "pluginVersion": "2.0.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "testdata",
+            "uid": "P53465F745837BCFD"
+          },
+          "refId": "A",
+          "scenarioId": "random_walk"
+        }
+      ],
+      "title": "Compass (Wind Direction)",
+      "type": "briangann-gauge-panel"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "D3 Gauge - Compass",
+  "uid": "d3gauge-compass-test",
+  "version": 1,
+  "weekStart": ""
+}

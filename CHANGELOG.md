@@ -64,6 +64,7 @@ All changes noted here.
 - Add `eslint.config.mjs` scaffolding header and update README with flat config example
 - Add `mise.toml` for Node.js version pinning (24.14.1)
 - Add AGENTS instructions, e2e testing guide, and build/validate skills
+- Change `grafanaDependency` to `>=10.0.0` with no upper limit
 
 ### CI
 
@@ -95,6 +96,11 @@ All changes noted here.
   display (fixes #101)
 - Add "Show Tick Labels" toggle to hide/show the tick mark labels
   (fixes #101)
+- Add "Wrap Values to Range" option under Limits for compass-style
+  gauges; normalizes out-of-range values using modulo arithmetic
+  (e.g., -90 becomes 270 for a 0-360 range) (related to #13)
+- Remove hardcoded decimals default of 2; now uses Grafana's auto
+- Add provisioned compass dashboard for testing
 
 ### Panel Editor UX
 

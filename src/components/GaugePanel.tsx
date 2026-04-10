@@ -77,6 +77,18 @@ export const GaugePanel: React.FC<Props> = ({
 
   const metric = metrics[0];
 
+  const wrappedValue = useMemo(() => {
+    const raw = metric.display.numeric;
+    if (!options.wrapValues || isNaN(raw)) {
+      return raw;
+    }
+    const range = options.maxValue - options.minValue;
+    if (range <= 0) {
+      return raw;
+    }
+    return ((((raw - options.minValue) % range) + range) % range) + options.minValue;
+  }, [metric.display.numeric, options.wrapValues, options.minValue, options.maxValue]);
+
   const [ticksClamped, setTicksClamped] = useState(false);
 
   const onTicksClamped = useCallback((clamped: boolean) => {
@@ -104,8 +116,12 @@ export const GaugePanel: React.FC<Props> = ({
       <div className={cx(styles.container)}>
         <Gauge
           {...options}
-          displayFormatted={formattedValueToString(metric.display)}
-          displayValue={isNaN(metric.display.numeric) ? NaN : metric.display.numeric}
+          displayFormatted={options.wrapValues && !isNaN(wrappedValue)
+            ? formattedValueToString(
+                getDisplayProcessor({ field: { config: metric.field }, theme: theme2 })(wrappedValue)
+              )
+            : formattedValueToString(metric.display)}
+          displayValue={isNaN(wrappedValue) ? NaN : wrappedValue}
           displayTitle={metric.display.title || ''}
           panelId={id}
           panelWidth={width}

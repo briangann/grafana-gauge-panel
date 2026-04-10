@@ -51,6 +51,7 @@ const defaultOptions: GaugeOptions = {
   markerStartShape: 'circle',
   minValue: 0,
   maxValue: 100,
+  wrapValues: false,
   outerEdgeColor: '#000',
   innerColor: '#fff',
   pivotColor: '#333',
@@ -371,6 +372,63 @@ describe('GaugePanel', () => {
     it('falls back to field name when displayName is absent', () => {
       render(<GaugePanel {...makeProps()} />);
       expect(mockGaugeProps[0].displayTitle).toBe('value');
+    });
+  });
+
+  describe('wrapValues', () => {
+    it('wraps negative value into range when enabled', () => {
+      const props = makeProps(
+        { minValue: 0, maxValue: 360, wrapValues: true },
+        makeFieldData([-90], {})
+      );
+      render(<GaugePanel {...props} />);
+      expect(mockGaugeProps[0].displayValue).toBe(270);
+    });
+
+    it('wraps value exceeding max into range', () => {
+      const props = makeProps(
+        { minValue: 0, maxValue: 360, wrapValues: true },
+        makeFieldData([400], {})
+      );
+      render(<GaugePanel {...props} />);
+      expect(mockGaugeProps[0].displayValue).toBe(40);
+    });
+
+    it('does not wrap when disabled', () => {
+      const props = makeProps(
+        { minValue: 0, maxValue: 360, wrapValues: false },
+        makeFieldData([-90], {})
+      );
+      render(<GaugePanel {...props} />);
+      expect(mockGaugeProps[0].displayValue).toBe(-90);
+    });
+
+    it('passes through in-range values unchanged', () => {
+      const props = makeProps(
+        { minValue: 0, maxValue: 360, wrapValues: true },
+        makeFieldData([180], {})
+      );
+      render(<GaugePanel {...props} />);
+      expect(mockGaugeProps[0].displayValue).toBe(180);
+    });
+
+    it('wraps with non-zero minValue', () => {
+      const props = makeProps(
+        { minValue: 10, maxValue: 110, wrapValues: true },
+        makeFieldData([5], {})
+      );
+      render(<GaugePanel {...props} />);
+      // range=100, (5-10)%100 = -5, (-5+100)%100 = 95, 95+10 = 105
+      expect(mockGaugeProps[0].displayValue).toBe(105);
+    });
+
+    it('wraps value at exactly max to min', () => {
+      const props = makeProps(
+        { minValue: 0, maxValue: 360, wrapValues: true },
+        makeFieldData([360], {})
+      );
+      render(<GaugePanel {...props} />);
+      expect(mockGaugeProps[0].displayValue).toBe(0);
     });
   });
 

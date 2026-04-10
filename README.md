@@ -12,7 +12,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
 
 This panel plugin provides a [D3-based](https://d3js.org) gauge panel
-for [Grafana](https://www.grafana.com) 9.3+/10.x/11.x/12.x
+for [Grafana](https://www.grafana.com) 10.0+
 
 ## Screenshots
 
@@ -27,6 +27,8 @@ for [Grafana](https://www.grafana.com) 9.3+/10.x/11.x/12.x
 ![Custom Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/alt-gauge.png)
 
 ![Custom Gauge With Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/alt-gauge-limits.png)
+
+![Compass Gauge](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/compass-example.png)
 
 ### Configuration Options
 
@@ -82,10 +84,11 @@ and allows the needle to cross the limit (burying the needle).
 
 ![Limits](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-limits.png)
 
-| Option        | Description                       |
-| ------------- | --------------------------------- |
-| Minimum Value | Minimum Value allowed on the face |
-| Maximum Value | Maximum Value allowed on the face |
+| Option               | Description                                                        |
+| -------------------- | ------------------------------------------------------------------ |
+| Minimum Value        | Minimum Value allowed on the face                                  |
+| Maximum Value        | Maximum Value allowed on the face                                  |
+| Wrap Values to Range | Wrap out-of-range values using modulo arithmetic (for compass)     |
 
 When you change the Minimum or Maximum Value, tick spacing is
 automatically recalculated if the new range would produce more than

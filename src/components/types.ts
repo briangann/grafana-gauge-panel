@@ -36,6 +36,7 @@ export interface GaugeOptions {
   // limits
   minValue: number;
   maxValue: number;
+  wrapValues: boolean;
   // coloring
   outerEdgeColor: string;
   innerColor: string;
