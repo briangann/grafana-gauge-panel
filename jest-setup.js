@@ -10,3 +10,12 @@ console.error = (...args) => {
   }
   originalConsoleError(...args);
 };
+
+// Suppress i18next promotional banner from Grafana UI internals.
+const originalConsoleInfo = console.info;
+console.info = (...args) => {
+  if (typeof args[0] === 'string' && args[0].includes('i18next')) {
+    return;
+  }
+  originalConsoleInfo(...args);
+};
