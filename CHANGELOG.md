@@ -101,6 +101,9 @@ All changes noted here.
   (e.g., -90 becomes 270 for a 0-360 range) (related to #13)
 - Remove hardcoded decimals default of 2; now uses Grafana's auto
 - Add provisioned compass dashboard for testing
+- Add "Format Tick Labels with Unit" option under Gauge Readings;
+  formats tick labels using the configured unit and decimals
+  (e.g., 100000000 displays as "100 MB/s") (related to #57)
 
 ### Panel Editor UX
 

@@ -153,10 +153,11 @@ This is the main section that is used to modify the displayed range on the gauge
 
 ![Gauge Readings](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-config-gauge-readings.png)
 
-| Option             | Description                                                        |
-| ------------------ | ------------------------------------------------------------------ |
-| Tick Spacing Major | The numeric spacing of the major increment ticks (minimum 0.001)   |
-| Tick Spacing Minor | The numeric spacing of the minor increment ticks (minimum 0.001)   |
+| Option                       | Description                                                      |
+| ---------------------------- | ---------------------------------------------------------------- |
+| Tick Spacing Major           | The numeric spacing of the major increment ticks (minimum 0.001) |
+| Tick Spacing Minor           | The numeric spacing of the minor increment ticks (minimum 0.001) |
+| Format Tick Labels with Unit | Format tick labels using the configured unit and decimals        |
 
 Fractional tick spacing is supported for both major and minor ticks.
 This is useful for gauges with narrow ranges where sub-integer precision
