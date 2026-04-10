@@ -166,6 +166,10 @@ value on the first tick, last tick, and any tick where the unit
 prefix changes (e.g., "KB/s" to "MB/s"). Middle ticks show only
 the number for clean alignment.
 
+![Unit Formatting Example 1](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-gauge-units-1.png)
+
+![Unit Formatting Example 2](https://raw.githubusercontent.com/briangann/grafana-gauge-panel/main/src/screenshots/react-gauge-units-2.png)
+
 Fractional tick spacing is supported for both major and minor ticks.
 This is useful for gauges with narrow ranges where sub-integer precision
 is needed (e.g., a frequency gauge spanning 47-52 Hz with 0.1 Hz minor
