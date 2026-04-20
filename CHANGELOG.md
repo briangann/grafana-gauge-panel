@@ -93,6 +93,15 @@ All changes noted here.
 - Remove `.github/dependabot.yml` (superseded by Renovate)
 - Add `.github/workflows/lint-actions.yml` — runs `actionlint` and
   `zizmor` on PRs and pushes to `main` that touch `.github/workflows/**`
+- Fix actionlint findings surfaced by the new workflow:
+  - Quote `$GITHUB_OUTPUT`, `$PWD`, and metadata vars in `ci.yml`
+    (SC2086); drop useless `cat` and consolidate `>>` redirects in
+    the `Get plugin metadata` step (SC2002, SC2129, SC2155)
+  - Quote `$GITHUB_OUTPUT` in `is-compatible.yml` and collapse the
+    folded-scalar `run:` into a plain block
+  - Replace `ubuntu-x64-small` runner label with `ubuntu-latest` in
+    `version-bump-changelog.yml` (scaffolding leftover; this repo is
+    not on Grafana Labs self-hosted runners)
 
 ### New Features
 
