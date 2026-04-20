@@ -128,12 +128,18 @@ All changes noted here.
   `cking`, `importme`, `negotiables`, `zizmor`).
 - Add an **E2E targeting** subsection to `AGENTS.md` §10 Testing:
   - Ours → `data-testid`.
-  - Grafana option builder with `grafanaDependency` ≥ 11.0.0 →
+  - Grafana option builder ≥ 11.0.0 →
     `selectors.components.PanelEditor.OptionsPane.fieldInput(<label>)`
     via `@grafana/plugin-e2e`.
-  - Grafana option builder with `grafanaDependency` including <11 (this
-    repo today) → `label[for="<plugin-id>-<option-path>"]` with
-    `.first()`.
+  - Grafana option builder ≥ 12.0.0 → also
+    `label[for="<plugin-id>-<option-path>"]` with `.first()`. Do **not**
+    use this below Grafana 12 — confirmed failing on 10.0.13 / 10.2.9 /
+    11.1.13 / 11.5.10 in PR #173 CI.
+  - Always gate edit-mode interaction tests on a `grafanaVersion` floor
+    via `test.skip` in a describe-level `beforeEach` — panel-editor
+    chrome diverges across majors. This repo's current floor is 12.0.0.
+  - Always verify on the matrix floor (not just `pnpm server`'s default
+    image) before declaring a locator stable.
 
 ### New Features
 
