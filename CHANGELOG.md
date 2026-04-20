@@ -120,7 +120,9 @@ All changes noted here.
   goal-driven execution, tool use, session hygiene, communication style,
   ask-vs-proceed, self-improvement) and sections 11–12 follow upstream;
   all prior project-specific content (stack, commands, layout,
-  conventions, forbidden) now lives under Section 10.
+  conventions, forbidden) now lives under Section 10. Every line now
+  wraps at 120 chars, so the repo's `.markdownlint.yaml` rule applies
+  cleanly (no per-file `MD013` disable needed).
 - `cspell.config.json`: add proper names and tool names referenced in
   the new template (`Andrej`, `Cherny`, `Donahoe`, `IJFW`, `Karpathy`,
   `cking`, `importme`, `negotiables`, `zizmor`).
