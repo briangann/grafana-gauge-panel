@@ -129,8 +129,21 @@ The CI workflow (`ci.yml`) is an inline workflow (not a reusable workflow call) 
 
 ### Action Pinning
 
-Pin all GitHub Actions to **version tags** (e.g., `@v6`, `@v4.0.0`), not commit SHAs.
-This keeps workflows readable and consistent.
+Pin every third-party GitHub Action to a **full-length commit SHA**
+with a trailing version comment:
+
+```yaml
+- uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+```
+
+Enforced by `zizmor` in `.github/workflows/lint-actions.yml`. Tags can
+be moved silently and are not safe as a pin.
+
+To resolve a tag to a SHA:
+
+```bash
+gh api repos/<owner>/<repo>/commits/<tag> -q .sha
+```
 
 ## Version Bumping & Changelog
 
