@@ -116,8 +116,8 @@ devDependencies:
     specifier: 10.0.0
     version: 10.0.0
   css-loader:
-    specifier: ^6.11.0
-    version: 6.11.0(webpack@5.106.2)
+    specifier: ^7.1.4
+    version: 7.1.4(webpack@5.106.2)
   d3:
     specifier: 7.9.0
     version: 7.9.0
@@ -1435,7 +1435,7 @@ packages:
       react-calendar: 6.0.0(@types/react@18.3.28)(react-dom@18.3.1)(react@18.3.1)
       react-colorful: 5.6.1(react-dom@18.3.1)(react@18.3.1)
       react-custom-scrollbars-2: 4.5.0(react-dom@18.3.1)(react@18.3.1)
-      react-data-grid: github.com/grafana/react-data-grid/a10c748f40edc538425b458af4e471a8262ec4ed(react-dom@18.3.1)(react@18.3.1)
+      react-data-grid: git@github.com+grafana/react-data-grid/a10c748f40edc538425b458af4e471a8262ec4ed(react-dom@18.3.1)(react@18.3.1)
       react-dom: 18.3.1(react@18.3.1)
       react-dropzone: 14.3.8(react@18.3.1)
       react-highlight-words: 0.21.0(react@18.3.1)
@@ -4584,24 +4584,24 @@ packages:
       hyphenate-style-name: 1.1.0
     dev: false
 
-  /css-loader@6.11.0(webpack@5.106.2):
-    resolution: {integrity: sha512-CTJ+AEQJjq5NzLga5pE39qdiSV56F8ywCIsqNIRF0r7BDgWsN25aazToqAFg7ZrtA/U016xudB3ffgweORxX7g==}
-    engines: {node: '>= 12.13.0'}
+  /css-loader@7.1.4(webpack@5.106.2):
+    resolution: {integrity: sha512-vv3J9tlOl04WjiMvHQI/9tmIrCxVrj6PFbHemBB1iihpeRbi/I4h033eoFIhwxBBqLhI0KYFS7yvynBFhIZfTw==}
+    engines: {node: '>= 18.12.0'}
     peerDependencies:
-      '@rspack/core': 0.x || 1.x
-      webpack: ^5.0.0
+      '@rspack/core': 0.x || ^1.0.0 || ^2.0.0-0
+      webpack: ^5.27.0
     peerDependenciesMeta:
       '@rspack/core':
         optional: true
       webpack:
         optional: true
     dependencies:
-      icss-utils: 5.1.0(postcss@8.5.8)
-      postcss: 8.5.8
-      postcss-modules-extract-imports: 3.1.0(postcss@8.5.8)
-      postcss-modules-local-by-default: 4.2.0(postcss@8.5.8)
-      postcss-modules-scope: 3.2.1(postcss@8.5.8)
-      postcss-modules-values: 4.0.0(postcss@8.5.8)
+      icss-utils: 5.1.0(postcss@8.5.10)
+      postcss: 8.5.10
+      postcss-modules-extract-imports: 3.1.0(postcss@8.5.10)
+      postcss-modules-local-by-default: 4.2.0(postcss@8.5.10)
+      postcss-modules-scope: 3.2.1(postcss@8.5.10)
+      postcss-modules-values: 4.0.0(postcss@8.5.10)
       postcss-value-parser: 4.2.0
       semver: 7.7.4
       webpack: 5.106.2(@swc/core@1.15.30)(webpack-cli@5.1.4)
@@ -6120,13 +6120,13 @@ packages:
     dependencies:
       safer-buffer: 2.1.2
 
-  /icss-utils@5.1.0(postcss@8.5.8):
+  /icss-utils@5.1.0(postcss@8.5.10):
     resolution: {integrity: sha512-soFhflCVWLfRNOPU3iv5Z9VUdT44xFRbzjLsEzSr5AQmgqPMTHdU3PMT1Cf1ssx8fLNJDA1juftYl+PUcv3MqA==}
     engines: {node: ^10 || ^12 || >= 14}
     peerDependencies:
       postcss: ^8.1.0
     dependencies:
-      postcss: 8.5.8
+      postcss: 8.5.10
     dev: true
 
   /identity-obj-proxy@3.0.0:
@@ -7765,45 +7765,45 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /postcss-modules-extract-imports@3.1.0(postcss@8.5.8):
+  /postcss-modules-extract-imports@3.1.0(postcss@8.5.10):
     resolution: {integrity: sha512-k3kNe0aNFQDAZGbin48pL2VNidTF0w4/eASDsxlyspobzU3wZQLOGj7L9gfRe0Jo9/4uud09DsjFNH7winGv8Q==}
     engines: {node: ^10 || ^12 || >= 14}
     peerDependencies:
       postcss: ^8.1.0
     dependencies:
-      postcss: 8.5.8
+      postcss: 8.5.10
     dev: true
 
-  /postcss-modules-local-by-default@4.2.0(postcss@8.5.8):
+  /postcss-modules-local-by-default@4.2.0(postcss@8.5.10):
     resolution: {integrity: sha512-5kcJm/zk+GJDSfw+V/42fJ5fhjL5YbFDl8nVdXkJPLLW+Vf9mTD5Xe0wqIaDnLuL2U6cDNpTr+UQ+v2HWIBhzw==}
     engines: {node: ^10 || ^12 || >= 14}
     peerDependencies:
       postcss: ^8.1.0
     dependencies:
-      icss-utils: 5.1.0(postcss@8.5.8)
-      postcss: 8.5.8
+      icss-utils: 5.1.0(postcss@8.5.10)
+      postcss: 8.5.10
       postcss-selector-parser: 7.1.1
       postcss-value-parser: 4.2.0
     dev: true
 
-  /postcss-modules-scope@3.2.1(postcss@8.5.8):
+  /postcss-modules-scope@3.2.1(postcss@8.5.10):
     resolution: {integrity: sha512-m9jZstCVaqGjTAuny8MdgE88scJnCiQSlSrOWcTQgM2t32UBe+MUmFSO5t7VMSfAf/FJKImAxBav8ooCHJXCJA==}
     engines: {node: ^10 || ^12 || >= 14}
     peerDependencies:
       postcss: ^8.1.0
     dependencies:
-      postcss: 8.5.8
+      postcss: 8.5.10
       postcss-selector-parser: 7.1.1
     dev: true
 
-  /postcss-modules-values@4.0.0(postcss@8.5.8):
+  /postcss-modules-values@4.0.0(postcss@8.5.10):
     resolution: {integrity: sha512-RDxHkAiEGI78gS2ofyvCsu7iycRv7oqw5xMWn9iMoR0N/7mf9D50ecQqUo5BZ9Zh2vH4bCUR/ktCqbB9m8vJjQ==}
     engines: {node: ^10 || ^12 || >= 14}
     peerDependencies:
       postcss: ^8.1.0
     dependencies:
-      icss-utils: 5.1.0(postcss@8.5.8)
-      postcss: 8.5.8
+      icss-utils: 5.1.0(postcss@8.5.10)
+      postcss: 8.5.10
     dev: true
 
   /postcss-selector-parser@7.1.1:
@@ -7818,8 +7818,8 @@ packages:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
     dev: true
 
-  /postcss@8.5.8:
-    resolution: {integrity: sha512-OW/rX8O/jXnm82Ey1k44pObPtdblfiuWnrd8X7GJ7emImCOstunGbXUpp7HdBrFQX6rJzn3sPT397Wp5aCwCHg==}
+  /postcss@8.5.10:
+    resolution: {integrity: sha512-pMMHxBOZKFU6HgAZ4eyGnwXF/EvPGGqUr0MnZ5+99485wwW41kW91A4LOGxSHhgugZmSChL5AlElNdwlNgcnLQ==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.11
@@ -9935,9 +9935,9 @@ packages:
     resolution: {integrity: sha512-w2NTI8+3l3eeltKAdK8QpiLo/flRAr2p8AGeakfMZOXBxOg9HIu4LVDxBi81sYgVhFhdJjv1OrB5ssI8uFPoLg==}
     dev: false
 
-  github.com/grafana/react-data-grid/a10c748f40edc538425b458af4e471a8262ec4ed(react-dom@18.3.1)(react@18.3.1):
-    resolution: {tarball: https://codeload.github.com/grafana/react-data-grid/tar.gz/a10c748f40edc538425b458af4e471a8262ec4ed}
-    id: github.com/grafana/react-data-grid/a10c748f40edc538425b458af4e471a8262ec4ed
+  git@github.com+grafana/react-data-grid/a10c748f40edc538425b458af4e471a8262ec4ed(react-dom@18.3.1)(react@18.3.1):
+    resolution: {commit: a10c748f40edc538425b458af4e471a8262ec4ed, repo: git@github.com:grafana/react-data-grid.git, type: git}
+    id: git@github.com+grafana/react-data-grid/a10c748f40edc538425b458af4e471a8262ec4ed
     name: react-data-grid
     version: 7.0.0-beta.56
     peerDependencies:
