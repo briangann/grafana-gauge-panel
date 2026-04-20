@@ -380,6 +380,18 @@ Check CI status with `gh pr checks <PR-number>`.
   hex values.
 - Use `Array<T>` syntax for non-simple array types (ESLint rule).
 
+##### E2E targeting
+
+- **If the component is ours, add `data-testid`.** Our custom editors (`TickMapEditor`,
+  `TickMapItem`, `RangeEditor`, etc.) render in this repo, so adding a `data-testid` prop
+  is a one-line change and the most stable locator.
+- **If the element is rendered by Grafana's option builder (`.addBooleanSwitch`,
+  `.addTextInput`, …), use the `label[for="<plugin-id>-<option-path>"]` pattern.** The
+  `for` attribute is deterministically built from values we own (`plugin.json` `id` and
+  the option's `path` in `module.ts`), so it is stable across Grafana versions without
+  writing a custom editor wrapper just to inject a testid. Wrap the selector in
+  `.first()` — some Grafana versions render the label twice in the options pane.
+
 #### GitHub Actions
 
 Pin every third-party action to a **full-length commit SHA** with a trailing version
