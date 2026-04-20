@@ -1,4 +1,5 @@
 import { test, expect, PanelEditPage } from '@grafana/plugin-e2e';
+import { gte } from 'semver';
 
 const SMOKE_DASHBOARD = { uid: 'briangann-gauge-smoke' };
 const PANEL_ID = '1';
@@ -8,7 +9,20 @@ const PANEL_ID = '1';
 const gaugeSvg = (panelEditPage: PanelEditPage) =>
   panelEditPage.panel.locator.locator('svg[viewBox^="0,0,"]').first();
 
+// Panel editor chrome (options group aria-labels, option-id label `for`
+// attributes) only stabilises around Grafana 12. Skip interaction tests
+// on 10.x/11.x — the smoke test still covers those versions at the
+// render level.
+const MIN_GRAFANA_FOR_INTERACTIONS = '12.0.0';
+
 test.describe('gauge panel — edit-mode interactions', () => {
+  test.beforeEach(async ({ grafanaVersion }) => {
+    test.skip(
+      !gte(grafanaVersion, MIN_GRAFANA_FOR_INTERACTIONS),
+      `panel edit-mode chrome differs on Grafana <${MIN_GRAFANA_FOR_INTERACTIONS}`
+    );
+  });
+
   test('toggling "Show Value on Gauge" hides and restores the value label', async ({
     gotoPanelEditPage,
   }) => {

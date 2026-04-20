@@ -196,6 +196,10 @@ All changes noted here.
   3. Tick maps — clicking `Add Tick Map`, entering value `50` + text
      `HALF`, and asserting the gauge renders a `<text>` with `HALF` in
      place of the `50` tick label.
+  Tests skip on Grafana `<12.0.0` — the panel-editor chrome (options
+  group aria-labels, option-id `label[for]` attributes) only
+  stabilises around Grafana 12. The `gauge-smoke.spec.ts` render check
+  keeps coverage for 10.x / 11.x.
 
 ### Testing (interaction coverage)
 
