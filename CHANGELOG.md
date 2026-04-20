@@ -114,6 +114,14 @@ All changes noted here.
 - Update `AGENTS.md` Action Pinning rule: require full-length commit
   SHAs with a trailing version comment (was: version tags). Reflects
   the `zizmor`-enforced policy.
+- Add a `Coding Agents` section to `AGENTS.md`, imported verbatim from
+  the `TheRealSeanDonahoe/agents-md` template (general-purpose operating
+  rules for coding agents). Block is wrapped in
+  `markdownlint-disable MD013 MD024` to preserve the source wording and
+  avoid a duplicate-`Commands`-heading lint error.
+- Add proper names and tool names surfaced by cspell (`Andrej`,
+  `Cherny`, `Donahoe`, `IJFW`, `Karpathy`, `negotiables`, `zizmor`,
+  `cking`) to `cspell.config.json`.
 
 ### New Features
 
