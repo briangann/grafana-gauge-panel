@@ -91,6 +91,8 @@ All changes noted here.
   (pending `grafanaDependency` upper-bound bump), and a rule pinning
   `@types/node` below v25 to match `engines.node >= 24`
 - Remove `.github/dependabot.yml` (superseded by Renovate)
+- Add `.github/workflows/lint-actions.yml` — runs `actionlint` and
+  `zizmor` on PRs and pushes to `main` that touch `.github/workflows/**`
 
 ### New Features
 
