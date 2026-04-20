@@ -152,12 +152,20 @@ All changes noted here.
 - `@testing-library/react` 14.0.0 → 15.0.7 (fixes `ReactDOMTestUtils.act` warnings)
 - `@grafana/eslint-config` 8.2.0 → 9.0.0
 - `@stylistic/eslint-plugin-ts` 2.13.0 → 4.4.1
-- `@types/node` 20.19.37 → 25.5.2
+- `@types/node` 20.19.37 → 24.x (pinned to match `engines.node >= 24`;
+  do not drift to 25 while the engine floor is 24)
 - `cspell` 7.3.8 → 10.0.0
 - `eslint-config-prettier` 8.10.2 → 10.1.8
 - `eslint-plugin-jsdoc` 51.4.1 → 62.9.0
-- `eslint-plugin-react-hooks` 5.2.0 → 7.0.1
+- `eslint-plugin-react-hooks` 5.2.0 → 7.0.1 (held at 7.0.1 via `~` range;
+  7.1.x adds `react-hooks/immutability` rule that requires code changes
+  in `GaugePanel.tsx`, tracked separately)
 - `glob` 10.5.0 → 13.0.6
+- `@grafana/plugin-e2e` 3.4.12 → 3.5.1
+- `@swc/core` 1.15.24 → 1.15.30
+- `@typescript-eslint/eslint-plugin` 8.58.1 → 8.58.2
+- `@typescript-eslint/parser` 8.58.1 → 8.58.2
+- `webpack` 5.106.0 → 5.106.2
 - Remove deprecated `@types/glob` (glob 13 ships own types)
 
 ### Refactor
