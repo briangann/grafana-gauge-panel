@@ -380,6 +380,36 @@ Check CI status with `gh pr checks <PR-number>`.
   hex values.
 - Use `Array<T>` syntax for non-simple array types (ESLint rule).
 
+##### E2E targeting
+
+- **If the component is ours, add `data-testid`.** Our custom editors (`TickMapEditor`,
+  `TickMapItem`, `RangeEditor`, etc.) render in this repo, so adding a `data-testid` prop
+  is a one-line change and the most stable locator.
+- **If the element is rendered by Grafana's option builder (`.addBooleanSwitch`,
+  `.addTextInput`, …)** pick based on the minimum Grafana version the test will run
+  against:
+  - **Grafana ≥ 11.0.0:** use
+    `selectors.components.PanelEditor.OptionsPane.fieldInput(<label>)` from
+    `@grafana/plugin-e2e`. Resolves to
+    `data-testid Panel editor option pane field input <label>` — Grafana's officially
+    supported selector.
+  - **Grafana ≥ 12.0.0:** `label[for="<plugin-id>-<option-path>"]` (with `.first()`) also
+    works. The `for` attribute is built from values we own (`plugin.json` `id` + option
+    `path` in `module.ts`), so it's stable on 12+ without writing a custom editor
+    wrapper. Do **not** rely on this selector below Grafana 12 — on 10.x and 11.x the
+    option pane renders without that id convention and the label is not found.
+- **Always gate edit-mode interaction tests on a Grafana version floor** via
+  `test.skip(!gte(grafanaVersion, '<floor>'), '…')` in a describe-level `beforeEach`.
+  Panel-editor chrome (Options group aria labels, option-id attributes, portal layout)
+  diverges enough across majors that a locator that passes on one version will often
+  fail on an earlier one. For this repo today the floor is **Grafana 12.0.0**. Keep
+  render-level smoke coverage on older versions via tests that only assert on the
+  rendered SVG, not on editor chrome.
+- **Verify on the matrix floor before declaring a locator stable.** Local verification
+  against one recent Grafana version (e.g. via `pnpm server`, which pins to a single
+  image) is not sufficient — CI runs the full matrix and will catch chrome differences
+  on 10.x / 11.x that the default dev image hides.
+
 #### GitHub Actions
 
 Pin every third-party action to a **full-length commit SHA** with a trailing version
