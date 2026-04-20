@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - name: Version bump
-        uses: grafana/plugin-ci-workflows/actions/plugins/version-bump-changelog@plugins-version-bump-changelog/v1.1.0
+        uses: grafana/plugin-ci-workflows/actions/plugins/version-bump-changelog@d0d69c5a1890ada83d93217b7e9eed9fce3dbdf9 # plugins-version-bump-changelog/v1.1.0
         with:
           generate-changelog: ${{ inputs.generate-changelog }}
           version: ${{ inputs.version }}

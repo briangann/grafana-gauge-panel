@@ -7,12 +7,12 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       # pnpm action uses the packageManager field in package.json to
       # understand which version to install.
-      - uses: pnpm/action-setup@v5
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
       - name: Setup Node.js environment
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 24
           cache: 'pnpm'
@@ -28,7 +28,7 @@ jobs:
           echo "modulets=${MODULETS}" >> "$GITHUB_OUTPUT"
 
       - name: Compatibility check
-        uses: grafana/plugin-actions/is-compatible@is-compatible/v1.0.3
+        uses: grafana/plugin-actions/is-compatible@4698961fa64137fcac207108397ebe8a738a33d1 # is-compatible/v1.0.3
         with:
           module: ${{ steps.find-module-ts.outputs.modulets }}
           comment-pr: no

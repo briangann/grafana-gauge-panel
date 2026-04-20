@@ -14,4 +14,4 @@ jobs:
 
     steps:
       - name: release please version bump changelog
-        uses: grafana/plugin-ci-workflows/actions/plugins/release-please@plugins-release-please/v1.0.1
+        uses: grafana/plugin-ci-workflows/actions/plugins/release-please@80407d0289c509581f86bd8f55b82dbf7237fc1b # plugins-release-please/v1.0.1
