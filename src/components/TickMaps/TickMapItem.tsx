@@ -27,6 +27,7 @@ export const TickMapItem: React.FC<TickMapItemProps> = (props) => {
           </Field>
           <Field label="Value" description="Tick Value where the text will be placed" disabled={!tickMap.enabled}>
             <Input
+              data-testid={`tickmap-value-input-${tickMap.order}`}
               value={tickMap.value}
               placeholder=""
               onChange={(e) => setter(tickMap.order, { ...tickMap, value: e.currentTarget.value })}
@@ -34,6 +35,7 @@ export const TickMapItem: React.FC<TickMapItemProps> = (props) => {
           </Field>
           <Field label="Text" description="Text to be displayed for tick value" disabled={!tickMap.enabled}>
             <Input
+              data-testid={`tickmap-text-input-${tickMap.order}`}
               value={tickMap.text}
               placeholder=""
               onChange={(e) => setter(tickMap.order, { ...tickMap, text: e.currentTarget.value })}

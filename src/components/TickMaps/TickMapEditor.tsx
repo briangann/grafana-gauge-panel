@@ -138,7 +138,7 @@ export const TickMapEditor: React.FC<Props> = ({ context, onChange }) => {
       <div style={{ marginBottom: 8, fontSize: 12, color: 'var(--text-secondary)' }}>
         Replaces value at tick with specified text. The value setting must match one of the displayed values.
       </div>
-      <Button fill="solid" variant="primary" icon="plus" onClick={addItem}>
+      <Button data-testid="tickmap-add-button" fill="solid" variant="primary" icon="plus" onClick={addItem}>
         Add Tick Map
       </Button>
       {tracker.map((trackerItem: TickMapItemTracker, index: number) => {

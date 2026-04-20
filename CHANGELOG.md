@@ -187,6 +187,23 @@ All changes noted here.
   one `<text>` label). The panel is located via `getPanelById(1)` and
   the gauge SVG is disambiguated from the panel-header icon by its
   `viewBox="0,0,…"` attribute.
+- Add panel-level interaction test `tests/gauge-interactions.spec.ts`
+  covering three edit-mode flows:
+  1. `Show Value on Gauge` toggle — text-element count drops when the
+     value label is hidden and returns when toggled back on.
+  2. `Show Threshold Band On Gauge` toggle — path-element count drops
+     when the three bands are hidden and returns when toggled back on.
+  3. Tick maps — clicking `Add Tick Map`, entering value `50` + text
+     `HALF`, and asserting the gauge renders a `<text>` with `HALF` in
+     place of the `50` tick label.
+
+### Testing (interaction coverage)
+
+- Add `data-testid="tickmap-add-button"` on the `Add Tick Map` button
+  in `TickMapEditor` and `data-testid="tickmap-value-input-<order>"` /
+  `data-testid="tickmap-text-input-<order>"` on the Value and Text
+  inputs in `TickMapItem`, so the tick-maps interaction test can
+  target them without relying on Grafana-generated class names.
 
 ### E2E Testing
 
