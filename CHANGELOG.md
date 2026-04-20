@@ -126,10 +126,14 @@ All changes noted here.
 - `cspell.config.json`: add proper names and tool names referenced in
   the new template (`Andrej`, `Cherny`, `Donahoe`, `IJFW`, `Karpathy`,
   `cking`, `importme`, `negotiables`, `zizmor`).
-- Add an **E2E targeting** subsection to `AGENTS.md` §10 Testing: if
-  the component is ours, add `data-testid`; if Grafana's option builder
-  renders it (`.addBooleanSwitch`, `.addTextInput`, …), use the
-  `label[for="<plugin-id>-<option-path>"]` pattern with `.first()`.
+- Add an **E2E targeting** subsection to `AGENTS.md` §10 Testing:
+  - Ours → `data-testid`.
+  - Grafana option builder with `grafanaDependency` ≥ 11.0.0 →
+    `selectors.components.PanelEditor.OptionsPane.fieldInput(<label>)`
+    via `@grafana/plugin-e2e`.
+  - Grafana option builder with `grafanaDependency` including <11 (this
+    repo today) → `label[for="<plugin-id>-<option-path>"]` with
+    `.first()`.
 
 ### New Features
 

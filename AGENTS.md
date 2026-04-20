@@ -386,11 +386,19 @@ Check CI status with `gh pr checks <PR-number>`.
   `TickMapItem`, `RangeEditor`, etc.) render in this repo, so adding a `data-testid` prop
   is a one-line change and the most stable locator.
 - **If the element is rendered by Grafana's option builder (`.addBooleanSwitch`,
-  `.addTextInput`, …), use the `label[for="<plugin-id>-<option-path>"]` pattern.** The
-  `for` attribute is deterministically built from values we own (`plugin.json` `id` and
-  the option's `path` in `module.ts`), so it is stable across Grafana versions without
-  writing a custom editor wrapper just to inject a testid. Wrap the selector in
-  `.first()` — some Grafana versions render the label twice in the options pane.
+  `.addTextInput`, …)** pick based on `grafanaDependency` in `src/plugin.json`:
+  - **`grafanaDependency` starts at `>=11.0.0` or higher:** use
+    `selectors.components.PanelEditor.OptionsPane.fieldInput(<label>)` from
+    `@grafana/plugin-e2e`. Resolves to
+    `data-testid Panel editor option pane field input <label>` and is the officially
+    supported selector.
+  - **`grafanaDependency` includes Grafana <11** (this repo today — `>=10.0.0`):
+    use the `label[for="<plugin-id>-<option-path>"]` pattern. The `for` attribute is
+    deterministically built from values we own (`plugin.json` `id` and the option's
+    `path` in `module.ts`), so it is stable across every Grafana version in the
+    matrix without writing a custom editor wrapper just to inject a testid. Wrap the
+    selector in `.first()` — some Grafana versions render the label twice in the
+    options pane.
 
 #### GitHub Actions
 
