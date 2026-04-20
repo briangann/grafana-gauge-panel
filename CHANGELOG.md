@@ -179,6 +179,14 @@ All changes noted here.
   of clicking the Help toolbar button. Avoids the Grafana 13.x /
   React 19 preview portal overlay that intercepted the click and
   timed out the test (fixes #164).
+- Add plugin-level smoke test `tests/gauge-smoke.spec.ts` plus a
+  provisioned dashboard `provisioning/dashboards/dashboards/D3Gauge-Smoke.json`.
+  The test navigates to the provisioned `Smoke Gauge` panel (uid
+  `briangann-gauge-smoke`), waits for the gauge SVG to become visible,
+  and asserts the render output (multiple `<path>` elements and at least
+  one `<text>` label). The panel is located via `getPanelById(1)` and
+  the gauge SVG is disambiguated from the panel-header icon by its
+  `viewBox="0,0,…"` attribute.
 
 ### E2E Testing
 
