@@ -85,6 +85,12 @@ All changes noted here.
 - Bump `actions/github-script` v8.0.0 → v9.0.0
 - Remove `master` branch references, pin actions to version tags
 - Clean up scaffolding comments in release.yml
+- Replace Dependabot with Renovate: add `renovate.json` with weekly
+  Monday schedule, grouped non-major dev/prod bumps, vulnerability
+  alerts, `lockFileMaintenance`, a rule blocking `@grafana/**@13.x`
+  (pending `grafanaDependency` upper-bound bump), and a rule pinning
+  `@types/node` below v25 to match `engines.node >= 24`
+- Remove `.github/dependabot.yml` (superseded by Renovate)
 
 ### New Features
 
