@@ -102,6 +102,12 @@ All changes noted here.
   - Replace `ubuntu-x64-small` runner label with `ubuntu-latest` in
     `version-bump-changelog.yml` (scaffolding leftover; this repo is
     not on Grafana Labs self-hosted runners)
+- Pin all third-party GitHub Actions to full-length commit SHAs with a
+  trailing version comment (required by `zizmor`). Covers every
+  `uses:` across `ci.yml`, `bundle-stats.yml`, `coverage.yml`,
+  `cp-update.yml`, `is-compatible.yml`, `pr-files.yml`,
+  `release-please.yml`, `release.yml`, and
+  `version-bump-changelog.yml`
 
 ### New Features
 
