@@ -171,6 +171,15 @@ All changes noted here.
   test output via `jest-setup.js` console filter
 - Suppress i18next promotional banner in test output
 
+### E2E Fixes
+
+- Rewrite `tests/grafana-version.spec.ts` to read the Grafana version
+  from the `grafanaVersion` fixture in `@grafana/plugin-e2e` (which
+  reads `window.grafanaBootData.settings.buildInfo.version`) instead
+  of clicking the Help toolbar button. Avoids the Grafana 13.x /
+  React 19 preview portal overlay that intercepted the click and
+  timed out the test (fixes #164).
+
 ### E2E Testing
 
 - Add Playwright config with `@grafana/plugin-e2e` auth and Chromium project

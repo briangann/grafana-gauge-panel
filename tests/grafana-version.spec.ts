@@ -1,10 +1,5 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@grafana/plugin-e2e';
 
-test('Check Grafana Version from Help Button', async ({ page }) => {
-  await page.goto('http://localhost:3000/');
-  const locator = page.getByRole('button', { name: 'Help' });
-  await locator.waitFor();
-  await locator.click();
-  const versionPattern = RegExp('Grafana v\\d+');
-  await expect(page.getByText(versionPattern)).toContainText('Grafana v');
+test('Check Grafana Version from bootData', async ({ grafanaVersion }) => {
+  expect(grafanaVersion).toMatch(/^\d+\.\d+\.\d+/);
 });
