@@ -109,6 +109,12 @@ All changes noted here.
   `release-please.yml`, `release.yml`, and
   `version-bump-changelog.yml`
 
+### Docs
+
+- Update `AGENTS.md` Action Pinning rule: require full-length commit
+  SHAs with a trailing version comment (was: version tags). Reflects
+  the `zizmor`-enforced policy.
+
 ### New Features
 
 - Add `computeTickSpacing` utility that calculates human-friendly
