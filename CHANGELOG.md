@@ -114,6 +114,16 @@ All changes noted here.
 - Update `AGENTS.md` Action Pinning rule: require full-length commit
   SHAs with a trailing version comment (was: version tags). Reflects
   the `zizmor`-enforced policy.
+- Restructure `AGENTS.md` around the
+  [TheRealSeanDonahoe/agents-md](https://github.com/TheRealSeanDonahoe/agents-md)
+  template. Sections 0–9 (non-negotiables, simplicity, surgical changes,
+  goal-driven execution, tool use, session hygiene, communication style,
+  ask-vs-proceed, self-improvement) and sections 11–12 follow upstream;
+  all prior project-specific content (stack, commands, layout,
+  conventions, forbidden) now lives under Section 10.
+- `cspell.config.json`: add proper names and tool names referenced in
+  the new template (`Andrej`, `Cherny`, `Donahoe`, `IJFW`, `Karpathy`,
+  `cking`, `importme`, `negotiables`, `zizmor`).
 
 ### New Features
 
