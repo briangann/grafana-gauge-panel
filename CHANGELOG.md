@@ -2,7 +2,7 @@
 
 All changes noted here.
 
-## v2.1.0 (2026-04-21)
+## v2.2.0 (2026-04-21)
 
 ### Bug Fixes (Rendering and Migration)
 
