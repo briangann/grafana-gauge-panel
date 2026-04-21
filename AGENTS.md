@@ -265,15 +265,25 @@ pnpm exec playwright test --ui                       # interactive Playwright
    Plugins** → **Submit Plugin** and paste the `.zip` and `.zip.sha1` URLs. Grafana
    reviews and updates the catalog. grafana.com is not updated automatically.
 
-**Tag push triggers `release.yml`:** release-please-action is passed
-`secrets.GH_PAT_TOKEN` (a PAT with `repo` scope) via its `token:` input.
-Tags pushed by this PAT trigger downstream workflows; tags pushed by the default
-`GITHUB_TOKEN` would not (GitHub disallows workflow recursion from `GITHUB_TOKEN`).
-If the PAT expires or is rotated, the symptom is: release-please PR merges, tag
-appears on GitHub, but `release.yml` never runs. Fix by refreshing the secret.
-Fallback if the secret is broken: re-push the tag from a local clone
-(`git fetch --tags && git push origin v<ver>`) — a client-side push always
-triggers workflows.
+**Auth for release-please:** release-please-action is given a GitHub App
+installation token minted by `actions/create-github-app-token` using
+`secrets.RELEASE_BOT_APP_CLIENT_ID` + `secrets.RELEASE_BOT_APP_PRIVATE_KEY`.
+Two reasons this matters:
+
+1. **Branch protection on `main` requires verified signatures.** Commits
+   created via the App-authenticated GitHub REST API are auto-verified;
+   commits pushed via `git push` from a PAT-authenticated runner are not.
+   Both the release-please bump commit and the CHANGELOG stamper commit
+   therefore go through the Contents/PR API, never `git push`.
+2. **`GITHUB_TOKEN`-originated events do not trigger downstream workflows.**
+   App-token-originated tag pushes do, so the `v*` tag release-please creates
+   actually fires `release.yml`.
+
+If the App key expires or is revoked the symptom is `create-github-app-token`
+failing loudly in the first step — no silent no-op. Rotate the key in the
+GitHub App settings, update `RELEASE_BOT_APP_PRIVATE_KEY`. The App needs
+`contents: read & write`, `pull-requests: read & write` permissions and must
+be installed on this repository.
 
 - **Compatibility check:** build first, then `levitate` against the target Grafana version.
 
