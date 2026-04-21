@@ -1,17 +1,38 @@
-name: release please
+name: release-please
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
-permissions:
-  contents: write
-  pull-requests: write
-  id-token: write
+permissions: read-all
 
 jobs:
-  run-release-please:
+  release-please:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - name: release please version bump changelog
-        uses: grafana/plugin-ci-workflows/actions/plugins/release-please@80407d0289c509581f86bd8f55b82dbf7237fc1b # plugins-release-please/v1.0.1
+      - name: Verify GH_ACCESS_TOKEN PAT is valid
+        env:
+          GH_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+        run: |
+          if [ -z "${GH_TOKEN}" ]; then
+            echo "::error::GH_ACCESS_TOKEN secret is empty or unset. Set it at https://github.com/${GITHUB_REPOSITORY}/settings/secrets/actions"
+            exit 1
+          fi
+          code=$(curl -sS -o /dev/null -w '%{http_code}' -H "Authorization: Bearer ${GH_TOKEN}" https://api.github.com/user)
+          if [ "${code}" != "200" ]; then
+            echo "::error::GH_ACCESS_TOKEN authentication failed (HTTP ${code}). Token is likely expired or revoked — rotate at https://github.com/settings/tokens with 'repo' scope and update the secret."
+            exit 1
+          fi
+          echo "GH_ACCESS_TOKEN authenticates (HTTP 200)."
+
+      - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
+        with:
+          # PAT (not GITHUB_TOKEN) so the tag push on release triggers release.yml.
+          # GITHUB_TOKEN-originated events never trigger downstream workflows.
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json

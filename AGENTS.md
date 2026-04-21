@@ -239,11 +239,32 @@ pnpm exec playwright test --ui                       # interactive Playwright
 
 #### Release and scaffolding
 
-- **Version bump + changelog:** `workflow_dispatch` on
-  `.github/workflows/version-bump-changelog.yml` (inputs: `version` = `patch` | `minor` |
-  `major`, `generate-changelog` = bool).
-- **Release please:** `workflow_dispatch` on `.github/workflows/release-please.yml` (no
-  inputs).
+**Release pipeline (end-to-end):**
+
+1. Conventional-commit merges land on `main`.
+2. `release-please.yml` runs on every push to `main` and opens/updates a
+   **release PR** that bumps `package.json` and `.release-please-manifest.json`. It does
+   **not** touch `CHANGELOG.md` (`skip-changelog: true`) — that file is hand-authored.
+3. Before merging the release PR, finalize `CHANGELOG.md` for the target version
+   (replace any `(unreleased)` marker with the release date, polish notes).
+4. Merging the release PR creates the `v*` git tag and a GitHub release via release-please.
+5. The `release.yml` workflow (trigger: `push: tags: ['v*']`) builds/signs the plugin
+   with `GRAFANA_ACCESS_POLICY_TOKEN`, attaches a build-provenance attestation, and
+   publishes a **signed `.zip`** plus `.zip.sha1` to a GitHub **draft** release.
+6. **Manual:** publish the draft GitHub release; then sign in to grafana.com → **My
+   Plugins** → **Submit Plugin** and paste the `.zip` and `.zip.sha1` URLs. Grafana
+   reviews and updates the catalog. grafana.com is not updated automatically.
+
+**Tag push triggers `release.yml`:** release-please-action is passed
+`secrets.GH_ACCESS_TOKEN` (a PAT with `repo` scope) via its `token:` input.
+Tags pushed by this PAT trigger downstream workflows; tags pushed by the default
+`GITHUB_TOKEN` would not (GitHub disallows workflow recursion from `GITHUB_TOKEN`).
+If the PAT expires or is rotated, the symptom is: release-please PR merges, tag
+appears on GitHub, but `release.yml` never runs. Fix by refreshing the secret.
+Fallback if the secret is broken: re-push the tag from a local clone
+(`git fetch --tags && git push origin v<ver>`) — a client-side push always
+triggers workflows.
+
 - **Compatibility check:** build first, then `levitate` against the target Grafana version.
 
   ```bash
