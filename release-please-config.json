@@ -5,6 +5,7 @@
       "release-type": "node",
       "package-name": "briangann-gauge-panel",
       "include-v-in-tag": true,
+      "include-component-in-tag": false,
       "skip-changelog": true,
       "bump-minor-pre-major": false,
       "bump-patch-for-minor-pre-major": false,
