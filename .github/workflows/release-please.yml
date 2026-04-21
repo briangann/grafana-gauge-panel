@@ -50,7 +50,7 @@ jobs:
           set -euo pipefail
 
           pr_num=$(jq -r '.number' <<<"${PR_JSON}")
-          branch=$(gh pr view "${pr_num}" --json headRefName --jq '.headRefName')
+          branch=$(jq -r '.headBranchName' <<<"${PR_JSON}")
           echo "Release PR #${pr_num} on branch ${branch}"
 
           manifest=$(gh api "repos/${REPO}/contents/.release-please-manifest.json?ref=${branch}" --jq '.content' | base64 -d)
