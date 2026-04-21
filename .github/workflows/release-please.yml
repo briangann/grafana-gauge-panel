@@ -14,6 +14,21 @@ jobs:
       contents: write
       pull-requests: write
     steps:
+      - name: Verify GH_ACCESS_TOKEN PAT is valid
+        env:
+          GH_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+        run: |
+          if [ -z "${GH_TOKEN}" ]; then
+            echo "::error::GH_ACCESS_TOKEN secret is empty or unset. Set it at https://github.com/${GITHUB_REPOSITORY}/settings/secrets/actions"
+            exit 1
+          fi
+          code=$(curl -sS -o /dev/null -w '%{http_code}' -H "Authorization: Bearer ${GH_TOKEN}" https://api.github.com/user)
+          if [ "${code}" != "200" ]; then
+            echo "::error::GH_ACCESS_TOKEN authentication failed (HTTP ${code}). Token is likely expired or revoked — rotate at https://github.com/settings/tokens with 'repo' scope and update the secret."
+            exit 1
+          fi
+          echo "GH_ACCESS_TOKEN authenticates (HTTP 200)."
+
       - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
         with:
           # PAT (not GITHUB_TOKEN) so the tag push on release triggers release.yml.
