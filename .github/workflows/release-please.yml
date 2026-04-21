@@ -14,78 +14,68 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - name: Verify GH_PAT_TOKEN PAT is valid
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT_TOKEN }}
-        run: |
-          if [ -z "${GH_TOKEN}" ]; then
-            echo "::error::GH_PAT_TOKEN secret is empty or unset. Set it at https://github.com/${GITHUB_REPOSITORY}/settings/secrets/actions"
-            exit 1
-          fi
-          code=$(curl -sS -o /dev/null -w '%{http_code}' -H "Authorization: Bearer ${GH_TOKEN}" https://api.github.com/user)
-          if [ "${code}" != "200" ]; then
-            echo "::error::GH_PAT_TOKEN authentication failed (HTTP ${code}). Token is likely expired or revoked — rotate at https://github.com/settings/tokens with 'repo' scope and update the secret."
-            exit 1
-          fi
-          echo "GH_PAT_TOKEN authenticates (HTTP 200)."
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+        with:
+          client-id: ${{ secrets.RELEASE_BOT_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_BOT_APP_PRIVATE_KEY }}
 
       - id: release
         uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
         with:
-          # PAT (not GITHUB_TOKEN) so the tag push on release triggers release.yml.
-          # GITHUB_TOKEN-originated events never trigger downstream workflows.
-          token: ${{ secrets.GH_PAT_TOKEN }}
+          # GitHub App token so release-please's commits are signed by the
+          # App and marked verified by GitHub (required by branch protection
+          # on main), and so the release tag push triggers release.yml
+          # (GITHUB_TOKEN-originated events do not trigger downstream workflows).
+          token: ${{ steps.app-token.outputs.token }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-      # Release-please does not manage CHANGELOG.md (skip-changelog: true).
-      # If the hand-authored changelog has a "## vX.Y.Z (unreleased)" header
-      # matching the version release-please just proposed, replace
-      # "(unreleased)" with today's UTC date on the release PR branch so
-      # the merged release commit already has the correct date stamped.
-      - name: Checkout release PR branch
-        if: steps.release.outputs.prs_created == 'true'
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-
+      # Auto-stamp the CHANGELOG release date on the release PR branch when a
+      # "## vX.Y.Z (unreleased)" header matches the version release-please just
+      # proposed. Only the matching version is stamped; other (unreleased)
+      # sections for other versions are left alone.
+      #
+      # Uses the GitHub Contents REST API (not `git push`) so the commit is
+      # authored by the App and marked verified — plain `git push` from the
+      # runner would produce an unsigned commit and fail branch protection.
       - name: Stamp CHANGELOG release date on release PR
         if: steps.release.outputs.prs_created == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           PR_JSON: ${{ steps.release.outputs.pr }}
+          REPO: ${{ github.repository }}
         run: |
+          set -euo pipefail
+
           pr_num=$(jq -r '.number' <<<"${PR_JSON}")
           branch=$(gh pr view "${pr_num}" --json headRefName --jq '.headRefName')
-          version=$(jq -r '."."' .release-please-manifest.json)
-          echo "Release PR #${pr_num} on branch ${branch}, version ${version}"
+          echo "Release PR #${pr_num} on branch ${branch}"
 
-          remote_url="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          git fetch "${remote_url}" "${branch}"
-          git checkout "${branch}"
-
-          # Escape dots in the version for regex use so we only touch the exact
-          # "## vX.Y.Z (unreleased)" header matching the version release-please
-          # just proposed. Any other (unreleased) sections in the changelog
-          # (for different versions) are left alone.
+          manifest=$(gh api "repos/${REPO}/contents/.release-please-manifest.json?ref=${branch}" --jq '.content' | base64 -d)
+          version=$(jq -r '."."' <<<"${manifest}")
           version_re=${version//./\\.}
+          echo "Proposed version: ${version}"
+
+          changelog_resp=$(gh api "repos/${REPO}/contents/CHANGELOG.md?ref=${branch}")
+          changelog_sha=$(jq -r '.sha' <<<"${changelog_resp}")
+          jq -r '.content' <<<"${changelog_resp}" | base64 -d > CHANGELOG.md
+
           if ! grep -qE "^## v${version_re} \(unreleased\)\$" CHANGELOG.md; then
             echo "::notice::No '## v${version} (unreleased)' header in CHANGELOG.md; nothing to stamp"
             exit 0
           fi
 
           today=$(date -u +%Y-%m-%d)
-          sed -i.bak -E "s|^## v${version_re} \(unreleased\)\$|## v${version} (${today})|" CHANGELOG.md
-          rm CHANGELOG.md.bak
+          sed -i -E "s|^## v${version_re} \(unreleased\)\$|## v${version} (${today})|" CHANGELOG.md
 
-          if git diff --quiet CHANGELOG.md; then
-            echo "::notice::CHANGELOG.md unchanged after sed; date already stamped"
-            exit 0
-          fi
+          content_b64=$(base64 -w0 CHANGELOG.md)
 
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add CHANGELOG.md
-          git commit -m "docs(changelog): stamp v${version} release date"
-          git push "${remote_url}" "HEAD:${branch}"
+          gh api -X PUT "repos/${REPO}/contents/CHANGELOG.md" \
+            -f message="docs(changelog): stamp v${version} release date" \
+            -f branch="${branch}" \
+            -f sha="${changelog_sha}" \
+            -f content="${content_b64}"
+
+          echo "Stamped v${version} release date in CHANGELOG.md on ${branch}"
