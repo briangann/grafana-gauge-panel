@@ -29,10 +29,58 @@ jobs:
           fi
           echo "GH_PAT_TOKEN authenticates (HTTP 200)."
 
-      - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
+      - id: release
+        uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
         with:
           # PAT (not GITHUB_TOKEN) so the tag push on release triggers release.yml.
           # GITHUB_TOKEN-originated events never trigger downstream workflows.
           token: ${{ secrets.GH_PAT_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+      # Release-please does not manage CHANGELOG.md (skip-changelog: true).
+      # If the hand-authored changelog has a "## vX.Y.Z (unreleased)" header
+      # matching the version release-please just proposed, replace
+      # "(unreleased)" with today's UTC date on the release PR branch so
+      # the merged release commit already has the correct date stamped.
+      - name: Checkout release PR branch
+        if: steps.release.outputs.prs_created == 'true'
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Stamp CHANGELOG release date on release PR
+        if: steps.release.outputs.prs_created == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT_TOKEN }}
+          PR_JSON: ${{ steps.release.outputs.pr }}
+        run: |
+          pr_num=$(jq -r '.number' <<<"${PR_JSON}")
+          branch=$(gh pr view "${pr_num}" --json headRefName --jq '.headRefName')
+          version=$(jq -r '."."' .release-please-manifest.json)
+          echo "Release PR #${pr_num} on branch ${branch}, version ${version}"
+
+          remote_url="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch "${remote_url}" "${branch}"
+          git checkout "${branch}"
+
+          if ! grep -qE "^## v${version} \(unreleased\)" CHANGELOG.md; then
+            echo "::notice::No '## v${version} (unreleased)' header in CHANGELOG.md; nothing to stamp"
+            exit 0
+          fi
+
+          today=$(date -u +%Y-%m-%d)
+          sed -i.bak -E "s|^## v${version} \(unreleased\)\$|## v${version} (${today})|" CHANGELOG.md
+          rm CHANGELOG.md.bak
+
+          if git diff --quiet CHANGELOG.md; then
+            echo "::notice::CHANGELOG.md unchanged after sed; date already stamped"
+            exit 0
+          fi
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add CHANGELOG.md
+          git commit -m "docs(changelog): stamp v${version} release date"
+          git push "${remote_url}" "HEAD:${branch}"
