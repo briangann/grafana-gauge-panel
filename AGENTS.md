@@ -257,7 +257,13 @@ pnpm exec playwright test --ui                       # interactive Playwright
    stamped, the others are left untouched. If no header matches (e.g. you predicted
    minor but release-please proposes patch), the job emits a `::notice::` and skips;
    edit the header manually then.
-4. Merging the release PR creates the `v*` git tag and a GitHub release via release-please.
+4. Merging the release PR creates the `vX.Y.Z` git tag and a GitHub release via
+   release-please. The tag name format is enforced by
+   `release-please-config.json` (`include-v-in-tag: true`,
+   `include-component-in-tag: false`). Do **not** flip either of those — the
+   `grafana/plugin-actions/build-plugin` action in the next step hard-checks
+   `"v${PLUGIN_VERSION}" == "${GITHUB_TAG}"` and will fail fast if the tag is
+   anything other than `v<version>`.
 5. The `release.yml` workflow (trigger: `push: tags: ['v*']`) builds/signs the plugin
    with `GRAFANA_ACCESS_POLICY_TOKEN`, attaches a build-provenance attestation, and
    publishes a **signed `.zip`** plus `.zip.sha1` to a GitHub **draft** release.
