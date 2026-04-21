@@ -371,6 +371,9 @@ Check CI status with `gh pr checks <PR-number>`.
 
 #### Testing
 
+- **Always run `pnpm test:ci`, never `pnpm test`.** `pnpm test` enters Jest watch mode
+  which produces no output in non-TTY shells and looks hung. Use `pnpm test:ci` for all
+  one-shot verification (agents, CI, scripts).
 - Mock `d3` and `d3-ease` at file top (ESM modules require `jest.mock`).
 - Mock `Gauge` when testing `GaugePanel` to capture props.
 - Use `renderHook` from `@testing-library/react` for custom hook tests.
