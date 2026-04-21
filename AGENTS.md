@@ -250,9 +250,13 @@ pnpm exec playwright test --ui                       # interactive Playwright
    **not** rewrite `CHANGELOG.md` content (`skip-changelog: true`).
 3. After release-please creates or updates the release PR, a follow-up job in the same
    workflow `sed`s `## vX.Y.Z (unreleased)` → `## vX.Y.Z (YYYY-MM-DD)` on the release
-   PR branch when the proposed version matches the unreleased header. If the versions
-   don't match (e.g. you predicted minor but release-please proposes patch), the job
-   emits a `::notice::` and skips — edit the header manually then.
+   PR branch when the proposed version matches the unreleased header. The match is
+   anchored to the exact proposed version, so it is safe to keep multiple
+   `(unreleased)` sections in `CHANGELOG.md` at once (e.g. a forward-staged `v2.2.0`
+   section above an about-to-ship `v2.1.1` section) — only the matching header is
+   stamped, the others are left untouched. If no header matches (e.g. you predicted
+   minor but release-please proposes patch), the job emits a `::notice::` and skips;
+   edit the header manually then.
 4. Merging the release PR creates the `v*` git tag and a GitHub release via release-please.
 5. The `release.yml` workflow (trigger: `push: tags: ['v*']`) builds/signs the plugin
    with `GRAFANA_ACCESS_POLICY_TOKEN`, attaches a build-provenance attestation, and
