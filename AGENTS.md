@@ -256,7 +256,7 @@ pnpm exec playwright test --ui                       # interactive Playwright
    reviews and updates the catalog. grafana.com is not updated automatically.
 
 **Tag push triggers `release.yml`:** release-please-action is passed
-`secrets.GH_ACCESS_TOKEN` (a PAT with `repo` scope) via its `token:` input.
+`secrets.GH_PAT_TOKEN` (a PAT with `repo` scope) via its `token:` input.
 Tags pushed by this PAT trigger downstream workflows; tags pushed by the default
 `GITHUB_TOKEN` would not (GitHub disallows workflow recursion from `GITHUB_TOKEN`).
 If the PAT expires or is rotated, the symptom is: release-please PR merges, tag
