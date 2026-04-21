@@ -10,7 +10,7 @@ const gaugeSvg = (panelEditPage: PanelEditPage) =>
   panelEditPage.panel.locator.locator('svg[viewBox^="0,0,"]').first();
 
 // Panel editor chrome (options group aria-labels, option-id label `for`
-// attributes) only stabilises around Grafana 12. Skip interaction tests
+// attributes) only stabilizes around Grafana 12. Skip interaction tests
 // on 10.x/11.x — the smoke test still covers those versions at the
 // render level.
 const MIN_GRAFANA_FOR_INTERACTIONS = '12.0.0';

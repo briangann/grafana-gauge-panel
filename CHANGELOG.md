@@ -83,6 +83,9 @@ All changes noted here.
 - Bump `magefile/mage-action` v3.1.0 → v4.0.0
 - Bump `actions/upload-artifact` v6 → v7, `actions/download-artifact` v7 → v8
 - Bump `actions/github-script` v8.0.0 → v9.0.0
+- Bump `tj-actions/changed-files` v47 → v47.0.6 in `pr-files.yml`
+- Include `grafana-dev` image in the e2e version matrix
+  (`skip-grafana-dev-image: false` in `ci.yml`)
 - Remove `master` branch references, pin actions to version tags
 - Clean up scaffolding comments in release.yml
 - Replace Dependabot with Renovate: add `renovate.json` with weekly
@@ -212,7 +215,7 @@ All changes noted here.
      place of the `50` tick label.
   Tests skip on Grafana `<12.0.0` — the panel-editor chrome (options
   group aria-labels, option-id `label[for]` attributes) only
-  stabilises around Grafana 12. The `gauge-smoke.spec.ts` render check
+  stabilizes around Grafana 12. The `gauge-smoke.spec.ts` render check
   keeps coverage for 10.x / 11.x.
 
 ### Testing (interaction coverage)
@@ -256,9 +259,11 @@ All changes noted here.
 - `glob` 10.5.0 → 13.0.6
 - `@grafana/plugin-e2e` 3.4.12 → 3.5.1
 - `@swc/core` 1.15.24 → 1.15.30
-- `@typescript-eslint/eslint-plugin` 8.58.1 → 8.58.2
-- `@typescript-eslint/parser` 8.58.1 → 8.58.2
+- `@typescript-eslint/eslint-plugin` 8.58.1 → 8.59.0
+- `@typescript-eslint/parser` 8.58.1 → 8.59.0
 - `webpack` 5.106.0 → 5.106.2
+- `uuid` 13.0.0 → 14.0.0 (drops Node 18 support, expects global `crypto`;
+  safe under `engines.node >= 24`)
 - Remove deprecated `@types/glob` (glob 13 ships own types)
 
 ### Refactor
