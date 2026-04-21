@@ -83,6 +83,7 @@ All changes noted here.
 - Bump `magefile/mage-action` v3.1.0 → v4.0.0
 - Bump `actions/upload-artifact` v6 → v7, `actions/download-artifact` v7 → v8
 - Bump `actions/github-script` v8.0.0 → v9.0.0
+- Bump `tj-actions/changed-files` v47 → v47.0.6 in `pr-files.yml`
 - Remove `master` branch references, pin actions to version tags
 - Clean up scaffolding comments in release.yml
 - Replace Dependabot with Renovate: add `renovate.json` with weekly
