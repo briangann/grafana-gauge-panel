@@ -65,13 +65,18 @@ jobs:
           git fetch "${remote_url}" "${branch}"
           git checkout "${branch}"
 
-          if ! grep -qE "^## v${version} \(unreleased\)" CHANGELOG.md; then
+          # Escape dots in the version for regex use so we only touch the exact
+          # "## vX.Y.Z (unreleased)" header matching the version release-please
+          # just proposed. Any other (unreleased) sections in the changelog
+          # (for different versions) are left alone.
+          version_re=${version//./\\.}
+          if ! grep -qE "^## v${version_re} \(unreleased\)\$" CHANGELOG.md; then
             echo "::notice::No '## v${version} (unreleased)' header in CHANGELOG.md; nothing to stamp"
             exit 0
           fi
 
           today=$(date -u +%Y-%m-%d)
-          sed -i.bak -E "s|^## v${version} \(unreleased\)\$|## v${version} (${today})|" CHANGELOG.md
+          sed -i.bak -E "s|^## v${version_re} \(unreleased\)\$|## v${version} (${today})|" CHANGELOG.md
           rm CHANGELOG.md.bak
 
           if git diff --quiet CHANGELOG.md; then
