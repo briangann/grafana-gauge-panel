@@ -96,6 +96,11 @@ All changes noted here.
 - Remove `.github/dependabot.yml` (superseded by Renovate)
 - Add `.github/workflows/lint-actions.yml` — runs `actionlint` and
   `zizmor` on PRs and pushes to `main` that touch `.github/workflows/**`
+- Grant `security-events: write` and `actions: read` to the `zizmor` job
+  in `lint-actions.yml` so `zizmorcore/zizmor-action` can upload its
+  SARIF report via `github/codeql-action/upload-sarif`
+  (previously failed on `main` with "Resource not accessible by
+  integration")
 - Fix actionlint findings surfaced by the new workflow:
   - Quote `$GITHUB_OUTPUT`, `$PWD`, and metadata vars in `ci.yml`
     (SC2086); drop useless `cat` and consolidate `>>` redirects in
