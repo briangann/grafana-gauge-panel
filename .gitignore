@@ -27,6 +27,7 @@ artifacts/
 work/
 ci/
 e2e-results/
+playwright/
 **/cypress/videos
 **/cypress/report.json
 
@@ -37,3 +38,5 @@ e2e-results/
 
 .eslintcache
 docs/superpowers/
+
+scratch
