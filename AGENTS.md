@@ -241,12 +241,22 @@ pnpm exec playwright test --ui                       # interactive Playwright
 
 **Release pipeline (end-to-end):**
 
-1. Conventional-commit merges land on `main`.
+1. Conventional-commit merges land on `main`. When merging feature/fix work, add a
+   `## vX.Y.Z (unreleased)` section at the top of `CHANGELOG.md` describing the change
+   (`X.Y.Z` = the next expected version — patch for `fix:`, minor for `feat:`, major
+   for `feat!:`). Content under that header is hand-authored.
 2. `release-please.yml` runs on every push to `main` and opens/updates a
    **release PR** that bumps `package.json` and `.release-please-manifest.json`. It does
-   **not** touch `CHANGELOG.md` (`skip-changelog: true`) — that file is hand-authored.
-3. Before merging the release PR, finalize `CHANGELOG.md` for the target version
-   (replace any `(unreleased)` marker with the release date, polish notes).
+   **not** rewrite `CHANGELOG.md` content (`skip-changelog: true`).
+3. After release-please creates or updates the release PR, a follow-up job in the same
+   workflow `sed`s `## vX.Y.Z (unreleased)` → `## vX.Y.Z (YYYY-MM-DD)` on the release
+   PR branch when the proposed version matches the unreleased header. The match is
+   anchored to the exact proposed version, so it is safe to keep multiple
+   `(unreleased)` sections in `CHANGELOG.md` at once (e.g. a forward-staged `v2.2.0`
+   section above an about-to-ship `v2.1.1` section) — only the matching header is
+   stamped, the others are left untouched. If no header matches (e.g. you predicted
+   minor but release-please proposes patch), the job emits a `::notice::` and skips;
+   edit the header manually then.
 4. Merging the release PR creates the `v*` git tag and a GitHub release via release-please.
 5. The `release.yml` workflow (trigger: `push: tags: ['v*']`) builds/signs the plugin
    with `GRAFANA_ACCESS_POLICY_TOKEN`, attaches a build-provenance attestation, and
@@ -256,7 +266,7 @@ pnpm exec playwright test --ui                       # interactive Playwright
    reviews and updates the catalog. grafana.com is not updated automatically.
 
 **Tag push triggers `release.yml`:** release-please-action is passed
-`secrets.GH_ACCESS_TOKEN` (a PAT with `repo` scope) via its `token:` input.
+`secrets.GH_PAT_TOKEN` (a PAT with `repo` scope) via its `token:` input.
 Tags pushed by this PAT trigger downstream workflows; tags pushed by the default
 `GITHUB_TOKEN` would not (GitHub disallows workflow recursion from `GITHUB_TOKEN`).
 If the PAT expires or is rotated, the symptom is: release-please PR merges, tag
