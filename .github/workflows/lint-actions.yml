@@ -37,6 +37,10 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: read
+      # Required so `zizmorcore/zizmor-action` can upload its SARIF report
+      # via `github/codeql-action/upload-sarif` into the Security tab.
+      security-events: write
+      actions: read
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
