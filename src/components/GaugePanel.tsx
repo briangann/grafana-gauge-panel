@@ -1,5 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import {
+  DataFrame,
+  Field,
   PanelProps,
   FieldDisplay,
   getDisplayProcessor,
@@ -45,17 +47,22 @@ export const GaugePanel: React.FC<Props> = ({
   );
 
   const metrics = useMemo(() => {
-    for (const frame of data.series) {
-      for (const field of frame.fields) {
-        if (field.config.unit === 'percent' || field.config.unit === 'percentunit') {
-          const min = field.config.min ?? 0;
-          const max = field.config.max ?? (field.config.unit === 'percent' ? 100 : 1);
-          field.state = field.state ?? {};
-          field.state.range = { min, max, delta: max - min };
-          field.display = getDisplayProcessor({ field, theme: theme2 });
+    const series = data.series.map((frame: DataFrame) => ({
+      ...frame,
+      fields: frame.fields.map((field: Field) => {
+        if (field.config.unit !== 'percent' && field.config.unit !== 'percentunit') {
+          return field;
         }
-      }
-    }
+        const min = field.config.min ?? 0;
+        const max = field.config.max ?? (field.config.unit === 'percent' ? 100 : 1);
+        const nextField = {
+          ...field,
+          state: { ...(field.state ?? {}), range: { min, max, delta: max - min } },
+        };
+        nextField.display = getDisplayProcessor({ field: nextField, theme: theme2 });
+        return nextField;
+      }),
+    }));
     return getFieldDisplayValues({
       fieldConfig,
       reduceOptions: {
@@ -64,7 +71,7 @@ export const GaugePanel: React.FC<Props> = ({
       },
       replaceVariables,
       theme: theme2,
-      data: data.series,
+      data: series,
       timeZone,
     });
   }, [data.series, fieldConfig, options.operatorName, replaceVariables, theme2, timeZone]);

@@ -53,7 +53,7 @@ importers:
         version: 7.29.0
       '@grafana/eslint-config':
         specifier: ^9.0.0
-        version: 9.0.0(@stylistic/eslint-plugin-ts@4.4.1(eslint@9.39.4)(typescript@5.9.3))(@typescript-eslint/eslint-plugin@8.59.0(@typescript-eslint/parser@8.59.0(eslint@9.39.4)(typescript@5.9.3))(eslint@9.39.4)(typescript@5.9.3))(@typescript-eslint/parser@8.59.0(eslint@9.39.4)(typescript@5.9.3))(eslint-config-prettier@10.1.8(eslint@9.39.4))(eslint-plugin-jsdoc@62.9.0(eslint@9.39.4))(eslint-plugin-react-hooks@7.0.1(eslint@9.39.4))(eslint-plugin-react@7.37.5(eslint@9.39.4))(eslint@9.39.4)(typescript@5.9.3)
+        version: 9.0.0(@stylistic/eslint-plugin-ts@4.4.1(eslint@9.39.4)(typescript@5.9.3))(@typescript-eslint/eslint-plugin@8.59.0(@typescript-eslint/parser@8.59.0(eslint@9.39.4)(typescript@5.9.3))(eslint@9.39.4)(typescript@5.9.3))(@typescript-eslint/parser@8.59.0(eslint@9.39.4)(typescript@5.9.3))(eslint-config-prettier@10.1.8(eslint@9.39.4))(eslint-plugin-jsdoc@62.9.0(eslint@9.39.4))(eslint-plugin-react-hooks@7.1.1(eslint@9.39.4))(eslint-plugin-react@7.37.5(eslint@9.39.4))(eslint@9.39.4)(typescript@5.9.3)
       '@grafana/plugin-e2e':
         specifier: ^3.5.1
         version: 3.5.1(@playwright/test@1.59.1)
@@ -136,8 +136,8 @@ importers:
         specifier: ^7.37.5
         version: 7.37.5(eslint@9.39.4)
       eslint-plugin-react-hooks:
-        specifier: ~7.0.1
-        version: 7.0.1(eslint@9.39.4)
+        specifier: ~7.1.1
+        version: 7.1.1(eslint@9.39.4)
       eslint-webpack-plugin:
         specifier: ^5.0.3
         version: 5.0.3(eslint@9.39.4)(webpack@5.106.2)
@@ -2873,11 +2873,11 @@ packages:
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
 
-  eslint-plugin-react-hooks@7.0.1:
-    resolution: {integrity: sha512-O0d0m04evaNzEPoSW+59Mezf8Qt0InfgGIBJnpC0h3NH/WjUAR7BIKUfysC6todmtiZ/A0oUVS8Gce0WhBrHsA==}
+  eslint-plugin-react-hooks@7.1.1:
+    resolution: {integrity: sha512-f2I7Gw6JbvCexzIInuSbZpfdQ44D7iqdWX01FKLvrPgqxoE7oMj8clOfto8U6vYiz4yd5oKu39rRSVOe1zRu0g==}
     engines: {node: '>=18'}
     peerDependencies:
-      eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
+      eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0 || ^10.0.0
 
   eslint-plugin-react@7.37.5:
     resolution: {integrity: sha512-Qteup0SqU15kdocexFNAJMvCJEfa2xUKNV4CC1xsVMrIIqEy3SQ/rqyxCWNzfrd3/ldy6HMlD2e0JDVpDg2qIA==}
@@ -6093,7 +6093,7 @@ snapshots:
       tslib: 2.8.1
       typescript: 5.9.2
 
-  '@grafana/eslint-config@9.0.0(@stylistic/eslint-plugin-ts@4.4.1(eslint@9.39.4)(typescript@5.9.3))(@typescript-eslint/eslint-plugin@8.59.0(@typescript-eslint/parser@8.59.0(eslint@9.39.4)(typescript@5.9.3))(eslint@9.39.4)(typescript@5.9.3))(@typescript-eslint/parser@8.59.0(eslint@9.39.4)(typescript@5.9.3))(eslint-config-prettier@10.1.8(eslint@9.39.4))(eslint-plugin-jsdoc@62.9.0(eslint@9.39.4))(eslint-plugin-react-hooks@7.0.1(eslint@9.39.4))(eslint-plugin-react@7.37.5(eslint@9.39.4))(eslint@9.39.4)(typescript@5.9.3)':
+  '@grafana/eslint-config@9.0.0(@stylistic/eslint-plugin-ts@4.4.1(eslint@9.39.4)(typescript@5.9.3))(@typescript-eslint/eslint-plugin@8.59.0(@typescript-eslint/parser@8.59.0(eslint@9.39.4)(typescript@5.9.3))(eslint@9.39.4)(typescript@5.9.3))(@typescript-eslint/parser@8.59.0(eslint@9.39.4)(typescript@5.9.3))(eslint-config-prettier@10.1.8(eslint@9.39.4))(eslint-plugin-jsdoc@62.9.0(eslint@9.39.4))(eslint-plugin-react-hooks@7.1.1(eslint@9.39.4))(eslint-plugin-react@7.37.5(eslint@9.39.4))(eslint@9.39.4)(typescript@5.9.3)':
     dependencies:
       '@stylistic/eslint-plugin-ts': 4.4.1(eslint@9.39.4)(typescript@5.9.3)
       '@typescript-eslint/eslint-plugin': 8.59.0(@typescript-eslint/parser@8.59.0(eslint@9.39.4)(typescript@5.9.3))(eslint@9.39.4)(typescript@5.9.3)
@@ -6102,7 +6102,7 @@ snapshots:
       eslint-config-prettier: 10.1.8(eslint@9.39.4)
       eslint-plugin-jsdoc: 62.9.0(eslint@9.39.4)
       eslint-plugin-react: 7.37.5(eslint@9.39.4)
-      eslint-plugin-react-hooks: 7.0.1(eslint@9.39.4)
+      eslint-plugin-react-hooks: 7.1.1(eslint@9.39.4)
       typescript: 5.9.3
 
   '@grafana/faro-core@1.19.0':
@@ -8684,7 +8684,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-react-hooks@7.0.1(eslint@9.39.4):
+  eslint-plugin-react-hooks@7.1.1(eslint@9.39.4):
     dependencies:
       '@babel/core': 7.29.0
       '@babel/parser': 7.29.2
