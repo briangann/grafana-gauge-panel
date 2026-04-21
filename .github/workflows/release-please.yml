@@ -1,17 +1,20 @@
-name: release please
+name: release-please
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
-permissions:
-  contents: write
-  pull-requests: write
-  id-token: write
+permissions: read-all
 
 jobs:
-  run-release-please:
+  release-please:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - name: release please version bump changelog
-        uses: grafana/plugin-ci-workflows/actions/plugins/release-please@80407d0289c509581f86bd8f55b82dbf7237fc1b # plugins-release-please/v1.0.1
+      - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
