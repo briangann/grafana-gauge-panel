@@ -255,13 +255,15 @@ pnpm exec playwright test --ui                       # interactive Playwright
    Plugins** → **Submit Plugin** and paste the `.zip` and `.zip.sha1` URLs. Grafana
    reviews and updates the catalog. grafana.com is not updated automatically.
 
-**Caveat — tag push from release-please:** release-please-action pushes the tag using
-the default `GITHUB_TOKEN`, which by design does not trigger further workflows. That
-means `release.yml` will not auto-run when release-please merges the release PR.
-Options: (a) wire a PAT (`secrets.GH_ACCESS_TOKEN`) via the `token:` input on
-release-please-action so tag pushes trigger workflows; (b) after merge, re-push the
-tag manually (`git fetch --tags && git push origin v<ver> --force`) — the re-push is a
-client-side action and will trigger `release.yml`.
+**Tag push triggers `release.yml`:** release-please-action is passed
+`secrets.GH_ACCESS_TOKEN` (a PAT with `repo` scope) via its `token:` input.
+Tags pushed by this PAT trigger downstream workflows; tags pushed by the default
+`GITHUB_TOKEN` would not (GitHub disallows workflow recursion from `GITHUB_TOKEN`).
+If the PAT expires or is rotated, the symptom is: release-please PR merges, tag
+appears on GitHub, but `release.yml` never runs. Fix by refreshing the secret.
+Fallback if the secret is broken: re-push the tag from a local clone
+(`git fetch --tags && git push origin v<ver>`) — a client-side push always
+triggers workflows.
 
 - **Compatibility check:** build first, then `levitate` against the target Grafana version.
 

@@ -16,5 +16,8 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
         with:
+          # PAT (not GITHUB_TOKEN) so the tag push on release triggers release.yml.
+          # GITHUB_TOKEN-originated events never trigger downstream workflows.
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
