@@ -332,7 +332,7 @@ jobs:
    packaging, validation. Conditionally builds/tests the Go backend if `Magefile.go`
    exists.
 2. **resolve-versions** — uses `grafana/plugin-actions/e2e-version` to resolve the Grafana
-   image matrix (skips `grafana-dev`, includes the React 19 preview).
+   image matrix (includes `grafana-dev` and the React 19 preview).
 3. **playwright-tests** — runs Playwright e2e tests against each resolved Grafana version
    in a Docker Compose environment. Uploads test reports as artifacts.
 
