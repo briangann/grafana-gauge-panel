@@ -143,8 +143,8 @@ importers:
         specifier: ~7.1.1
         version: 7.1.1(eslint@9.39.4)
       eslint-webpack-plugin:
-        specifier: ^5.0.3
-        version: 5.0.3(eslint@9.39.4)(webpack@5.106.2)
+        specifier: ^6.0.0
+        version: 6.0.0(eslint@9.39.4)(webpack@5.106.2)
       fork-ts-checker-webpack-plugin:
         specifier: ^8.0.0
         version: 8.0.0(typescript@5.9.3)(webpack@5.106.2)
@@ -2909,11 +2909,11 @@ packages:
     resolution: {integrity: sha512-tD40eHxA35h0PEIZNeIjkHoDR4YjjJp34biM0mDvplBe//mB+IHCqHDGV7pxF+7MklTvighcCPPZC7ynWyjdTA==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
-  eslint-webpack-plugin@5.0.3:
-    resolution: {integrity: sha512-P2Id4RMSMQMwMEuw3W9x3n2qDbKPeD+tehWMY3ENFsoSPKNZ9i3WTZEsFE7NeQIpNebhNEGw8qorvpLVq1rK1g==}
-    engines: {node: '>= 18.12.0'}
+  eslint-webpack-plugin@6.0.0:
+    resolution: {integrity: sha512-x9m9cH0Rw0RNJB/utP9AMGzmuXg/yLP/FCHSVSfsyjQUyetXN4g1BaIqxkj1i3mVX48aOys0bsVt63LLfh6oYg==}
+    engines: {node: '>= 20.9.0'}
     peerDependencies:
-      eslint: ^8.0.0 || ^9.0.0
+      eslint: ^9.0.0 || ^10.0.0
       webpack: ^5.0.0
 
   eslint@9.39.4:
@@ -5161,6 +5161,7 @@ packages:
 
   uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   uwrap@0.1.2:
@@ -8732,12 +8733,10 @@ snapshots:
 
   eslint-visitor-keys@5.0.1: {}
 
-  eslint-webpack-plugin@5.0.3(eslint@9.39.4)(webpack@5.106.2):
+  eslint-webpack-plugin@6.0.0(eslint@9.39.4)(webpack@5.106.2):
     dependencies:
       '@types/eslint': 9.6.1
       eslint: 9.39.4
-      flatted: 3.4.2
-      jest-worker: 29.7.0
       micromatch: 4.0.8
       normalize-path: 3.0.0
       schema-utils: 4.3.3
