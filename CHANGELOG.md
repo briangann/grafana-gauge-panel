@@ -10,6 +10,9 @@ All changes noted here.
 - Bump `grafanaDependency` to `>=12.3.0` (drops Grafana 10.x/11.x support)
 - Update CI e2e `grafana-dependency` range to `>=12.3.0`
 - Bump `MIN_GRAFANA_FOR_INTERACTIONS` to `12.3.0` in e2e tests
+- Add home dashboard with links to all example dashboards
+- Fix `GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH` pointing to missing `panels.json`
+- Fix `Test Bury Below Min Value` panel to supply a value below min (-10)
 - Set explicit `grafana-dependency: '>=12.3.0'` and `version-resolver-type: plugin-grafana-dependency`
   for the e2e Grafana version matrix in CI
 - Run `resolve-versions` in parallel with `build` to reduce e2e wall time
