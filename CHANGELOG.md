@@ -17,6 +17,9 @@ All changes noted here.
   `davelosert/vitest-coverage-report-action` v2.12.0, `googleapis/release-please-action` v5.0.0,
   `grafana/plugin-actions/e2e-version` v2.0.0, `grafana/plugin-actions/wait-for-grafana` v1.0.3,
   `pnpm/action-setup` v6.0.8
+- Update npm dependencies: `@swc/core` v1.15.33, `@typescript-eslint/*` v8.59.3,
+  `@grafana/plugin-e2e` v3.8.0, `@grafana/tsconfig` v2.1.0, `@playwright/test` + `playwright` v1.60.0,
+  `semver` v7.8.0, `terser-webpack-plugin` v5.6.0
 
 ## v2.2.0 (2026-04-21)
 
