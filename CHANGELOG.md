@@ -2,6 +2,17 @@
 
 All changes noted here.
 
+## v2.2.1 (unreleased)
+
+### Maintenance
+
+- Update `@grafana/create-plugin` scaffold from v6.10.1 to v7.6.0
+  - Harden `bundle-stats.yml` contents permission (`write` → `read`)
+  - Remove deprecated `tsconfig` `baseUrl`, replace with `paths` (TypeScript 6 compat)
+  - Update `ts-node` `module`/`moduleResolution`/`target` to `nodenext`/`nodenext`/`es2022`
+- Add words to cspell dictionary
+- Ignore `docs/` directory in cspell
+
 ## v2.2.0 (2026-04-21)
 
 ### Bug Fixes (Rendering and Migration)
