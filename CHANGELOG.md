@@ -13,6 +13,10 @@ All changes noted here.
 - Add words to cspell dictionary
 - Ignore `docs/` directory in cspell
 - Remove unused cypress hoist pattern from `.npmrc`
+- Update GitHub Actions SHA pins: `actions/cache` v5.0.5, `actions/create-github-app-token` v3.2.0,
+  `davelosert/vitest-coverage-report-action` v2.12.0, `googleapis/release-please-action` v5.0.0,
+  `grafana/plugin-actions/e2e-version` v2.0.0, `grafana/plugin-actions/wait-for-grafana` v1.0.3,
+  `pnpm/action-setup` v6.0.8
 
 ## v2.2.0 (2026-04-21)
 
