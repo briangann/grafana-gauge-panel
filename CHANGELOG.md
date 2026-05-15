@@ -6,7 +6,11 @@ All changes noted here.
 
 ### Maintenance
 
-- Set explicit `grafana-dependency: '>=10.0.0'` and `version-resolver-type: plugin-grafana-dependency`
+- Externalize `react/jsx-runtime` for React 19 compatibility
+- Bump `grafanaDependency` to `>=12.3.0` (drops Grafana 10.x/11.x support)
+- Update CI e2e `grafana-dependency` range to `>=12.3.0`
+- Bump `MIN_GRAFANA_FOR_INTERACTIONS` to `12.3.0` in e2e tests
+- Set explicit `grafana-dependency: '>=12.3.0'` and `version-resolver-type: plugin-grafana-dependency`
   for the e2e Grafana version matrix in CI
 - Update `@grafana/create-plugin` scaffold from v6.10.1 to v7.6.0
   - Harden `bundle-stats.yml` contents permission (`write` → `read`)
