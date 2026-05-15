@@ -12,6 +12,8 @@ All changes noted here.
 - Bump `MIN_GRAFANA_FOR_INTERACTIONS` to `12.3.0` in e2e tests
 - Set explicit `grafana-dependency: '>=12.3.0'` and `version-resolver-type: plugin-grafana-dependency`
   for the e2e Grafana version matrix in CI
+- Run `resolve-versions` in parallel with `build` to reduce e2e wall time
+- Remove redundant `sudo apt-get install jq` (pre-installed on ubuntu-latest runners)
 - Update `@grafana/create-plugin` scaffold from v6.10.1 to v7.6.0
   - Harden `bundle-stats.yml` contents permission (`write` → `read`)
   - Remove deprecated `tsconfig` `baseUrl`, replace with `paths` (TypeScript 6 compat)
