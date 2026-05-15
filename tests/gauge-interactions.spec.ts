@@ -11,9 +11,8 @@ const gaugeSvg = (panelEditPage: PanelEditPage) =>
 
 // Panel editor chrome (options group aria-labels, option-id label `for`
 // attributes) only stabilizes around Grafana 12. Skip interaction tests
-// on 10.x/11.x — the smoke test still covers those versions at the
-// render level.
-const MIN_GRAFANA_FOR_INTERACTIONS = '12.0.0';
+// below the minimum supported version (grafanaDependency >=12.3.0).
+const MIN_GRAFANA_FOR_INTERACTIONS = '12.3.0';
 
 test.describe('gauge panel — edit-mode interactions', () => {
   test.beforeEach(async ({ grafanaVersion }) => {

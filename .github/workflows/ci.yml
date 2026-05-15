@@ -161,7 +161,7 @@ jobs:
         uses: grafana/plugin-actions/e2e-version@73cd57e848b81e75e3c17697e6701c9fa1404bcc # e2e-version/v2.0.0
         with:
           version-resolver-type: plugin-grafana-dependency
-          grafana-dependency: '>=10.0.0'
+          grafana-dependency: '>=12.3.0'
           skip-grafana-nightly-image: false
           skip-grafana-react-19-preview-image: false
 
