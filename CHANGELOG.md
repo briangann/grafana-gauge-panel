@@ -6,6 +6,8 @@ All changes noted here.
 
 ### Maintenance
 
+- Set explicit `grafana-dependency: '>=10.0.0'` and `version-resolver-type: plugin-grafana-dependency`
+  for the e2e Grafana version matrix in CI
 - Update `@grafana/create-plugin` scaffold from v6.10.1 to v7.6.0
   - Harden `bundle-stats.yml` contents permission (`write` → `read`)
   - Remove deprecated `tsconfig` `baseUrl`, replace with `paths` (TypeScript 6 compat)
