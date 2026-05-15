@@ -1,0 +1,27 @@
+{
+  "id": null,
+  "uid": "briangann-gauge-home",
+  "title": "D3 Gauge - Home",
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "",
+  "style": "dark",
+  "tags": [],
+  "time": { "from": "now-6h", "to": "now" },
+  "timepicker": {},
+  "timezone": "",
+  "weekStart": "",
+  "panels": [
+    {
+      "id": 1,
+      "type": "text",
+      "title": "D3 Gauge Panel — Example Dashboards",
+      "gridPos": { "h": 12, "w": 12, "x": 0, "y": 0 },
+      "options": {
+        "mode": "markdown",
+        "content": "## D3 Gauge Panel Examples\n\n| Dashboard | Description |\n|-----------|-------------|\n| [Smoke Test](/d/briangann-gauge-smoke) | Basic gauge rendering smoke test |\n| [Unit Formatting](/d/d3gauge-unit-formatting) | Gauge with various unit formats |\n| [Compass](/d/d3gauge-compass-test) | Compass-style gauge configuration |\n| [Min/Max Angle Options](/d/b961b1ee-1d95-4458-996e-40c9cafa2b1c) | Test min/max angle settings |\n| [Min/Max Angle Options (All)](/d/dd276dbd-9516-462f-a5d5-faca0e3d9f22) | Full min/max angle options matrix |\n| [Migrate to React](/d/bca4e41f-a30f-4420-acc1-e72dfc32c650) | Angular → React migration reference |"
+      },
+      "datasource": null
+    }
+  ]
+}
