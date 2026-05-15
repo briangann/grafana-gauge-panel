@@ -2,6 +2,36 @@
 
 All changes noted here.
 
+## v2.2.1 (unreleased)
+
+### Maintenance
+
+- Externalize `react/jsx-runtime` for React 19 compatibility
+- Bump `grafanaDependency` to `>=12.3.0` (drops Grafana 10.x/11.x support)
+- Update CI e2e `grafana-dependency` range to `>=12.3.0`
+- Bump `MIN_GRAFANA_FOR_INTERACTIONS` to `12.3.0` in e2e tests
+- Add home dashboard with links to all example dashboards
+- Fix `GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH` pointing to missing `panels.json`
+- Fix `Test Bury Below Min Value` panel to supply a value below min (-10)
+- Set explicit `grafana-dependency: '>=12.3.0'` and `version-resolver-type: plugin-grafana-dependency`
+  for the e2e Grafana version matrix in CI
+- Run `resolve-versions` in parallel with `build` to reduce e2e wall time
+- Remove redundant `sudo apt-get install jq` (pre-installed on ubuntu-latest runners)
+- Update `@grafana/create-plugin` scaffold from v6.10.1 to v7.6.0
+  - Harden `bundle-stats.yml` contents permission (`write` → `read`)
+  - Remove deprecated `tsconfig` `baseUrl`, replace with `paths` (TypeScript 6 compat)
+  - Update `ts-node` `module`/`moduleResolution`/`target` to `nodenext`/`nodenext`/`es2022`
+- Add words to cspell dictionary
+- Ignore `docs/` directory in cspell
+- Remove unused cypress hoist pattern from `.npmrc`
+- Update GitHub Actions SHA pins: `actions/cache` v5.0.5, `actions/create-github-app-token` v3.2.0,
+  `davelosert/vitest-coverage-report-action` v2.12.0, `googleapis/release-please-action` v5.0.0,
+  `grafana/plugin-actions/e2e-version` v2.0.0, `grafana/plugin-actions/wait-for-grafana` v1.0.3,
+  `pnpm/action-setup` v6.0.8
+- Update npm dependencies: `@swc/core` v1.15.33, `@typescript-eslint/*` v8.59.3,
+  `@grafana/plugin-e2e` v3.8.0, `@grafana/tsconfig` v2.1.0, `@playwright/test` + `playwright` v1.60.0,
+  `semver` v7.8.0, `terser-webpack-plugin` v5.6.0
+
 ## v2.2.0 (2026-04-21)
 
 ### Bug Fixes (Rendering and Migration)

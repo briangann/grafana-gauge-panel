@@ -117,7 +117,7 @@
           },
           "refId": "A",
           "scenarioId": "csv_metric_values",
-          "stringInput": "1,20,90,30,5,0"
+          "stringInput": "-10"
         }
       ],
       "title": "Test Bury Below Min Value",
