@@ -12,6 +12,7 @@ All changes noted here.
   - Update `ts-node` `module`/`moduleResolution`/`target` to `nodenext`/`nodenext`/`es2022`
 - Add words to cspell dictionary
 - Ignore `docs/` directory in cspell
+- Remove unused cypress hoist pattern from `.npmrc`
 
 ## v2.2.0 (2026-04-21)
 
