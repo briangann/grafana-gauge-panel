@@ -103,8 +103,6 @@ jobs:
       - name: Get plugin metadata
         id: metadata
         run: |
-          sudo apt-get install jq
-
           GRAFANA_PLUGIN_ID=$(jq -r .id dist/plugin.json)
           GRAFANA_PLUGIN_VERSION=$(jq -r .info.version dist/plugin.json)
           GRAFANA_PLUGIN_ARTIFACT="${GRAFANA_PLUGIN_ID}-${GRAFANA_PLUGIN_VERSION}.zip"
@@ -146,8 +144,6 @@ jobs:
     permissions:
       contents: read
     timeout-minutes: 3
-    needs: build
-    if: ${{ needs.build.outputs.has-e2e == 'true' }}
     outputs:
       matrix: ${{ steps.resolve-versions.outputs.matrix }}
     steps:
@@ -167,6 +163,7 @@ jobs:
 
   playwright-tests:
     needs: [resolve-versions, build]
+    if: ${{ needs.build.outputs.has-e2e == 'true' }}
     timeout-minutes: 15
     permissions:
       contents: read
