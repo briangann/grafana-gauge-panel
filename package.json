@@ -52,7 +52,7 @@
     "cspell": "10.0.0",
     "css-loader": "^6.11.0",
     "d3": "7.9.0",
-    "eslint": "^9.39.4",
+    "eslint": "^10.0.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsdoc": "^62.9.0",
     "eslint-plugin-react": "^7.37.5",
