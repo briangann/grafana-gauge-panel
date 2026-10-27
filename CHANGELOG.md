@@ -42,6 +42,9 @@ All changes noted here.
   (`workflow_dispatch`): it has been continuously red since 2026-10-23 (levitate
   reports `src/module.ts` is incompatible with the latest `@grafana/*` package
   versions) and was consuming ~175 min/month with no signal
+- Group all Renovate updates into a single weekly PR (`groupName: "all dependencies"`);
+  previously only non-major (patch/minor) updates were grouped, so major updates opened
+  individual PRs. Security alerts and lockfile maintenance remain separate.
 
 ## v2.2.0 (2026-04-21)
 
