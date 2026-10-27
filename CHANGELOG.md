@@ -31,6 +31,13 @@ All changes noted here.
 - Update npm dependencies: `@swc/core` v1.15.33, `@typescript-eslint/*` v8.59.3,
   `@grafana/plugin-e2e` v3.8.0, `@grafana/tsconfig` v2.1.0, `@playwright/test` + `playwright` v1.60.0,
   `semver` v7.8.0, `terser-webpack-plugin` v5.6.0
+- Add `concurrency` groups with `cancel-in-progress` to `ci.yml`, `is-compatible.yml`,
+  `coverage.yml`, and `bundle-stats.yml`; the group uses
+  `github.event.pull_request.number || github.ref` so all of a PR's runs share one
+  group (`github.ref` alone is `refs/pull/N/M` and changes on every commit)
+- Skip the e2e jobs (`resolve-versions`, `playwright-tests`) in `ci.yml` for Renovate
+  PRs (`renovate/*` head branches); the `build` job (typecheck, lint, unit tests,
+  package validation) still runs on dependency bumps
 
 ## v2.2.0 (2026-04-21)
 

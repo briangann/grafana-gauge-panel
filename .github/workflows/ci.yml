@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build, lint and unit tests
@@ -140,6 +144,7 @@ jobs:
 
   resolve-versions:
     name: Resolve e2e images
+    if: ${{ !startsWith(github.head_ref, 'renovate/') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -163,7 +168,7 @@ jobs:
 
   playwright-tests:
     needs: [resolve-versions, build]
-    if: ${{ needs.build.outputs.has-e2e == 'true' }}
+    if: ${{ !startsWith(github.head_ref, 'renovate/') && needs.build.outputs.has-e2e == 'true' }}
     timeout-minutes: 15
     permissions:
       contents: read
