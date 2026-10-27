@@ -31,6 +31,20 @@ All changes noted here.
 - Update npm dependencies: `@swc/core` v1.15.33, `@typescript-eslint/*` v8.59.3,
   `@grafana/plugin-e2e` v3.8.0, `@grafana/tsconfig` v2.1.0, `@playwright/test` + `playwright` v1.60.0,
   `semver` v7.8.0, `terser-webpack-plugin` v5.6.0
+- Add `concurrency` groups with `cancel-in-progress` to `ci.yml`, `is-compatible.yml`,
+  `coverage.yml`, and `bundle-stats.yml`; the group uses
+  `github.event.pull_request.number || github.ref` so all of a PR's runs share one
+  group (`github.ref` alone is `refs/pull/N/M` and changes on every commit)
+- Skip the e2e jobs (`resolve-versions`, `playwright-tests`) in `ci.yml` for Renovate
+  PRs (`renovate/*` head branches); the `build` job (typecheck, lint, unit tests,
+  package validation) still runs on dependency bumps
+- Make the Latest Grafana API compatibility check (`is-compatible.yml`) manual
+  (`workflow_dispatch`): it has been continuously red since 2026-10-23 (levitate
+  reports `src/module.ts` is incompatible with the latest `@grafana/*` package
+  versions) and was consuming ~175 min/month with no signal
+- Group all Renovate updates into a single weekly PR (`groupName: "all dependencies"`);
+  previously only non-major (patch/minor) updates were grouped, so major updates opened
+  individual PRs. Security alerts and lockfile maintenance remain separate.
 
 ## v2.2.0 (2026-04-21)
 
